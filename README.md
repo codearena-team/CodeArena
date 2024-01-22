@@ -8,7 +8,7 @@
 |인원|6명|
 |시간|평일 09:00-18:00|
 
-## 🤖 팀원 구성성
+## 🤖 팀원 구성
 
 <table>
  <tr>
@@ -35,26 +35,32 @@
 ## 📌 커밋 컨벤션
 
 <h3> Type 명세 </h3>
-<p>[Feat] : 기능 개발 완료</p>
-<p>[Modify] : 기능 개발 중 수정 사항 발생</p>
-<p>[Refactor] : 리팩토링 수행</p>
-<p>[Docs] : 문서 작업</p>
-<p>[Test] : 테스트 코드 작성</p>
-<p>[Design] : CSS, UI 수정</p>
-<p>[Remove] : 파일 삭제</p>
-
+<table>
+  <tr>
+<td><p><b>[Feat]</p> : 기능 개발 완료</p></td>
+<td><p><b>[Modify]</p> : 기능 개발 중 수정 사항 발생</p></td>
+<td><p><b>[Refactor]</p> : 리팩토링 수행</p></td>
+<td><p><b>[Docs]</p> : 문서 작업</p></td>
+<td><p><b>[Test]</p> : 테스트 코드 작성</p></td>
+<td><p><b>[Design]</p> : CSS, UI 수정</p></td>
+<td><p><b>[Remove]</p> : 파일 삭제</p></td>
+  </tr>
+</table>
 <hr>
 <h3> Commit Example </h3>
 <p>feat 커밋 예시 (JIRA 고유번호 4번 Task의 경우) </p>
 <p>[Type] Subject //타입의 경우 첫글자는 대문자로 작성, 커밋 내용이 뚜렷하게 드러날 수 있도록 작성 </p>
 <p>body //Subject 관련 어떤 작업을 했는지에 대해 간단하게 작성 </p>
 <p>footer //JIRA Task 번호와 매칭 </p>
-
-<p><b>[Feat] 로그인 기능 구현</b></p>
+<table>
+  <tr>
+<td><p><b>[Feat] 로그인 기능 구현</b></p>
 
 <p><b>로그인 API 구현 </b></p>
 
-<p><b>Related to : D211-4 </b></p>
+<p><b>Related to : D211-4 </b></p></td>
+  </tr>
+</table>
 
 
 
@@ -63,6 +69,6 @@
 
 
 ## 📌 브랜치 전략
-<p> Github-Flow 전략 </p>
+### Github-Flow 전략 채택
 <p>- CI/CD 환경에서 개발 진행. </p>
 <p>- master 및 feature 브랜치 활용 </p>
