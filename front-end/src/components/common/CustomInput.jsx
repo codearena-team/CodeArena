@@ -4,7 +4,7 @@ export default function CustomInput (probs) {
   return (
     <div class="container">
         <div className="inputs">
-            <input onChange={(e)=>probs.setEmail(e.target.value)} type={probs.type} required /> 
+            <input type={probs.type} value={probs.value} required /> 
             <label>{probs.label}</label>
         </div>
     </div>

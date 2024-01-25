@@ -9,7 +9,6 @@ const navigation = [
   { name: 'Login', href: '/login', current: false },
   { name: 'Logout', href: '/logout', current: false },
   { name: 'Profile', href: '/profile', current: false },
-  { name: 'home', href: '/', current: false },
   // { name: 'submit', href: '/submit', current: false },
   // { name: 'create', href: '/create', current: false },
   { name: 'problem', href: '/problem', current: false },
@@ -43,11 +42,13 @@ export default function NavBar() {
               </div>
               <div className="flex flex-1 justify-between">
                 <div className="flex flex-shrink-0 items-center">
+                <Link to="/">
                   <img
                     className="h-full w-auto"
                     src={Logo}
                     alt="Your Company"
                   />
+                </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
