@@ -1,7 +1,7 @@
 import React from 'react';
 import 'tailwindcss/tailwind.css';
 
-import ssafy from '../../images/main/MainPage4/ssafy.png';
+import ssafy from '../../images/main/Policy/ssafy.png';
 
 const ImageAndText = ({ image, title, children }) => (
     <div className="w-full text-start mb-6 flex items-center">
@@ -13,7 +13,7 @@ const ImageAndText = ({ image, title, children }) => (
     </div>
   );
 
-export default function MainPage5() {
+export default function Policy() {
   return (
     <div className="flex items-center">
       <div className="ml-6">

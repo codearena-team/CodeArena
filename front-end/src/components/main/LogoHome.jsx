@@ -1,13 +1,13 @@
 import React from 'react';
 import 'tailwindcss/tailwind.css';
-import Logo from '../../images/main/MainPage1/Logo.png';
+import Logo from '../../images/main/LogoHome/Logo.png';
 
-export default function MainPage1({ scrollToPage2 }) {
+export default function LogoHome({ scrollToFourElement }) {
   // const Page2Ref = useRef(null);
 
   const handleLogoClick = () => {
-    if (scrollToPage2) {
-      scrollToPage2();
+    if (scrollToFourElement) {
+      scrollToFourElement();
     }
   };
 

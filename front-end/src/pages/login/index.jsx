@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import CustomInput from '../../components/common/CustomInput'
-import './login.css'
+import '../css/login.css'
 
 export default function Login() {
   // const [email, setEmail] = useState()

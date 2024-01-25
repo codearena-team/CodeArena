@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import Logo from '../images/logo.png'
+import { BellIcon } from '@heroicons/react/24/outline'
+import Logo from '../../images/common/logo.png'
 
 const navigation = [ 
   { name: 'test', href: '/test', current: false },

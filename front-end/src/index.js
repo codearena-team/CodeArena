@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import Router from './router';
-import NavBar from './components/navBar'
+import NavBar from './components/navBar/navBar'
 
 const container = document.getElementById('root');
 const root = createRoot(container);

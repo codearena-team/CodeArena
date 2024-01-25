@@ -1,9 +1,9 @@
 import React from 'react';
 import 'tailwindcss/tailwind.css';
 
-import Rank from '../../images/main/MainPage3/Rank.png';
-import Hand from '../../images/main/MainPage3/hand.png';
-import Plus from '../../images/main/MainPage3/Plus.png';
+import Rank from '../../images/main/Summary/Rank.png';
+import Hand from '../../images/main/Summary/hand.png';
+import Plus from '../../images/main/Summary/Plus.png';
 
 // 인기 질문 카드
 const QuestionCard = ({ question }) => (
@@ -32,7 +32,7 @@ const ImageAndText = ({ image, title, children }) => (
     </div>
   );
 
-export default function MainPage3() {
+export default function Summary() {
 
     // 아레나 랭크 연동하여 수정필요
     // const ArenaRank = [
