@@ -16,9 +16,9 @@ export default function Router () {
       <Route path="/create" element={<CreateTest />} />
       <Route path="/login" element={<Login />} />
       <Route path="/mypage" element={<MyPage />} />
-      <Route path="/board" element={<Board />} />
       <Route path="/problemsolve" element={<Ps />} />
       <Route path="/arena" element={<Arena />} />
+      <Route path="/board" element={<Board />} />
     </Routes>
   );
 };
