@@ -1,9 +1,27 @@
-import CustomInput from '../../../components/common/CustomInput'
-import Button from '../../../components/common/Button'
 import { useState } from 'react'
+import '../../css/custom.css'
 
 export default function SnsSignup(){
-  const [email,setEmail] = useState("example@codearena.com")
+  const [nickname,setNickname] = useState('');
+  const [introduce,setIntroduce] = useState('');
+
+  const checkNickname = () =>{
+    return nickname.length > 0 && nickname.length <= 10
+  }
+
+  const checkIntroduce = () =>{
+    return introduce.length > 0 && introduce.length <= 30
+  }
+
+  const handleSignup = ()=>{
+    if (!checkNickname()) {
+      alert('닉네임이 형식에 맞지 않습니다')
+    }
+    if (!checkIntroduce()) {
+      alert('소개글이 형식에 맞지 않습니다')
+    }
+  }
+
   return (
     <div className='flex justify-center'>  
       <div 
@@ -19,25 +37,31 @@ export default function SnsSignup(){
         Create Account :)
         </div>
         <div style={{marginTop:40}}>
-          <CustomInput 
-          value={email}
-          label="이메일"
-          type="email"
-          />
-          <CustomInput 
-          label="비밀번호"
-          type="password"
-          />
-          <CustomInput 
-          label="닉네임"
-          type="text"
-          />
-          <CustomInput 
-          label="소개글"
-          type="text"
-          />
-          <Button
-          name="회원가입"/>
+          <div className="container">
+            <div className="inputs">
+              <input type='text' required />
+              <label>이메일</label>
+            </div>
+          </div>
+          <div className="container">
+            <div className="inputs">
+              <input type='password' required />
+              <label>비밀번호</label>
+            </div>
+          </div>
+          <div className="container">
+            <div className="inputs">
+              <input type='text' value={nickname} onChange={ (e) => setNickname(e.target.value)} required />
+              <label>닉네임</label>
+            </div>
+          </div>
+          <div className="container">
+            <div className="inputs">
+              <input type='text' value={introduce} onChange={ (e) => setIntroduce(e.target.value)} required />
+              <label>소개글</label>
+            </div>
+          </div>
+          <button className="btn btn-neutral w-full rounded-full" onClick={handleSignup}>회원가입</button>
         </div>
       </div>
     </div>

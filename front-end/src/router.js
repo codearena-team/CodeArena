@@ -25,7 +25,7 @@ export default function Router () {
       <Route path="/arena" element={<Arena />} />
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />
-      <Route path="/login/snssignup" element={<SnsSignup/>} />
+      <Route path="/login/snssignup" element={<SnsSignup/>} /> 
     </Routes>
   );
 };
