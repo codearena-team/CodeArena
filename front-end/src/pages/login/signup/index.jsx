@@ -3,9 +3,10 @@ import { useState } from 'react'
 
 export default function Signup(){
   const [email, setEmail] = useState('');
-  const [password,setPassword] = useState('');
   const [nickname,setNickname] = useState('');
   const [introduce,setIntroduce] = useState('');
+  const [password,setPassword] = useState('');
+  const [passwordconfirm,setPasswordconfirm] = useState('');
 
   const checkEmail = () =>{
     const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
@@ -39,8 +40,11 @@ export default function Signup(){
     if (!checkIntroduce()) {
       alert('소개글이 형식에 맞지 않습니다')
     }
+    if (password !== passwordconfirm) {
+      alert('비밀번호와 비밀번호 확인이 일치하지 않습니다');
+    }
   }
-
+  
   return (
     <div className='flex justify-center'>  
       <div 
@@ -82,7 +86,7 @@ export default function Signup(){
           </div>
           <div className="container">
             <div className="inputs">
-              <input type='password' required />
+              <input type='password' value={passwordconfirm} onChange={(e) => setPasswordconfirm(e.target.value)} required />
               <label>비밀번호 확인</label>
             </div>
           </div>
