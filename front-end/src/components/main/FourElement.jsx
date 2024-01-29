@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import 'tailwindcss/tailwind.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 import ProblemSolve from '../../images/main/FourElement/ProblemSolve.gif';
-import ProblemSolve2 from '../../images/main/FourElement/ProblemSolve.png';
+import ProblemSolveAsset from '../../images/main/FourElement/ProblemSolve.png';
 import CodeArena from '../../images/main/FourElement/CodeArena.gif';
-import CodeArena2 from '../../images/main/FourElement/CodeArena.png';
+import CodeArenaAsset from '../../images/main/FourElement/CodeArena.png';
 import Community from '../../images/main/FourElement/Community.gif';
-import Community2 from '../../images/main/FourElement/Community.png';
+import CommunityAsset from '../../images/main/FourElement/Community.png';
 import AboutUs from '../../images/main/FourElement/AboutUs.gif';
-import AboutUs2 from '../../images/main/FourElement/AboutUs.png';
+import AboutUsAsset from '../../images/main/FourElement/AboutUs.png';
 
 export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
   const [isProblemSolveHovered, setIsProblemSolveHovered] = useState(false);
@@ -21,6 +20,12 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
     if (scrollToAboutUs) {
       scrollToAboutUs();
     }
+  };
+
+  const navigate = useNavigate();
+
+  const handleCodeArenaClick = () => {
+    navigate('/arena');
   };
 
   return (
@@ -43,7 +48,7 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
         <Link to="/problemsolve">
         <img
           // 마우스 올리면 gif, 마우스 나가면 png
-          src={isProblemSolveHovered ? ProblemSolve : ProblemSolve2}
+          src={isProblemSolveHovered ? ProblemSolve : ProblemSolveAsset}
           alt="Problem_Solve"
           className="w-full h-full object-cover"
           style={{ mask: 'url(#trapezoidMask)' }}
@@ -69,11 +74,12 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
         onMouseLeave={() => setIsCodeArenaHovered(false)}
       > <Link to="/arena">
         <img
-          src={isCodeArenaHovered ? CodeArena : CodeArena2}
+          src={isCodeArenaHovered ? CodeArena : CodeArenaAsset}
           alt="Code_Arena"
           className="w-full h-full object-cover"
           style={{ mask: 'url(#trapezoidMask2)' }}
-          />
+          onClick={handleCodeArenaClick}
+        />
         </Link>
         <svg height="0" width="0">
           <mask id="trapezoidMask2" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
@@ -97,7 +103,7 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
         onMouseLeave={() => setIsCommunityHovered(false)}
       > <Link to="/board">
         <img
-          src={isCommunityHovered ? Community : Community2}
+          src={isCommunityHovered ? Community : CommunityAsset}
           alt="Community"
           className="w-full h-full object-cover"
           style={{ mask: 'url(#trapezoidMask3)' }}
@@ -125,7 +131,7 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
         onMouseLeave={() => setIsAboutUsHovered(false)}
       > 
         <img
-          src={isAboutUsHovered ? AboutUs : AboutUs2}
+          src={isAboutUsHovered ? AboutUs : AboutUsAsset}
           alt="About_Us"
           className="w-full h-full object-cover"
           style={{ mask: 'url(#trapezoidMask4)' }}
