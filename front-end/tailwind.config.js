@@ -16,6 +16,7 @@ module.exports = {
   plugins: [
     // Other plugins
     require('tailwindcss-animatecss'),
+    require("daisyui"),
   ],
   
 }
