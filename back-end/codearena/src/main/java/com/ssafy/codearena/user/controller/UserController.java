@@ -36,6 +36,11 @@ public class UserController {
     public ResponseEntity<UserResultDto> reissue(@RequestBody UserReissueDto userReissueDto) {
         return new ResponseEntity<UserResultDto>(userService.reissue(userReissueDto), HttpStatus.OK);
     }
+    @GetMapping
+    public ResponseEntity<UserResultDto> searchUser(@RequestParam String userNickname) {
+        return new ResponseEntity<UserResultDto>(userService.searchUser(userNickname) ,HttpStatus.OK);
+    }
+
 
 
 }

@@ -9,11 +9,9 @@ public interface UserService {
 
     UserResultDto join(UserJoinDto userJoinDto);
     UserResultDto login(UserLoginDto userLoginDto);
-
     UserResultDto checkDuplicatedNickname(String nickname);
-
     UserResultDto checkDuplicatedEmail(String email);
-
     UserResultDto reissue(UserReissueDto userReissueDto);
+    UserResultDto searchUser(String userNickname);
 
 }

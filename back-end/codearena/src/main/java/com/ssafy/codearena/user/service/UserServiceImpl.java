@@ -7,6 +7,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -181,4 +183,51 @@ public class UserServiceImpl implements UserService{
         System.out.println("message"+message);
         javaMailSender.send(message);
     }
+
+    @Override
+    public UserResultDto searchUser(String userNickname) {
+
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("회원 정보 조회 성공");
+
+        UserSearchDto userSearchDto = new UserSearchDto();
+        UserInfoDto userInfoDto = null;
+
+        try {
+            userInfoDto = mapper.searchUser(userNickname);
+
+            System.out.println(userInfoDto);
+            // 검색된 회원이 없을 시
+            if (userInfoDto == null) {
+                userResultDto.setStatus("404");
+                userResultDto.setMsg("해당 이름의 회원 없음");
+                userResultDto.setData(null);
+            } else {
+                ArrayList<Integer> solvedProblem = mapper.getSolvedProblem(userInfoDto.getUserId());
+                ArrayList<Integer> wrongProblem = mapper.getWrongProblem(userInfoDto.getUserId());
+
+                System.out.println("solvedProblem = " + solvedProblem);
+                System.out.println("wrongProblem = " + wrongProblem);
+
+                userSearchDto.setUserInfoDto(userInfoDto);
+                // 1. 회원이 푼 문제
+                userSearchDto.setSolvedProblem(solvedProblem);
+                // 2. 회원이 틀린 문제
+                userSearchDto.setWrongProblem(wrongProblem);
+                // 3. CntOfCate
+                // 일단 지금은 null 상태로 두기
+                userSearchDto.setCntOfCate(null);
+
+                userResultDto.setData(userSearchDto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 내부 에러");
+            userResultDto.setData(null);
+        }
+        return userResultDto;
+    }
+
 }
