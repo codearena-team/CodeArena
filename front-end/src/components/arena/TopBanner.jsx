@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import FindMatch from '../../images/arena/TopBanner/FindMatch.gif';
 import FindMatchAsset from '../../images/arena/TopBanner/FindMatch.png';
@@ -255,12 +256,14 @@ export default function TopBanner() {
           onMouseEnter={() => setIsGameSearchHovered(true)} // 마우스 호버 In
           onMouseLeave={() => setIsGameSearchHovered(false)} // 마우스 호버 Out
         >
-          <img
-            src={isGameSearchHovered ? GameSearch : GameSearchAsset} // 게임 찾기 Hover
-            alt="게임찾기 이미지"
-            className="mr-2 rounded-xl"
-            style={{ width: '100%', height: 'auto' }}
-          />
+          <Link to="/game-list">
+            <img
+              src={isGameSearchHovered ? GameSearch : GameSearchAsset} // 게임 찾기 Hover
+              alt="게임찾기 이미지"
+              className="mr-2 rounded-xl"
+              style={{ width: '100%', height: 'auto' }}
+            />
+          </Link>
         </button>
       </div>
       {/* 상단 배너 선 */}

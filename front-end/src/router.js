@@ -7,6 +7,7 @@ import Ps from './pages/problemsolve/index';
 import Main from './pages/main/index';
 import Arena from "./pages/arena/index";
 import MyPage from "./pages/mypage/index";
+import GameRoomList from "./pages/arena/match/index";
 
 export default function Router () {
   return (
@@ -18,6 +19,7 @@ export default function Router () {
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/problemsolve" element={<Ps />} />
       <Route path="/arena" element={<Arena />} />
+      <Route path="/game-list" element={<GameRoomList />} />
       <Route path="/board" element={<Board />} />
     </Routes>
   );
