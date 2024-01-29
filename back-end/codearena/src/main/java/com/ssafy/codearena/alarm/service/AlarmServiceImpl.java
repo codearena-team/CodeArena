@@ -21,7 +21,27 @@ public class AlarmServiceImpl implements AlarmService{
     }
 
     @Override
+    public List<AlarmReceiveDto> sendList(String userId) {
+        return alarmMapper.sendList(userId);
+    }
+
+    @Override
     public int send(AlarmSendDto alarmSendDto) {
         return alarmMapper.send(alarmSendDto);
+    }
+
+    @Override
+    public AlarmReceiveDto detail(String alarmId) {
+        return alarmMapper.detail(alarmId);
+    }
+
+    @Override
+    public void readChange(String alarmId) {
+        alarmMapper.readChange(alarmId);
+    }
+
+    @Override
+    public void statusChange(String alarmId, String alarmStatus) {
+        alarmMapper.statusChange(alarmId, alarmStatus);
     }
 }

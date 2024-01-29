@@ -18,7 +18,15 @@
     <select id="receive" parameterType="string" resultMap="receiveMap">
         SELECT alarm_id, alarm_type, to_id, from_id, alarm_msg, is_read, alarm_date, status
         FROM alarm
-        WHERE from_id = "${userId}";
+        WHERE from_id = "${userId}"
+        ORDER BY alarm_date DESC;
+    </select>
+
+    <select id="sendList" parameterType="string" resultMap="receiveMap">
+        SELECT alarm_id, alarm_type, to_id, from_id, alarm_msg, is_read, alarm_date, status
+        FROM alarm
+        WHERE to_id = "${userId}"
+        ORDER BY alarm_date DESC;
     </select>
 
 
@@ -26,5 +34,23 @@
         INSERT INTO alarm(alarm_type, to_id, from_id, alarm_msg, alarm_date, status) VALUES(${alarmType}, ${toId}, ${fromId}, "${alarmMsg}", now(), "${alarmStatus}");
     </insert>
 
+
+    <select id="detail" parameterType="string" resultMap="receiveMap">
+        SELECT alarm_id, alarm_type, to_id, from_id, alarm_msg, is_read, alarm_date, status
+        FROM alarm
+        WHERE alarm_id = "${alarmId}";
+    </select>
+
+    <update id="readChange" parameterType="string">
+        UPDATE alarm
+        SET is_read = true
+        WHERE alarm_id = "${alarmId}";
+    </update>
+
+    <update id="statusChange" parameterType="string">
+        UPDATE alarm
+        SET status = "${alarmStatus}"
+        WHERE alarm_id = "${alarmId}";
+    </update>
 
 </mapper>
