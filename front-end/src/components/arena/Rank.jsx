@@ -51,7 +51,7 @@ export default function RankPage() {
   const renderRankingItem = (user, index) => (
     <div
       key={index}
-      className="flex justify-between items-center h-16 mb-5 rounded-lg shadow-lg bg-yellow-100"
+      className="flex justify-between hover:scale-125 items-center h-16 mb-5 rounded-lg shadow-lg bg-yellow-100"
       style={{ backgroundColor: '#F8E6D0' }}
     >
       <span className='font-bold ml-4' style={{color:'#FE4582'}}>{user.rank}st</span>
