@@ -2,6 +2,7 @@ package com.ssafy.codearena.user.controller;
 
 import com.ssafy.codearena.user.dto.UserJoinDto;
 import com.ssafy.codearena.user.dto.UserLoginDto;
+import com.ssafy.codearena.user.dto.UserReissueDto;
 import com.ssafy.codearena.user.dto.UserResultDto;
 import com.ssafy.codearena.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,10 @@ public class UserController {
     public ResponseEntity<UserResultDto> login(@RequestBody UserLoginDto userLoginDto) {
         return new ResponseEntity<UserResultDto>(userService.login(userLoginDto), HttpStatus.OK);
     }
-
+//    @GetMapping("/password/reissue")
+//    public ResponseEntity<UserResultDto> reissue(@RequestBody UserReissueDto userReissueDto) {
+//        return new ResponseEntity<UserResultDto>(userService.reissue(userReissueDto), HttpStatus.OK);
+//    }
 
 
 }
