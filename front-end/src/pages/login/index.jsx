@@ -5,18 +5,25 @@ import Google from '../../images/login/google.png'
 import Naver from '../../images/login/naver.png'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password,setPassword] = useState('');
 
+  
+
+
+
+  // 이메일 유효성 검사
   const checkEmail = () =>{
     const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
     return regExp.test(email)
   }
 
+  // 8~10자 영문자 조합 비밀번호 유효성 검사
   const checkPassword = () =>{
-    // 8~10자 영문자 조합
     const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/
     return regExp.test(password)
   }
@@ -25,10 +32,26 @@ export default function Login() {
     if (!checkEmail()) {
       alert('이메일이 형식에 맞지 않습니다')
     } 
-    if (!checkPassword()) {
-      alert('비밀번호가 형식에 맞지 않습니다')
+    // if (!checkPassword()) {
+    //   alert('비밀번호가 형식에 맞지 않습니다')
+    // }
+    if (checkEmail()) {
+      axios({
+        url:'http://192.168.100.207:80/api/user/login',
+        method:'post',
+        data: {
+          userEmail : email,
+          userPassword : password
+        }
+      })
+        .then((res)=>{
+          console.log(res)
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }
     }
-  }
 
   return (
     <div className='flex justify-center'>

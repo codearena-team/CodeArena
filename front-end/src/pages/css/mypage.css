@@ -1,0 +1,19 @@
+.pinkbutton{
+  background-color: #F4ECE4;
+}
+
+.pinkbutton:hover {
+  background-color: inherit;
+}
+
+.yellowbox {
+  background-color: #F7F6E4;
+  width: 320px;
+  border-radius: 10%;
+}
+
+.pinkbox{
+  background-color: #F4ECE4;
+  width: 230px;
+  border-radius: 10%;
+}

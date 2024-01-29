@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@uiw/react-codemirror": "^4.21.21",
     "animate.css": "^4.1.1",
-    "axios": "^1.6.5",
+    "axios": "^1.6.7",
     "fetch": "^1.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
