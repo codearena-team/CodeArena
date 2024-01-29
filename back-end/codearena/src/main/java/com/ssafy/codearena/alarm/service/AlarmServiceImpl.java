@@ -1,6 +1,7 @@
 package com.ssafy.codearena.alarm.service;
 
 import com.ssafy.codearena.alarm.dto.AlarmReceiveDto;
+import com.ssafy.codearena.alarm.dto.AlarmSendDto;
 import com.ssafy.codearena.alarm.mapper.AlarmMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,5 +18,10 @@ public class AlarmServiceImpl implements AlarmService{
     @Override
     public List<AlarmReceiveDto> receive(String userId) {
         return alarmMapper.receive(userId);
+    }
+
+    @Override
+    public int send(AlarmSendDto alarmSendDto) {
+        return alarmMapper.send(alarmSendDto);
     }
 }
