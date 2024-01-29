@@ -3,5 +3,56 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.codearena.problem.mapper.ProblemMapper">
+    <resultMap id="problemWithSearchDto" type="problemWithSearchDto">
+        <result property="problemId" column="problem_id"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="problemTitle" column="problem_title"/>
+        <result property="problemRating" column="problem_rating"/>
+        <result property="submitCount" column="submit_count"/>
+        <result property="acceptCount" column="accept_count"/>
+        <result property="percentage" column="percentage"/>
+    </resultMap>
+    <sql id='cate'>
+        <choose>
+            <when test=' word!=null and !"".equals(word)'>
+                <choose>
+                    <when test=' cate.equals("problem_id") '>
+                        and p.problem_id = ${word}
+                    </when>
+                    <otherwise>
+                        and ${cate} like concat('%','${word}','%')
+                    </otherwise>
+                </choose>
+            </when>
+        </choose>
 
+    </sql>
+    <select id="problemCount" parameterType="hashmap" resultType="int">
+        select count(problem_id) from ps_list as p
+        where 1=1
+        <include refid="cate"></include>
+    </select>
+
+
+    <sql id="orderby">
+        <if test='orderBy!=null and !"".equals(orderBy)'>
+            order by '${orderBy}' desc
+        </if>
+    </sql>
+    <select id="selectProblemList" parameterType="hashmap" resultMap="problemWithSearchDto">
+        select
+            p.problem_id, p.problem_title, p.problem_rating, ifnull(inline.submit_count, 0) as submit_count, ifnull(inline2.accept_count, 0) as accept_count, u.user_nickname,
+            ifnull(round((inline2.accept_count/inline.submit_count * 100),2), 0) AS percentage
+        from ps_list as p
+                 left join (select problem_id, count(distinct user_id) as submit_count from ps_submit group by problem_id) as inline
+                           on p.problem_id = inline.problem_id
+                 left join (select problem_id, count(distinct user_id) as accept_count from ps_submit where submit_status like '%맞았습니다.%' group by problem_id) as inline2
+                           on p.problem_id = inline2.problem_id
+                 left join `user` as u
+                           on p.user_id = u.user_id
+        where 1=1 and p.problem_visibility = 1
+        <include refid="cate"></include>
+        <include refid="orderby"></include>
+        limit ${start}, ${offset}
+    </select>
 </mapper>
