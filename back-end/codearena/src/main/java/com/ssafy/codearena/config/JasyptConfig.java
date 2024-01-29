@@ -16,7 +16,7 @@ public class JasyptConfig {
 
     private static final String ALGORITHM = "PBEWithMD5AndDES";
 
-    @Bean
+    @Bean(name = "jasyptStringEncryptor")
     public StringEncryptor stringEncryptor() {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
