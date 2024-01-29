@@ -23,6 +23,8 @@ dependencies {
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.33'
 	// https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
 	implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '3.0.3'
+	// SMTP 를 위한 mail 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	compileOnly 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'	//jasypt

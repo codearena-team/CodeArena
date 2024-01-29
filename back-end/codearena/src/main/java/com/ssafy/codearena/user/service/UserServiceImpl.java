@@ -3,6 +3,8 @@ package com.ssafy.codearena.user.service;
 import com.ssafy.codearena.user.dto.*;
 import com.ssafy.codearena.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 
     private final UserMapper mapper;
+    private final JavaMailSender javaMailSender;
 
     @Override
     public UserResultDto join(UserJoinDto userJoinDto) {
@@ -84,7 +87,6 @@ public class UserServiceImpl implements UserService{
         } finally {
             userResultDto.setData(userDuplicatedDto);
         }
-
         return userResultDto;
     }
 
@@ -113,70 +115,70 @@ public class UserServiceImpl implements UserService{
         } finally {
             userResultDto.setData(userDuplicatedDto);
         }
+        return userResultDto;
+    }
+
+    @Override
+    public UserResultDto reissue(UserReissueDto userReissueDto) {
+        UserResultDto userResultDto = new UserResultDto();
+
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("비밀번호 변경 후 이메일 전송 완료");
+        userResultDto.setData(null);
+
+        try {
+            String tempPassword = getTempPassword();
+            userReissueDto.setTempPassword(tempPassword);
+
+            int result = mapper.reissue(userReissueDto);
+
+            if (result == 1) {
+                // 이메일 전송 로직
+
+                MailDto mailDto = new MailDto();
+                mailDto.setAddress(userReissueDto.getUserEmail());
+                mailDto.setTitle("[Code Arena] 임시 비밀번호 발급");
+                mailDto.setMessage("Code Arena 임시 비밀번호 발급 안내 이메일입니다. " + "회원님의 임시 비밀번호는 " + tempPassword + " 입니다. " + "로그인 후에 비밀번호를 변경해주세요!");
+
+                mailSend(mailDto);
+
+            } else {
+                userResultDto.setStatus("404");
+                userResultDto.setMsg("해당 유저 없음");
+            }
+
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("수정, 이메일 전송 실패");
+        }
 
         return userResultDto;
     }
 
-//    @Override
-//    public UserResultDto reissue(UserReissueDto userReissueDto) {
-//        UserResultDto userResultDto = new UserResultDto();
-//
-//        userResultDto.setStatus("200");
-//        userResultDto.setMsg("비밀번호 변경 후 이메일 전송 완료");
-//        userResultDto.setData(null);
-//
-//        try {
-//            String tempPassword = getTempPassword();
-//            userReissueDto.setTempPassword(tempPassword);
-//
-//            int result = mapper.reissue(userReissueDto);
-//
-//            if (result == 1) {
-//                // 이메일 전송 로직
-//
-//                MailDto mailDto = new MailDto();
-//                mailDto.setAddress(userReissueDto.getUserEmail());
-//                mailDto.setTitle("[Code Arena] 임시 비밀번호 발급");
-//                mailDto.setMessage("Code Arena 임시 비밀번호 발급 안내 이메일입니다. " + "회원님의 임시 비밀번호는 " + tempPassword + " 입니다. " + "로그인 후에 비밀번호를 변경해주세요!");
-//
-//
-//            } else {
-//                userResultDto.setStatus("404");
-//                userResultDto.setMsg("해당 유저 없음");
-//            }
-//
-//        } catch (Exception e) {
-//            userResultDto.setStatus("500");
-//            userResultDto.setMsg("수정, 이메일 전송 실패");
-//        }
-//
-//        return userResultDto;
-//    }
-//
-//    // 비밀번호 랜덤 생성 로직
-//    public static String getTempPassword(){
-//        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-//                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-//
-//        String str = "";
-//
-//        // 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
-//        int idx = 0;
-//        for (int i = 0; i < 10; i++) {
-//            idx = (int) (charSet.length * Math.random());
-//            str += charSet[idx];
-//        }
-//        return str;
-//    }
-//
-//    public void mailSend(MailDto mailDto) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(mailDto.getAddress());
-//        message.setSubject(mailDto.getTitle());
-//        message.setText(mailDto.getMessage());
-//        message.setFrom("wisejohn950330@gmail.com");
-//        message.setReplyTo("wisejohn950330@gmail.com");
-//        System.out.println("message"+message);
-//        javaMailSender.send(message);
-//    }
+    // 비밀번호 랜덤 생성 로직
+    public static String getTempPassword(){
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String str = "";
+
+        // 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+    }
+
+    public void mailSend(MailDto mailDto) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(mailDto.getAddress());
+        message.setSubject(mailDto.getTitle());
+        message.setText(mailDto.getMessage());
+        message.setFrom("timber3597@naver.com");
+        message.setReplyTo("timber3597@naver.com");
+        System.out.println("message"+message);
+        javaMailSender.send(message);
+    }
 }

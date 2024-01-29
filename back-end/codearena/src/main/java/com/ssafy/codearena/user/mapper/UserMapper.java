@@ -13,6 +13,6 @@ public interface UserMapper {
     int checkNickname(String nickname) throws SQLException;
     int checkEmail(String email) throws SQLException;
     int login(UserLoginDto userLoginDto) throws SQLException;
-//    int reissue(UserReissueDto userReissueDto) throws SQLException;
+    int reissue(UserReissueDto userReissueDto) throws SQLException;
 
 }

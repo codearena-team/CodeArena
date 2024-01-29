@@ -14,6 +14,6 @@ public interface UserService {
 
     UserResultDto checkDuplicatedEmail(String email);
 
-//    UserResultDto reissue(UserReissueDto userReissueDto);
+    UserResultDto reissue(UserReissueDto userReissueDto);
 
 }

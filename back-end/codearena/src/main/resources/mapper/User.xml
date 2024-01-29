@@ -20,4 +20,8 @@
     <select id="login" parameterType="userLoginDto" resultType="int">
         select count(*) from user where user_email="${userEmail}" and user_password="${userPassword}";
     </select>
+
+    <update id="reissue" parameterType="userReissueDto">
+        update user set user_password="${tempPassword}" where user_email="${userEmail}";
+    </update>
 </mapper>
