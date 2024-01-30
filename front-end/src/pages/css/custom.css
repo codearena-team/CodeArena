@@ -47,5 +47,4 @@ input{
 .container .inputs input:focus ~ label,
 .container .inputs input:valid ~ label{
   transform: translateY(-23px);
-  color: crimson;
 }
