@@ -36,7 +36,7 @@ export default function AboutUs({ fromRefFourElement }) {
       </div>
 
       {/* 회색 선 - 아래쪽 */}
-      <div className="absolute bottom-44 left-0 right-0 h-1 bg-gray-200 z-10"></div>
+      <div className="absolute bottom-56 left-0 right-0 h-1 bg-gray-200 z-10"></div>
     </div>
   );
 }

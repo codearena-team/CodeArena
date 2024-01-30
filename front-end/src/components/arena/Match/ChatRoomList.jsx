@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ChatRoom from '../Match/ChatRoom';
+import ChatRoom from '../match/ChatRoom';
 
 export default function MatchArena() {
   const [roomName, setRoomName] = useState('');
@@ -24,7 +24,7 @@ export default function MatchArena() {
       return;
     } else {
         const params = new URLSearchParams();
-        params.append('user1', roomName);
+        params.append('user1', '유저1');
         params.append('user2', '유저2');
 
       axios.post('http://192.168.100.209:80/chat/room', params)

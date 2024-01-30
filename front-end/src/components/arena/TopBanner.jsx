@@ -130,9 +130,10 @@ export default function TopBanner() {
        className="mt-3 flex justify-center w-3/4 shadow-lg rounded-xl z-10"
        style={{ backgroundColor: '#E3E6D9', height: 'auto' }}
       >
+        {/* 경쟁 매칭 버튼*/}
         <button
-          className="btn m-2 rounded-xl"
-          style={{ width: '35%', height: 'auto' }}
+          className="m-2 rounded-xl"
+          style={{ width: '80%', height: 'auto' }}
           onClick={openLanguageModal} // 클릭하면 모달 띄우기
           onMouseEnter={() => setIsFindMatchHovered(true)} // 마우스 호버 In
           onMouseLeave={() => setIsFindMatchHovered(false)} // 마우스 호버 Out
@@ -158,21 +159,21 @@ export default function TopBanner() {
               <h3 className="font-bold text-2xl mb-5">언어를 선택하세요 !</h3>
               {/* 언어 선택 옵션 3가지 */}
               <button
-                className={`btn mr-5 ${selectedLanguage === 'Python' && 'btn-selected'}`}
+                className={`btn mr-5 ${selectedLanguage === 'Python' ? 'btn-selected' : ''}`}
                 style={{ backgroundColor: selectedLanguage === 'Python' ? '#F9C7C6' : '#E3E6D9' }}
                 onClick={() => handleLanguageSelection('Python')}
               >
                 Python
               </button>
               <button
-                className={`btn mr-5 ${selectedLanguage === 'Java' && 'btn-selected'}`}
+                className={`btn mr-5 ${selectedLanguage === 'Java' ? 'btn-selected' : ''}`}
                 style={{ backgroundColor: selectedLanguage === 'Java' ? '#F9C7C6' : '#E3E6D9' }}
                 onClick={() => handleLanguageSelection('Java')}
               >
                 Java
               </button>
               <button
-                className={`btn mb-5 ${selectedLanguage === 'C++' && 'btn-selected'}`}
+                className={`btn mb-5 ${selectedLanguage === 'C++' ? 'btn-selected' : ''}`}
                 style={{ backgroundColor: selectedLanguage === 'C++' ? '#F9C7C6' : '#E3E6D9' }}
                 onClick={() => handleLanguageSelection('C++')}
               >
@@ -256,7 +257,7 @@ export default function TopBanner() {
           onMouseEnter={() => setIsGameSearchHovered(true)} // 마우스 호버 In
           onMouseLeave={() => setIsGameSearchHovered(false)} // 마우스 호버 Out
         >
-          <Link to="/game-list">
+          <Link to="/game-list/competition"> {/* 들어갔을 때 경쟁전 방 리스트 먼저 보이도록 */}
             <img
               src={isGameSearchHovered ? GameSearch : GameSearchAsset} // 게임 찾기 Hover
               alt="게임찾기 이미지"
