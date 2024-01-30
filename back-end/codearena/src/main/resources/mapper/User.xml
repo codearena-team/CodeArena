@@ -4,6 +4,14 @@
 
 <mapper namespace="com.ssafy.codearena.user.mapper.UserMapper">
 
+    <resultMap id="userInfoDto" type="UserInfoDto">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_intro" property="userIntro"/>
+        <result column="speed_rating" property="speedRating"/>
+        <result column="effi_rating" property="effiRating"/>
+    </resultMap>
 
     <insert id="join" parameterType="userJoinDto">
         insert into user(user_email, user_password, user_nickname, user_intro) values("${userEmail}" ,"${userPassword}" , "${userNickname}", "${userIntro}");
@@ -20,4 +28,29 @@
     <select id="login" parameterType="userLoginDto" resultType="int">
         select count(*) from user where user_email="${userEmail}" and user_password="${userPassword}";
     </select>
+
+    <update id="reissue" parameterType="userReissueDto">
+        update user set user_password="${tempPassword}" where user_email="${userEmail}";
+    </update>
+
+    <select id="searchUser" parameterType="string" resultMap="userInfoDto">
+        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating
+        from user
+        where user_nickname="${userNickname}";
+    </select>
+
+    <select id="getSolvedProblem" parameterType="int" resultType="Integer">
+        select distinct problem_id
+        from ps_submit
+        where user_id="${userId}" and submit_status="맞았습니다."
+        order by problem_id;
+    </select>
+
+    <select id="getWrongProblem" parameterType="int" resultType="Integer">
+        select distinct problem_id
+        from ps_submit
+        where user_id="${userId}" and submit_status!="맞았습니다."
+        order by problem_id;
+    </select>
+    
 </mapper>

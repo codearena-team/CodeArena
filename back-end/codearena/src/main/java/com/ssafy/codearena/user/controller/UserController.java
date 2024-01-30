@@ -2,6 +2,7 @@ package com.ssafy.codearena.user.controller;
 
 import com.ssafy.codearena.user.dto.UserJoinDto;
 import com.ssafy.codearena.user.dto.UserLoginDto;
+import com.ssafy.codearena.user.dto.UserReissueDto;
 import com.ssafy.codearena.user.dto.UserResultDto;
 import com.ssafy.codearena.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,25 +16,29 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
     @PostMapping("/join")
     public ResponseEntity<UserResultDto> join(@RequestBody UserJoinDto userJoinDto) {
         return new ResponseEntity<UserResultDto>(userService.join(userJoinDto), HttpStatus.OK);
     }
-
     @GetMapping("/nick/duplicate")
     public ResponseEntity<UserResultDto> checkDuplicatedNickname(@RequestParam String userNickname) {
         return new ResponseEntity<UserResultDto>(userService.checkDuplicatedNickname(userNickname), HttpStatus.OK);
     }
-
     @GetMapping("/email/duplicate")
     public ResponseEntity<UserResultDto> checkDuplicatedEmail(@RequestParam String userEmail) {
         return new ResponseEntity<UserResultDto>(userService.checkDuplicatedEmail(userEmail), HttpStatus.OK);
     }
-
     @PostMapping("/login")
     public ResponseEntity<UserResultDto> login(@RequestBody UserLoginDto userLoginDto) {
         return new ResponseEntity<UserResultDto>(userService.login(userLoginDto), HttpStatus.OK);
+    }
+    @GetMapping("/password/reissue")
+    public ResponseEntity<UserResultDto> reissue(@RequestBody UserReissueDto userReissueDto) {
+        return new ResponseEntity<UserResultDto>(userService.reissue(userReissueDto), HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity<UserResultDto> searchUser(@RequestParam String userNickname) {
+        return new ResponseEntity<UserResultDto>(userService.searchUser(userNickname) ,HttpStatus.OK);
     }
 
 
