@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -16,5 +17,6 @@ public interface UserMapper {
     UserInfoDto searchUser(String userNickname) throws SQLException;
     ArrayList<Integer> getSolvedProblem(int userId) throws SQLException;
     ArrayList<Integer> getWrongProblem(int userId) throws SQLException;
+    void saveRefreshToken(Map<String, String> map) throws SQLException;
 
 }

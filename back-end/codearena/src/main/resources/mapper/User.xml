@@ -52,5 +52,11 @@
         where user_id="${userId}" and submit_status!="맞았습니다."
         order by problem_id;
     </select>
+
+    <update id="saveRefreshToken" parameterType="map">
+        update user
+        set refresh_token = #{refreshToken}
+        where user_email=#{userEmail};
+    </update>
     
 </mapper>

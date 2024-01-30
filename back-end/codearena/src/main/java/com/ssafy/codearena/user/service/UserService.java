@@ -13,5 +13,5 @@ public interface UserService {
     UserResultDto checkDuplicatedEmail(String email);
     UserResultDto reissue(UserReissueDto userReissueDto);
     UserResultDto searchUser(String userNickname);
-
+    void saveRefreshToken(String userEmail, String refreshToken);
 }

@@ -5,7 +5,9 @@ import com.ssafy.codearena.user.dto.UserLoginDto;
 import com.ssafy.codearena.user.dto.UserReissueDto;
 import com.ssafy.codearena.user.dto.UserResultDto;
 import com.ssafy.codearena.user.service.UserService;
+import com.ssafy.codearena.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
+
     @PostMapping("/join")
     public ResponseEntity<UserResultDto> join(@RequestBody UserJoinDto userJoinDto) {
         return new ResponseEntity<UserResultDto>(userService.join(userJoinDto), HttpStatus.OK);
