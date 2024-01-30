@@ -26,7 +26,6 @@ public class DataBaseConfiguration{
         this.applicationContext = applicationContext;
     }
 
-
     @Bean
     // ApplicationContext이 Bean을 관리하는 역할을 수행하고
     // SpringBootApplication이 실행될 때 @Configuration 어노테이션이 붙은 java파일을 설정정보로 등록한다.

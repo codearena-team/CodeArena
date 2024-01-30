@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="429d9fa9-888e-4fa2-8df8-448546924eeb" name="Changes" comment="[feat] test.html 문서 추가">
-      <change beforePath="$PROJECT_DIR$/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/test.html" afterDir="false" />
-    </list>
+    <list default="true" id="429d9fa9-888e-4fa2-8df8-448546924eeb" name="Changes" comment="[feat] test.html 문서 추가" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,9 +29,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2bKlWoF2BFiFP4dCDjslUjec67o" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -47,7 +45,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "develop",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/SSAFY/workspace/NoFearCode/S10P12D211",
+    "last_opened_file_path": "C:/SSAFY/workspace/NFC/S10P12D211/back-end/codearena",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -72,6 +70,7 @@
       <option name="presentableId" value="Default" />
       <updated>1705971685494</updated>
       <workItem from="1705971686599" duration="6617000" />
+      <workItem from="1706510440616" duration="59000" />
     </task>
     <task id="LOCAL-00001" summary="[feat] Hello World 테스트 진행">
       <option name="closed" value="true" />
