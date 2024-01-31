@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="429d9fa9-888e-4fa2-8df8-448546924eeb" name="Changes" comment="[feat] test.html 문서 추가" />
+    <list default="true" id="429d9fa9-888e-4fa2-8df8-448546924eeb" name="Changes" comment="[feat] test.html 문서 추가">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,7 +45,7 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "develop",
+    "git-widget-placeholder": "feature/board-BE",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/SSAFY/workspace/NFC/S10P12D211/back-end/codearena",
     "node.js.detected.package.eslint": "true",
@@ -71,6 +73,7 @@
       <updated>1705971685494</updated>
       <workItem from="1705971686599" duration="6617000" />
       <workItem from="1706510440616" duration="59000" />
+      <workItem from="1706662541935" duration="586000" />
     </task>
     <task id="LOCAL-00001" summary="[feat] Hello World 테스트 진행">
       <option name="closed" value="true" />
