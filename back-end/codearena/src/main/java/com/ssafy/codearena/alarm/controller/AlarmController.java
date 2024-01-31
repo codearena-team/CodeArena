@@ -15,16 +15,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "알림 API", description = "알림에 관한 Controller **알림 타입 = 1 : 문제 생성 요청, 2 : 문제 수정 요청, 3 : 게임 초대, 4 : 공지사항 **")
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/alarm")
-public class AlarmController {
+public class AlarmController implements AlarmControllerDocs{
 
     private final AlarmService alarmService;
 
-    @Operation(summary = "수신함 리스트", description = "파라미터로 받은 유저가 수신한 알림 목록을 최신순으로 정렬하여 전달")
-    @Parameter(name = "userId", description = "수신함 조회를 위한 유저 아이디")
+
     @GetMapping("/receive")
     public ResponseEntity<AlarmResultDto> receive(@RequestParam String userId) {
 
