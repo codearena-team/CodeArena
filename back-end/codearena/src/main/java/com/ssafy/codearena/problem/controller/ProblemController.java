@@ -33,4 +33,11 @@ public class ProblemController {
 
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+
+    @DeleteMapping("{problemId}")
+    private ResponseEntity<ResultDto> deleteProblem(@PathVariable String problemId){
+        log.debug("params : {}", problemId);
+        ResultDto resultDto = service.deleteProblem(problemId);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }
