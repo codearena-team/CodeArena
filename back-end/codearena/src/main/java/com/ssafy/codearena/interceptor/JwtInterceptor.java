@@ -13,7 +13,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtInterceptor implements HandlerInterceptor {
-
     private final String HEADER_AUTH = "Authorization";
 
     private final JwtUtil jwtUtil;
@@ -36,7 +35,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             request.setAttribute("tokenError" , userResultDto);
 
-            //request.getRequestDispatcher("/error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
 
             log.info("request에 메세지 담음 : {} " , request);
 

@@ -19,7 +19,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     // 인터셉터 제외할 path : 로그인, 닉네임+이메일 중복검사, 비밀번호 임시발급, 회원가입, 다른 회원 조회
     private final List<String> excludePointList = Arrays.asList (
-            "/**/login", "/**/duplicate", "/**/password/reissue", "/**/join", "/user", "/problem", "/alarm"
+//            "/**/login", "/**/duplicate", "/**/password/reissue", "/**/join", "/problem", "/alarm" ,"/error", "/user"
+            "/**"
     );
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -39,8 +40,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
+        // 토큰 검사할 애들을 설정해준다.
                 .excludePathPatterns(excludePointList);
-        // 걸리지 않을 애들을 설정해준다.
+        // 토큰 검사하지 않을 애들을 설정해준다.
         //      .addPathPatterns(addEndPointList)
     }
 }
