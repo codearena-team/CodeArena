@@ -104,4 +104,8 @@
             ('${problemId}', '${item.tagName}')
         </foreach>
     </insert>
+
+    <delete id="deleteProblem" parameterType="String">
+        delete from ps_list where problem_id=${problemId}
+    </delete>
 </mapper>

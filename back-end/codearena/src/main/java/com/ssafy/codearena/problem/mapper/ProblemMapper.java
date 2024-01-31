@@ -18,4 +18,5 @@ public interface ProblemMapper {
     void insertProblem(ProblemForInsertDto problemForInsertDto) throws SQLException;
     void insertTestCase(TCListDto tcListDto) throws SQLException;
     void insertProblemTagList(TagListDto tagListDto) throws SQLException;
+    void deleteProblem(String problemId) throws SQLException;
 }

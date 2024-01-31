@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Result;
 import java.util.HashMap;
 import java.util.List;
 
@@ -124,5 +125,21 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
 
+    }
+
+    @Override
+    public ResultDto deleteProblem(String problemId) {
+        ResultDto resultDto = new ResultDto();
+        resultDto.setMsg("해당 문제가 성공적으로 삭제되었습니다.");
+        resultDto.setStatus("200");
+        try{
+            mapper.deleteProblem(problemId);
+        }catch(Exception e){
+            log.error("exceptino : {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("삭제 도중 에러가 발생하였습니다.");
+        }finally{
+            return resultDto;
+        }
     }
 }
