@@ -18,5 +18,7 @@ module.exports = {
     require('tailwindcss-animatecss'),
     require("daisyui"),
   ],
+  
+  
 }
 

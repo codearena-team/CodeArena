@@ -1,0 +1,22 @@
+.problemTable{
+  background-color: #F9F9F7;
+  border-radius: 15px;
+  border-top-left-radius: 0px;
+}
+
+tbody tr:hover{
+  background-color: #dcdcd2;
+}
+
+.orderBy{
+  padding-top: 5px;
+  margin-right: 2px;
+  width: 100px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-color: #F9F9F7;
+}
+
+.unchoice{
+  background-color: #dcdcd2;
+}

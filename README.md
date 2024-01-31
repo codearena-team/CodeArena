@@ -72,3 +72,6 @@
 ### Github-Flow 전략 채택
 <p>- CI/CD 환경에서 개발 진행. </p>
 <p>- master 및 feature 브랜치 활용 </p>
+
+## ⚙ 시스템 아키텍쳐
+![캡처1](/asset/SystemArchitecture.png)
