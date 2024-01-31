@@ -25,7 +25,6 @@ export default function Router () {
     <Routes>
       <Route path="/" element={<Main />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/mypage/:nickname" element={<MyPage />} />
       <Route path="/profile/:nickname" element={<Profile />} />
       <Route path="/profile/:nickname/edit" element={<Edit />} />
       <Route path="/profile/changepassword" element={<ChangePassword />} />

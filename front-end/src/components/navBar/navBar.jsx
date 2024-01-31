@@ -10,7 +10,7 @@ const navigation = [
   // { name: 'Logout', href: '/logout', current: false },
   // { name: 'Profile', href: '/profile', current: false },
   { name: 'Community', href: '/Community', current: false },
-  { name: 'problem', href: '/problem', current: false },
+  { name: 'problem', href: '/problem/1', current: false },
   { name: 'Arena', href: '/arena', current: false },
   { name: 'Login', href: '/login', current: false },
 ]
