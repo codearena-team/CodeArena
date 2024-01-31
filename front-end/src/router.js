@@ -14,9 +14,9 @@ import Alarm from "./pages/profile/alarm/index";
 import Signup from './pages/login/signup/index';
 import SnsSignup from './pages/login/snssignup/index';
 import FindPassword from './pages/login/findpassword/index';
-import CompetitionList from "./components/arena/match/CompetitionList";
-import CompetitionView from './components/arena/match/CompetitionView';
-import GroupList from "./components/arena/match/GroupList";
+import CompetitionList from "./components/arena/Match/CompetitionList";
+import CompetitionView from './components/arena/Match/CompetitionView';
+import GroupList from "./components/arena/Match/GroupList";
 
 
 
