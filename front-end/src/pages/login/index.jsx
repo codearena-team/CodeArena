@@ -6,14 +6,14 @@ import Naver from '../../images/login/naver.png'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'; 
+import { setToken } from '../../features/login/authSlice';
 
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password,setPassword] = useState('');
-
-  
-
+  const dispatch = useDispatch()
 
 
   // 이메일 유효성 검사
@@ -44,14 +44,21 @@ export default function Login() {
           userPassword : password
         }
       })
-        .then((res)=>{
-          console.log(res)
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
+      .then((res)=>{
+        console.log(res.data.data.token)
+        dispatch(setToken(res.data.data))
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
       }
     }
+  
+    const test = () => {
+      
+      dispatch((setToken('asdqwesdavnjk324798145sadhj')))
+    }
+
 
   return (
     <div className='flex justify-center'>

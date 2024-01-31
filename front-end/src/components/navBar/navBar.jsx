@@ -25,14 +25,14 @@ export default function NavBar() {
       {({ open }) => (
         <>
           
-            <div className="relative flex h-16 justify-start">
+            <div className="relative flex h-16 justify-start mb-5">
               <div className="flex-initial absolute inset-y-0 left-0 flex items-center sm:hidden">
               </div>
               <div className="flex flex-1 justify-between align-middle">
                 <div className="flex flex-shrink-0 items-center">
                 <Link to="/">
                   <img
-                    className="h-full w-auto"
+                    className="h-full w-auto mt-3"
                     src={Logo}
                     alt="Your Company"
                   />
@@ -56,8 +56,7 @@ export default function NavBar() {
                     <button
                       type="button"
                       className="relative rounded-full p-1
-                      hover:text-white focus:outline-none focus:ring-2"
-
+                      hover:text-white"
                       >
                       <BellIcon className="h-6 w-6" aria-hidden="true" /> 
                     </button>
@@ -81,8 +80,9 @@ export default function NavBar() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none top-full">
+                      <Link to='/profile/:nickname'>
+                        <Menu.Item>
                         {({ active }) => (
                           <a
                             href="#"
@@ -91,7 +91,9 @@ export default function NavBar() {
                             Profile
                           </a>
                         )}
-                      </Menu.Item>
+                        </Menu.Item>
+                      </Link>
+                      
                       <Menu.Item>
                         {({ active }) => (
                           <a
@@ -109,8 +111,6 @@ export default function NavBar() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            
-    
               </div>
             </div>
      

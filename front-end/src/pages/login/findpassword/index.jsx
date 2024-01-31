@@ -1,5 +1,6 @@
 import '../../css/custom.css'
 import { useState } from 'react'
+import axios from 'axios';
 
 export default function FindPassword(){
   const [email, setEmail] = useState('');
@@ -10,10 +11,22 @@ export default function FindPassword(){
   }
 
   const handleFindpassword = ()=>{
-    if (checkEmail()) {
-      console.log('이메일 유효성 검사 통과')
-    }else {
+    if (!checkEmail()) {
       alert('이메일이 형식에 맞지 않습니다')
+    }else{
+      axios({
+        url:'http://192.168.100.207:80/api/user/password/reissue',
+        method:'post',
+        data : {
+          userEmail : email
+        }
+      })
+      .then((res)=>{
+        console.log(res)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
     }
   }
 
