@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.codearena.Chatting.mapper.GameMapper">
+
+
+    <!-- 랜덤 문제번호 조회 -->
+    <select id="findProblemById" resultType="int">
+        SELECT problem_id
+        FROM code_arena.ps_list
+        ORDER BY RAND() LIMIT 1;
+    </select>
+
+
+</mapper>
