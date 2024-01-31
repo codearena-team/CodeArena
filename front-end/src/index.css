@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  min-height: 735px;
+  margin: 0px;
+}
+
 body {
-  height: 750px;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -11,7 +15,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F4F5F1;
+  min-height: 735px;
 }
+
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

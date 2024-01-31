@@ -70,15 +70,20 @@ export default function Signup(){
 
   const onEmailChange = (e)=>{
     setEmail(e.target.value)
+    // console.log(email)
+    // console.log(e.target.value)
     // 이메일 중복 검사 요청보내기
     axios({
-      url:`http://192.168.100.207:80/api/user/email/duplicate?userEmail=${email}`,
+      url:`http://192.168.100.207:80/api/user/email/duplicate?userEmail=${e.target.value}`,
       method:'get',
     })
     .then((res)=>{
       console.log(res.data.data.result)
-      if (res.data.data.result === 'false'){
+      console.log(res.data.data.result === false)
+      if (res.data.data.result === false){
         setEmailmessage('중복된 이메일 입니다')
+      }else{
+        setEmailmessage('')
       }
     })
     .catch((err)=>{
@@ -91,13 +96,15 @@ export default function Signup(){
     setNickname(e.target.value)
     // 닉네임 중복 검사 요청보내기
     axios({
-      url:`http://192.168.100.207:80/api/user/nick/duplicate?userNickname=${nickname}`,
+      url:`http://192.168.100.207:80/api/user/nick/duplicate?userNickname=${e.target.value}`,
       method:'get',
     })
     .then((res)=>{
       console.log(res.data.data.result)
-      if (res.data.data.result === 'false'){
+      if (res.data.data.result === false){
         setNicknamemessage('중복된 닉네임 입니다')
+      }else{
+        setNicknamemessage('')
       }
     })
     .catch((err)=>{
@@ -126,14 +133,14 @@ export default function Signup(){
             <div className="inputs">
               <input type='text' value={email} onChange={onEmailChange}required />
               <label>이메일</label>
-              <h1 className='text-sm text-red-500'>{setEmailmessage}</h1>
+              <h1 className='text-sm text-red-500'>{emailmessage}</h1>
             </div>
           </div>
           <div className="container">
             <div className="inputs">
               <input type='text' value={nickname} onChange={onNicknameChange} required />
               <label>닉네임</label>
-              <h1 className='text-sm text-red-500'>{setNicknamemessage}</h1>
+              <h1 className='text-sm text-red-500'>{nicknamemessage}</h1>
             </div>
           </div>
           <div className="container">
