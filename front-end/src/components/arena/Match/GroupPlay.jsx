@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function GroupLobby() {
+export default function GroupPlay() {
 
     return (
         <div>

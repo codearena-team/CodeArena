@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CreateModal from './modal/BannerCreateModal';
 
 import FindMatch from '../../images/arena/TopBanner/FindMatch.gif';
 import FindMatchAsset from '../../images/arena/TopBanner/FindMatch.png';
@@ -20,6 +21,7 @@ export default function TopBanner() {
   const [isGameSearchHovered, setIsGameSearchHovered] = useState(false);
   const [isSpeedModeHovered, setIsSpeedModeHovered] = useState(false);
   const [isEffiModeHovered, setIsEffiModeHovered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -118,6 +120,16 @@ export default function TopBanner() {
     }, desiredTimeInSeconds * 1000);
   };
 
+  // 게임 생성 모달 열기
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 게임 생성 모달 닫기
+  const closeModal = () => {
+      setIsModalOpen(false);
+  };
+
   return (
     <div className='flex flex-col items-center justify-center relative'>
       {/* 상단 배너 선 */}
@@ -132,7 +144,7 @@ export default function TopBanner() {
       >
         {/* 경쟁 매칭 버튼*/}
         <button
-          className="m-2 rounded-xl"
+          className="m-2 rounded-xl hover:scale-110"
           style={{ width: '80%', height: 'auto' }}
           onClick={openLanguageModal} // 클릭하면 모달 띄우기
           onMouseEnter={() => setIsFindMatchHovered(true)} // 마우스 호버 In
@@ -236,23 +248,27 @@ export default function TopBanner() {
             </div>
           </dialog>
         </button>
+
         {/* 게임 생성 */}
         <button
-          className="px-4 py-2 mx-2 rounded-xl"
-          style={{ width: '80%', height: 'auto' }}
-          onMouseEnter={() => setIsGameCreateHovered(true)} // 마우스 호버 In
-          onMouseLeave={() => setIsGameCreateHovered(false)} // 마우스 호버 Out
+            className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
+            style={{ width: '80%', height: 'auto' }}
+            onClick={() => document.getElementById('my_modal_1').showModal()}
+            onMouseEnter={() => setIsGameCreateHovered(true)} // 마우스 호버 In
+            onMouseLeave={() => setIsGameCreateHovered(false)} // 마우스 호버 Out
         >
-          <img
+            <img
             src={isGameCreateHovered ? GameCreate : GameCreateAsset} // 게임 생성 Hover
             alt="게임생성 이미지"
             className="mr-2 rounded-xl"
             style={{ width: '100%', height: 'auto' }}
-          />
+            />
         </button>
+        {<CreateModal closeModal={closeModal} />}
+
         {/* 게임 찾기 */}
         <button
-          className="px-4 py-2 mx-2 rounded-xl"
+          className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
           style={{ width: '80%', height: 'auto' }}
           onMouseEnter={() => setIsGameSearchHovered(true)} // 마우스 호버 In
           onMouseLeave={() => setIsGameSearchHovered(false)} // 마우스 호버 Out

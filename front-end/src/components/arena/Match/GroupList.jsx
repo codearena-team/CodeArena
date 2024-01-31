@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../../css/shake.css';
+import '../../../pages/css/shake.css';
 import CreateModal from '../modal/CreateModal';
 
 export default function GroupList() {
@@ -9,7 +9,7 @@ export default function GroupList() {
     const [searchText, setSearchText] = useState(''); // 검색어 텍스트 입력
     const [selectedButton, setSelectedButton] = useState('group'); // 선택된 버튼 타입 -> 단체전
     const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false); // 방생성 모달 열고 닫기
 
     const PAGE_SIZE = 10; // 한 페이지에 보여줄 방 개수
 
@@ -39,37 +39,37 @@ export default function GroupList() {
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
 
-    // useEffect(() => {
-    //     // 페이지에 맞는 데이터를 가져오는 함수
-    //     const getPaginatedData = () => {
-    //         const startIndex = (currentPage - 1) * PAGE_SIZE;
-    //         const endIndex = startIndex + PAGE_SIZE;
-    //         return problemData.slice(startIndex, endIndex);
-    //     };
+    useEffect(() => {
+        // 페이지에 맞는 데이터를 가져오는 함수
+        const getPaginatedData = () => {
+            const startIndex = (currentPage - 1) * PAGE_SIZE;
+            const endIndex = startIndex + PAGE_SIZE;
+            return problemData.slice(startIndex, endIndex);
+        };
 
-    //     setPaginatedData(getPaginatedData());
-    // }, [currentPage, problemData]);
+        setPaginatedData(getPaginatedData());
+    }, [currentPage, problemData]);
 
     // 진행 시간을 1초씩 증가시키는 함수
-    // useEffect(() => {
-    //     let timer;
-    //     const interval = setInterval(() => {
-    //         setPaginatedData(prevData => {
-    //             const updatedData = prevData.map(item => {
-    //                 return { ...item, duration: item.duration + 1 };
-    //             });
-    //             return updatedData.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-    //         });
+    useEffect(() => {
+        let timer;
+        const interval = setInterval(() => {
+            setPaginatedData(prevData => {
+                const updatedData = prevData.map(item => {
+                    return { ...item, duration: item.duration + 1 };
+                });
+                return updatedData.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+            });
             
-    //         // 여기서 1분 (60초) 이상이 되면 clearInterval 호출
-    //         timer = setTimeout(() => clearInterval(interval), 60 * 1000);
-    //     }, 1000);
+            // 여기서 1분 (60초) 이상이 되면 clearInterval 호출
+            timer = setTimeout(() => clearInterval(interval), 60 * 1000);
+        }, 1000);
     
-    //     return () => {
-    //         clearInterval(interval);
-    //         clearTimeout(timer);
-    //     };
-    // }, [currentPage]);
+        return () => {
+            clearInterval(interval);
+            clearTimeout(timer);
+        };
+    }, [currentPage]);
 
     // 페이지네이션 이전 페이지로 이동
     const handlePrevPage = () => {
@@ -196,30 +196,32 @@ export default function GroupList() {
 
             {/* 페이지네이션 */}
             <div className="flex justify-center mt-5">
-                <button
-                    className="btn btn-pagination"
-                    onClick={handlePrevPage}
-                    disabled={currentPage === 1}
-                >
-                    {'<'}
-                </button>
-                {Array.from({ length: Math.min(5, Math.ceil(problemData.length / PAGE_SIZE)) }, (_, index) => (
+                <div className='absolute bottom-0 mb-5'>
                     <button
-                        key={index + 1}
-                        className={`btn btn-pagination hover:scale-125 ${currentPage === index + 1 ? 'active' : ''}`}
-                        style={{ backgroundColor: currentPage === index + 1 ? '#E3E6D9' : 'white' }}
-                        onClick={() => setCurrentPage(index + 1)}
+                        className="btn btn-pagination"
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
                     >
-                        {index + 1}
+                        {'<'}
                     </button>
-                ))}
-                <button
-                    className="btn btn-pagination"
-                    onClick={handleNextPage}
-                    disabled={currentPage === Math.ceil(problemData.length / PAGE_SIZE)}
-                >
-                    {'>'}
-                </button>
+                    {Array.from({ length: Math.min(5, Math.ceil(problemData.length / PAGE_SIZE)) }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            className={`btn btn-pagination hover:scale-125 ${currentPage === index + 1 ? 'active' : ''}`}
+                            style={{ backgroundColor: currentPage === index + 1 ? '#E3E6D9' : 'white' }}
+                            onClick={() => setCurrentPage(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        className="btn btn-pagination"
+                        onClick={handleNextPage}
+                        disabled={currentPage === Math.ceil(problemData.length / PAGE_SIZE)}
+                    >
+                        {'>'}
+                    </button>
+                </div>
             </div>
         </div>
     );

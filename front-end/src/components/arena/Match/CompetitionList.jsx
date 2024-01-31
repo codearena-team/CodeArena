@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import '../../css/shake.css';
+import { Link, useNavigate } from 'react-router-dom';
+import '../../../pages/css/shake.css';
 
 export default function CompetitionList() {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 표시 데이터
@@ -10,6 +10,8 @@ export default function CompetitionList() {
     const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
     const PAGE_SIZE = 10; // 한 페이지에 보여줄 방 개수
 
+    const navigate = useNavigate();
+    
     // 가상의 문제 데이터 (일단은 10개정도..)
     const problemData = [
         { id: 1, problemNumber: '#1000', problemTitle: '두 정수 더하기', participants: ['user1', 'user2'], duration: '00:30', spectators: 5, isFull: false },
@@ -167,9 +169,15 @@ export default function CompetitionList() {
                     <div className="text-center">{item.spectators}</div>
                     <div className="text-center">
                         {item.isFull ? (
-                            <button className="btn btn-disabled" disabled>입장불가</button>
+                        <button className="btn btn-disabled" disabled>입장불가</button>
                         ) : (
-                            <button className="btn btn-enter hover:scale-125">입장하기</button>
+                            // 경쟁전 관전 페이지로 입장하기
+                            <Link
+                                to={`/game-list/competition/view/${item.id}`}
+                                className="btn btn-enter hover:scale-125"
+                            >
+                                입장하기
+                            </Link>
                         )}
                     </div>
                 </div>
@@ -177,30 +185,32 @@ export default function CompetitionList() {
 
             {/* 페이지네이션 */}
             <div className="flex justify-center mt-5">
-                <button
-                    className="btn btn-pagination"
-                    onClick={handlePrevPage}
-                    disabled={currentPage === 1}
-                >
-                    {'<'}
-                </button>
-                {Array.from({ length: Math.min(5, Math.ceil(problemData.length / PAGE_SIZE)) }, (_, index) => (
+                <div className='absolute bottom-0 mb-5'>
                     <button
-                        key={index + 1}
-                        className={`btn btn-pagination hover:scale-125 ${currentPage === index + 1 ? 'active' : ''}`}
-                        style={{ backgroundColor: currentPage === index + 1 ? '#E3E6D9' : 'white' }}
-                        onClick={() => setCurrentPage(index + 1)}
+                        className="btn btn-pagination"
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
                     >
-                        {index + 1}
+                        {'<'}
                     </button>
-                ))}
-                <button
-                    className="btn btn-pagination"
-                    onClick={handleNextPage}
-                    disabled={currentPage === Math.ceil(problemData.length / PAGE_SIZE)}
-                >
-                    {'>'}
-                </button>
+                    {Array.from({ length: Math.min(5, Math.ceil(problemData.length / PAGE_SIZE)) }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            className={`btn btn-pagination hover:scale-125 ${currentPage === index + 1 ? 'active' : ''}`}
+                            style={{ backgroundColor: currentPage === index + 1 ? '#E3E6D9' : 'white' }}
+                            onClick={() => setCurrentPage(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        className="btn btn-pagination"
+                        onClick={handleNextPage}
+                        disabled={currentPage === Math.ceil(problemData.length / PAGE_SIZE)}
+                    >
+                        {'>'}
+                    </button>
+                </div>
             </div>
         </div>
     );

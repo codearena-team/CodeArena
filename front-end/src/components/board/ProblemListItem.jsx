@@ -1,4 +1,5 @@
-import "../css/ProblemListItem.css"
+import "../../pages/css/ProblemListItem.css";
+
 
 export default function ProblemListItem(probs) {
 
