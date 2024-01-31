@@ -1,9 +1,9 @@
-package com.ssafy.codearena;
+package com.ssafy.codearena.Chatting;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-class CodearenaApplicationTests {
+class ChattingApplicationTests {
 
 	@Test
 	void contextLoads() {
