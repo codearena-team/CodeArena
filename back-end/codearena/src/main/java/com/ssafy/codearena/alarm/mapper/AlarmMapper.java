@@ -8,10 +8,10 @@ import java.util.List;
 
 @Mapper
 public interface AlarmMapper {
-    List<AlarmReceiveDto> receive(String userId);
-    List<AlarmReceiveDto> sendList(String userId);
-    int send(AlarmSendDto alarmSendDto);
-    AlarmReceiveDto detail(String alarmId);
-    void readChange(String alarmId);
-    void statusChange(String alarmId, String alarmStatus);
+    List<AlarmReceiveDto> receive(String userId) throws Exception;
+    List<AlarmReceiveDto> sendList(String userId) throws  Exception;
+    void send(AlarmSendDto alarmSendDto) throws  Exception;
+    AlarmReceiveDto detail(String alarmId) throws  Exception;
+    void readChange(String alarmId) throws  Exception;
+    void statusChange(String alarmId, String alarmStatus) throws  Exception;
 }
