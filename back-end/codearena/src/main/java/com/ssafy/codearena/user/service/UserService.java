@@ -1,9 +1,6 @@
 package com.ssafy.codearena.user.service;
 
-import com.ssafy.codearena.user.dto.UserJoinDto;
-import com.ssafy.codearena.user.dto.UserLoginDto;
-import com.ssafy.codearena.user.dto.UserReissueDto;
-import com.ssafy.codearena.user.dto.UserResultDto;
+import com.ssafy.codearena.user.dto.*;
 
 public interface UserService {
 
@@ -14,4 +11,5 @@ public interface UserService {
     UserResultDto reissue(UserReissueDto userReissueDto);
     UserResultDto searchUser(String userNickname);
     void saveRefreshToken(String userEmail, String refreshToken);
+    UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto);
 }

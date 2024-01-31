@@ -13,6 +13,12 @@
         <result column="effi_rating" property="effiRating"/>
     </resultMap>
 
+    <resultMap id="tokenDataDto" type="TokenDataDto">
+        <result column="user_id" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_email" property="userEmail"/>
+    </resultMap>
+
     <insert id="join" parameterType="userJoinDto">
         insert into user(user_email, user_password, user_nickname, user_intro) values("${userEmail}" ,"${userPassword}" , "${userNickname}", "${userIntro}");
     </insert>
@@ -25,8 +31,10 @@
         select count(*) from user where user_email="${email}";
     </select>
 
-    <select id="login" parameterType="userLoginDto" resultType="int">
-        select count(*) from user where user_email="${userEmail}" and user_password="${userPassword}";
+    <select id="login" parameterType="userLoginDto" resultMap="tokenDataDto">
+        select user_id, user_nickname, user_email
+        from user
+        where user_email=#{userEmail} and user_password=#{userPassword};
     </select>
 
     <update id="reissue" parameterType="userReissueDto">
@@ -56,6 +64,12 @@
     <update id="saveRefreshToken" parameterType="map">
         update user
         set refresh_token = #{refreshToken}
+        where user_email=#{userEmail};
+    </update>
+
+    <update id="changePassword" parameterType="userChangePasswordDto">
+        update user
+        set user_password=#{userPassword}
         where user_email=#{userEmail};
     </update>
     

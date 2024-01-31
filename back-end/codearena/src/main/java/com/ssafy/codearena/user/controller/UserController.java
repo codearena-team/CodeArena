@@ -1,13 +1,11 @@
 package com.ssafy.codearena.user.controller;
 
-import com.ssafy.codearena.user.dto.UserJoinDto;
-import com.ssafy.codearena.user.dto.UserLoginDto;
-import com.ssafy.codearena.user.dto.UserReissueDto;
-import com.ssafy.codearena.user.dto.UserResultDto;
+import com.ssafy.codearena.user.dto.*;
 import com.ssafy.codearena.user.service.UserService;
 import com.ssafy.codearena.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +41,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<UserResultDto> searchUser(@RequestParam String userNickname) {
         return new ResponseEntity<UserResultDto>(userService.searchUser(userNickname) ,HttpStatus.OK);
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<UserResultDto> changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto) {
+        return new ResponseEntity<UserResultDto>(userService.changePassword(userChangePasswordDto), HttpStatus.OK);
     }
 
 

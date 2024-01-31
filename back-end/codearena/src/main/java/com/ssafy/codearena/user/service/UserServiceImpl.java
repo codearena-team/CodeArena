@@ -71,12 +71,13 @@ public class UserServiceImpl implements UserService{
         try {
             String lowerEmail = userLoginDto.getUserEmail().toLowerCase();
             userLoginDto.setUserEmail(lowerEmail);
-            int result = mapper.login(userLoginDto);
+            TokenDataDto tokenDataDto = mapper.login(userLoginDto);
+            log.info("[UserLogin] : {}" , tokenDataDto);
 
             // 로그인 성공 시
-            if (result == 1) {
-                String accessToken = jwtUtil.createAccessToken(userLoginDto.getUserEmail());
-                String refreshToken = jwtUtil.createRefreshToken(userLoginDto.getUserEmail());
+            if (tokenDataDto != null) {
+                String accessToken = jwtUtil.createAccessToken(tokenDataDto);
+                String refreshToken = jwtUtil.createRefreshToken(tokenDataDto);
 
                 log.debug("access token : {}", accessToken);
                 log.debug("refresh token : {}", refreshToken);
@@ -142,7 +143,6 @@ public class UserServiceImpl implements UserService{
             int result = mapper.checkEmail(lowerEmail);
 
             if (result >= 1) {
-                userResultDto.setStatus("200");
                 userResultDto.setMsg("이미 사용 중");
                 userDuplicatedDto.setResult(false);
             }
@@ -262,6 +262,30 @@ public class UserServiceImpl implements UserService{
             userResultDto.setStatus("500");
             userResultDto.setMsg("서버 내부 에러");
             userResultDto.setData(null);
+        }
+        return userResultDto;
+    }
+
+    @Override
+    public UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto) {
+        UserResultDto userResultDto = new UserResultDto();
+
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("비밀번호 변경 완료");
+        userResultDto.setData(null);
+
+        try {
+            String lowerEmail = userChangePasswordDto.getUserEmail().toLowerCase();
+            userChangePasswordDto.setUserEmail(lowerEmail);
+            int result = mapper.changePassword(userChangePasswordDto);
+
+            if (result != 1) {
+                userResultDto.setStatus("404");
+                userResultDto.setMsg("해당 사용자 없음!");
+            }
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 내부 에러 발생");
         }
         return userResultDto;
     }
