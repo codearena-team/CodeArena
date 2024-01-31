@@ -21,7 +21,6 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         final String token = request.getHeader(HEADER_AUTH);
-
         if (token != null && jwtUtil.checkToken(token)) {
             log.info("access 토큰 사용 가능 : {}", token);
             return true;
@@ -37,7 +36,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             request.setAttribute("tokenError" , userResultDto);
 
-            request.getRequestDispatcher("/error").forward(request, response);
+            //request.getRequestDispatcher("/error").forward(request, response);
 
             log.info("request에 메세지 담음 : {} " , request);
 

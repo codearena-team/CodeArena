@@ -19,7 +19,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     // 인터셉터 제외할 path : 로그인, 닉네임+이메일 중복검사, 비밀번호 임시발급, 회원가입, 다른 회원 조회
     private final List<String> excludePointList = Arrays.asList (
-            "/**/login", "/**/duplicate", "/**/password/reissue", "/**/join", "/user"
+            "/**/login", "/**/duplicate", "/**/password/reissue", "/**/join", "/user", "/problem", "/alarm"
     );
     @Override
     public void addCorsMappings(CorsRegistry registry) {
