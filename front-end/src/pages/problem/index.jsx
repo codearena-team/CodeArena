@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import ProblemListItem from "../../components/board/ProblemListItem"
+import { useParams, Link } from "react-router-dom"
+import ProblemListItem from "../../components/problem/ProblemListItem"
 import "../css/problemsolve.css"
 import axios from "axios"
 
@@ -15,10 +15,14 @@ export default function Ps() {
   const pgno = params.pgno
   const [problemList, setProblemList] = useState([])
 
+  const test = () =>{
+    console.log(word)
+  }
+
   useEffect(()=> {
     axios({
       method : 'get',
-      url : `http://192.168.100.208:8080/problem?orderBy=date&cate=&word=&pgno=${pgno}&spp=15`,
+      url : `http://i10d211.p.ssafy.io:8081/api/problem?orderBy=date&cate=&word=&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       console.log(res);
@@ -70,7 +74,7 @@ export default function Ps() {
             <thead>
               <tr>
                 <th className="p-1.5">번호</th>
-                <th className="p-1.5">제목</th>
+                <th className="p-1.5 w-1/2">제목</th>
                 <th className="p-1.5">출제자</th>
                 <th className="p-1.5">정답자수</th>
                 <th className="p-1.5">제출자수</th>
@@ -90,11 +94,15 @@ export default function Ps() {
           </table>
         </div>
       </div>
-      <div class="join flex justify-center my-2">
-        <button class="join-item btn btn-sm">1</button>
-        <button class="join-item btn btn-sm btn-active">2</button>
-        <button class="join-item btn btn-sm">3</button>
-        <button class="join-item btn btn-sm">4</button>
+      <div class="join flex justify-between my-2">
+        <div className="w-40"></div>
+        <div>
+          <button class="join-item btn btn-sm">1</button>
+          <button class="join-item btn btn-sm btn-active">2</button>
+          <button class="join-item btn btn-sm">3</button>
+          <button class="join-item btn btn-sm">4</button>
+        </div>
+        <div className="w-40"><Link to="/problem/create" className="btn btn-neutral btn-sm">문제 생성</Link></div>
       </div>
     </div>
   )
