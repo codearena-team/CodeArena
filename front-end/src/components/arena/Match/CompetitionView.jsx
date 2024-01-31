@@ -19,9 +19,9 @@ export default function CompetitionView() {
     };
 
     return (
-        <div className="competition-view" style={{ height: '950px'}}>
+        <div className="competition-view" style={{ height: '85vh' }}>
             {/* 왼쪽(6)에 해당하는 부분 */}
-            <div className="left-panel mt-5 ml-3 mr-3" style={{ width: `${panelWidths.left}%` }}>
+            <div className="left-panel mt-5 ml-3 mr-3" style={{ width: `${panelWidths.left}%`}}>
                 {/* 왼쪽 상단 (유저 정보) */}
                 <div
                     className="match-header rounded-xl shadow-lg"
@@ -33,7 +33,7 @@ export default function CompetitionView() {
                 </div>
                 <div
                     className="user-screens mt-5 rounded-xl shadow-lg"
-                    style={{ width: '100%', height: '75%', backgroundColor: '#F5EBDB' }}
+                    style={{ width: '100%', height: '80%', backgroundColor: '#F5EBDB' }}
                 >
                     {/* "유저1의 화면이 보이는 공간 vs 유저2의 화면이 보이는 공간" */}
                     {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
@@ -48,7 +48,7 @@ export default function CompetitionView() {
             <DividingLine onDividerMove={handleDividerMove} />
 
             {/* 오른쪽(4)에 해당하는 부분 (추가할 내용) */}
-            <div className="right-panel mr-3 mt-5" style={{ width: `${panelWidths.right}%` }}>
+            <div className="right-panel mr-3 mt-5" style={{ width: `${panelWidths.right}%`, display: 'flex', flexDirection: 'column' }}>
                 {/* 상단 버튼 영역 */}
                 <div
                     className="flex justify-center items-center mb-3 ml-1"
@@ -78,7 +78,7 @@ export default function CompetitionView() {
 
                 {/* 채팅 div */}
                 <div
-                    className="ml-5"
+                    className="ml-5 flex-grow"
                     style={{ maxHeight: "calc(100% - 40px)", overflowY: "auto" }}
                 >
                     <div className="chat chat-end mt-3">
@@ -101,7 +101,7 @@ export default function CompetitionView() {
                     </div>
                 </div>
                 {/* 입력 폼 */}
-                <div className="flex justify-center items-center mb-3">
+                <div className="flex justify-center items-center mb-5 relative bottom-5">
                     <div className="w-5/6">
                         <div className="flex justify-center items-center">
                             <input

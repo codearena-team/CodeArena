@@ -196,7 +196,7 @@ export default function GroupList() {
 
             {/* 페이지네이션 */}
             <div className="flex justify-center mt-5">
-                <div className='absolute bottom-0 mb-5'>
+                <div className='relative bottom-0 mb-5'>
                     <button
                         className="btn btn-pagination"
                         onClick={handlePrevPage}
