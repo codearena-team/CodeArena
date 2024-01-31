@@ -55,7 +55,7 @@
 
     <select id="problemCount" parameterType="hashmap" resultType="int">
         select count(problem_id) from ps_list as p
-        where 1=1
+        where 1=1 and p.problem_visibility = 1
         <include refid="cate"></include>
     </select>
 
