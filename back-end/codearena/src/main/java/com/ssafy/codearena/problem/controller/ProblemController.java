@@ -40,4 +40,10 @@ public class ProblemController {
         ResultDto resultDto = service.deleteProblem(problemId);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+
+    @GetMapping("/category")
+    private ResponseEntity<ResultDto> getAllCategories(){
+        ResultDto resultDto = service.getTagCategory();
+        return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
+    }
 }

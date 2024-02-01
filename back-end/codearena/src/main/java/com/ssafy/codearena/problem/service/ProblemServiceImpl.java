@@ -142,4 +142,22 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
+
+    @Override
+    public ResultDto getTagCategory() {
+        ResultDto resultDto = new ResultDto();
+        try{
+            List<TagDto> tagList = mapper.getAllTagNames();
+            resultDto.setStatus("200");
+            resultDto.setMsg("태그 목록을 불러오는데 성공하였습니다.");
+            resultDto.setData(tagList);
+        }catch(Exception e){
+            log.error("exception : {}", e);
+            resultDto.setData(null);
+            resultDto.setStatus("500");
+            resultDto.setMsg("태그 목록을 불러오는 도중 에러가 발생하였습니다.");
+        }finally{
+            return resultDto;
+        }
+    }
 }

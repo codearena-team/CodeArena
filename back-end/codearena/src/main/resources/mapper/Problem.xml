@@ -34,6 +34,10 @@
         <collection column="problemId = problem_id" property="testCase" javaType="List" ofType="..TestCaseDto" select="selectTestCase"></collection>
     </resultMap>
 
+    <resultMap id="tagName" type="tagDto">
+        <result property="tagName" column="tag_name"/>
+    </resultMap>
+
     <sql id='cate'>
         <choose>
             <when test=' word!=null and !"".equals(word)'>
@@ -108,4 +112,8 @@
     <delete id="deleteProblem" parameterType="String">
         delete from ps_list where problem_id=${problemId}
     </delete>
+
+    <select id="getAllTagNames" resultMap="tagName">
+        select tag_name from ps_tag_cate
+    </select>
 </mapper>

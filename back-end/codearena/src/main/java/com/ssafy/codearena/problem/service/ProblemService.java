@@ -11,4 +11,6 @@ public interface ProblemService {
     ResultDto insertProblem(ProblemForInsertDto problemForInsertDto);
 
     ResultDto deleteProblem(String problemId);
+
+    ResultDto getTagCategory();
 }

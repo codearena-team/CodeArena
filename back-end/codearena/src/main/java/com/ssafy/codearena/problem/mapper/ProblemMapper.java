@@ -1,10 +1,7 @@
 package com.ssafy.codearena.problem.mapper;
 
 
-import com.ssafy.codearena.problem.dto.ProblemWithSearchDto;
-import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
-import com.ssafy.codearena.problem.dto.TCListDto;
-import com.ssafy.codearena.problem.dto.TagListDto;
+import com.ssafy.codearena.problem.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
@@ -19,4 +16,5 @@ public interface ProblemMapper {
     void insertTestCase(TCListDto tcListDto) throws SQLException;
     void insertProblemTagList(TagListDto tagListDto) throws SQLException;
     void deleteProblem(String problemId) throws SQLException;
+    List<TagDto> getAllTagNames() throws SQLException;
 }
