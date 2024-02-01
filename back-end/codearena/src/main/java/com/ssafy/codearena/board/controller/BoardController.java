@@ -36,8 +36,15 @@ public class BoardController implements BoardControllerDocs{
     @Override
     @PostMapping("/write")
     public ResponseEntity<?> boardWrite(@RequestBody BoardWriteDto boardWriteDto) {
-        System.out.println(boardWriteDto);
+
         return new ResponseEntity<BoardResultDto>(boardService.boardWrite(boardWriteDto), HttpStatus.OK);
+    }
+
+    @Override
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<?> boardDelete(@PathVariable String boardId) {
+
+        return new ResponseEntity<BoardResultDto>(boardService.boardDelete(boardId), HttpStatus.OK);
     }
 
 }

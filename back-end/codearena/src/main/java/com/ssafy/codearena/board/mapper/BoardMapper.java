@@ -10,4 +10,5 @@ import java.sql.SQLException;
 public interface BoardMapper {
     public BoardDetailDto boardDetail(String boardId) throws Exception;
     public void boardWrite(BoardWriteDto boardWriteDto) throws Exception;
+    public void boardDelete(String boardId) throws Exception;
 }

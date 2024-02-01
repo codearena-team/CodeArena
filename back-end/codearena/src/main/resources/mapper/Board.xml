@@ -27,4 +27,10 @@
         INSERT INTO board(user_id, problem_id, board_title, board_lang, board_content, board_date)
         VALUES("${userId}", "${problemId}", "${title}", "${lang}", "${content}", now());
     </insert>
+
+    <delete id="boardDelete" parameterType="string">
+        DELETE
+        FROM board
+        WHERE article_no = ${boardId};
+    </delete>
 </mapper>

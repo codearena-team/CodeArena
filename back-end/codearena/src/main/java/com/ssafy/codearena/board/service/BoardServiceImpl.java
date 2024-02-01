@@ -40,7 +40,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<BoardDetailDto> boardList(Map<String, String> map) {
+    public BoardResultDto boardList(Map<String, String> map) {
         return null;
     }
 
@@ -65,17 +65,35 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void updateHit(String boardId) {
+    public BoardResultDto updateHit(String boardId) {
 
+        return null;
     }
 
     @Override
-    public void boardUpdate(BoardWriteDto boardUpdateDto) {
+    public BoardResultDto boardUpdate(BoardWriteDto boardUpdateDto) {
 
+        return null;
     }
 
     @Override
-    public void boardDelete(String boardId) {
+    public BoardResultDto boardDelete(String boardId) {
 
+        BoardResultDto boardResultDto = new BoardResultDto();
+
+        boardResultDto.setStatus("200");
+        boardResultDto.setMsg("게시글 삭제 성공");
+        boardResultDto.setData(null);
+
+        try {
+
+            boardMapper.boardDelete(boardId);
+        }
+        catch (Exception e) {
+            boardResultDto.setStatus("500");
+            boardResultDto.setData("Server Internal Error");
+        }
+
+        return boardResultDto;
     }
 }
