@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
@@ -47,6 +48,9 @@ public interface BoardControllerDocs {
             @Parameter(name = "sortType", description = "정렬 기준", example = "time : 최신순, hit : 조회수순, default : time"),
             @Parameter(name = "key", description = "검색 조건", example = "board_title : 제목 기준, problem_id : 문제번호 기준 || DB컬럼명과 똑같이 사용"),
             @Parameter(name = "word", description = "검색 조건 기준으로 검색할 내용")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "게시글 객체", content = @Content(schema = @Schema(implementation = BoardDetailDto.class)))
     })
     public ResponseEntity<?> boardList(Map<String, String> map);
 
