@@ -17,4 +17,7 @@ public interface ProblemMapper {
     void insertProblemTagList(TagListDto tagListDto) throws SQLException;
     void deleteProblem(String problemId) throws SQLException;
     List<TagDto> getAllTagNames() throws SQLException;
+
+    ProblemDetailDto getProblemDetailByProblemId(String problemId) throws SQLException;
+
 }

@@ -28,15 +28,54 @@
         <result property="problemMem" column="problem_mem"/>
         <result property="problemRating" column="problem_rating"/>
     </resultMap>
+    
+    <resultMap id="problemDetail" type="problemDetailDto">
+        <result property="problemId" column="problem_id"/>
+        <result property="problemTitle" column="problem_title"/>
+        <result property="problemContent" column="problem_content"/>
+        <result property="submitCount" column="submit_count"/>
+        <result property="acceptCount" column="accept_count"/>
+        <result property="percentage" column="percentage"/>
+        <result property="userId" column="user_id"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="problemInputDesc" column="problem_input_desc"/>
+        <result property="problemOutputDesc" column="problem_output_desc"/>
+        <result property="problemTime" column="problem_time"/>
+        <result property="problemMem" column="problem_mem"/>
+        <result property="problemExInput" column="problem_ex_input"/>
+        <result property="problemExOutput" column="problem_ex_output"/>
+        <result property="problemVisibility" column="problem_visibility"/>
+        <collection column="problemId=problem_id" property="tagList" javaType="List" ofType="TagDto" select="getTagListByProblemId"/>
+    </resultMap>
 
     <resultMap id="TCListDto" type="tCListDto">
         <result property="problemId" column="problem_id"/>
-        <collection column="problemId = problem_id" property="testCase" javaType="List" ofType="..TestCaseDto" select="selectTestCase"></collection>
+        <collection column="problemId=problem_id" property="testCase" ofType="TestCaseDto" select="selectTestCase"/>
     </resultMap>
 
     <resultMap id="tagName" type="tagDto">
+        <result property="tagId" column="tag_id"/>
         <result property="tagName" column="tag_name"/>
     </resultMap>
+
+    <select id="getTagListByProblemId" resultMap="tagName">
+        select tag_id, tag_name from ps_problem_tag where problem_id=${problemId}
+    </select>
+
+    <select id="getProblemDetailByProblemId" resultMap="problemDetail" parameterType="String">
+        select
+            p.problem_id, p.problem_title, ifnull(inline.submit_count, 0) as submit_count, ifnull(inline2.accept_count, 0) as accept_count,u.user_id, u.user_nickname,
+            ifnull(round((inline2.accept_count/inline.submit_count * 100),2), 0) AS percentage,
+            problem_content, problem_input_desc, problem_output_desc, problem_time, problem_mem, problem_ex_input, problem_ex_output, problem_visibility
+        from ps_list as p
+                 left join (select problem_id, count(distinct user_id) as submit_count from ps_submit group by problem_id) as inline
+                           on p.problem_id = inline.problem_id
+                 left join (select problem_id, count(distinct user_id) as accept_count from ps_submit where submit_status like '%맞았습니다.%' group by problem_id) as inline2
+                           on p.problem_id = inline2.problem_id
+                 left join `user` as u
+                           on p.user_id = u.user_id
+        where p.problem_id = ${problemId}
+    </select>
 
     <sql id='cate'>
         <choose>
@@ -86,7 +125,7 @@
 
     <sql id="orderby">
         <if test='orderBy!=null and !"".equals(orderBy)'>
-            order by '${orderBy}' desc
+            order by ${orderBy} desc
         </if>
     </sql>
     <select id="selectProblemList" parameterType="hashmap" resultMap="problemWithSearchDto">

@@ -13,4 +13,5 @@ public interface ProblemService {
     ResultDto deleteProblem(String problemId);
 
     ResultDto getTagCategory();
+    ResultDto getProblemDetail(String problemId);
 }

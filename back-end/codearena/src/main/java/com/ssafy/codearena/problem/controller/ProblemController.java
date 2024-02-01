@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.HashMap;
 
 @RestController
@@ -45,5 +46,10 @@ public class ProblemController {
     private ResponseEntity<ResultDto> getAllCategories(){
         ResultDto resultDto = service.getTagCategory();
         return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
+    }
+    @GetMapping("{problemId}")
+    private ResponseEntity<ResultDto> getProblemDetail(@PathVariable String problemId){
+        ResultDto resultDto = service.getProblemDetail(problemId);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

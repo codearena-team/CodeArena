@@ -183,4 +183,25 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
+
+    @Override
+    public ResultDto getProblemDetail(String problemId) {
+        ResultDto resultDto = new ResultDto();
+        ProblemDetailDto problemDetail = new ProblemDetailDto();
+        resultDto.setMsg("문제 번호 "+problemId+"에 대한 정보를 조회하는데 성공했습니다.");
+        resultDto.setData(problemDetail);
+        resultDto.setStatus("200");
+        try{
+            problemDetail = mapper.getProblemDetailByProblemId(problemId);
+        }catch(Exception e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("문제 번호 "+problemId+"에 대한 정보를 조회하는데 에러가 발생하였습니다.");
+            problemDetail = null;
+        }finally{
+            resultDto.setData(problemDetail);
+            return resultDto;
+        }
+
+    }
 }
