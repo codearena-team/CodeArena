@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DividingLine from "./dividingLine";
+import G_DividingLine from "./G_dividingLine";
 import GroupTopInfo from './GroupTopInfo';
 
 export default function GroupView() {
@@ -24,24 +24,22 @@ export default function GroupView() {
       {/* 단체전 관전실 */}
       <GroupTopInfo />
       {/* 아래 채팅 */}
-      <div className="competition-view" style={{ height: '85vh' }}>
+      <div className="competition-view mt-3" style={{ height: '85vh' }}>
         {/* 왼쪽(6)에 해당하는 부분 */}
         <div className="left-panel ml-3 mr-3 mt-1" style={{ width: `${panelWidths.left}%`}}>
           <div
-            className="user-screens mt-5 rounded-xl shadow-lg"
+            className="user-screens mt-5 rounded-xl shadow-lg flex items-center justify-center"
             style={{ width: '100%', height: '80%', backgroundColor: '#F5EBDB' }}
           >
             {/* "유저1의 화면이 보이는 공간 vs 유저2의 화면이 보이는 공간" */}
             {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
-            <div className="user-screen">유저1의 화면</div>
-            <div className="user-screen">vs</div>
-            <div className="user-screen">유저2의 화면</div>
+            <div className="user-screen">관전자가 보는 플레이어의 화면</div>
           </div>
         </div>
 
         {/* 구분선을 기준으로 왼쪽(6):오른쪽(4)로 나누어져있음 */}
         {/* handleDividerMove를 통해 왼쪽 오른쪽 화면 비율 조정 */}
-        <DividingLine onDividerMove={handleDividerMove} />
+        <G_DividingLine onDividerMove={handleDividerMove} />
 
         {/* 오른쪽(4)에 해당하는 부분 */}
         <div className="right-panel mr-3 mt-1" style={{ width: `${panelWidths.right}%`, display: 'flex', flexDirection: 'column' }}>

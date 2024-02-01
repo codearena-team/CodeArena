@@ -18,7 +18,7 @@
   cursor: ew-resize; /* 가로로 조절할 수 있는 커서 모양 */
   position: absolute;
   border-radius: 10px;
-  top: 30%;
+  top: 53.5%;
 }
 
 .vertical-divider.hovered {
@@ -37,3 +37,4 @@
   font-weight: bold;
   cursor: pointer; /* 커서 모양을 pointer로 변경 */
 }
+  

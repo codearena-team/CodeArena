@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ExitModal from "../modal/ExitModal";
+import C_ExitModal from "../modal/C_ExitModal";
 
 export default function TopInfo() {
   const [panelWidths, setPanelWidths] = useState({
@@ -48,7 +48,7 @@ export default function TopInfo() {
         >
           나가기
         </button>
-        {<ExitModal />}
+        {<C_ExitModal />}
       </div>
     </div>
   );

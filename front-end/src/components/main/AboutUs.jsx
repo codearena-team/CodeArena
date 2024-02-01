@@ -32,7 +32,7 @@ export default function AboutUs({ fromRefFourElement }) {
           </p>
           <br />
           <br />
-          <img src={We} alt="We have.." className='z-0' />
+          <img src={We} alt="We have.." className='relative bottom-10 z-0' />
       </div>
 
       {/* 회색 선 - 아래쪽 */}

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import '../../../pages/css/dividingLine.css';
+import '../../../pages/css/C_dividingLine.css';
 
 export default function DividingLine({ onDividerMove }) {
     // 상태 관리를 통해 마우스 커서 상태 및 구분선 위치 관리
@@ -77,7 +77,7 @@ export default function DividingLine({ onDividerMove }) {
     return (
         <div className="competition-view">
             <div
-                className={`vertical-divider ${isHovered || isDragging ? 'hovered' : ''}`}
+                className={`vertical-dividingLine ${isHovered || isDragging ? 'hovered' : ''}`}
                 style={{ left: `${dividerPosition}%` }}
                 onMouseEnter={handleDividerMouseEnter}
                 onMouseLeave={handleDividerMouseLeave}

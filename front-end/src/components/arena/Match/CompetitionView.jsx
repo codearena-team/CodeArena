@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DividingLine from "./dividingLine";
+import C_DividingLine from "./C_dividingLine";
 import TopInfo from "./CompTopInfo";
 
 export default function CompetitionView() {
@@ -25,7 +25,7 @@ export default function CompetitionView() {
         {/* 왼쪽(6)에 해당하는 부분 */}
         <div className="left-panel ml-3 mr-3 mt-1" style={{ width: `${panelWidths.left}%`}}>
           <div
-            className="user-screens mt-5 rounded-xl shadow-lg"
+            className="user-screens mt-5 rounded-xl shadow-lg flex items-center justify-center"
             style={{ width: '100%', height: '80%', backgroundColor: '#F5EBDB' }}
           >
             {/* "유저1의 화면이 보이는 공간 vs 유저2의 화면이 보이는 공간" */}
@@ -38,7 +38,7 @@ export default function CompetitionView() {
 
         {/* 구분선을 기준으로 왼쪽(6):오른쪽(4)로 나누어져있음 */}
         {/* handleDividerMove를 통해 왼쪽 오른쪽 화면 비율 조정 */}
-        <DividingLine onDividerMove={handleDividerMove} />
+        <C_DividingLine onDividerMove={handleDividerMove} />
 
         {/* 오른쪽(4)에 해당하는 부분 */}
         <div className="right-panel mr-3 mt-1" style={{ width: `${panelWidths.right}%`, display: 'flex', flexDirection: 'column' }}>
