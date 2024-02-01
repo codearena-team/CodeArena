@@ -2,46 +2,76 @@ import React from 'react';
 // npm install styled-components 애니메이트 기능 구현 설치 라이브러리
 import styled, { keyframes } from 'styled-components';
 
+import Oh from '../../images/arena/HotMatch/oh.png'
+import Gwi from '../../images/arena/HotMatch/gwi.png'
+import Hae from '../../images/arena/HotMatch/hae.png'
+import Kim from '../../images/arena/HotMatch/kim.png'
+import View from '../../images/arena/HotMatch/View.png'
+import VS from '../../images/arena/HotMatch/VS.png'
+import Fighting from '../../images/arena/HotMatch/Fighting.gif'
 
 export default function HotMatch() {
-    // Hot Match 애니메이트
-    const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
-    const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
+  // Hot Match 애니메이트
+  const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
+  const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
 
-    return (
-        <div className='flex flex-col mt-5 relative'>
-            <br />
-            {/* Hot Match 문구 */}
-            <AnimatedHeader className='ml-5 font-bold'>Hot Match !</AnimatedHeader>
-            {/* Hot Match 배너 */}
-            <div className="mt-5 shadow-xl mb-5" style={{ backgroundColor: '#E3E6D9', height: '450px' }}>
-                {/* 캐러셀 */}
-                <div className='flex justify-center mt-2'>
-                    <div className="carousel carousel-center w-full p-4 space-x-4 rounded-box">
-                        <div className="carousel-item">
-                            <img src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg" className="rounded-box" />
-                        </div> 
-                        <div className="carousel-item">
-                            <img src="https://daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg" className="rounded-box" />
-                        </div> 
-                        <div className="carousel-item">
-                            <img src="https://daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg" className="rounded-box" />
-                        </div> 
-                        <div className="carousel-item">
-                            <img src="https://daisyui.com/images/stock/photo-1494253109108-2e30c049369b.jpg" className="rounded-box" />
-                        </div> 
-                        <div className="carousel-item">
-                            <img src="https://daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg" className="rounded-box" />
-                        </div> 
-                        <div className="carousel-item">
-                            <img src="https://daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg" className="rounded-box" />
-                        </div> 
-                        <div className="carousel-item">
-                            <img src="https://daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg" className="rounded-box" />
-                        </div>
+  const userData = [
+    { id: 1, profileImage: Oh, username: 'username1', profileImage2: Kim, username2: 'username2', rating: 1100, rating2: 1105 },
+    { id: 2, profileImage: Gwi, username: 'username2', profileImage2: Hae, username2: 'username2', rating: 1040, rating2: 1055 },
+  ]
+
+  return (
+    <div className='flex flex-col mt-5 relative'>
+      <br />
+      {/* Hot Match 문구 */}
+      <AnimatedHeader className='ml-5 font-bold'>Hot Match !</AnimatedHeader>
+      {/* Hot Match 배너 */}
+      <div className="mt-5 shadow-xl mb-5" style={{ backgroundColor: '#E3E6D9', height: '100%' }}>
+        {/* 캐러셀 */}
+        <div className='flex justify-center mt-2'>
+          <div className="carousel w-full p-4 space-x-0 rounded-box">
+            {/* 아이템 요소 */}
+            {userData.map((user) => (
+              <div
+                key={user.id}
+                className="carousel-item flex items-center justify-center"
+                style={{ width:'100%'}}
+              >
+                <div className="rounded-xl ml-2 w-1/3 shadow-xl p-5 mb-2" style={{ backgroundColor: '#F4F5F1' }}>
+                  {/* 지금 경쟁 중! + 시청자 수 */}
+                  <div className="flex items-center justify-end">
+                    <img src={Fighting} alt="지금 경쟁 중!" className='w-1/3 rounded-xl mr-10' />
+                    <img src={View} alt="시청자 수" className="w-8 h-8 rounded-full" />
+                    <span className="ml-2">120 View</span>
+                  </div>
+                  {/* 유저1 vs 유저2 사진 */}
+                  <div className="mt-5 flex items-center justify-between">
+                    <img src={user.profileImage} alt={user.id} className="w-1/3 h-100 rounded-2xl shadow-xl" />
+                    <img src={VS} alt="VS" className="w-1/4 h-100 rounded-lg" />
+                    <img src={user.profileImage2} alt={user.id} className="w-1/3 h-100 rounded-2xl shadow-xl" />
+                  </div>
+                  {/* 구분선 */}
+                  <hr
+                    className="mt-2"
+                    style={{ border: '2px solid #E3E6D9' }}
+                  />
+                  {/* 유저1 vs 유저2 정보 */}
+                  <div className="mt-5 flex items-center justify-between">
+                    <div className='text-center'>
+                      <div>{user.username}</div>
+                      <div>{user.rating}</div>
                     </div>
+                    <div className='text-center'>
+                      <div>{user.username2}</div>
+                      <div>{user.rating2}</div>
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

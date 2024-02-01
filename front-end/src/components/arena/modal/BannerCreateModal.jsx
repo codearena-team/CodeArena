@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import GameCreate from '../../../images/arena/TopBanner/GameCreate.gif';
-import GameCreateAsset from '../../../images/arena/TopBanner/GameCreate.png';
 // import ChatRoom from '../match/ChatRoom';
 
 export default function CreateModal({ closeModal, onRoomCreated }) {
   const [roomName, setRoomName] = useState('');
   const [chatrooms, setChatrooms] = useState([]);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const [isGameCreateHovered, setIsGameCreateHovered] = useState(false);
-
-  const roomid = () => {
-    {
-      
-    }
-  }
 
   const findAllRoom = () => {
       axios.get('http://192.168.100.209:80/chat/rooms')
@@ -63,10 +54,6 @@ export default function CreateModal({ closeModal, onRoomCreated }) {
       setSelectedRoomId(roomId);
     }
   };
-
-  useEffect(() => {
-    findAllRoom();
-  }, []);
 
   return (
     <div>
