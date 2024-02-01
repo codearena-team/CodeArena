@@ -13,12 +13,12 @@
 .vertical-divider {
   position: relative;
   width: 10px; /* 구분선의 너비 */
-  height: 87%;
+  height: 60%;
   background-color: #ddd; /* 구분선 색상 */
   cursor: ew-resize; /* 가로로 조절할 수 있는 커서 모양 */
   position: absolute;
   border-radius: 10px;
-  top: 10%;
+  top: 30%;
 }
 
 .vertical-divider.hovered {
