@@ -5,6 +5,7 @@ import Problem from './pages/problem/index';
 import ProblemDetail from "./pages/problem/problemId/detail/index";
 import ProblemEdit from "./pages/problem/problemId/edit/index";
 import ProblemCreate from "./pages/problem/create";
+import TagList from "./pages/problem/taglist";
 import Main from './pages/main/index';
 import Arena from "./pages/arena/index";
 import Profile from "./pages/profile/index";
@@ -35,6 +36,8 @@ export default function Router () {
       <Route path="/problem/create" element={<ProblemCreate />} />
       <Route path="/problem/:problemId/edit" element={<ProblemEdit />} />
       <Route path="/problem/:problemId/detail" element={<ProblemDetail />} />
+      <Route path="/problem/tagList" element={<TagList />} />
+
 
       <Route path="/arena" element={<Arena />} />
       <Route path="/game-list/competition" element={<CompetitionList />} /> {/* 경쟁전 방리스트 페이지 */}

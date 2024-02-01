@@ -13,6 +13,9 @@ export default function ProblemDetail() {
   const problemId = params.problemId
   const [code, setCode] = useState('')
   const [lang, setLang] = useState('java')
+  const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
+  const [selectedList, setSelectedList] = useState([])
+  const [cate, setCate] = useState('선택')
   const [problem, setProblem] = useState({})
   useEffect(()=> {
     axios({
@@ -28,58 +31,37 @@ export default function ProblemDetail() {
     })
   },[])
 
+  const onClickCate = (e)=>{
+    const arr = cateList
+    const filtered = arr.filter((element) => element !== e.target.value);
+    setCateList(filtered)
+    const tmp = selectedList
+    tmp.push(e.target.value)
+    setSelectedList(tmp)
+    setCate('선택')
+  }
+  const onClickSelected = (e)=>{
+    const text = e.target.innerText.split("(")[0]
+    const arr = selectedList
+    const filtered = arr.filter((element) => element !== text);
+    setSelectedList(filtered)
+    const tmp = cateList
+    tmp.push(text)
+    setCateList(tmp)
+  }
+
+
   const onChangeCode = useCallback((code, viewUpdate) => {
     setCode(code);
   }, []);
   const onClickHandler = (e) => {
     console.log(code);
   }
-  // setProblem({
-  //   problemId : 1,
-  //   userNickname : "양건우",
-  //   problemTime : "1000",
-  //   problemMem : "64",
-  //   submitCnt : "2345",
-  //   solveCnt : "1234",
-  //   solveCntPeople : "2345",
-  //   solvePercent :"23" ,
-  //   problemTitle : "제곱수 찾기",
-  //   problemContent : "N행 M열의 표 A가 있고, 표의 각 칸에는 숫자가 하나씩 적혀있다.\
-  //   연두는 서로 다른 1개 이상의 칸을 선택하려고 하는데, 행의 번호가 선택한 순서대로 등차\
-  //   수열을 이루고 있어야 하고, 열의 번호도 선택한 순서대로 등차수열을 이루고 있어야 한다.\
-  //   이렇게 선택한 칸에 적힌 수를 순서대로 이어붙이면 정수를 하나 만들 수 있다.연두가 만들\
-  //   연두는 서로 다른 1개 이상의 칸을 선택하려고 하는데, 행의 번호가 선택한 순서대로 등차\
-  //   수열을 이루고 있어야 하고, 열의 번호도 선택한 순서대로 등차수열을 이루고 있어야 한다.\
-  //   이렇게 선택한 칸에 적힌 수를 순서대로 이어붙이면 정수를 하나 만들 수 있다.연두가 만들\
-  //   연두는 서로 다른 1개 이상의 칸을 선택하려고 하는데, 행의 번호가 선택한 순서대로 등차\
-  //   수열을 이루고 있어야 하고, 열의 번호도 선택한 순서대로 등차수열을 이루고 있어야 한다.\
-  //   이렇게 선택한 칸에 적힌 수를 순서대로 이어붙이면 정수를 하나 만들 수 있다.연두가 만들\
-  //   연두는 서로 다른 1개 이상의 칸을 선택하려고 하는데, 행의 번호가 선택한 순서대로 등차\
-  //   수열을 이루고 있어야 하고, 열의 번호도 선택한 순서대로 등차수열을 이루고 있어야 한다.\
-  //   이렇게 선택한 칸에 적힌 수를 순서대로 이어붙이면 정수를 하나 만들 수 있다.연두가 만들\
-  //   연두는 서로 다른 1개 이상의 칸을 선택하려고 하는데, 행의 번호가 선택한 순서대로 등차\
-  //   수열을 이루고 있어야 하고, 열의 번호도 선택한 순서대로 등차수열을 이루고 있어야 한다.\
-  //   이렇게 선택한 칸에 적힌 수를 순서대로 이어붙이면 정수를 하나 만들 수 있다.연두가 만들\
-  //   연두는 서로 다른 1개 이상의 칸을 선택하려고 하는데, 행의 번호가 선택한 순서대로 등차\
-  //   수열을 이루고 있어야 하고, 열의 번호도 선택한 순서대로 등차수열을 이루고 있어야 한다.\
-  //   이렇게 선택한 칸에 적힌 수를 순서대로 이어붙이면 정수를 하나 만들 수 있다.연두가 만들\
-  //   연두는 서로 다른 1개 이상의 칸을 선택하려고 하는데, 행의 번호가 선택한 순서대로 등차\
-  //   수열을 이루고 있어야 하고, 열의 번호도 선택한 순서대로 등차수열을 이루고 있어야 한다.\
-  //   이렇게 선택한 칸에 적힌 수를 순서대로 이어붙이면 정수를 하나 만들 수 있다.연두가 만들\
-  //   수 있는 정수 중에서 가장 큰 완전 제곱수를 구해보자. 완전 제곱수란 어떤 정수를 제곱한 수이다.",
-  //   problemInputDesc : "첫째 줄에 N, M이 주어진다. 둘째 줄부터 N개의 줄에는 표에 적힌 숫자가 1번\
-  //    행부터 N번 행까지 순서대로 한 줄에 한 행씩 주어진다. 한 행에 적힌 숫자는 1번 열부터 M번 열까지\
-  //     순서대로 주어지고, 공백없이 모두 붙여져 있다.",
-  //   problemOutputDesc : "첫째 줄에 연두가 만들 수 있는 가장 큰 완전 제곱수를 출력한다. 만약, 완전 \
-  //                       제곱수를 만들 수 없는 경우에는 -1을 출력한다.",
-  //   problemExInput : "2 3\n123\n456",
-  //   problemExOutput : "64",
-  //   })
   return(
-    <div className="grid grid-cols-2 p-8 h-full">
+    <div className="grid grid-cols-2 p-8 h-full pt-0">
       <div>
         <div className="leftUp drop-shadow-xl p-5">
-          <h1 className="text-3xl mb-2">{problem.problemTitle}
+          <h1 className="text-3xl mb-2 ">{problem.problemTitle}
            <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-neutral btn-sm rounded-full ms-2">문제 수정</Link>
            <Link to="/problem/create" className="btn btn-neutral btn-sm rounded-full ms-2">문제 수정 요청</Link>
 
@@ -87,33 +69,84 @@ export default function ProblemDetail() {
           <Link className="btn btn-xs btn-neutral me-2 rounded-full">질문게시판</Link>
           <Link className="btn btn-xs btn-neutral rounded-full">제출현황</Link>
         </div>
-        <div className="leftDown drop-shadow-xl p-5">
-          <p>내용</p>
+        <div className="leftDown drop-shadow-xl p-5 ">
+          <div className="flex justify-center gap-2 drop-shadow-xl text-center mb-4">
+            <div className="bg-rose-200 rounded-lg p-2">
+              <p>시간제한</p>
+              <p>{problem.problemTime}ms</p>
+            </div>
+            <div className="bg-rose-200 rounded-lg p-2">
+              <p>메모리제한</p>
+              <p>{problem.problemMem}MB</p>
+            </div>
+            <div className="join bg-rose-200">
+              <div className="join-item p-2 border-r-2">
+                <p>제출자</p>
+                <p>{problem.submitCount}</p>
+              </div>
+              <div className="join-item p-2 border-r-2">
+                <p>정답자</p>
+                <p>{problem.acceptCount}</p>
+              </div>
+              <div className="join-item p-2">
+                <p>제출률</p>
+                <p>{problem.percentage}</p>
+              </div>
+            </div>
+          </div>
+          <p className="text-xl">내용</p>
           <p>{problem.problemContent}</p>
-          <hr />
-          <p>입력</p>
+          <hr className="my-2" />
+          <p className="text-xl">입력</p>
           <p>{problem.problemInputDesc}</p>
-          <hr />
-          <p>출력</p>
+          <hr className="my-2"  />
+          <p className="text-xl">출력</p>
           <p>{problem.problemOutputDesc}</p>
-          <hr />
+          <hr className="my-2"  />
           <div className="grid grid-cols-2 w-full gap-4">
             <div>
-              <p>입력예제</p>
+              <p className="text-xl">입력예제</p>
               <CodeMirror height="100%" value={problem.problemExInput} onChange={onChangeCode} editable={false} />
             </div>
             <div>
-              <p>출력예제</p>
+              <p className="text-xl">출력예제</p>
               <CodeMirror height="100%" value={problem.problemExOutput} onChange={onChangeCode} editable={false} />
             </div>
           </div>
-
+          
         </div>
       </div>
       <div className="right drop-shadow-xl p-5 sticky">
-        제출
-        <CodeMirror value={code} height="80vh" extensions={[java(),python(),cpp()]} onChange={onChangeCode} />
-        <button onClick={onClickHandler} className="btn btn-sm btn-neutral rounded-full">제 출</button>
+        <div className="flex ">
+          <label className="font-bold ms-1 mt-1">언어</label>
+          <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className=" mb-2 select select-sm select-bordered" >
+            <option>java</option>
+            <option>python</option>
+            <option>cpp</option>
+          </select>
+          <label className="font-bold ms-4 mt-1">알고리즘</label>
+          <select value={cate} onChange={onClickCate} className="select select-sm select-bordered w-20" >
+            <option isabled selected>선택</option>
+            {cateList.map((cate)=>{
+              return(
+                <option onClick={onClickCate}>{cate}</option>
+              )
+            })}
+          </select>
+          <div className="" >
+            {selectedList.map((selected)=>{
+              return(
+                <span className='mx-2' onClick={onClickSelected}>{selected}</span>
+              )
+            })}
+          </div>
+
+        </div>
+        
+        <CodeMirror value={code} height="75vh" extensions={[java(),python(),cpp()]} onChange={onChangeCode} />
+        <div className="flex justify-end">
+          <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full">제 출</button>
+        </div>
       </div>
     </div>
   )
