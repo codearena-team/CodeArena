@@ -1,30 +1,43 @@
 import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/24/outline'
 import Logo from '../../images/common/logo.png'
 import Profile from '../../images/common/profile.png'
+import { useSelector,useDispatch } from 'react-redux'
+import { logout } from '../../features/login/authSlice'
+
+
 
 const navigation = [ 
-  // { name: 'test', href: '/test', current: false },
-  // { name: 'Logout', href: '/logout', current: false },
-  // { name: 'Profile', href: '/profile', current: false },
-  { name: 'Community', href: '/Community', current: false },
+  { name: 'Community', href: '/community', current: false },
   { name: 'problem', href: '/problem/1', current: false },
   { name: 'Arena', href: '/arena', current: false },
   { name: 'Login', href: '/login', current: false },
 ]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function NavBar() {
+  const isLogin = useSelector(state => state.auth.isLogin);
+  const nickName = useSelector(state => state.auth.userNickname)
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
+
+
+  const handleLogout = ()=>{
+    dispatch(logout());
+  }
+
   return (
-    <Disclosure as="nav" className="">
+    <Disclosure as="nav">
       {({ open }) => (
         <>
-          
             <div className="relative flex h-16 justify-start mb-5">
               <div className="flex-initial absolute inset-y-0 left-0 flex items-center sm:hidden">
               </div>
@@ -40,7 +53,7 @@ export default function NavBar() {
                 </div>
                 <div className="flex justify-center items-center">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
+                    {filterNav.map((item) => (
                       <Link
                         key={item.name} 
                         to={item.href}
@@ -53,60 +66,80 @@ export default function NavBar() {
                         {item.name}
                       </Link>
                     ))}
-                    <button
-                      type="button"
-                      className="relative rounded-full p-1
-                      hover:text-white"
-                      >
-                      <BellIcon className="h-6 w-6" aria-hidden="true" /> 
-                    </button>
+                  {/* 벨아이콘 알림함 */}
+                    { isLogin && (
+                      <button
+                        type="button"
+                        className="relative rounded-full p-1
+                        hover:text-white"
+                        onClick={()=>{navigate('/profile/alarm')}}
+                        >
+                        <BellIcon className="h-6 w-6" aria-hidden="true" /> 
+                      </button>
+                    )}
+
                   {/* 프로필 드롭다운위치 */}
-                    <Menu as="div" className="relative ml flex">
-                      <div className="my-auto">
-                        <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2">
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src={Profile}
-                          alt=""
-                        />
-                        </Menu.Button>
-                      </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none top-full">
-                      <Link to='/profile/:nickname'>
+                    {isLogin && (
+                      <Menu as="div" className="relative ml flex">
+                        <div className="my-auto">
+                          <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2">
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src={Profile}
+                            alt=""
+                          />
+                          </Menu.Button>
+                        </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                      <Menu.Items className="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none top-full">
                         <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Profile
-                          </a>
-                        )}
+                            {({ active }) => (
+                              <a
+                                href="#"
+                                className={classNames(active ? 'bg-white' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              >
+                              {nickName}님 환영합니다
+                              </a>
+                            )}
+                          </Menu.Item>
+                          
+                        <Link to='/profile/:nickname'>
+                          <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Profile
+                            </a>
+                          )}
+                          </Menu.Item>
+                        </Link>
+                        
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              onClick={handleLogout}
+                            >
+                              Sign out
+                            </a>
+                          )}
                         </Menu.Item>
-                      </Link>
-                      
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                    </Transition>
-                    </Menu>      
+                      </Menu.Items>
+
+                      </Transition>
+                      </Menu>
+                    )}     
                   </div>
                 </div>
               </div>

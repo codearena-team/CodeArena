@@ -2,24 +2,39 @@ import '../../css/login.css'
 import '../../css/custom.css'
 import { useState } from 'react'
 import axios from 'axios';
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 export default function ChangePassword(){
-  const [currentpassword,setCurrentpassword] = useState('')
   const [password,setPassword] = useState('');
   const [passwordconfirm,setPasswordconfirm] = useState('');
+  const email = useSelector(state => state.auth.userEmail)
+  const navigate = useNavigate()
 
-  // 현재비밀번호가 지금비밀번호인지 확인하고 변경할비밀번호와 비밀번호확인이 일치하는지확인하고
-  // const handleChange = ()=>{
-  //   if (password == passwordconfirm) {
-  //     axios({
-  //       url : 'http://192.168.100.207:80/api/user/password',
-  //       method : 'put',
-  //       data : {
-          
-  //       }
-  //     })
-  //   }
-  // }
+  // 변경할비밀번호와 비밀번호확인이 일치하는지확인하고
+  const handleChange = ()=>{
+    if (password == passwordconfirm) {
+      axios({
+        url : 'http://i10d211.p.ssafy.io:8081/api/user/password',
+        method : 'put',
+        data : {
+          userEmail : email,
+          userPassword : password
+        }
+      })
+      .then((res)=>{
+        console.log(res)
+        alert('비밀번호가 변경되었습니다')
+        navigate('/')
+      })
+      .catch((err)=>{
+        console.log(err)
+        alert('비밀번호가 변경실패')
+      })
+    }else{
+      alert('비밀번호가 일치하지 않습니다')
+    }
+  }
   
 
   return(
@@ -39,12 +54,6 @@ export default function ChangePassword(){
         <div style={{marginTop:50}}>
           <div className="container">
             <div className="inputs">
-              <input type='password' onChange={(e) => {setCurrentpassword(e.target.value)}} required />
-              <label>현재 비밀번호</label>
-            </div>
-          </div>
-          <div className="container">
-            <div className="inputs">
               <input type='password' onChange={(e) => {setPassword(e.target.value)}} required />
               <label>변경할 비밀번호</label>
             </div>
@@ -55,7 +64,7 @@ export default function ChangePassword(){
               <label>비밀번호 확인</label>
             </div>
           </div>
-          <button className="btn btn-neutral w-full rounded-full">비밀번호 변경하기</button>
+          <button className="btn btn-neutral w-full rounded-full" onClick={handleChange}>비밀번호 변경하기</button>
         </div>
       </div>
     </div>

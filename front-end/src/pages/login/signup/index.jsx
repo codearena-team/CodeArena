@@ -1,8 +1,10 @@
 import '../../css/custom.css'
 import { useState } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 export default function Signup(){
+  const navigate = useNavigate()
   const [email, setEmail] = useState('');
   const [nickname,setNickname] = useState('');
   const [introduce,setIntroduce] = useState('');
@@ -49,7 +51,7 @@ export default function Signup(){
     }
     if(checkEmail() && checkNickname() && checkIntroduce() && password == passwordconfirm) {
       axios({
-        url:'http://192.168.100.207:80/api/user/join',
+        url:'http://i10d211.p.ssafy.io:8081/api/user/join',
         method:'post',
         data:{
           userEmail : email,
@@ -60,6 +62,7 @@ export default function Signup(){
       })
       .then((res)=>{
         console.log(res)
+        navigate('/')
       })
       .catch((err)=>{
         console.log(err)

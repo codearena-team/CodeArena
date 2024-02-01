@@ -38,13 +38,13 @@ export default function MyPage() {
   
   return (
     <div className='container mx-auto'>
-      <div className="grid grid-cols-12 p-20">
+      <div className="grid grid-cols-12 p-20 pb-0">
         <div className="col-span-2 gap-4 mt-5">
           <div className='grid grid-cols-1 gap-4'>
             <div className='flex justify-center'><img style={{width:130}} src={Profile} alt="" /></div>
             <h1 className='text-2xl text-center'>{params.nickname}</h1>
             <h1 className='text-2xl text-center'>소개글</h1>
-            <div className='flex justify-center'><button className="btn btn-outline w-20 rounded-full text-xl">follow</button></div>
+            <div className='flex justify-center'><button className="btn btn-outline w-20 rounded-full text-xl drop-shadow-xl">follow</button></div>
             <div className='flex justify-evenly'>
               <button className="btn btn-active rounded-full w-21 text-sm pinkbutton drop-shadow-xl">팔로워 10</button>
               <button className="btn btn-active rounded-full w-21 text-sm pinkbutton drop-shadow-xl">팔로잉 35</button>
@@ -61,8 +61,8 @@ export default function MyPage() {
           </div>
         </div>
         <div className="col-span-6 ml-10">
-          <div className='yellowbox drop-shadow-xl p-5 mb-5' style={{width:'100%'}}>맞힌문제</div>
-          <div className='yellowbox  drop-shadow-xl p-5'>틀린문제</div>
+          <div className='yellowbox drop-shadow-xl p-5 mb-5 font-bold' style={{width:'100%'}}>맞힌문제</div>
+          <div className='yellowbox  drop-shadow-xl p-5 font-bold'>틀린문제</div>
         </div>
         <div className="col-span-4 gap-4 ml-10">
           <div className='pinkbox drop-shadow-xl mb-5'>
@@ -79,8 +79,8 @@ export default function MyPage() {
           <div className='pinkbox drop-shadow-xl flex'>
             <img style={{width:40,height:40}} src={Rank} alt="" className='ml-2 mt-5'/>
             <div>
-              <div className='text-sm p-3'>스피드전점수 :</div>
-              <div className='text-sm p-3'>효율전점수 :</div>
+              <div className='text-sm p-3 font-bold'>speed score :</div>
+              <div className='text-sm p-3 font-bold'>efficiency score :</div>
             </div>
           </div>
         </div>

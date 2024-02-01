@@ -141,6 +141,7 @@ export default function TopBanner() {
       <div
        className="mt-3 flex justify-center w-3/4 shadow-lg rounded-xl z-10"
        style={{ backgroundColor: '#E3E6D9', height: 'auto' }}
+       
       >
         {/* 경쟁 매칭 버튼*/}
         <button

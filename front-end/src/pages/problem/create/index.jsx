@@ -1,4 +1,3 @@
-
 import CodeMirror from '@uiw/react-codemirror';
 import {useState, useCallback} from "react";
 import axios from 'axios';
@@ -145,7 +144,6 @@ export default function ProblemCreate() {
 
   return (
     <div className="p-20 pt-0">
-      
       <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
         <h1 className='font-bold text-3xl text-center mb-5'>문제 생성</h1>
         <div className='flex justify-end mb-4'>
@@ -199,6 +197,7 @@ export default function ProblemCreate() {
               <label className="font-bold me-1"htmlFor="rating">문제 등급</label>
               <input value={rating} onChange={(e)=>{setRating(e.target.value)}} className="w-8/12 bg-white rounded-lg bor input input-sm input-bordered" id="rating" type="number" />
             </div>
+            
           </div>
           <div className="grid grid-cols-2 gap-5">
             <div className='flex justify-end'>

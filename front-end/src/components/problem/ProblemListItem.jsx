@@ -15,7 +15,6 @@ export default function ProblemListItem(probs) {
       <th className="p-1">{probs.problemItem.acceptCount}</th>
       <th className="p-1">{probs.problemItem.submitCount}</th>
       <th className="p-1">{probs.problemItem.percentage}</th>
-      {/* <th className="p-1">{probs.problemItem.problemRating}</th> */}
     </tr>
   )
 }

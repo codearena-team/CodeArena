@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Login from './pages/login/index';
-import Board from './pages/board/index';
+import Community from './pages/community/index';
+import CommunityCreate from './pages/community/create/index';
 import Problem from './pages/problem/index';
 import ProblemDetail from "./pages/problem/problemId/detail/index";
 import ProblemEdit from "./pages/problem/problemId/edit/index";
@@ -30,7 +31,9 @@ export default function Router () {
       <Route path="/profile/:nickname/edit" element={<Edit />} />
       <Route path="/profile/changepassword" element={<ChangePassword />} />
       <Route path="/profile/alarm" element={<Alarm />} />
-      <Route path="/board" element={<Board />} />
+
+      <Route path="/community" element={<Community />} />
+      <Route path="/community/create" element={<CommunityCreate />} />
       
       <Route path="/problem/:pgno" element={<Problem />} />
       <Route path="/problem/create" element={<ProblemCreate />} />
