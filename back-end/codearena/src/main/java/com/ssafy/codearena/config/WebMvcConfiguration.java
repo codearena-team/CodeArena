@@ -15,34 +15,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-    private final JwtInterceptor jwtInterceptor;
-
-    // 인터셉터 제외할 path : 로그인, 닉네임+이메일 중복검사, 비밀번호 임시발급, 회원가입, 다른 회원 조회
-    private final List<String> excludePointList = Arrays.asList (
-//            "/**/login", "/**/duplicate", "/**/password/reissue", "/**/join", "/problem", "/alarm" ,"/error", "/user"
-            "/**"
-    );
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/**")
-                .allowedOrigins("*")
-//			.allowedOrigins("http://localhost:5173", "http://localhost:5174")
+//                .allowedOrigins("http://192.168.0.29:3000")
+              .allowedOriginPatterns("*")
+//			    .allowedOrigins("http://localhost:5173", "http://localhost:5174")
                 .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
                         HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
                         HttpMethod.PATCH.name())
-//			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
-//			.allowCredentials(true)
-//			.exposedHeaders("*")
+//                .allowedHeaders("Authorization")
+//			    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
+			    .allowCredentials(true)
+			    .exposedHeaders("Authorization")
                 .maxAge(1800); // Pre-flight Caching
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor)
-        // 토큰 검사할 애들을 설정해준다.
-                .excludePathPatterns(excludePointList);
-        // 토큰 검사하지 않을 애들을 설정해준다.
-        //      .addPathPatterns(addEndPointList)
-    }
 }

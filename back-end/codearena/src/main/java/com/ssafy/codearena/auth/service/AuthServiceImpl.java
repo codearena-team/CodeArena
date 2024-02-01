@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthMapper mapper;
-
     private final JwtUtil jwtUtil;
     private final String HEADER_AUTH = "Authorization";
 
@@ -30,14 +29,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResultDto check(HttpServletRequest request) {
 
-        //응애
-
         AuthResultDto authResultDto = new AuthResultDto();
         authResultDto.setStatus("200");
         authResultDto.setMsg("토큰 사용 가능");
         authResultDto.setData(null);
 
         String token = request.getHeader(HEADER_AUTH);
+
+        System.out.println("token = " + token);
 
         if ("".equals(token) || !jwtUtil.checkToken(token)) {
             authResultDto.setStatus("302");
@@ -69,19 +68,7 @@ public class AuthServiceImpl implements AuthService {
                 // access 토큰 재발급 해서 보내주기
                 String accessToken = jwtUtil.createAccessToken(result);
 
-//                response.setHeader("Authorization");
-
-//                // 쿠키 만들기
-//                ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
-//                        .maxAge( 15)  // 액세스 토큰의 유효기간은 15초로 설정
-//                        .path("/")
-//                        .httpOnly(true)  // 브라우저에서 토큰에 접근할 수 없도록 하는 설정
-//                        .sameSite("None")  // 모든 도메인에서 사용이 가능하도록 설정
-////                      .secure(true)   https 환경에서만 사용이 가능하도록 하는 옵션
-//                        .build();
-//
-//                // response 헤더에 "Set-Cookie" 로 access 토큰을 전달한다.
-//                response.setHeader("Set-Cookie", cookie.toString());
+                response.setHeader(HEADER_AUTH, accessToken);
 
             } else {
                 // 해당 refresh 토큰을 가진 사람이 없다면
