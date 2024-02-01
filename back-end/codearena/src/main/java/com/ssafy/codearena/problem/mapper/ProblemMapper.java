@@ -20,4 +20,6 @@ public interface ProblemMapper {
 
     ProblemDetailDto getProblemDetailByProblemId(String problemId) throws SQLException;
 
+    List<TestCaseDto> getTestCasesByProblemId(String problemId) throws SQLException;
+
 }

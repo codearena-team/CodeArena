@@ -52,4 +52,9 @@ public class ProblemController {
         ResultDto resultDto = service.getProblemDetail(problemId);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+    @GetMapping("{problemId}/testcase")
+    private ResponseEntity<ResultDto> getTestCase(@PathVariable String problemId){
+        ResultDto resultDto = service.getTestCase(problemId);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }

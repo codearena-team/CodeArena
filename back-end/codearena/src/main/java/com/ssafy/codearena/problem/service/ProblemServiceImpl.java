@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.Result;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -203,5 +204,26 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
 
+    }
+
+    @Override
+    public ResultDto getTestCase(String problemId) {
+        ResultDto resultDto = new ResultDto();
+        List<TestCaseDto> testcase = Collections.EMPTY_LIST;
+        resultDto.setStatus("202");
+        resultDto.setMsg("문제번호 : "+problemId+"에 대한 테스트케이스가 비었습니다.");
+        try{
+            testcase = mapper.getTestCasesByProblemId(problemId);
+            if(!testcase.isEmpty()){
+                resultDto.setStatus("200");
+                resultDto.setMsg("문제번호 : "+problemId+"에 대한 테스트케이스 조회에 성공했습니다.");
+            }
+        }catch(Exception e){
+            testcase = Collections.EMPTY_LIST;
+            resultDto.setMsg("문제번호 : "+problemId+" 에 대한 테스트케이스 조회 중 에러가 발생하였습니다.");
+        }finally{
+            resultDto.setData(testcase);
+            return resultDto;
+        }
     }
 }

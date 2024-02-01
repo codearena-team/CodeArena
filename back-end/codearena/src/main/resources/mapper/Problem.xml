@@ -53,6 +53,12 @@
         <collection column="problemId=problem_id" property="testCase" ofType="TestCaseDto" select="selectTestCase"/>
     </resultMap>
 
+    <resultMap id="testcase" type="testCaseDto">
+        <result property="input" column="input"/>
+        <result property="output" column="output"/>
+        <result property="tid" column="tid"/>
+    </resultMap>
+
     <resultMap id="tagName" type="tagDto">
         <result property="tagId" column="tag_id"/>
         <result property="tagName" column="tag_name"/>
@@ -146,11 +152,11 @@
         <include refid="orderby"></include>
         limit ${start}, ${offset}
     </select>
-    <!-- problem_id, user_id, problem_title, problem_content, problem_rating, problem_time, problem_mem, problem_ex_input, problem_ex_output, problem_input_desc, problem_output_desc, problem_validation_code, problem_validation_lang, problem_visibility, problem_date -->
+
     <insert id="insertProblem" parameterType="problemForInsertDto">
         insert into ps_list ( user_id, problem_title, problem_content, problem_time, problem_mem, problem_ex_input, problem_ex_output, problem_input_desc, problem_output_desc, problem_validation_code, problem_validation_lang )
         values (${userId}, '${problemTitle}', '${problemContent}', '${problemTime}', '${problemMem}','${problemExInput}', '${problemExOutput}', '${problemInputDesc}', '${problemOutputDesc}', '${problemValidationCode}', '${problemValidationLang}')
-        <selectKey order="AFTER" keyProperty="problemId" resultType="java.lang.Integer">
+            <selectKey order="AFTER" keyProperty="problemId" resultType="java.lang.Integer">
             select last_insert_id();
         </selectKey>
     </insert>
@@ -176,5 +182,9 @@
 
     <select id="getAllTagNames" resultMap="tagName">
         select tag_name from ps_tag_cate
+    </select>
+
+    <select id="getTestCasesByProblemId" resultMap="testcase" parameterType="String">
+        select tid, input, output from ps_testcase where problem_id=${problemId}
     </select>
 </mapper>

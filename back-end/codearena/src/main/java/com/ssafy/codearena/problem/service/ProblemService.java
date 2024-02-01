@@ -14,4 +14,5 @@ public interface ProblemService {
 
     ResultDto getTagCategory();
     ResultDto getProblemDetail(String problemId);
+    ResultDto getTestCase(String problemId);
 }
