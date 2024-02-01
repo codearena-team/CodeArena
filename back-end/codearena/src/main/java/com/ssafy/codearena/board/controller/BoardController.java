@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -55,4 +56,9 @@ public class BoardController implements BoardControllerDocs{
         return new ResponseEntity<BoardResultDto>(boardService.boardUpdate(boardUpdateDto), HttpStatus.OK);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<?> boardList(@RequestParam Map<String, String> map) {
+
+        return new ResponseEntity<BoardResultDto>(boardService.boardList(map), HttpStatus.OK);
+    }
 }

@@ -13,22 +13,57 @@
         <result column="board_type" property="type"/>
         <result column="board_lang" property="lang"/>
         <result column="board_content" property="content"/>
-        <result column="board_code" property="code" />
+        <result column="board_code" property="code"/>
         <result column="board_hit" property="hit"/>
         <result column="board_spoiler" property="spoiler"/>
         <result column="board_date" property="date"/>
     </resultMap>
 
+    <!--> 검색조건에 관한 동적쿼리문 -->
+    <sql id="search">
+        <if test='word != null and word != ""'>
+            <if test="key == 'board_title'">
+                AND board_title LIKE CONCAT('%', '${word}', '%')
+            </if>
+            <if test="key != 'board_title'">
+                AND ${key} = ${word}
+            </if>
+        </if>
+    </sql>
+
+
+    <!--> 정렬에 관한 동적쿼리문 -->
+    <sql id="sort">
+        <if test="sortType != null and sortType != ''">
+            <if test="sortType == 'articleNo'">
+                ORDER BY article_no DESC
+            </if>
+            <if test="sortType == 'time'">
+                ORDER BY board_date DESC
+            </if>
+            <if test="sortType == 'hit'">
+                ORDER BY board_hit DESC
+            </if>
+        </if>
+    </sql>
+
+    <!-- 게시글 타입 동적쿼리 -->
+    <sql id="type">
+        <if test="boardType != null and boardType != ''">
+            AND board_type = ${boardType}
+        </if>
+    </sql>
+
 
     <select id="boardDetail" parameterType="string" resultMap="detail">
-        SELECT *
+        SELECT article_no, user_id, problem_id, board_title, board_type, board_lang, board_content, board_code, board_hit, board_spoiler, board_date
         FROM board
         WHERE article_no = ${boardId};
     </select>
 
     <insert id="boardWrite" parameterType="com.ssafy.codearena.board.dto.BoardWriteDto">
         INSERT INTO board(user_id, problem_id, board_title, board_type, board_lang, board_content, board_code, board_spoiler, board_date)
-        VALUES("${userId}", "${problemId}", "${title}", "${type}", "${lang}", "${content}", "${code}", ${spoiler}, now());
+        VALUES(#{userId}, #{problemId}, #{title}, #{type}, #{lang}, #{content}, #{code}, #{spoiler}, now());
     </insert>
 
     <delete id="boardDelete" parameterType="string">
@@ -42,4 +77,24 @@
         SET problem_id = ${problemId}, board_title = "${title}", board_lang = "${lang}", board_content = "${content}", board_code = "${code}", board_spoiler = ${spoiler}
         WHERE user_id = ${userId};
     </update>
+
+    <select id="boardList" parameterType="map" resultMap="detail">
+        SELECT article_no, user_id, problem_id, board_title, board_type, board_lang, board_content, board_code, board_hit, board_spoiler, board_date
+        FROM board
+            <where>
+                <include refid="type"/>
+                <include refid="search"/>
+                <include refid="sort"/>
+            </where>
+        LIMIT ${start}, ${listSize}
+    </select>
+
+    <select id="getTotalBoardCount" parameterType="map" resultType="int">
+        SELECT COUNT(article_no)
+        FROM board
+        <where>
+            <include refid="search"></include>
+        </where>
+    </select>
+
 </mapper>

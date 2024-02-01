@@ -20,7 +20,7 @@ public class BoardDetailDto {
     @Schema(description = "제목")
     private String title;
 
-    @Schema(description = "질문 타입", example = "질문, 시간복잡도, 공간복잡도, 반례 요청, 반례")
+    @Schema(description = "질문 타입", example = "1 : 질문, 2 : 시간복잡도, 3 : 공간복잡도, 4 : 반례 요청, 5 : 반례")
     private String type;
     
     @Schema(description = "질문 언어")
@@ -37,5 +37,8 @@ public class BoardDetailDto {
 
     @Schema(description = "스포방지 여부", example = "1 : 스포방지, 2 : 전체공개")
     private int spoiler;
+
+    @Schema(description = "게시 날짜")
+    private String date;
 
 }

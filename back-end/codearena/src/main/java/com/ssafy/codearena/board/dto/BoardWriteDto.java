@@ -18,7 +18,7 @@ public class BoardWriteDto {
     @Schema(description = "제목")
     private String title;
 
-    @Parameter(description = "질문 타입", example = "질문, 시간복잡도, 공간복잡도, 반례 요청, 반례")
+    @Parameter(description = "질문 타입", example = "1 : 질문, 2 : 시간복잡도, 3 : 공간복잡도, 4 : 반례 요청, 5 : 반례")
     private String type;
 
     @Schema(description = "사용 언어", example = "python, c++, java")

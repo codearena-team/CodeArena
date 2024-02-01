@@ -5,11 +5,14 @@ import com.ssafy.codearena.board.dto.BoardUpdateDto;
 import com.ssafy.codearena.board.dto.BoardWriteDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 @Tag(name = "게시판 API", description = "게시판 관련 API")
 public interface BoardControllerDocs {
@@ -35,5 +38,11 @@ public interface BoardControllerDocs {
     @Parameter(name = "Object", description = "boardUpdateDto", content = @Content(schema = @Schema(implementation = BoardUpdateDto.class)))
     @ApiResponse(responseCode = "200", description = "게시글 수정 성공")
     public ResponseEntity<?> boardUpdate(BoardUpdateDto boardUpdateDto);
+
+    @Operation(summary = "게시글 리스트")
+    @Parameters(value = {
+            @Parameter(name = "pageNo")
+    })
+    public ResponseEntity<?> boardList(Map<String, String> map);
 
 }
