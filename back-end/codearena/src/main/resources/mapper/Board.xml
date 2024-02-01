@@ -10,9 +10,12 @@
         <result column="user_id" property="userId"/>
         <result column="problem_id" property="problemId"/>
         <result column="board_title" property="title"/>
+        <result column="board_type" property="type"/>
         <result column="board_lang" property="lang"/>
         <result column="board_content" property="content"/>
+        <result column="board_code" property="code" />
         <result column="board_hit" property="hit"/>
+        <result column="board_spoiler" property="spoiler"/>
         <result column="board_date" property="date"/>
     </resultMap>
 
@@ -24,8 +27,8 @@
     </select>
 
     <insert id="boardWrite" parameterType="com.ssafy.codearena.board.dto.BoardWriteDto">
-        INSERT INTO board(user_id, problem_id, board_title, board_lang, board_content, board_date)
-        VALUES("${userId}", "${problemId}", "${title}", "${lang}", "${content}", now());
+        INSERT INTO board(user_id, problem_id, board_title, board_type, board_lang, board_content, board_code, board_spoiler, board_date)
+        VALUES("${userId}", "${problemId}", "${title}", "${type}", "${lang}", "${content}", "${code}", ${spoiler}, now());
     </insert>
 
     <delete id="boardDelete" parameterType="string">
@@ -33,4 +36,10 @@
         FROM board
         WHERE article_no = ${boardId};
     </delete>
+
+    <update id="boardUpdate" parameterType="com.ssafy.codearena.board.dto.BoardUpdateDto">
+        UPDATE board
+        SET problem_id = ${problemId}, board_title = "${title}", board_lang = "${lang}", board_content = "${content}", board_code = "${code}", board_spoiler = ${spoiler}
+        WHERE user_id = ${userId};
+    </update>
 </mapper>

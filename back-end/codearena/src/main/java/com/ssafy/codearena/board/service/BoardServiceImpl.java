@@ -2,6 +2,7 @@ package com.ssafy.codearena.board.service;
 
 import com.ssafy.codearena.board.dto.BoardDetailDto;
 import com.ssafy.codearena.board.dto.BoardResultDto;
+import com.ssafy.codearena.board.dto.BoardUpdateDto;
 import com.ssafy.codearena.board.dto.BoardWriteDto;
 import com.ssafy.codearena.board.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
@@ -71,9 +72,24 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public BoardResultDto boardUpdate(BoardWriteDto boardUpdateDto) {
+    public BoardResultDto boardUpdate(BoardUpdateDto boardUpdateDto) {
 
-        return null;
+        BoardResultDto boardResultDto = new BoardResultDto();
+
+        boardResultDto.setStatus("200");
+        boardResultDto.setMsg("게시글 수정 성공");
+        boardResultDto.setData(null);
+
+        try {
+
+            boardMapper.boardUpdate(boardUpdateDto);
+        }
+        catch (Exception e) {
+            boardResultDto.setStatus("500");
+            boardResultDto.setMsg("Server Internal Error");
+        }
+
+        return boardResultDto;
     }
 
     @Override

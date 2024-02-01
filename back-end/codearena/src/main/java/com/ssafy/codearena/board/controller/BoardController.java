@@ -3,6 +3,7 @@ package com.ssafy.codearena.board.controller;
 
 import com.ssafy.codearena.board.dto.BoardDetailDto;
 import com.ssafy.codearena.board.dto.BoardResultDto;
+import com.ssafy.codearena.board.dto.BoardUpdateDto;
 import com.ssafy.codearena.board.dto.BoardWriteDto;
 import com.ssafy.codearena.board.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,6 +46,13 @@ public class BoardController implements BoardControllerDocs{
     public ResponseEntity<?> boardDelete(@PathVariable String boardId) {
 
         return new ResponseEntity<BoardResultDto>(boardService.boardDelete(boardId), HttpStatus.OK);
+    }
+
+    @Override
+    @PatchMapping("/update")
+    public ResponseEntity<?> boardUpdate(@RequestBody BoardUpdateDto boardUpdateDto) {
+
+        return new ResponseEntity<BoardResultDto>(boardService.boardUpdate(boardUpdateDto), HttpStatus.OK);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.ssafy.codearena.board.controller;
 
-import com.ssafy.codearena.alarm.dto.AlarmReceiveDto;
 import com.ssafy.codearena.board.dto.BoardDetailDto;
+import com.ssafy.codearena.board.dto.BoardUpdateDto;
 import com.ssafy.codearena.board.dto.BoardWriteDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,5 +30,10 @@ public interface BoardControllerDocs {
     @ApiResponse(responseCode = "200", description = "게시글 삭제 성공")
     public ResponseEntity<?> boardDelete(String boardId);
 
+    //제목, 내용, 코드, 스포방지여부
+    @Operation(summary = "게시글 수정")
+    @Parameter(name = "Object", description = "boardUpdateDto", content = @Content(schema = @Schema(implementation = BoardUpdateDto.class)))
+    @ApiResponse(responseCode = "200", description = "게시글 수정 성공")
+    public ResponseEntity<?> boardUpdate(BoardUpdateDto boardUpdateDto);
 
 }
