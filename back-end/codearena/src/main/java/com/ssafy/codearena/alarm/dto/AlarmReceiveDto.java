@@ -15,7 +15,7 @@ public class AlarmReceiveDto {
 
     @Schema(description = "수신자 ID")
     private int toId;
-    
+
     @Schema(description = "송신자 ID")
     private int fromId;
 
