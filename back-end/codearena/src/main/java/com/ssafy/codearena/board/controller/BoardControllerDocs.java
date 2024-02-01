@@ -41,7 +41,12 @@ public interface BoardControllerDocs {
 
     @Operation(summary = "게시글 리스트")
     @Parameters(value = {
-            @Parameter(name = "pageNo")
+            @Parameter(name = "pano", description = "조회할 페이지 번호"),
+            @Parameter(name = "spp", description = "한 페이지 당 게시글 수 지정"),
+            @Parameter(name = "boardType", description = "질문 타입", example = "1 : 질문, 2 : 시간복잡도, 3 : 공간복잡도, 4 : 반례 요청, 5 : 반례"),
+            @Parameter(name = "sortType", description = "정렬 기준", example = "time : 최신순, hit : 조회수순, default : time"),
+            @Parameter(name = "key", description = "검색 조건", example = "board_title : 제목 기준, problem_id : 문제번호 기준 || DB컬럼명과 똑같이 사용"),
+            @Parameter(name = "word", description = "검색 조건 기준으로 검색할 내용")
     })
     public ResponseEntity<?> boardList(Map<String, String> map);
 
