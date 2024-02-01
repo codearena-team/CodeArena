@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import AlarmListItem from "../../../components/board/AlarmListItem.jsx"
+import AlarmListItem from "../../../components/community/AlarmListItem.jsx"
 import "../../css/problemsolve.css"
 import axios from "axios"
 
 export default function Alarm() {
   // 알림 종류(받은알림, 보낸알림)
   const [alarmtype, setAlarmtype] = useState('received') 
-  // 검색 카테고리   problemId : 문제번호, problemTitle : 문제제목 , userNickname : 작성자 
+  // 처리여부 드롭다운 
+  const [process, setProcess] = useState('처리중')  
   const params = useParams()
   const pgno = params.pgno
   const [alarmList, setAlarmList] = useState([])
 
-  // 알림 목록 요청보내기
+  // 알림 목록 요청보내기 AlarmList 에 추가
   // useEffect(()=> {
   //   axios({
   //     method : 'get',
@@ -51,7 +52,7 @@ export default function Alarm() {
                 <th className="p-1.5">날짜</th>
               </tr>
             </thead>
-            <tbody className="font-normal">
+            {/* <tbody className="font-normal">
              {alarmList.map((alarmItem,index)=>{
               return(
              <AlarmListItem 
@@ -60,7 +61,8 @@ export default function Alarm() {
               index={index}
              />
              )})}
-            </tbody>
+            </tbody> */}
+            
           </table>
         </div>
       </div>

@@ -1,9 +1,12 @@
 import '../../css/custom.css'
 import { useState } from 'react'
-import axios from 'axios';
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+
 
 export default function FindPassword(){
   const [email, setEmail] = useState('');
+  const navigate = useNavigate()
 
   const checkEmail = () =>{
     const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
@@ -15,14 +18,16 @@ export default function FindPassword(){
       alert('이메일이 형식에 맞지 않습니다')
     }else{
       axios({
-        url:'http://192.168.100.207:80/api/user/password/reissue',
-        method:'post',
+        url : 'http://i10d211.p.ssafy.io:8081/api/user/password/reissue',
+        method : 'post',
         data : {
           userEmail : email
         }
       })
       .then((res)=>{
         console.log(res)
+        alert('임시비밀번호발급완료')
+        navigate('/login')
       })
       .catch((err)=>{
         console.log(err)

@@ -6,7 +6,7 @@ export const authSlice = createSlice({
   initialState : {
     accessToken : null,
     refreshToken : null,
-    isLogIn : false,
+    isLogin : false,
     userId : null,
     userEmail : null,
     userNickname : null
@@ -16,7 +16,7 @@ export const authSlice = createSlice({
     setToken : (state,action) =>{
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
-      state.isLogIn = true;
+      state.isLogin = true;
       state.userId = jwtDecode(action.payload.accessToken).userId
       state.userEmail = jwtDecode(action.payload.accessToken).userEmail
       state.userNickname = jwtDecode(action.payload.accessToken).userNickname
@@ -24,7 +24,7 @@ export const authSlice = createSlice({
     logout: (state) =>{
       state.accessToken = null;
       state.refreshToken = null;
-      state.isLogIn = false;
+      state.isLogin = false;
       state.userId = null;
       state.userEmail = null;
       state.userNickname = null;

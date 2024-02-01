@@ -4,7 +4,7 @@ import KaKao from '../../images/login/kakao.png'
 import Google from '../../images/login/google.png'
 import Naver from '../../images/login/naver.png'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'; 
 import { setToken } from '../../features/login/authSlice';
@@ -13,7 +13,8 @@ import { setToken } from '../../features/login/authSlice';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password,setPassword] = useState('');
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
 
   // 이메일 유효성 검사
@@ -36,27 +37,43 @@ export default function Login() {
     //   alert('비밀번호가 형식에 맞지 않습니다')
     // }
     if (checkEmail()) {
+      
       axios({
-        url:'http://192.168.100.207:80/api/user/login',
+        url: 'http://192.168.100.207:8080/api/user/login',
         method:'post',
         data: {
           userEmail : email,
+          
           userPassword : password
+        },
+        withCredentials : true,
+        headers: {
+                    
+          'Access-Control-Allow-Origin': '192.168.100.129' ,
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Max-Age': '3600',
+          'Access-Control-Allow-Headers': 'Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization'
+
         }
       })
       .then((res)=>{
-        console.log(res.data.data.token)
-        dispatch(setToken(res.data.data))
+        console.log(res)
+        if (res.data.status == "404"){
+          alert('이메일,패스워드가 일치하지 않습니다')
+        }else{
+          dispatch(setToken(res.data.data))
+          alert('로그인성공')
+          navigate('/')
+        }
       })
       .catch((err)=>{
         console.log(err)
       })
       }
     }
-  
+
     const test = () => {
-      
-      dispatch((setToken('asdqwesdavnjk324798145sadhj')))
+      dispatch((setToken(true)))
     }
 
 
