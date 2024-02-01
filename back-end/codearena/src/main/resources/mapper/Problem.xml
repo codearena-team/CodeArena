@@ -63,22 +63,11 @@
         <result property="tagId" column="tag_id"/>
         <result property="tagName" column="tag_name"/>
     </resultMap>
-    <!--
-     Integer submitNo;
-    Integer tid;
-    String userId;
-    String problemId;
-    String submitLang;
-    String code;
-    String submitStatus;
-    String timeComplexity;
-    String memory;
-    String submitDate;
-    TestCaseDto testCaseDto;
-    List<SubmitTagDto> tagList;
-     -->
+
     <resultMap id="submitDto" type="submitDto">
         <result property="submitNo" column="submit_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="userNickname" column="user_nickname"/>
         <result property="tid" column="tid"/>
         <result property="problemId" column="problem_id"/>
         <result property="submitLang" column="submit_lang"/>
@@ -97,8 +86,13 @@
     </resultMap>
 
     <select id="getTestCaseByTid" resultMap="testcase">
-        select input, output, tid from ps_testcase where tid=${tid}
+        <include refid="tidCheck"/>
     </select>
+    <sql id="tidCheck">
+        <if test="tid!=null">
+            select tid, input, output from ps_testcase where tid=${tid}
+        </if>
+    </sql>
 
     <select id="getSubmitTagsBySubmitNo" resultMap="submitTag">
         select submit_no, tag_name from ps_submit_tag where submit_no=${submitNo}
@@ -246,4 +240,45 @@
                 ( ${submitNo}, '${item.tagName}' )
             </foreach>
     </insert>
+
+    <sql id="nickname">
+        <if test='userNickname!=null and !"".equals(userNickname)'>
+            and u.user_nickname like concat('%','${userNickname}','%')
+        </if>
+    </sql>
+    <sql id="problemId">
+        <if test='problemId!=null and !"".equals(problemId)'>
+            and problem_id=${problemId}
+        </if>
+    </sql>
+    <sql id="lang">
+        <if test='lang!=null and !"".equals(lang)'>
+            and lang like concat('%', '${lang}', '%')
+        </if>
+    </sql>
+    <sql id="orderBy">
+        <if test='orderBy!=null and !"".equals(orderBy)'>
+            order by ${orderBy}
+        </if>
+    </sql>
+    <select id="getSubmitCount" resultType="int" parameterType="hashmap">
+        select count(submit_no)
+        from ps_submit
+        where 1=1
+        <include refid="nickname"></include>
+        <include refid="problemId"></include>
+        <include refid="lang"></include>
+    </select>
+    <select id="getSubmitList" resultMap="submitDto" parameterType="hashmap">
+        select submit_no, tid, u.user_nickname, problem_id, submit_lang, code, submit_status, time_complexity, memory, submit_date
+        from ps_submit as s
+        left join user as u
+        on s.user_id=u.user_id
+        where 1=1
+        <include refid="nickname"></include>
+        <include refid="problemId"></include>
+        <include refid="lang"></include>
+        <include refid="orderBy"></include>
+        limit ${start}, ${offset}
+    </select>
 </mapper>

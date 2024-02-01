@@ -65,4 +65,10 @@ public class ProblemController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    @GetMapping("/submit")
+    private ResponseEntity<ResultDto> getSubmitList(@RequestParam HashMap<String, String> params){
+        ResultDto resultDto = service.getSubmitList(params);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
 }

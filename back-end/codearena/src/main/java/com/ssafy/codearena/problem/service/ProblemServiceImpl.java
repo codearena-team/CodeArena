@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.Result;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -254,5 +255,79 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
 
+    }
+
+    @Override
+    public ResultDto getSubmitList(HashMap<String, String> params) {
+        ResultDto resultDto = new ResultDto();
+        SubmitListDto list = new SubmitListDto();
+        List<SubmitDto> submitList = new ArrayList<>();
+        list.setItemCount(0);
+        list.setPageCount(BASIC_PGNO);
+        resultDto.setStatus("202");
+        try{
+            int spp = BASIC_SPP;
+            String problemId = "";
+            String userNickname = "";
+            String lang = "";
+            String orderBy= "";
+            int pgno = BASIC_PGNO;
+            if(params.containsKey("spp") && Integer.parseInt(params.get("spp")) > 0){
+                spp = Integer.parseInt(params.get("spp"));
+            }
+            if(params.containsKey("problemId")){
+                problemId = params.get("problemId");
+            }
+            if(params.containsKey("userNickname")){
+                userNickname = params.get("userNickname");
+            }
+            if(params.containsKey("lang")){
+                lang = params.get("lang");
+            }
+            if(params.containsKey("orderBy")){
+                orderBy = params.get("orderBy");
+            }
+            if(params.containsKey("pgno")){
+                pgno = Integer.parseInt(params.get("pgno"));
+            }
+            params = new HashMap<>();
+            params.put("problemId", problemId);
+            params.put("userNickname", userNickname);
+            params.put("lang", lang);
+            int itemCount = mapper.getSubmitCount(params);
+            int pageCount = BASIC_PGNO;
+            if(itemCount > spp) pageCount = (itemCount%spp) == 0 ? pageCount/spp : pageCount/spp+1;
+            if(pageCount < pgno){
+                pgno = BASIC_PGNO;
+            }
+            resultDto.setMsg("검색 결과 "+itemCount+"건 검색되었습니다.");
+            if(itemCount > 0){
+                params.put("start", String.valueOf((pgno-1) * spp));
+                params.put("offset", String.valueOf(spp));
+                switch(orderBy){
+                    case "timeComplexity":
+                        orderBy = "time_complexity";
+                        break;
+                    default :
+                        orderBy = "submit_date";
+                        break;
+                }
+                params.put("orderBy", orderBy);
+                resultDto.setStatus("200");
+                submitList = mapper.getSubmitList(params);
+                list.setPageCount(pageCount);
+                list.setItemCount(itemCount);
+            }
+
+        }catch(Exception e){
+            log.debug("exception {}", e);
+            submitList = Collections.EMPTY_LIST;
+            resultDto.setMsg("채점 현황 조회 중 에러가 발생하였습니다.");
+            resultDto.setStatus("500");
+        }finally{
+            list.setSubmitList(submitList);
+            resultDto.setData(list);
+            return resultDto;
+        }
     }
 }

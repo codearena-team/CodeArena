@@ -24,5 +24,7 @@ public interface ProblemMapper {
 
     void insertSubmit(SubmitDto submitDto) throws SQLException;
     void insertSubmitTags(SubmitTagListDto submitTagListDto) throws SQLException;
+    List<SubmitDto> getSubmitList(HashMap<String, String> params) throws SQLException;
+    int getSubmitCount(HashMap<String, String> params) throws SQLException;
 
 }

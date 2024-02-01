@@ -17,4 +17,5 @@ public interface ProblemService {
     ResultDto getProblemDetail(String problemId);
     ResultDto getTestCase(String problemId);
     ResultDto insertSubmit(String problemId, SubmitDto submitDto);
+    ResultDto getSubmitList(HashMap<String, String> params);
 }
