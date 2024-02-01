@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.Result;
 import java.util.HashMap;
 
 @RestController
@@ -31,6 +32,29 @@ public class ProblemController {
         ResultDto resultDto = service.insertProblem(problemForInsertDto);
 
 
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{problemId}")
+    private ResponseEntity<ResultDto> deleteProblem(@PathVariable String problemId){
+        log.debug("params : {}", problemId);
+        ResultDto resultDto = service.deleteProblem(problemId);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/category")
+    private ResponseEntity<ResultDto> getAllCategories(){
+        ResultDto resultDto = service.getTagCategory();
+        return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
+    }
+    @GetMapping("{problemId}")
+    private ResponseEntity<ResultDto> getProblemDetail(@PathVariable String problemId){
+        ResultDto resultDto = service.getProblemDetail(problemId);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+    @GetMapping("{problemId}/testcase")
+    private ResponseEntity<ResultDto> getTestCase(@PathVariable String problemId){
+        ResultDto resultDto = service.getTestCase(problemId);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

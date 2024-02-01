@@ -9,4 +9,10 @@ public interface ProblemService {
     ResultDto getProblemList(HashMap<String, String> map);
 
     ResultDto insertProblem(ProblemForInsertDto problemForInsertDto);
+
+    ResultDto deleteProblem(String problemId);
+
+    ResultDto getTagCategory();
+    ResultDto getProblemDetail(String problemId);
+    ResultDto getTestCase(String problemId);
 }

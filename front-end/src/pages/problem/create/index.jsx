@@ -14,8 +14,8 @@ export default function ProblemCreate() {
   const [outputFileData, setOutputFileData] = useState("");
   const [lang, setLang] = useState("Java");
   const [testCode, setTestCode] = useState("");
-  const [time, setTime] = useState("");
-  const [mem, setMem] = useState("");
+  const [time, setTime] = useState("1000");
+  const [mem, setMem] = useState("256");
   const [rating, setRating] = useState(1)
   const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
@@ -203,16 +203,16 @@ export default function ProblemCreate() {
           <div className="grid grid-cols-2 gap-5">
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="time">시간제한</label>
-              <input onChange={(e)=>{setTime(e.target.value)}} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-8/12" />
+              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-8/12" />
             </div>
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="mem">메모리제한</label>
-              <input onChange={(e)=>{setMem(e.target.value)}} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-8/12" />
+              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-8/12" />
             </div>
           </div>
         </div>
         <div className='flex justify-end mb-4'>
-        <label className="font-bold me-1"htmlFor="time">알고리즘</label>
+          <label className="font-bold me-1"htmlFor="time">알고리즘</label>
           <select onChange={onClickCate} className="select select-sm select-bordered" style={{width:"15.5%"}} >
             {cateList.map((cate)=>{
               return(

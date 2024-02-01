@@ -20,3 +20,7 @@ tbody tr:hover{
 .unchoice{
   background-color: #dcdcd2;
 }
+
+.even {
+  background-color: #F9F6ED;
+}

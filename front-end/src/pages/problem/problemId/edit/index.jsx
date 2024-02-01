@@ -181,7 +181,7 @@ export default function ProblemEdit() {
         <div className='flex justify-between'>
           <div className=' w-40'></div>
           <div><button className='btn btn-neutral w-60 text-2xl text-center rounded-full drop-shadow-lg' onClick={onClick} >수 정</button></div>
-          <div><button className='btn w-40 text-xl text-center rounded-full btn-error drop-shadow-lg'>삭제</button></div>
+          <div><button className='btn w-40 text-xl text-center rounded-full drop-shadow-lg'>삭제</button></div>
         </div>
       </div>
     </div>

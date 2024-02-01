@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Result;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,14 +26,22 @@ public class ProblemServiceImpl implements ProblemService{
     private static final int ADMIN_ID = 1;
 
     private static final int ALARM_TYPE = 1;
+    private static final int BASIC_SPP = 15;
+    private static final int BASIC_PGNO = 1;
     @Override
     public ResultDto getProblemList(HashMap<String, String> map) {
         ResultDto resultDto = new ResultDto();
         HashMap<String, String> hashMap = new HashMap<>();
         ProblemListDto problemListDto = new ProblemListDto();
         try{
-            int spp = Integer.parseInt(map.get("spp"));
-            String cate = map.get("cate");
+            int spp = BASIC_SPP;
+            if(map.containsKey("spp") && Integer.parseInt(map.get("spp")) > 0){
+                spp = Integer.parseInt(map.get("spp"));
+            }
+            String cate = "";
+            if(map.containsKey("cate")){
+                cate = map.get("cate");
+            }
             switch(cate) {
                 case "problemTitle":
                     cate = "problem_title";
@@ -44,14 +54,29 @@ public class ProblemServiceImpl implements ProblemService{
                     break;
             }
             hashMap.put("cate", cate);
-            hashMap.put("word", map.get("word"));
+            String word = "";
+            if(map.containsKey("word")){
+                word = map.get("word");
+            }
+            hashMap.put("word", word);
+            String tag = "";
+            if(map.containsKey("tag")){
+                tag = map.get("tag");
+            }
+            hashMap.put("tag", tag);
             int totalItemCount = mapper.problemCount(hashMap);
             int totalPageCount = 1;
             if(totalItemCount > spp) totalPageCount = (totalItemCount%spp) == 0 ? totalItemCount/spp : totalItemCount/spp+1;
-            int pgno = Integer.parseInt(map.get("pgno"));
+            int pgno = BASIC_PGNO;
+            if(map.containsKey("pgno") && Integer.parseInt(map.get("pgno")) > 0){
+                pgno = Integer.parseInt(map.get("pgno"));
+            }
             if(pgno > totalPageCount) pgno = totalPageCount;
             String orderBy = "";
-            switch(map.get("orderBy")){
+            if(map.containsKey("orderBy")){
+                orderBy = map.get("orderBy");
+            }
+            switch(orderBy){
                 case "date":
                     orderBy = "problem_date";
                     break;
@@ -124,5 +149,81 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
 
+    }
+
+    @Override
+    public ResultDto deleteProblem(String problemId) {
+        ResultDto resultDto = new ResultDto();
+        resultDto.setMsg("해당 문제가 성공적으로 삭제되었습니다.");
+        resultDto.setStatus("200");
+        try{
+            mapper.deleteProblem(problemId);
+        }catch(Exception e){
+            log.error("exceptino : {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("삭제 도중 에러가 발생하였습니다.");
+        }finally{
+            return resultDto;
+        }
+    }
+
+    @Override
+    public ResultDto getTagCategory() {
+        ResultDto resultDto = new ResultDto();
+        try{
+            List<TagDto> tagList = mapper.getAllTagNames();
+            resultDto.setStatus("200");
+            resultDto.setMsg("태그 목록을 불러오는데 성공하였습니다.");
+            resultDto.setData(tagList);
+        }catch(Exception e){
+            log.error("exception : {}", e);
+            resultDto.setData(null);
+            resultDto.setStatus("500");
+            resultDto.setMsg("태그 목록을 불러오는 도중 에러가 발생하였습니다.");
+        }finally{
+            return resultDto;
+        }
+    }
+
+    @Override
+    public ResultDto getProblemDetail(String problemId) {
+        ResultDto resultDto = new ResultDto();
+        ProblemDetailDto problemDetail = new ProblemDetailDto();
+        resultDto.setMsg("문제 번호 "+problemId+"에 대한 정보를 조회하는데 성공했습니다.");
+        resultDto.setData(problemDetail);
+        resultDto.setStatus("200");
+        try{
+            problemDetail = mapper.getProblemDetailByProblemId(problemId);
+        }catch(Exception e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("문제 번호 "+problemId+"에 대한 정보를 조회하는데 에러가 발생하였습니다.");
+            problemDetail = null;
+        }finally{
+            resultDto.setData(problemDetail);
+            return resultDto;
+        }
+
+    }
+
+    @Override
+    public ResultDto getTestCase(String problemId) {
+        ResultDto resultDto = new ResultDto();
+        List<TestCaseDto> testcase = Collections.EMPTY_LIST;
+        resultDto.setStatus("202");
+        resultDto.setMsg("문제번호 : "+problemId+"에 대한 테스트케이스가 비었습니다.");
+        try{
+            testcase = mapper.getTestCasesByProblemId(problemId);
+            if(!testcase.isEmpty()){
+                resultDto.setStatus("200");
+                resultDto.setMsg("문제번호 : "+problemId+"에 대한 테스트케이스 조회에 성공했습니다.");
+            }
+        }catch(Exception e){
+            testcase = Collections.EMPTY_LIST;
+            resultDto.setMsg("문제번호 : "+problemId+" 에 대한 테스트케이스 조회 중 에러가 발생하였습니다.");
+        }finally{
+            resultDto.setData(testcase);
+            return resultDto;
+        }
     }
 }
