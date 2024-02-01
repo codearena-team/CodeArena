@@ -51,15 +51,35 @@
                 </choose>
             </when>
         </choose>
-
     </sql>
+
+    <sql id="whereTag">
+        <choose>
+            <when test=' tag!=null and !"".equals(tag)'>
+                and tag_name = '${tag}'
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="joinTag">
+        <choose>
+            <when test=' tag!=null and !"".equals(tag)'>
+                left join ps_problem_tag as t
+                on p.problem_id = t.problem_id
+            </when>
+        </choose>
+    </sql>
+
+
     <select id="selectTestCase">
         select tid, input, output from ps_testcase where problem_id = ${problemId}
     </select>
 
     <select id="problemCount" parameterType="hashmap" resultType="int">
-        select count(problem_id) from ps_list as p
+        select count(p.problem_id) from ps_list as p
+        <include refid="joinTag"></include>
         where 1=1 and p.problem_visibility = 1
+        <include refid="whereTag"></include>
         <include refid="cate"></include>
     </select>
 
@@ -80,7 +100,9 @@
                            on p.problem_id = inline2.problem_id
                  left join `user` as u
                            on p.user_id = u.user_id
+                 <include refid="joinTag"/>
         where 1=1 and p.problem_visibility = 1
+        <include refid="whereTag"></include>
         <include refid="cate"></include>
         <include refid="orderby"></include>
         limit ${start}, ${offset}

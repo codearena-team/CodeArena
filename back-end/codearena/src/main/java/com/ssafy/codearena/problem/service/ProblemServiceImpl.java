@@ -25,14 +25,22 @@ public class ProblemServiceImpl implements ProblemService{
     private static final int ADMIN_ID = 1;
 
     private static final int ALARM_TYPE = 1;
+    private static final int BASIC_SPP = 15;
+    private static final int BASIC_PGNO = 1;
     @Override
     public ResultDto getProblemList(HashMap<String, String> map) {
         ResultDto resultDto = new ResultDto();
         HashMap<String, String> hashMap = new HashMap<>();
         ProblemListDto problemListDto = new ProblemListDto();
         try{
-            int spp = Integer.parseInt(map.get("spp"));
-            String cate = map.get("cate");
+            int spp = BASIC_SPP;
+            if(map.containsKey("spp") && Integer.parseInt(map.get("spp")) > 0){
+                spp = Integer.parseInt(map.get("spp"));
+            }
+            String cate = "";
+            if(map.containsKey("cate")){
+                cate = map.get("cate");
+            }
             switch(cate) {
                 case "problemTitle":
                     cate = "problem_title";
@@ -45,14 +53,29 @@ public class ProblemServiceImpl implements ProblemService{
                     break;
             }
             hashMap.put("cate", cate);
-            hashMap.put("word", map.get("word"));
+            String word = "";
+            if(map.containsKey("word")){
+                word = map.get("word");
+            }
+            hashMap.put("word", word);
+            String tag = "";
+            if(map.containsKey("tag")){
+                tag = map.get("tag");
+            }
+            hashMap.put("tag", tag);
             int totalItemCount = mapper.problemCount(hashMap);
             int totalPageCount = 1;
             if(totalItemCount > spp) totalPageCount = (totalItemCount%spp) == 0 ? totalItemCount/spp : totalItemCount/spp+1;
-            int pgno = Integer.parseInt(map.get("pgno"));
+            int pgno = BASIC_PGNO;
+            if(map.containsKey("pgno") && Integer.parseInt(map.get("pgno")) > 0){
+                pgno = Integer.parseInt(map.get("pgno"));
+            }
             if(pgno > totalPageCount) pgno = totalPageCount;
             String orderBy = "";
-            switch(map.get("orderBy")){
+            if(map.containsKey("orderBy")){
+                orderBy = map.get("orderBy");
+            }
+            switch(orderBy){
                 case "date":
                     orderBy = "problem_date";
                     break;
