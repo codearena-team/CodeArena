@@ -7,7 +7,6 @@ import com.ssafy.codearena.board.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,28 +18,25 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
-    public BoardDetailDto boardDetail(String boardId) {
+    public BoardResultDto boardDetail(String boardId) {
 
         BoardResultDto boardResultDto = new BoardResultDto();
 
+        boardResultDto.setStatus("200");
+        boardResultDto.setMsg("조회 성공");
+
+
         try {
-            BoardDetailDto boardDetailDto = boardMapper.boardDetail(boardId);
-            boardResultDto.setStatus("200");
-            boardResultDto.setMsg("조회 성공");
-            boardResultDto.setData(boardDetailDto);
-        }
-        catch (SQLException e) {
-            boardResultDto.setStatus("404");
-            boardResultDto.setMsg("SQL Error");
+
+            boardResultDto.setData(boardMapper.boardDetail(boardId));
+
         }
         catch (Exception e) {
             boardResultDto.setStatus("500");
             boardResultDto.setMsg("Server Internal Error");
         }
 
-
-        BoardDetailDto BoardDetailDto = null;
-        return BoardDetailDto;
+        return boardResultDto;
     }
 
     @Override
@@ -49,8 +45,23 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void boardWrite(BoardWriteDto boardWriteDto) {
+    public BoardResultDto boardWrite(BoardWriteDto boardWriteDto) {
 
+        BoardResultDto boardResultDto = new BoardResultDto();
+
+        boardResultDto.setStatus("201");
+        boardResultDto.setMsg("게시판 글쓰기 성공");
+
+        try {
+            boardMapper.boardWrite(boardWriteDto);
+            boardResultDto.setData(null);
+        }
+        catch (Exception e) {
+            boardResultDto.setStatus("500");
+            boardResultDto.setMsg("Server Internal Error");
+        }
+
+        return boardResultDto;
     }
 
     @Override
