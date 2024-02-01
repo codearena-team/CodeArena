@@ -22,4 +22,7 @@ public interface ProblemMapper {
 
     List<TestCaseDto> getTestCasesByProblemId(String problemId) throws SQLException;
 
+    void insertSubmit(SubmitDto submitDto) throws SQLException;
+    void insertSubmitTags(SubmitTagListDto submitTagListDto) throws SQLException;
+
 }

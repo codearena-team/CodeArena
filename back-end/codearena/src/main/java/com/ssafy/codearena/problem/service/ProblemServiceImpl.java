@@ -226,4 +226,33 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
+
+    @Override
+    public ResultDto insertSubmit(String problemId, SubmitDto submitDto) {
+        ResultDto resultDto = new ResultDto();
+        resultDto.setStatus("200");
+        resultDto.setMsg("성공적으로 채점서버에 제출되었습니다.");
+        submitDto.setSubmitStatus("채점중");
+        submitDto.setProblemId(problemId);
+        log.debug("params : {}", submitDto);
+        try{
+            mapper.insertSubmit(submitDto);
+            /*
+            * WebFlux 채점서버 제출부
+            * */
+            SubmitTagListDto listDto = new SubmitTagListDto();
+            listDto.setSubmitNo(submitDto.getSubmitNo());
+            listDto.setTagList(submitDto.getTagList());
+            if(!listDto.getTagList().isEmpty()){
+                mapper.insertSubmitTags(listDto);
+            }
+        }catch(Exception e){
+            log.debug("exception {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("채점 시도 중 에러가 발생하였습니다.");
+        }finally{
+            return resultDto;
+        }
+
+    }
 }
