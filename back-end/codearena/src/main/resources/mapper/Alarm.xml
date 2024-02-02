@@ -18,14 +18,14 @@
     <select id="receive" parameterType="string" resultMap="receiveMap">
         SELECT alarm_id, alarm_type, to_id, from_id, alarm_msg, is_read, alarm_date, status
         FROM alarm
-        WHERE from_id = "${userId}"
+        WHERE to_id = "${userId}"
         ORDER BY alarm_date DESC;
     </select>
 
     <select id="sendList" parameterType="string" resultMap="receiveMap">
         SELECT alarm_id, alarm_type, to_id, from_id, alarm_msg, is_read, alarm_date, status
         FROM alarm
-        WHERE to_id = "${userId}"
+        WHERE from_id = "${userId}"
         ORDER BY alarm_date DESC;
     </select>
 
