@@ -2,6 +2,7 @@ package com.ssafy.codearena.problem.service;
 
 import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
 import com.ssafy.codearena.problem.dto.ResultDto;
+import com.ssafy.codearena.problem.dto.SubmitDto;
 
 import java.util.HashMap;
 
@@ -15,4 +16,7 @@ public interface ProblemService {
     ResultDto getTagCategory();
     ResultDto getProblemDetail(String problemId);
     ResultDto getTestCase(String problemId);
+    ResultDto insertSubmit(String problemId, SubmitDto submitDto);
+    ResultDto getSubmitList(HashMap<String, String> params);
+    ResultDto getSubmitStatistics(String problemId, HashMap<String, String> params);
 }
