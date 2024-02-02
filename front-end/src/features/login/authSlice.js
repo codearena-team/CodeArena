@@ -4,7 +4,6 @@ import { jwtDecode } from 'jwt-decode'
 export const authSlice = createSlice({
   name : 'auth',
   initialState : {
-    accessToken : null,
     refreshToken : null,
     isLogin : false,
     userId : null,
@@ -13,16 +12,14 @@ export const authSlice = createSlice({
   },
   reducers : {
     // action.payload 는 res.data.data
-    setToken : (state,action) =>{
-      state.accessToken = action.payload.accessToken;
+    setRefreshToken : (state,action) =>{
       state.refreshToken = action.payload.refreshToken;
       state.isLogin = true;
-      state.userId = jwtDecode(action.payload.accessToken).userId
-      state.userEmail = jwtDecode(action.payload.accessToken).userEmail
-      state.userNickname = jwtDecode(action.payload.accessToken).userNickname
+      state.userId = jwtDecode(action.payload.refreshToken).userId
+      state.userEmail = jwtDecode(action.payload.refreshToken).userEmail
+      state.userNickname = jwtDecode(action.payload.refreshToken).userNickname
     },
     logout: (state) =>{
-      state.accessToken = null;
       state.refreshToken = null;
       state.isLogin = false;
       state.userId = null;
@@ -32,5 +29,5 @@ export const authSlice = createSlice({
   }  
 })
 
-export const { setToken,logout } = authSlice.actions
+export const { setRefreshToken,logout } = authSlice.actions
 export default authSlice.reducer

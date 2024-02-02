@@ -38,6 +38,8 @@ export default function CommunityCreate(){
     }
   }
 
+
+
   return(
     <div className="p-20 pt-0">
       <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
@@ -51,7 +53,7 @@ export default function CommunityCreate(){
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1" htmlFor="rating">언어</label>
-            <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-2/12" >
+            <select value={lang} onChange={(e)=>{setLang(e.target.value)}}  className="select select-sm select-bordered w-2/12" >
               <option>Java</option>
               <option>Python</option>
               <option>cpp</option>

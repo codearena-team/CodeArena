@@ -3,6 +3,8 @@ import { combineReducers } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from '../features/login/authSlice.js';
+import accessReducer from '../features/login/accessSlice.js';
+
 const persistConfig = {
   key : 'root',
   storage,
@@ -11,6 +13,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth : authReducer,
+  access : accessReducer
+
 })
 
 
@@ -20,6 +24,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+
 });
 
 export const persistor = persistStore(store);
