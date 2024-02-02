@@ -257,7 +257,7 @@
     </sql>
     <sql id="lang">
         <if test='lang!=null and !"".equals(lang)'>
-            and lang like concat('%', '${lang}', '%')
+            and submit_lang like concat('%', '${lang}', '%')
         </if>
     </sql>
     <sql id="orderBy">
