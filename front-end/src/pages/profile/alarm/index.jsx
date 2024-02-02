@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
 import ReceiveListItem from "../../../components/community/ReceiveListItem.jsx"
 import SendListItem from "../../../components/community/SendListItem.jsx"
 import "../../css/problemsolve.css"
@@ -12,8 +11,6 @@ export default function Alarm() {
   const [alarmtype, setAlarmtype] = useState('receive') 
   // 처리여부 드롭다운 
   const [process, setProcess] = useState('처리중')  
-  const params = useParams()
-  const pgno = params.pgno
   const [sendList, setSendList] = useState([])
   const [receiveList, setReceiveList] = useState([])
 
@@ -21,29 +18,35 @@ export default function Alarm() {
   // 알림 목록 요청보내기 렌더링 될때는 기본이 받는알림함보기
   useEffect(()=> {
     axios({
-      url : 'http://i10d211.p.ssafy.io:8081/api/alarm/receive?userId=6',
+      url : `http://i10d211.p.ssafy.io:8081/api/alarm/receive?userId=${userId}`,
       method : 'get',
     })
     .then((res)=>{
       console.log(res)
       setReceiveList(res.data.data) //[{},{},{}....이런식]
+      // alarmDate : 날짜 , alarmId : 알림글번호 , alarmMsg :알림내용, 
+      // alarmType: 알림종류 *(알림 타입 = 1 : 문제 생성 요청, 2 : 문제 수정 요청, 3 : 게임 초대, 4 : 공지사항 *)
+      // fromId 보낸사람
+      // isRead : 알림읽음 여부
     })
     .catch((err)=>{
       console.log(err)
     })
+  }, [])
+
+  useEffect(()=>{
     axios({
       url : `http://i10d211.p.ssafy.io:8081/api/alarm/send/list?userId=${userId}`,
       method : 'get',
     })
     .then((res)=>{
       console.log(res)
+      setSendList(res.data.data)
     })
-    .catch((res)=>{
-      console.log(res)
+    .catch((err)=>{
+      console.log(err)
     })
   },[])
-
-  
 
 
   return(
@@ -69,17 +72,27 @@ export default function Alarm() {
                 <th className="p-1.5">날짜</th>
               </tr>
             </thead>
-            {/* <tbody className="font-normal">
-             {alarmList.map((alarmItem,index)=>{
-              return(
-             <AlarmListItem 
-              key={alarmItem.alarmId}
-              alarmItem={alarmItem}
-              index={index}
-             />
-             )})}
-            </tbody> */}
-            
+
+            <tbody className="font-normal">
+              {alarmtype === 'receive'?(
+                receiveList.map((receiveItem,index) => (
+                  <ReceiveListItem 
+                  key={receiveItem.receiveId}
+                  receiveItem={receiveItem}
+                  index={index}
+                  />
+                ))
+                ) :( 
+                  sendList.map((sendItem,index) => (
+                    <SendListItem 
+                    key={sendItem.sendId}
+                    sendItem={sendItem}
+                    index={index}
+                    />
+                  ))
+                )}
+                        
+           </tbody>
           </table>
         </div>
       </div>

@@ -2,30 +2,37 @@ import CodeMirror from '@uiw/react-codemirror';
 import { useState,useCallback } from "react";
 import axios from 'axios';
 import '../../css/community.css';
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
-export default function CommunityCreate(){
+export default function CommunityCreate() {
+  const userId = useSelector(state => state.auth.userId)
   const [title, setTitle] = useState('');
-  const [pbnumber,setPbnumber] = useState('');
-  const [lang,setLang] = useState('Java');
-  const [cate,setCate] = useState('질문');
-  const [spo,setSpo] = useState(2)
   const [content, setContent] = useState('');
-  const [testCode, setTestCode] = useState("");
+  const [problemId,setProblemId] = useState('');
+  const [lang,setLang] = useState('Java');
+  // 1 : 질문, 2: 시간복잡도 ,3:공간복잡도 ,4:반례요청 ,5:반례
+  const [type,setType] = useState('질문');
+  const [spoiler,setSpoiler] = useState(0)
+  // 스포방지버튼 0은 전체공개 1은 스포방지
+  const [code, setCode] = useState("");
   const [bgcolor,setBgcolor] = useState('#F4F2CA');
   const [showCodeMirror, setShowCodeMirror] = useState(false)
 
+  const navigate = useNavigate()
+
   const onChangeTestCode = useCallback((code, viewUpdate) => {
-    setTestCode(code);
+    setCode(code);
   }, []);
 
+  
 
   const onClickCheckbox = () => {
-    if (spo === 2) {
-      setSpo(1)
+    if (spoiler === 0) {
+      setSpoiler(1)
     } else {
-      setSpo(2)
+      setSpoiler(0)
     }
-    console.log(spo)
   }
 
   const colorChange = () =>{
@@ -38,6 +45,29 @@ export default function CommunityCreate(){
     }
   }
 
+  const createArticle = ()=>{
+    axios({
+      url : 'http://i10d211.p.ssafy.io:8081/api/board/write',
+      method : 'post',
+      data : {
+        userId : userId,
+        problemId : problemId,
+        title : title,
+        content : content,
+        type : type,
+        lang : lang,
+        code : code,
+        spoiler : spoiler
+      }
+    })
+    .then((res)=>{
+      console.log(res)
+      //navigate로 게시글목록 이동
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
 
 
   return(
@@ -49,7 +79,7 @@ export default function CommunityCreate(){
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1 py-3" htmlFor="title">문제번호</label>
-          <input type="text" placeholder="문제번호를 입력하세요" id="title" onChange={(e)=>{setPbnumber(e.target.value)}} className="input input-bordered w-11/12" />
+          <input type="text" placeholder="문제번호를 입력하세요" id="title" onChange={(e)=>{setProblemId(e.target.value)}} className="input input-bordered w-11/12" />
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1" htmlFor="rating">언어</label>
@@ -62,12 +92,12 @@ export default function CommunityCreate(){
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1" htmlFor="rating">카테고리</label>
-            <select value={cate} onChange={(e)=>{setCate(e.target.value)}} className="select select-sm select-bordered w-2/12" >
-              <option>질문</option>
-              <option>시간복잡도</option>
-              <option>공간복잡도</option>
-              <option>반례요청</option>
-              <option>반례</option>
+            <select value={type} onChange={(e)=>{setType(e.target.value)}} className="select select-sm select-bordered w-2/12" >
+              <option value={1}>질문</option>
+              <option value={2}>시간복잡도</option>
+              <option value={3}>공간복잡도</option>
+              <option value={4}>반례요청</option>
+              <option value={5}>반례</option>
             </select>
             <div className='w-9/12'></div>
         </div>
@@ -92,10 +122,11 @@ export default function CommunityCreate(){
           </div>
         )}
         <div className='flex justify-end mb-4'>
-          <button className="btn rounded-full drop-shadow-xl" 
+          <button className="btn btn-sm rounded-full drop-shadow-xl" 
             style={{backgroundColor:'#F4F2CA',border:'1px solid black'}}
+            onClick={createArticle}
             >글쓰기
-            </button>
+          </button>
         </div>
       </div>
     </div>
