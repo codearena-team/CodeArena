@@ -34,10 +34,10 @@ export default function NavBar() {
   const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
 
 
-   //  access토큰 있는지 검사 ->만약 만료되서 없으면 refresh토큰으로 access토큰 재발급받은 후 access토큰으로 들어갈지 여부 결정
+    // access토큰 있는지 검사 ->만약 만료되서 없으면 refresh토큰으로 access토큰 재발급받은 후 access토큰으로 들어갈지 여부 결정
   // const goProfile = ()=>{
   //   axios({
-  //     url : 'http://i10d211.p.ssafy.io:8081/api/auth',
+  //     url : 'http://i10d211.p.ssafy.io:8081/api/auth',  // access 토큰검사axios
   //     method : 'get',
   //     headers : {
   //       Authorization : accessToken
@@ -47,7 +47,7 @@ export default function NavBar() {
   //     console.log(res)
   //     if (res.data.status == '302'){
   //       axios({
-  //         url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew',
+  //         url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew', // refresh로 재발급받는 axios
   //         method : 'post',
   //         data : {
   //           refreshToken : refreshToken
@@ -82,6 +82,8 @@ export default function NavBar() {
 
   const handleLogout = ()=>{
     dispatch(logout());
+    alert('로그아웃되었습니다')
+    navigate('/')
   }
 
   return (
