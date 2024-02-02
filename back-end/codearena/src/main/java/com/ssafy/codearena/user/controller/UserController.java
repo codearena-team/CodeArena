@@ -3,6 +3,7 @@ package com.ssafy.codearena.user.controller;
 import com.ssafy.codearena.user.dto.*;
 import com.ssafy.codearena.user.service.UserService;
 import com.ssafy.codearena.util.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
@@ -31,8 +32,8 @@ public class UserController {
         return new ResponseEntity<UserResultDto>(userService.checkDuplicatedEmail(userEmail), HttpStatus.OK);
     }
     @PostMapping("/login")
-    public ResponseEntity<UserResultDto> login(@RequestBody UserLoginDto userLoginDto) {
-        return new ResponseEntity<UserResultDto>(userService.login(userLoginDto), HttpStatus.OK);
+    public ResponseEntity<UserResultDto> login(HttpServletResponse response, @RequestBody UserLoginDto userLoginDto) {
+        return new ResponseEntity<UserResultDto>(userService.login(response, userLoginDto), HttpStatus.OK);
     }
     @GetMapping("/password/reissue")
     public ResponseEntity<UserResultDto> reissue(@RequestBody UserReissueDto userReissueDto) {

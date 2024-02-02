@@ -3,12 +3,14 @@ package com.ssafy.codearena.user.service;
 import com.ssafy.codearena.user.dto.*;
 import com.ssafy.codearena.user.mapper.UserMapper;
 import com.ssafy.codearena.util.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper mapper;
     private final JavaMailSender javaMailSender;
     private final JwtUtil jwtUtil;
+    private final String HEADER_AUTH = "Authorization";
 
     @Override
     public void saveRefreshToken(String userEmail, String refreshToken) {
@@ -58,7 +61,7 @@ public class UserServiceImpl implements UserService{
         return userResultDto;
     }
     @Override
-    public UserResultDto login(UserLoginDto userLoginDto) {
+    public UserResultDto login(HttpServletResponse response, UserLoginDto userLoginDto) {
 
         log.debug("login userEmail : {}", userLoginDto.getUserEmail());
 
@@ -76,6 +79,7 @@ public class UserServiceImpl implements UserService{
 
             // 로그인 성공 시
             if (tokenDataDto != null) {
+
                 String accessToken = jwtUtil.createAccessToken(tokenDataDto);
                 String refreshToken = jwtUtil.createRefreshToken(tokenDataDto);
 
@@ -84,7 +88,9 @@ public class UserServiceImpl implements UserService{
 
                 saveRefreshToken(userLoginDto.getUserEmail(), refreshToken);
 
-                UserTokenDto userTokenDto = new UserTokenDto(accessToken, refreshToken);
+                UserTokenDto userTokenDto = new UserTokenDto(refreshToken);
+
+                response.setHeader(HEADER_AUTH, accessToken);
 
                 userResultDto.setData(userTokenDto);
             } else {
