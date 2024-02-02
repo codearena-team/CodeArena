@@ -37,6 +37,12 @@
         where user_email=#{userEmail} and user_password=#{userPassword};
     </select>
 
+    <update id="logout" parameterType="string">
+        update user
+        set refresh_token=NULL
+        where user_email=#{userEmail};
+    </update>
+
     <update id="reissue" parameterType="userReissueDto">
         update user set user_password="${tempPassword}" where user_email="${userEmail}";
     </update>

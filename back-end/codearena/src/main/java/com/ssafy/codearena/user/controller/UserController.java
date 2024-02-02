@@ -35,6 +35,10 @@ public class UserController {
     public ResponseEntity<UserResultDto> login(HttpServletResponse response, @RequestBody UserLoginDto userLoginDto) {
         return new ResponseEntity<UserResultDto>(userService.login(response, userLoginDto), HttpStatus.OK);
     }
+    @PostMapping("/logout")
+    public ResponseEntity<UserResultDto> logout(@RequestBody String userEmail) {
+        return new ResponseEntity<UserResultDto>(userService.logout(userEmail), HttpStatus.OK);
+    }
     @GetMapping("/password/reissue")
     public ResponseEntity<UserResultDto> reissue(@RequestBody UserReissueDto userReissueDto) {
         return new ResponseEntity<UserResultDto>(userService.reissue(userReissueDto), HttpStatus.OK);
@@ -43,7 +47,6 @@ public class UserController {
     public ResponseEntity<UserResultDto> searchUser(@RequestParam String userNickname) {
         return new ResponseEntity<UserResultDto>(userService.searchUser(userNickname) ,HttpStatus.OK);
     }
-
     @PutMapping("/password")
     public ResponseEntity<UserResultDto> changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto) {
         return new ResponseEntity<UserResultDto>(userService.changePassword(userChangePasswordDto), HttpStatus.OK);

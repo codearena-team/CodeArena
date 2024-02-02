@@ -9,10 +9,10 @@ public interface UserService {
 
     UserResultDto join(UserJoinDto userJoinDto);
     UserResultDto login(HttpServletResponse response, UserLoginDto userLoginDto);
+    UserResultDto logout(String userEmail);
     UserResultDto checkDuplicatedNickname(String nickname);
     UserResultDto checkDuplicatedEmail(String email);
     UserResultDto reissue(UserReissueDto userReissueDto);
     UserResultDto searchUser(String userNickname);
-    void saveRefreshToken(String userEmail, String refreshToken);
     UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto);
 }

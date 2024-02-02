@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService{
     private final JwtUtil jwtUtil;
     private final String HEADER_AUTH = "Authorization";
 
-    @Override
     public void saveRefreshToken(String userEmail, String refreshToken) {
 
         Map<String ,String> map = new HashMap<String, String>();
@@ -106,6 +105,29 @@ public class UserServiceImpl implements UserService{
 
         return userResultDto;
     }
+
+    @Override
+    public UserResultDto logout(String userEmail) {
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setMsg("200");
+        userResultDto.setMsg("로그아웃 성공");
+        userResultDto.setData(null);
+
+        try {
+            int result = mapper.logout(userEmail);
+
+            if (result != 1) {
+                userResultDto.setStatus("404");
+                userResultDto.setMsg("해당 유저 없음");
+            }
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 에러 발생");
+        }
+
+        return userResultDto;
+    }
+
 
     @Override
     public UserResultDto checkDuplicatedNickname(String nickname) {
@@ -295,7 +317,5 @@ public class UserServiceImpl implements UserService{
         }
         return userResultDto;
     }
-
-
 
 }
