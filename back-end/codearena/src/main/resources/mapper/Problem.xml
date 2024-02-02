@@ -76,7 +76,7 @@
         <result property="timeComplexity" column="time_complexity"/>
         <result property="memory" column="memory"/>
         <result property="submitDate" column="submit_date"/>
-        <association property="testCaseDto" column="tid=tid" select="getTestCaseByTid" javaType="testCaseDto"/>
+        <association property="testCase" column="tid=tid" select="getTestCaseByTid" javaType="testCaseDto"/>
         <collection property="tagList" column="submitNo=submit_no" select="getSubmitTagsBySubmitNo" ofType="SubmitTagDto"/>
     </resultMap>
 

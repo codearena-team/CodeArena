@@ -18,6 +18,6 @@ public class SubmitDto {
     String timeComplexity;
     String memory;
     String submitDate;
-    TestCaseDto testCaseDto;
+    TestCaseDto testCase;
     List<SubmitTagDto> tagList;
 }
