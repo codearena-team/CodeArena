@@ -70,5 +70,10 @@ public class ProblemController {
         ResultDto resultDto = service.getSubmitList(params);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+    @GetMapping("{problemId}/submit/statistics")
+    private ResponseEntity<ResultDto> getStatistics(@PathVariable String problemId, @RequestParam HashMap<String, String> params){
+        ResultDto resultDto = service.getSubmitStatistics(problemId, params);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 
 }

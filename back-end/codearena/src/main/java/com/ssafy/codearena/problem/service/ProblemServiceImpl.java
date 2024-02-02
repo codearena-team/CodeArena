@@ -330,4 +330,40 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
+
+    @Override
+    public ResultDto getSubmitStatistics(String problemId, HashMap<String, String> params) {
+        SubmitStatisticDto submitStatistic = null;
+        ResultDto resultDto = new ResultDto();
+        resultDto.setStatus("403");
+        resultDto.setMsg("권한이 없습니다.");
+        params.put("problemId", problemId);
+        try{
+            String userId = "";
+            boolean isAccept = false;
+            if(params.containsKey("userId")){
+                userId = params.get("userId");
+            }
+            if(!"".equals(userId)){
+                params.put("userId", userId);
+                isAccept = mapper.isAccept(params) >= 1;
+            }
+            if(isAccept){
+                AvgByLangDto avgByLangDto = mapper.getAvgByLang(problemId);
+                List<RatioOfAlgoDto> ratioOfAlgoDto = mapper.getRatioOfAlgo(problemId);
+                submitStatistic = new SubmitStatisticDto();
+                submitStatistic.setAvgByLang(avgByLangDto);
+                submitStatistic.setRatioOfAlgo(ratioOfAlgoDto);
+                resultDto.setMsg("통계 데이터 조회에 성공했습니다.");
+                resultDto.setStatus("200");
+            }
+        }catch(Exception e){
+            log.debug("exception : {}", e);
+            resultDto.setMsg("통계 데이터를 불러오는 중 에러가 발생했습니다.");
+            resultDto.setStatus("500");
+        }finally{
+            resultDto.setData(submitStatistic);
+            return resultDto;
+        }
+    }
 }

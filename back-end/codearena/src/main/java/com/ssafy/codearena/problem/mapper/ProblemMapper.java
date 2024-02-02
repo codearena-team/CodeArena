@@ -27,4 +27,10 @@ public interface ProblemMapper {
     List<SubmitDto> getSubmitList(HashMap<String, String> params) throws SQLException;
     int getSubmitCount(HashMap<String, String> params) throws SQLException;
 
+    AvgByLangDto getAvgByLang(String problemId) throws SQLException;
+
+    List<RatioOfAlgoDto> getRatioOfAlgo(String problemId) throws SQLException;
+
+    int isAccept(HashMap<String, String> params) throws SQLException;
+
 }
