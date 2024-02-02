@@ -3,6 +3,7 @@ package com.ssafy.codearena.problem.controller;
 
 import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
 import com.ssafy.codearena.problem.dto.ResultDto;
+import com.ssafy.codearena.problem.dto.SubmitDto;
 import com.ssafy.codearena.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,4 +58,22 @@ public class ProblemController {
         ResultDto resultDto = service.getTestCase(problemId);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+
+    @PostMapping("{problemId}/submit")
+    private ResponseEntity<ResultDto> submitCode(@PathVariable String problemId, @RequestBody SubmitDto submitDto){
+        ResultDto resultDto = service.insertSubmit(problemId, submitDto);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/submit")
+    private ResponseEntity<ResultDto> getSubmitList(@RequestParam HashMap<String, String> params){
+        ResultDto resultDto = service.getSubmitList(params);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+    @GetMapping("{problemId}/submit/statistics")
+    private ResponseEntity<ResultDto> getStatistics(@PathVariable String problemId, @RequestParam HashMap<String, String> params){
+        ResultDto resultDto = service.getSubmitStatistics(problemId, params);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
 }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.Result;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -223,6 +224,145 @@ public class ProblemServiceImpl implements ProblemService{
             resultDto.setMsg("문제번호 : "+problemId+" 에 대한 테스트케이스 조회 중 에러가 발생하였습니다.");
         }finally{
             resultDto.setData(testcase);
+            return resultDto;
+        }
+    }
+
+    @Override
+    public ResultDto insertSubmit(String problemId, SubmitDto submitDto) {
+        ResultDto resultDto = new ResultDto();
+        resultDto.setStatus("200");
+        resultDto.setMsg("성공적으로 채점서버에 제출되었습니다.");
+        submitDto.setSubmitStatus("채점중");
+        submitDto.setProblemId(problemId);
+        log.debug("params : {}", submitDto);
+        try{
+            mapper.insertSubmit(submitDto);
+            /*
+            * WebFlux 채점서버 제출부
+            * */
+            SubmitTagListDto listDto = new SubmitTagListDto();
+            listDto.setSubmitNo(submitDto.getSubmitNo());
+            listDto.setTagList(submitDto.getTagList());
+            if(!listDto.getTagList().isEmpty()){
+                mapper.insertSubmitTags(listDto);
+            }
+        }catch(Exception e){
+            log.debug("exception {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("채점 시도 중 에러가 발생하였습니다.");
+        }finally{
+            return resultDto;
+        }
+
+    }
+
+    @Override
+    public ResultDto getSubmitList(HashMap<String, String> params) {
+        ResultDto resultDto = new ResultDto();
+        SubmitListDto list = new SubmitListDto();
+        List<SubmitDto> submitList = new ArrayList<>();
+        list.setItemCount(0);
+        list.setPageCount(BASIC_PGNO);
+        resultDto.setStatus("202");
+        try{
+            int spp = BASIC_SPP;
+            String problemId = "";
+            String userNickname = "";
+            String lang = "";
+            String orderBy= "";
+            int pgno = BASIC_PGNO;
+            if(params.containsKey("spp") && Integer.parseInt(params.get("spp")) > 0){
+                spp = Integer.parseInt(params.get("spp"));
+            }
+            if(params.containsKey("problemId")){
+                problemId = params.get("problemId");
+            }
+            if(params.containsKey("userNickname")){
+                userNickname = params.get("userNickname");
+            }
+            if(params.containsKey("lang")){
+                lang = params.get("lang");
+            }
+            if(params.containsKey("orderBy")){
+                orderBy = params.get("orderBy");
+            }
+            if(params.containsKey("pgno")){
+                pgno = Integer.parseInt(params.get("pgno"));
+            }
+            params = new HashMap<>();
+            params.put("problemId", problemId);
+            params.put("userNickname", userNickname);
+            params.put("lang", lang);
+            int itemCount = mapper.getSubmitCount(params);
+            int pageCount = BASIC_PGNO;
+            if(itemCount > spp) pageCount = (itemCount%spp) == 0 ? pageCount/spp : pageCount/spp+1;
+            if(pageCount < pgno){
+                pgno = BASIC_PGNO;
+            }
+            resultDto.setMsg("검색 결과 "+itemCount+"건 검색되었습니다.");
+            if(itemCount > 0){
+                params.put("start", String.valueOf((pgno-1) * spp));
+                params.put("offset", String.valueOf(spp));
+                switch(orderBy){
+                    case "timeComplexity":
+                        orderBy = "time_complexity";
+                        break;
+                    default :
+                        orderBy = "submit_date";
+                        break;
+                }
+                params.put("orderBy", orderBy);
+                resultDto.setStatus("200");
+                submitList = mapper.getSubmitList(params);
+                list.setPageCount(pageCount);
+                list.setItemCount(itemCount);
+            }
+
+        }catch(Exception e){
+            log.debug("exception {}", e);
+            submitList = Collections.EMPTY_LIST;
+            resultDto.setMsg("채점 현황 조회 중 에러가 발생하였습니다.");
+            resultDto.setStatus("500");
+        }finally{
+            list.setSubmitList(submitList);
+            resultDto.setData(list);
+            return resultDto;
+        }
+    }
+
+    @Override
+    public ResultDto getSubmitStatistics(String problemId, HashMap<String, String> params) {
+        SubmitStatisticDto submitStatistic = null;
+        ResultDto resultDto = new ResultDto();
+        resultDto.setStatus("403");
+        resultDto.setMsg("권한이 없습니다.");
+        params.put("problemId", problemId);
+        try{
+            String userId = "";
+            boolean isAccept = false;
+            if(params.containsKey("userId")){
+                userId = params.get("userId");
+            }
+            if(!"".equals(userId)){
+                params.put("userId", userId);
+                isAccept = mapper.isAccept(params) >= 1;
+            }
+            if(isAccept){
+                AvgByLangDto avgByLangDto = mapper.getAvgByLang(problemId);
+                List<RatioOfAlgoDto> ratioOfAlgoDto = mapper.getRatioOfAlgo(problemId);
+                submitStatistic = new SubmitStatisticDto();
+                submitStatistic.setAvgByLang(avgByLangDto);
+                submitStatistic.setRatioOfAlgo(ratioOfAlgoDto);
+                resultDto.setMsg("통계 데이터 조회에 성공했습니다.");
+                resultDto.setStatus("200");
+            }
+        }catch(Exception e){
+            log.debug("exception : {}", e);
+            resultDto.setMsg("통계 데이터를 불러오는 중 에러가 발생했습니다.");
+            resultDto.setStatus("500");
+        }finally{
+            resultDto.setData(submitStatistic);
             return resultDto;
         }
     }

@@ -64,6 +64,45 @@
         <result property="tagName" column="tag_name"/>
     </resultMap>
 
+    <resultMap id="submitDto" type="submitDto">
+        <result property="submitNo" column="submit_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="tid" column="tid"/>
+        <result property="problemId" column="problem_id"/>
+        <result property="submitLang" column="submit_lang"/>
+        <result property="code" column="code"/>
+        <result property="submitStatus" column="submit_status"/>
+        <result property="timeComplexity" column="time_complexity"/>
+        <result property="memory" column="memory"/>
+        <result property="submitDate" column="submit_date"/>
+        <association property="testCaseDto" column="tid=tid" select="getTestCaseByTid" javaType="testCaseDto"/>
+        <collection property="tagList" column="submitNo=submit_no" select="getSubmitTagsBySubmitNo" ofType="SubmitTagDto"/>
+    </resultMap>
+
+    <resultMap id="submitTag" type="submitTagDto">
+        <result property="submitNo" column="submit_no"/>
+        <result property="tagName" column="tag_name"/>
+    </resultMap>
+
+    <resultMap id="RatioOfAlgoDto" type="ratioOfAlgoDto">
+        <result property="tagName" column="tag_name"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <select id="getTestCaseByTid" resultMap="testcase">
+        <include refid="tidCheck"/>
+    </select>
+    <sql id="tidCheck">
+        <if test="tid!=null">
+            select tid, input, output from ps_testcase where tid=${tid}
+        </if>
+    </sql>
+
+    <select id="getSubmitTagsBySubmitNo" resultMap="submitTag">
+        select submit_no, tag_name from ps_submit_tag where submit_no=${submitNo}
+    </select>
+
     <select id="getTagListByProblemId" resultMap="tagName">
         select tag_id, tag_name from ps_problem_tag where problem_id=${problemId}
     </select>
@@ -186,5 +225,99 @@
 
     <select id="getTestCasesByProblemId" resultMap="testcase" parameterType="String">
         select tid, input, output from ps_testcase where problem_id=${problemId}
+    </select>
+    <insert id="insertSubmit" parameterType="submitDto">
+        insert into ps_submit
+        (problem_id, user_id, submit_lang, code, submit_status)
+        values
+            (${problemId}, '${userId}', '${submitLang}', '${code}', '${submitStatus}')
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="submitNo">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <insert id="insertSubmitTags" parameterType="submitTagListDto">
+        insert into ps_submit_tag
+        (submit_no, tag_name)
+        values
+            <foreach collection="tagList" item="item" separator=",">
+                ( ${submitNo}, '${item.tagName}' )
+            </foreach>
+    </insert>
+
+    <sql id="nickname">
+        <if test='userNickname!=null and !"".equals(userNickname)'>
+            and u.user_nickname like concat('%','${userNickname}','%')
+        </if>
+    </sql>
+    <sql id="problemId">
+        <if test='problemId!=null and !"".equals(problemId)'>
+            and problem_id=${problemId}
+        </if>
+    </sql>
+    <sql id="lang">
+        <if test='lang!=null and !"".equals(lang)'>
+            and lang like concat('%', '${lang}', '%')
+        </if>
+    </sql>
+    <sql id="orderBy">
+        <if test='orderBy!=null and !"".equals(orderBy)'>
+            order by ${orderBy}
+        </if>
+    </sql>
+    <select id="getSubmitCount" resultType="int" parameterType="hashmap">
+        select count(submit_no)
+        from ps_submit
+        where 1=1
+        <include refid="nickname"></include>
+        <include refid="problemId"></include>
+        <include refid="lang"></include>
+    </select>
+    <select id="getSubmitList" resultMap="submitDto" parameterType="hashmap">
+        select submit_no, tid, u.user_nickname, problem_id, submit_lang, code, submit_status, time_complexity, memory, submit_date
+        from ps_submit as s
+        left join user as u
+        on s.user_id=u.user_id
+        where 1=1
+        <include refid="nickname"></include>
+        <include refid="problemId"></include>
+        <include refid="lang"></include>
+        <include refid="orderBy"></include>
+        limit ${start}, ${offset}
+    </select>
+
+    <select id="isAccept" parameterType="String" resultType="int">
+        select count(user_id) from ps_submit where submit_status like concat('%','맞았습니다.','%') and problem_id=${problemId} and user_id=${userId};
+    </select>
+
+    <select id="getRatioOfAlgo" resultMap="RatioOfAlgoDto" parameterType="String">
+        select t.tag_name, count(s.submit_no) as count from ps_submit s
+        left join ps_submit_tag t
+        on s.submit_no = t.submit_no
+        where problem_id = ${problemId} and s.submit_status like '%맞았습니다.%'
+        group by t.tag_name
+    </select>
+
+    <select id="getAvgByLang" parameterType="String">
+            select s.problem_id, cpp, java, python from ps_list as s
+                left join
+            (select problem_id, round(avg(time_complexity)) as cpp
+             from
+                 (select problem_id, submit_lang, time_complexity from ps_submit where submit_status like '%맞았습니다.%' and problem_id=${problemId} and submit_lang like '%cpp%') inline
+             group by submit_lang) cpp
+            on s.problem_id = cpp.problem_id
+                left join
+            (select problem_id, round(avg(time_complexity)) as java
+             from
+                 (select problem_id, submit_lang, time_complexity from ps_submit where submit_status like '%맞았습니다.%' and problem_id=${problemId} and submit_lang like '%java%') inline
+             group by submit_lang) java
+            on s.problem_id = java.problem_id
+                left join
+            (select problem_id, round(avg(time_complexity)) as python
+             from
+                 (select problem_id, submit_lang, time_complexity from ps_submit where submit_status like '%맞았습니다.%' and problem_id=${problemId} and submit_lang like '%python%') inline
+             group by submit_lang) python
+            on s.problem_id = python.problem_id
+             where s.problem_id = ${problemId};
     </select>
 </mapper>
