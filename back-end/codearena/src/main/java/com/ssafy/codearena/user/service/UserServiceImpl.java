@@ -318,4 +318,26 @@ public class UserServiceImpl implements UserService{
         return userResultDto;
     }
 
+    @Override
+    public UserResultDto changeUserInfo(UserChangeInfoDto userChangeInfoDto) {
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("변경사항 저장 완료");
+        userResultDto.setData(null);
+
+        try {
+            int result = mapper.changeUserInfo(userChangeInfoDto);
+
+            if(result != 1) {
+                userResultDto.setStatus("404");
+                userResultDto.setMsg("해당 ID의 유저 없음");
+            }
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 에러 발생");
+        }
+
+        return userResultDto;
+    }
+
 }

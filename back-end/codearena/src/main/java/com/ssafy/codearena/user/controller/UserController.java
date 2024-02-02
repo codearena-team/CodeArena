@@ -51,7 +51,10 @@ public class UserController {
     public ResponseEntity<UserResultDto> changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto) {
         return new ResponseEntity<UserResultDto>(userService.changePassword(userChangePasswordDto), HttpStatus.OK);
     }
-
+    @PutMapping
+    public ResponseEntity<UserResultDto> changeUserInfo(@RequestBody UserChangeInfoDto userChangeInfoDto) {
+        return new ResponseEntity<UserResultDto>(userService.changeUserInfo(userChangeInfoDto), HttpStatus.OK);
+    }
 
 
 }
