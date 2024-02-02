@@ -85,4 +85,20 @@
         where user_id={userId};
     </update>
     
+    <insert id="follow" parameterType="userFollowDto">
+        insert into follow(from_id, to_id)
+        values (#{fromId}, #{toId});
+    </insert>
+
+    <delete id="unfollow" parameterType="userFollowDto">
+        delete from follow
+        where from_id=#{fromId} and to_id=#{toId};
+    </delete>
+    
+    <select id="getFollowList" parameterType="string" resultType="java.util.ArrayList">
+        select user_nickname
+        from follow as a join user as b on b.user_id = a.from_id
+        where b.user_nickname=#{userNickname};
+    </select>
+    
 </mapper>

@@ -21,5 +21,7 @@ public interface UserMapper {
     void saveRefreshToken(Map<String, String> map) throws SQLException;
     int changePassword(UserChangePasswordDto userChangePasswordDto) throws SQLException;
     int changeUserInfo(UserChangeInfoDto userChangeInfoDto) throws SQLException;
-
+    void follow(UserFollowDto userFollowDto) throws SQLException;
+    void unfollow(UserFollowDto userFollowDto) throws SQLException;
+    ArrayList<UserFollowInfoDto> getFollowList(String userNickname) throws SQLException;
 }

@@ -340,4 +340,58 @@ public class UserServiceImpl implements UserService{
         return userResultDto;
     }
 
+    @Override
+    public UserResultDto follow(UserFollowDto userFollowDto) {
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("회원 팔로우 성공");
+        userResultDto.setData(null);
+
+        try {
+            mapper.follow(userFollowDto);
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 내부 에러");
+        }
+
+        return userResultDto;
+    }
+
+    @Override
+    public UserResultDto unfollow(UserFollowDto userFollowDto) {
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("팔로우 취소 성공");
+        userResultDto.setData(null);
+
+        try {
+            mapper.unfollow(userFollowDto);
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 내부 에러");
+        }
+
+        return userResultDto;
+    }
+
+    @Override
+    public UserResultDto getFollowList(String userNickname) {
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("팔로우 목록 조회 성공");
+        userResultDto.setData(null);
+
+        try {
+
+            ArrayList<UserFollowInfoDto> result = mapper.getFollowList(userNickname);
+
+            userResultDto.setData(result);
+
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("팔로우 목록 조회 실패");
+        }
+
+        return userResultDto;
+    }
 }
