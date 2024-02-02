@@ -45,6 +45,7 @@ export default function Ps() {
       url : `http://i10d211.p.ssafy.io:8081/api/problem?orderBy=${orderBy}&cate=${cate}&word=${word}&pgno=${pgno}&spp=15&tag=${tag}`,
     })
     .then((res)=> {
+      console.log(res);
       setProblemList(res.data.data.problemWithSearch)
       setPageCount(res.data.data.pageCount)
     })

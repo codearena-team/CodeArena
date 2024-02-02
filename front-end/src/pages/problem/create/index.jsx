@@ -22,18 +22,24 @@ export default function ProblemCreate() {
 
   
   const onChangeInputFile = (event) => {
+    if (event.target.files[0].type === "text/plain") {
     let file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
     console.log(event);
-    let text = event.target.result;
-    text = text.replaceAll("\r", "");
-    let data = text.split("\n\n");
-    setInputFileData(data);
+      let text = event.target.result;
+      text = text.replaceAll("\r", "");
+      let data = text.split("\n\n");
+      setInputFileData(data);
     };
     reader.readAsText(file);
+    } else {
+      alert(".txt 파일만 업로드 가능합니다.")
+      event.target.value = null;
+    }
   };
   const onChangeOutputFile = (event) => {
+    if (event.target.files[0].type === "text/plain") {
     let file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -44,6 +50,10 @@ export default function ProblemCreate() {
     setOutputFileData(data);
     };
     reader.readAsText(file);
+    } else {
+      alert(".txt 파일만 업로드 가능합니다.")
+      event.target.value = null;
+    }
   };
   
   const onChangeTitle = (e) => {
@@ -115,7 +125,7 @@ export default function ProblemCreate() {
       return {tagName : selected}
     })
     axios({
-      url : "",
+      url : `http://i10d211.p.ssafy.io:8081/api/problem`,
       method : "post",
       data : {
         userId:1,
@@ -188,8 +198,8 @@ export default function ProblemCreate() {
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="rating">검증코드언어</label>
               <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-8/12" >
-                <option>Java</option>
-                <option>Python</option>
+                <option>java</option>
+                <option>python</option>
                 <option>cpp</option>
               </select>
             </div>

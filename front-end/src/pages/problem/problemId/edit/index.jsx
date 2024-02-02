@@ -1,9 +1,11 @@
 import CodeMirror from '@uiw/react-codemirror';
-import {useState, useCallback} from "react";
+import {useState, useCallback, useEffect} from "react";
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import TestCaseModal from '../../../../components/problem/TestcaseModal';
 
 export default function ProblemEdit() {
+  const params = useParams()
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [inputDescription, setInputDescription] = useState("");
@@ -18,6 +20,31 @@ export default function ProblemEdit() {
   const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
 
+
+  useEffect(() => {
+    axios({
+      url : `http://i10d211.p.ssafy.io:8081/api/problem/${params.problemId}/modify`,
+      method : "get",
+    })
+    .then((res) => {
+      console.log(res);
+      setTitle(res.data.data.problemTitle)
+      setContent(res.data.data.problemContent)
+      setInputDescription(res.data.data.problemInputDesc)
+      setOutputDescription(res.data.data.problemOutputDesc)
+      setInputExam(res.data.data.problemExInput)
+      setOutputExam(res.data.data.problemExOutput)
+      setLang(res.data.data.problemValidationLang)
+      setTestCode(res.data.data.problemValidationCode)
+      setTime(res.data.data.problemTime)
+      setMem(res.data.data.problemMem)
+      setSelectedList(res.data.data.tagList.map((tag)=>{return tag.tagName}))
+      let tmp = cateList
+      res.data.data.tagList.map((tag)=>{tmp = tmp.filter((el)=>{return el != tag.tagName})})
+      setCateList(tmp)
+    })
+
+  },[]) 
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value)
@@ -100,28 +127,28 @@ export default function ProblemEdit() {
         <h1 className='font-bold text-4xl mb-5 text-center'>문제 수정</h1>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1 py-3"htmlFor="title">제목</label>
-          <input type="text" placeholder="제목을 입력하세요" id="title" onChange={onChangeTitle} class="input input-bordered w-11/12" />
+          <input value={title} type="text" placeholder="제목을 입력하세요" id="title" onChange={onChangeTitle} class="input input-bordered w-11/12" />
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1"htmlFor="content">내용</label>
-          <textarea class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeContent} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
+          <textarea value={content} class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeContent} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1"htmlFor="input">입력 설명</label>
-          <textarea class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeInputDescription} id="input" placeholder="입력 설명을 입력하세요" rows="10"></textarea>
+          <textarea value={inputDescription} class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeInputDescription} id="input" placeholder="입력 설명을 입력하세요" rows="10"></textarea>
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1"htmlFor="output">출력 설명</label> <br />
-          <textarea class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
+          <textarea value={outputDescription} class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
           <div className='flex justify-end'>
             <label className="font-bold me-1"htmlFor="inputEx">입력 예제</label>
-            <CodeMirror onChange={onChangeInputExam} className='w-10/12' height="100%" id="inputEx"/>
+            <CodeMirror value={inputExam} onChange={onChangeInputExam} className='w-10/12' height="100%" id="inputEx"/>
           </div>
           <div className='flex justify-end'>
             <label className="font-bold me-1"htmlFor="inputEx">출력 예제</label>
-            <CodeMirror onChange={onChangeOutputExam} className='w-10/12' height="100%" id="inputEx"/>
+            <CodeMirror value={outputExam} onChange={onChangeOutputExam} className='w-10/12' height="100%" id="inputEx"/>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
@@ -130,8 +157,8 @@ export default function ProblemEdit() {
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="rating">검증코드언어</label>
               <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-8/12" >
-                <option>Java</option>
-                <option>Python</option>
+                <option>java</option>
+                <option>python</option>
                 <option>cpp</option>
               </select>
             </div>
@@ -143,11 +170,11 @@ export default function ProblemEdit() {
           <div className="grid grid-cols-2 gap-5">
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="time">시간제한</label>
-              <input onChange={(e)=>{setTime(e.target.value)}} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-8/12" />
+              <input value={time} onChange={(e)=>{setTime(e.target.value)}} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-8/12" />
             </div>
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="mem">메모리제한</label>
-              <input onChange={(e)=>{setMem(e.target.value)}} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-8/12" />
+              <input value={mem} onChange={(e)=>{setMem(e.target.value)}} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-8/12" />
             </div>
           </div>
         </div>
@@ -170,7 +197,7 @@ export default function ProblemEdit() {
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1"htmlFor="inputEx">검증용 코드</label>
-          <CodeMirror onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
+          <CodeMirror value={testCode} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
         </div>
         <div className='flex justify-center mb-4'>
         <button className="btn btn-sm w-60 text-lg text-center rounded-full drop-shadow" onClick={()=>document.getElementById('my_modal_3').showModal()}>테스트케이스 보기</button>
