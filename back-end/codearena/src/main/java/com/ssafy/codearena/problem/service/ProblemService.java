@@ -19,4 +19,6 @@ public interface ProblemService {
     ResultDto insertSubmit(String problemId, SubmitDto submitDto);
     ResultDto getSubmitList(HashMap<String, String> params);
     ResultDto getSubmitStatistics(String problemId, HashMap<String, String> params);
+
+    ResultDto getProblemDetailForUpdate(String problemId);
 }

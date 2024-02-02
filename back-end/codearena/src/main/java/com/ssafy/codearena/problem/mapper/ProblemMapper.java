@@ -33,4 +33,6 @@ public interface ProblemMapper {
 
     int isAccept(HashMap<String, String> params) throws SQLException;
 
+    ProblemForInsertDto getProblemDetailForUpdateByProblemId(String problemId) throws SQLException;
+
 }

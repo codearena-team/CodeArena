@@ -366,4 +366,22 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
+
+    @Override
+    public ResultDto getProblemDetailForUpdate(String problemId) {
+        ResultDto resultDto = new ResultDto();
+        resultDto.setStatus("200");
+        resultDto.setMsg("문제 업데이트를 위한 정보 불러오기에 성공했습니다.");
+        ProblemForInsertDto problem = new ProblemForInsertDto();
+        try{
+            problem = mapper.getProblemDetailForUpdateByProblemId(problemId);
+        }catch(Exception e){
+            log.debug("exception : ", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("문제가 발생했습니다.");
+        }finally{
+            resultDto.setData(problem);
+            return resultDto;
+        }
+    }
 }
