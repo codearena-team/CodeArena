@@ -7,8 +7,8 @@
     <resultMap id="receiveMap" type="com.ssafy.codearena.alarm.dto.AlarmReceiveDto">
         <result column="alarm_id" property="alarmId"/>
         <result column="alarm_type" property="alarmType"/>
-        <result column="to_id" property="toId"/>
-        <result column="from_id" property="fromId"/>
+        <result column="to_nickname" property="toNickname"/>
+        <result column="from_nickname" property="fromNickname"/>
         <result column="alarm_msg" property="alarmMsg"/>
         <result column="is_read" property="isRead"/>
         <result column="alarm_date" property="alarmDate"/>
@@ -16,14 +16,14 @@
     </resultMap>
 
     <select id="receive" parameterType="string" resultMap="receiveMap">
-        SELECT alarm_id, alarm_type, to_id, from_id, alarm_msg, is_read, alarm_date, status
+        SELECT alarm_id, alarm_type, to_id, from_id, (SELECT user_nickname FROM user WHERE user_id = to_id) as to_nickname,(SELECT user_nickname FROM user WHERE user_id = from_id) as from_nickname, alarm_msg, is_read, alarm_date, status
         FROM alarm
         WHERE to_id = "${userId}"
         ORDER BY alarm_date DESC;
     </select>
 
     <select id="sendList" parameterType="string" resultMap="receiveMap">
-        SELECT alarm_id, alarm_type, to_id, from_id, alarm_msg, is_read, alarm_date, status
+        SELECT alarm_id, alarm_type, to_id, from_id, (SELECT user_nickname FROM user WHERE user_id = to_id) as to_nickname,(SELECT user_nickname FROM user WHERE user_id = from_id) as from_nickname, alarm_msg, is_read, alarm_date, status
         FROM alarm
         WHERE from_id = "${userId}"
         ORDER BY alarm_date DESC;

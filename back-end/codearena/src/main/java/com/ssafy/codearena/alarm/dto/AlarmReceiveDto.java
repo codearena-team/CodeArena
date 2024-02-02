@@ -13,11 +13,11 @@ public class AlarmReceiveDto {
     @Schema(description = "알림 타입 >> 1 : 문제 생성 요청, 2 : 문제 수정 요청, 3 : 게임 초대, 4 : 공지사항")
     private int alarmType;
 
-    @Schema(description = "수신자 ID")
-    private int toId;
+    @Schema(description = "수신자 닉네임")
+    private String toNickname;
 
-    @Schema(description = "송신자 ID")
-    private int fromId;
+    @Schema(description = "송신자 닉네임")
+    private String fromNickname;
 
     @Schema(description = "알림 내용")
     private String alarmMsg;
