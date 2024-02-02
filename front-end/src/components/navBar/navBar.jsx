@@ -13,7 +13,7 @@ import { setAccessToken } from '../../features/login/accessSlice'
 
 const navigation = [ 
   { name: 'Community', href: '/community' },
-  { name: 'problem', href: '/problem/1' },
+  { name: 'problem', href: '/problem' },
   { name: 'Arena', href: '/arena'},
   { name: 'Login', href: '/login'},
 ]

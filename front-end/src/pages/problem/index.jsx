@@ -11,7 +11,7 @@ export default function Ps() {
   const [cate, setCate] = useState('problemTitle')  
   // 검색어 
   const [word, setWord] = useState('')
-  const [cateList, setCateList] = useState(["전체","PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
+  const [cateList, setCateList] = useState(["전체","DP","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [tag, setTag] =useState('전체')
   const [pageCount, setPageCount] = useState(1)
   const [pgno, setPgno] = useState(1)
@@ -30,10 +30,21 @@ export default function Ps() {
     }
     axios({
       method : 'get',
+      url : `http://i10d211.p.ssafy.io:8081/api/problem/category`,
+    })
+    .then((res)=> {
+      const tmp = res.data.data
+      tmp.splice(0, 0, {'tagName':'전체'})
+      setCateList(tmp)
+    })
+    .catch((err)=> {
+      console.log(err);
+    })
+    axios({
+      method : 'get',
       url : `http://i10d211.p.ssafy.io:8081/api/problem?orderBy=${orderBy}&cate=${cate}&word=${word}&pgno=${pgno}&spp=15&tag=${tag}`,
     })
     .then((res)=> {
-      console.log(res)
       setProblemList(res.data.data.problemWithSearch)
       setPageCount(res.data.data.pageCount)
     })
@@ -61,6 +72,8 @@ export default function Ps() {
     } else {
       changeParams('cate',cate)
     }
+    searchParams.delete('pgno')
+    setSearchParams(searchParams)
   }
   
   const changeParams = (key, value) => {
@@ -71,7 +84,7 @@ export default function Ps() {
   const pageNation = () => {
     const result = [];
     for (let i = 0; i < pageCount; i++) {
-      result.push(<buttom onClick={()=>changeParams('pgno',i+1)} key={i} class={(searchParams.get('pgno')===`${i+1}`) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</buttom>);
+      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i==0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
     }
     return result;
   };
@@ -89,7 +102,7 @@ export default function Ps() {
           <select onChange={(e)=> {setTag(e.target.value)}} className="select select-sm select-bordered join-item">
             {cateList.map((cate)=>{
               return(
-                <option>{cate}</option>
+                <option key={cate.tagName}>{cate.tagName}</option>
               )
             })}
           </select>
@@ -132,9 +145,9 @@ export default function Ps() {
       <div className="flex justify-between my-2">
         <div className="w-40"></div>
         <div className="join">
-          <buttom onClick={()=>{changeParams('pgno','1')}} class="join-item btn btn-sm">{'<<'}</buttom>
+          <button onClick={()=>{changeParams('pgno','1')}} className="join-item btn btn-sm">{'<<'}</button>
           {pageNation()}
-          <buttom onClick={()=>{changeParams('pgno', pageCount)}} class="join-item btn btn-sm">{'>>'}</buttom>
+          <button onClick={()=>{changeParams('pgno', pageCount)}} className="join-item btn btn-sm">{'>>'}</button>
         </div>
         <div className="w-40 flex justify-end"><Link to="/problem/create" className="btn btn-neutral btn-sm rounded-full">문제 생성</Link></div>
       </div>

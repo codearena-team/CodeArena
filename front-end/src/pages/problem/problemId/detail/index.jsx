@@ -17,6 +17,8 @@ export default function ProblemDetail() {
   const [selectedList, setSelectedList] = useState([])
   const [cate, setCate] = useState('선택')
   const [problem, setProblem] = useState({})
+  
+  
   useEffect(()=> {
     axios({
       method : 'get',
@@ -113,7 +115,7 @@ export default function ProblemDetail() {
               <CodeMirror height="100%" value={problem.problemExOutput} onChange={onChangeCode} editable={false} />
             </div>
           </div>
-          
+
         </div>
       </div>
       <div className="right drop-shadow-xl p-5 sticky">
@@ -126,10 +128,10 @@ export default function ProblemDetail() {
           </select>
           <label className="font-bold ms-4 mt-1">알고리즘</label>
           <select value={cate} onChange={onClickCate} className="select select-sm select-bordered w-20" >
-            <option isabled selected>선택</option>
+            <option isabled="true">선택</option>
             {cateList.map((cate)=>{
               return(
-                <option onClick={onClickCate}>{cate}</option>
+                <option key={cate} onClick={onClickCate}>{cate}</option>
               )
             })}
           </select>

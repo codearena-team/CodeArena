@@ -37,7 +37,7 @@ export default function Router () {
       <Route path="/community/create" element={<CommunityCreate />} />
     
 
-      <Route path="/problem/:pgno" element={<Problem />} />
+      <Route path="/problem" element={<Problem />} />
       <Route path="/problem/create" element={<ProblemCreate />} />
       <Route path="/problem/:problemId/edit" element={<ProblemEdit />} />
       <Route path="/problem/:problemId/detail" element={<ProblemDetail />} />
