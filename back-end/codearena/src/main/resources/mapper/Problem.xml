@@ -262,12 +262,14 @@
     </sql>
     <sql id="orderBy">
         <if test='orderBy!=null and !"".equals(orderBy)'>
-            order by ${orderBy}
+            order by ${orderBy} desc
         </if>
     </sql>
     <select id="getSubmitCount" resultType="int" parameterType="hashmap">
         select count(submit_no)
-        from ps_submit
+        from ps_submit as s
+        left join user as u
+        on s.user_id=u.user_id
         where 1=1
         <include refid="nickname"></include>
         <include refid="problemId"></include>
