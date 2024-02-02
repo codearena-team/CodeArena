@@ -48,9 +48,9 @@
     </update>
 
     <select id="searchUser" parameterType="string" resultMap="userInfoDto">
-        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating
+        select user_email, user_nickname, user_intro, speed_rating, effi_rating
         from user
-        where user_nickname="${userNickname}";
+        where user_nickname=${userNickname};
     </select>
 
     <select id="getSolvedProblem" parameterType="int" resultType="Integer">
@@ -77,6 +77,12 @@
         update user
         set user_password=#{userPassword}
         where user_email=#{userEmail};
+    </update>
+
+    <update id="changeUserInfo" parameterType="userChangeInfoDto">
+        update user
+        set user_nickname=#{userNickname}, user_intro=#{userIntro}
+        where user_id={userId};
     </update>
     
 </mapper>

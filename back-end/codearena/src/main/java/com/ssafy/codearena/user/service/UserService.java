@@ -15,4 +15,5 @@ public interface UserService {
     UserResultDto reissue(UserReissueDto userReissueDto);
     UserResultDto searchUser(String userNickname);
     UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto);
+    UserResultDto changeUserInfo(UserChangeInfoDto userChangeInfoDto);
 }

@@ -20,5 +20,6 @@ public interface UserMapper {
     ArrayList<Integer> getWrongProblem(int userId) throws SQLException;
     void saveRefreshToken(Map<String, String> map) throws SQLException;
     int changePassword(UserChangePasswordDto userChangePasswordDto) throws SQLException;
+    int changeUserInfo(UserChangeInfoDto userChangeInfoDto) throws SQLException;
 
 }
