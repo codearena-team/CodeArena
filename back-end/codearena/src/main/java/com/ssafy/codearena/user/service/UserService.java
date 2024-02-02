@@ -16,4 +16,7 @@ public interface UserService {
     UserResultDto searchUser(String userNickname);
     UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto);
     UserResultDto changeUserInfo(UserChangeInfoDto userChangeInfoDto);
+    UserResultDto follow(UserFollowDto userFollowDto);
+    UserResultDto unfollow(UserFollowDto userFollowDto);
+    UserResultDto getFollowList(String userNickname);
 }

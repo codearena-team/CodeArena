@@ -55,6 +55,19 @@ public class UserController {
     public ResponseEntity<UserResultDto> changeUserInfo(@RequestBody UserChangeInfoDto userChangeInfoDto) {
         return new ResponseEntity<UserResultDto>(userService.changeUserInfo(userChangeInfoDto), HttpStatus.OK);
     }
+    @PostMapping("/follow")
+    public ResponseEntity<UserResultDto> follow(@RequestBody UserFollowDto userFollowDto) {
+        return new ResponseEntity<UserResultDto>(userService.follow(userFollowDto), HttpStatus.OK);
+    }
+    @DeleteMapping("/follow")
+    public ResponseEntity<UserResultDto> unfollow(@RequestBody UserFollowDto userFollowDto) {
+        return new ResponseEntity<UserResultDto>(userService.unfollow(userFollowDto), HttpStatus.OK);
+    }
+    @GetMapping("/follow/{userNickname}")
+    public ResponseEntity<UserResultDto> getFollowList(@PathVariable String userNickname) {
+        return new ResponseEntity<UserResultDto>(userService.getFollowList(userNickname), HttpStatus.OK);
+    }
+
 
 
 }
