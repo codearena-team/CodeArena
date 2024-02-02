@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import CreateModal from './modal/BannerCreateModal';
+import BannerCreateModal from './modal/BannerCreateModal';
 
 import FindMatch from '../../images/arena/TopBanner/FindMatch.gif';
 import FindMatchAsset from '../../images/arena/TopBanner/FindMatch.png';
@@ -118,11 +118,6 @@ export default function TopBanner() {
       clearInterval(timerInterval);
       timerElement.textContent = '매칭 완료!'; // 매칭 완료 문구
     }, desiredTimeInSeconds * 1000);
-  };
-
-  // 게임 생성 모달 열기
-  const openModal = () => {
-    setIsModalOpen(true);
   };
 
   // 게임 생성 모달 닫기
@@ -265,7 +260,7 @@ export default function TopBanner() {
             style={{ width: '100%', height: 'auto' }}
             />
         </button>
-        {<CreateModal closeModal={closeModal} />}
+        {<BannerCreateModal closeModal={closeModal} />}
 
         {/* 게임 찾기 */}
         <button
