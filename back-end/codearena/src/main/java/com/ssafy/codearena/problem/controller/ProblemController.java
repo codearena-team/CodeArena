@@ -43,6 +43,13 @@ public class ProblemController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    @GetMapping("{problemId}/modify")
+    private ResponseEntity<ResultDto> getProblemForUpdate(@PathVariable String problemId){
+        log.debug("params : ", problemId);
+        ResultDto resultDto = service.getProblemDetailForUpdate(problemId);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
     @GetMapping("/category")
     private ResponseEntity<ResultDto> getAllCategories(){
         ResultDto resultDto = service.getTagCategory();
@@ -75,5 +82,6 @@ public class ProblemController {
         ResultDto resultDto = service.getSubmitStatistics(problemId, params);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+
 
 }
