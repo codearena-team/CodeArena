@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import GroupLobbyLine from "./GroupLobbyLine";
 import GroupLobbyExitModal from '../modal/GroupLobbyExitModal'
+import StartModal from "../modal/StartModal";
 
 import cat_one from '../../../images/arena/GroupView/cat_one.png';
 import cat_two from '../../../images/arena/GroupView/cat_two.png';
@@ -110,8 +111,7 @@ export default function GroupLobby() {
             style={{ height: '50%', backgroundColor: '#F5EBDB' }}
           >
             {/* 팔로우 목록 컨텐츠 */}
-            <div className="user-follow-item">유저1의 팔로우 목록</div>
-            <div className="user-follow-item">유저2의 팔로우 목록</div>
+            <div className="user-follow-item">나의 팔로우 목록</div>
             {/* ... Add more user-follow-item as needed */}
           </div>
 
@@ -128,7 +128,7 @@ export default function GroupLobby() {
                 // 버튼 클릭 시 처리할 기능 필요함
               }}
             >
-              Arena Start !
+              <StartModal ArenaGroupId={userData.id} />
             </button>
 
             {/* 나가기 버튼 */}
