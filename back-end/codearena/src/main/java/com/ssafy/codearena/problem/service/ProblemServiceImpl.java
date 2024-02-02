@@ -296,7 +296,7 @@ public class ProblemServiceImpl implements ProblemService{
             params.put("lang", lang);
             int itemCount = mapper.getSubmitCount(params);
             int pageCount = BASIC_PGNO;
-            if(itemCount > spp) pageCount = (itemCount%spp) == 0 ? pageCount/spp : pageCount/spp+1;
+            if(itemCount > spp) pageCount = (itemCount%spp) == 0 ? itemCount/spp : itemCount/spp+1;
             if(pageCount < pgno){
                 pgno = BASIC_PGNO;
             }
