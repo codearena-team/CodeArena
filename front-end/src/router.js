@@ -6,6 +6,7 @@ import Problem from './pages/problem/index';
 import ProblemDetail from "./pages/problem/problemId/detail/index";
 import ProblemEdit from "./pages/problem/problemId/edit/index";
 import ProblemCreate from "./pages/problem/create";
+import ProblemSubmit from "./pages/problem/submit/index";
 import TagList from "./pages/problem/taglist";
 import Main from './pages/main/index';
 import Arena from "./pages/arena/index";
@@ -42,6 +43,7 @@ export default function Router () {
       <Route path="/problem/:problemId/edit" element={<ProblemEdit />} />
       <Route path="/problem/:problemId/detail" element={<ProblemDetail />} />
       <Route path="/problem/tagList" element={<TagList />} />
+      <Route path="/problem/submit" element={<ProblemSubmit />} />
 
 
       <Route path="/arena" element={<Arena />} />
