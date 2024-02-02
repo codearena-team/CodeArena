@@ -7,8 +7,10 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'; 
-import { setToken } from '../../features/login/authSlice';
+import { setRefreshToken } from '../../features/login/authSlice';
+import { setAccessToken } from '../../features/login/accessSlice';
 
+axios.defaults.withCredentials = true;
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -37,31 +39,23 @@ export default function Login() {
     //   alert('비밀번호가 형식에 맞지 않습니다')
     // }
     if (checkEmail()) {
-      
       axios({
-        url: 'http://192.168.100.207:8080/api/user/login',
+        url: 'http://i10d211.p.ssafy.io:8081/api/user/login',
         method:'post',
         data: {
-          userEmail : email,
-          
+          userEmail : email, 
           userPassword : password
-        },
-        withCredentials : true,
-        headers: {
-                    
-          'Access-Control-Allow-Origin': '192.168.100.129' ,
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Max-Age': '3600',
-          'Access-Control-Allow-Headers': 'Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization'
-
-        }
+        },      
       })
       .then((res)=>{
         console.log(res)
+        console.log(res.headers.authorization)
+        console.log(res.data.data.refreshToken)
         if (res.data.status == "404"){
           alert('이메일,패스워드가 일치하지 않습니다')
         }else{
-          dispatch(setToken(res.data.data))
+          dispatch(setRefreshToken(res.data.data))
+          dispatch(setAccessToken(res.headers.authorization)) 
           alert('로그인성공')
           navigate('/')
         }
@@ -70,10 +64,6 @@ export default function Login() {
         console.log(err)
       })
       }
-    }
-
-    const test = () => {
-      dispatch((setToken(true)))
     }
 
 

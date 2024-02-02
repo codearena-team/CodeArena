@@ -6,14 +6,16 @@ import Logo from '../../images/common/logo.png'
 import Profile from '../../images/common/profile.png'
 import { useSelector,useDispatch } from 'react-redux'
 import { logout } from '../../features/login/authSlice'
-
+import axios from 'axios'
+import accessSlice from '../../features/login/accessSlice'
+import { setAccessToken } from '../../features/login/accessSlice'
 
 
 const navigation = [ 
-  { name: 'Community', href: '/community', current: false },
-  { name: 'problem', href: '/problem/1', current: false },
-  { name: 'Arena', href: '/arena', current: false },
-  { name: 'Login', href: '/login', current: false },
+  { name: 'Community', href: '/community' },
+  { name: 'problem', href: '/problem/1' },
+  { name: 'Arena', href: '/arena'},
+  { name: 'Login', href: '/login'},
 ]
 
 
@@ -24,11 +26,59 @@ function classNames(...classes) {
 export default function NavBar() {
   const isLogin = useSelector(state => state.auth.isLogin);
   const nickName = useSelector(state => state.auth.userNickname)
+  const accessToken = useSelector(state => state.access.accessToken)
+  const refreshToken = useSelector(state => state.auth.refreshToken )
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
   const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
 
+
+   //  access토큰 있는지 검사 ->만약 만료되서 없으면 refresh토큰으로 access토큰 재발급받은 후 access토큰으로 들어갈지 여부 결정
+  // const goProfile = ()=>{
+  //   axios({
+  //     url : 'http://i10d211.p.ssafy.io:8081/api/auth',
+  //     method : 'get',
+  //     headers : {
+  //       Authorization : accessToken
+  //     }
+  //   })
+  //   .then((res)=>{
+  //     console.log(res)
+  //     if (res.data.status == '302'){
+  //       axios({
+  //         url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew',
+  //         method : 'post',
+  //         data : {
+  //           refreshToken : refreshToken
+  //         }
+  //       })
+  //       .then((res)=>{
+  //         console.log(res)
+  //         dispatch(setAccessToken(res.headers.authorization))
+  //         axios({
+  //           url : 'http://i10d211.p.ssafy.io:8081/api/auth',
+  //           method : 'get',
+  //           headers : {
+  //             Authorization : res.headers.authorization
+  //           }
+  //         })
+  //         .then((res)=>{
+  //           console.log(res)
+  //         })
+  //         .catch((err)=>{
+  //           console.log(err)
+  //         })
+  //       })
+  //       .catch((err)=>{
+  //         console.log(err)
+  //       })
+  //     }
+  //   })
+  //   .catch((err)=>{
+  //     console.log(err)
+  //   })
+  // }
 
   const handleLogout = ()=>{
     dispatch(logout());
@@ -51,6 +101,7 @@ export default function NavBar() {
                   />
                 </Link>
                 </div>
+           
                 <div className="flex justify-center items-center">
                   <div className="flex space-x-4">
                     {filterNav.map((item) => (
@@ -58,10 +109,8 @@ export default function NavBar() {
                         key={item.name} 
                         to={item.href}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-xl hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
+                         'text-xl hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium'
                         )}
-                        aria-current={item.current ? 'page' : undefined}
                       >
                         {item.name}
                       </Link>
@@ -111,18 +160,20 @@ export default function NavBar() {
                             )}
                           </Menu.Item>
                           
-                        <Link to='/profile/:nickname'>
+                          
+                          <Link to={`/profile/${nickName}`}>
                           <Menu.Item>
                           {({ active }) => (
                             <a
                               href="#"
                               className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                            >
+                            > 
                               Profile
                             </a>
                           )}
                           </Menu.Item>
-                        </Link>
+                          </Link>
+                      
                         
                         <Menu.Item>
                           {({ active }) => (
