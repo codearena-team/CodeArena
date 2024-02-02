@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function EnterModal({ groupViewId }) {
+export default function GroupLobby({ groupId }) {
 
-  const groupViewPath = `/game-list/group/lobby/${groupViewId}`;
+  const groupViewPath = `/game-list/group/view/${groupId}`;
 
   return (
     <div>
-      <button className="btn" onClick={() => document.getElementById(groupViewId).showModal()}>관전하기</button>
-      <dialog id={groupViewId} className="modal">
+      <button className="btn" onClick={() => document.getElementById(groupId).showModal()}>참여하기</button>
+      <dialog id={groupId} className="modal">
         <div className="modal-box">
-            <h3 className="font-bold text-lg mb-4 text-center">단체전을 관전하시겠습니까?</h3>
+            <h3 className="font-bold text-lg mb-4 text-center">단체전에 참여하시겠습니까?</h3>
             <div className="modal-action flex justify-center">
               <Link to={groupViewPath} method="dialog">
                 <button className="btn">예</button>

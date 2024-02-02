@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../../../pages/css/shake.css';
+import '../../css/shake.css';
 import EnterModal from '../modal/CompEnterModal';
 
 export default function CompetitionList() {

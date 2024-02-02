@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import C_DividingLine from "./C_dividingLine";
-import TopInfo from "./CompTopInfo";
+import CompTopInfo from "./CompTopInfo";
 
 export default function CompetitionView() {
   // 왼쪽과 오른쪽 패널의 너비를 나타내는 상태 -> 처음 렌더링 되었을 때 6:4 비율 
@@ -20,7 +20,7 @@ export default function CompetitionView() {
 
   return (
     <div>
-      <TopInfo />
+      <CompTopInfo />
       <div className="competition-view" style={{ height: '85vh' }}>
         {/* 왼쪽(6)에 해당하는 부분 */}
         <div className="left-panel ml-3 mr-3 mt-1" style={{ width: `${panelWidths.left}%`}}>

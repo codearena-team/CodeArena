@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../../../pages/css/shake.css';
+import '../../css/shake.css';
 import CreateModal from '../modal/CreateModal';
 import GroupEnterModal from '../modal/GroupEnterModal';
+import GroupLobbyModal from '../modal/GroupLobbyModal';
 
 export default function GroupList() {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 표시 데이터
@@ -158,7 +159,12 @@ export default function GroupList() {
               <button className="btn btn-disabled" disabled>입장불가</button>
             ) : (
               // 단체전 입장 또는 관전하기
-              <GroupEnterModal groupId={item.id}/>
+              <div className="flex">
+                <GroupEnterModal groupViewId={item.id}/> {/* 관전하기 */}
+                <div className="ml-4">
+                  <GroupLobbyModal groupId={item.id} /> {/* 참여하기 */}
+                </div>
+              </div>
             )}
           </div>
         </div>

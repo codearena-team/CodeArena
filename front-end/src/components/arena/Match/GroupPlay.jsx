@@ -4,7 +4,7 @@ export default function GroupPlay() {
 
     return (
         <div>
-            {/* 단체전 플레이 페이지 */}
+            {/* 단체전 플레이 */}
         </div>
     );
 }

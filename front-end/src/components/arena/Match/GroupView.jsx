@@ -39,7 +39,7 @@ export default function GroupView() {
 
         {/* 구분선을 기준으로 왼쪽(6):오른쪽(4)로 나누어져있음 */}
         {/* handleDividerMove를 통해 왼쪽 오른쪽 화면 비율 조정 */}
-        <G_DividingLine onDividerMove={handleDividerMove} />
+        <G_DividingLine onDivider={handleDividerMove} />
 
         {/* 오른쪽(4)에 해당하는 부분 */}
         <div className="right-panel mr-3 mt-1" style={{ width: `${panelWidths.right}%`, display: 'flex', flexDirection: 'column' }}>
