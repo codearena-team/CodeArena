@@ -2,8 +2,10 @@ package com.ssafy.codearena.util;
 
 import com.ssafy.codearena.user.dto.TokenDataDto;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -112,4 +114,20 @@ public class JwtUtil {
         return (String) value.get("userEmail");
     }
 
+    public boolean isAdmin(String token) throws JwtException{
+        try {
+            // 토큰 유효성 검사
+            Jws<Claims> claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(token);
+
+            String userId = (String) claims.getBody().get("userId");
+
+            if (!"1".equals(userId)) throw new Exception("토큰 에러 발생");
+
+        } catch (Exception e) {
+            log.debug("exception : {} ", e);
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -19,6 +19,18 @@
         <result column="user_email" property="userEmail"/>
     </resultMap>
 
+    <resultMap id="userFollowInfoDto" type="UserFollowInfoDto">
+        <result column="to_id" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_email" property="userEmail"/>
+    </resultMap>
+
+    <resultMap id="userFollowingInfoDto" type="userFollowingInfoDto">
+        <result column="from_id" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_email" property="userEmail"/>
+    </resultMap>
+
     <insert id="join" parameterType="userJoinDto">
         insert into user(user_email, user_password, user_nickname, user_intro) values("${userEmail}" ,"${userPassword}" , "${userNickname}", "${userIntro}");
     </insert>
@@ -48,7 +60,7 @@
     </update>
 
     <select id="searchUser" parameterType="string" resultMap="userInfoDto">
-        select user_email, user_nickname, user_intro, speed_rating, effi_rating
+        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating
         from user
         where user_nickname=${userNickname};
     </select>
@@ -86,7 +98,7 @@
     </update>
     
     <insert id="follow" parameterType="userFollowDto">
-        insert into follow(from_id, to_id)
+        insert into follow
         values (#{fromId}, #{toId});
     </insert>
 
@@ -94,11 +106,17 @@
         delete from follow
         where from_id=#{fromId} and to_id=#{toId};
     </delete>
-    
-    <select id="getFollowList" parameterType="string" resultType="java.util.ArrayList">
-        select user_nickname
-        from follow as a join user as b on b.user_id = a.from_id
-        where b.user_nickname=#{userNickname};
+
+    <select id="getFollowList" parameterType="string" resultMap="userFollowInfoDto">
+        select to_id, b.user_nickname, b.user_email
+        from follow as a join user b on (b.user_id=a.to_id)
+        where from_id="${userId}";
+    </select>
+
+    <select id="getFollowingList" parameterType="string" resultMap="userFollowingInfoDto">
+        select from_id, b.user_nickname, b.user_email
+        from follow as a join user b on (b.user_id=a.from_id)
+        where to_id="${userId}";
     </select>
     
 </mapper>
