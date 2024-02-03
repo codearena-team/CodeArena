@@ -6,6 +6,7 @@ import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
 import com.ssafy.codearena.problem.dto.ResultDto;
 import com.ssafy.codearena.problem.dto.SubmitDto;
 import com.ssafy.codearena.problem.service.ProblemService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -63,8 +64,8 @@ public class ProblemController {
         return new ResponseEntity<ResultDto>(resultDto, HttpStatus.OK);
     }
     @GetMapping("{problemId}")
-    private ResponseEntity<ResultDto> getProblemDetail(@PathVariable String problemId){
-        ResultDto resultDto = service.getProblemDetail(problemId);
+    private ResponseEntity<ResultDto> getProblemDetail(@PathVariable String problemId, HttpServletRequest request){
+        ResultDto resultDto = service.getProblemDetail(problemId, request);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
     @GetMapping("{problemId}/testcase")

@@ -5,9 +5,13 @@ import com.ssafy.codearena.alarm.dto.AlarmSendDto;
 import com.ssafy.codearena.alarm.mapper.AlarmMapper;
 import com.ssafy.codearena.problem.dto.*;
 import com.ssafy.codearena.problem.mapper.ProblemMapper;
+import com.ssafy.codearena.util.JwtUtil;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.transaction.Transaction;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -31,7 +35,7 @@ public class ProblemServiceImpl implements ProblemService{
     private final ProblemMapper mapper;
 
     private final AlarmMapper alarmMapper;
-
+    private final JwtUtil jwtUtil;
     private static final int ADMIN_ID = 1;
 
     private static final int ALARM_TYPE = 1;
@@ -197,14 +201,23 @@ public class ProblemServiceImpl implements ProblemService{
     }
 
     @Override
-    public ResultDto getProblemDetail(String problemId) {
+    public ResultDto getProblemDetail(String problemId, HttpServletRequest request) {
         ResultDto resultDto = new ResultDto();
         ProblemDetailDto problemDetail = new ProblemDetailDto();
         resultDto.setMsg("문제 번호 "+problemId+"에 대한 정보를 조회하는데 성공했습니다.");
         resultDto.setData(problemDetail);
         resultDto.setStatus("200");
         try{
+            String token = request.getHeader("Authorization");
+            log.debug("token : {}",token);
             problemDetail = mapper.getProblemDetailByProblemId(problemId);
+            log.debug("{}",jwtUtil.isAdmin(token));
+            if("0".equals(problemDetail.getProblemVisibility()) && (token==null || "".equals(token) || !jwtUtil.isAdmin(token))) throw new AuthenticationFailedException("권한 없음");
+        }catch(AuthenticationFailedException e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("403");
+            resultDto.setMsg("접근 권한이 없습니다.");
+            problemDetail =null;
         }catch(Exception e){
             log.debug("exception : {}", e);
             resultDto.setStatus("500");
