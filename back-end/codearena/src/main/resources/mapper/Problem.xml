@@ -300,7 +300,7 @@
 
     <select id="getRatioOfAlgo" resultMap="RatioOfAlgoDto" parameterType="String">
         select t.tag_name, count(s.submit_no) as count from ps_submit s
-        left join ps_submit_tag t
+        inner join ps_submit_tag t
         on s.submit_no = t.submit_no
         where problem_id = ${problemId} and s.submit_status like '%맞았습니다.%'
         group by t.tag_name
@@ -351,21 +351,7 @@
     <delete id="deleteProblemTagsByProblemId" parameterType="int">
         delete from ps_problem_tag where problem_id=${problemId}
     </delete>
-    <!--
-    private String userId;
-    private Integer problemId;
-    private String problemTitle;
-    private String problemContent;
-    private String problemInputDesc;
-    private String problemOutputDesc;
-    private String problemValidationCode;
-    private String problemValidationLang;
-    private String problemExInput;
-    private String problemExOutput;
-    private String problemTime;
-    private String problemMem;
-    private Integer problemRating;
-     -->
+
     <update id="updateProblemByProblemId" parameterType="problemDetailDto">
         update
         ps_list
