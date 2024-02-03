@@ -19,4 +19,5 @@ public interface UserService {
     UserResultDto follow(UserFollowDto userFollowDto);
     UserResultDto unfollow(UserFollowDto userFollowDto);
     UserResultDto getFollowList(String userNickname);
+    UserResultDto getFollowingList(String userNickname);
 }

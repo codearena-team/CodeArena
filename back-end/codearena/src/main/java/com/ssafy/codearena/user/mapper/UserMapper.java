@@ -23,5 +23,7 @@ public interface UserMapper {
     int changeUserInfo(UserChangeInfoDto userChangeInfoDto) throws SQLException;
     void follow(UserFollowDto userFollowDto) throws SQLException;
     void unfollow(UserFollowDto userFollowDto) throws SQLException;
-    ArrayList<UserFollowInfoDto> getFollowList(String userNickname) throws SQLException;
+    ArrayList<UserFollowInfoDto> getFollowList(String userId) throws SQLException;
+    ArrayList<UserFollowingInfoDto> getFollowingList(String userId) throws SQLException;
+
 }
