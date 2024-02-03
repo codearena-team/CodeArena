@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService{
                 response.setHeader(HEADER_AUTH, accessToken);
 
                 userResultDto.setData(userTokenDto);
+
             } else {
                 userResultDto.setStatus("404");
                 userResultDto.setMsg("ID, PW 미일치");
@@ -370,26 +371,41 @@ public class UserServiceImpl implements UserService{
             userResultDto.setStatus("500");
             userResultDto.setMsg("서버 내부 에러");
         }
-
         return userResultDto;
     }
 
     @Override
-    public UserResultDto getFollowList(String userNickname) {
+    public UserResultDto getFollowList(String userId) {
         UserResultDto userResultDto = new UserResultDto();
         userResultDto.setStatus("200");
         userResultDto.setMsg("팔로우 목록 조회 성공");
         userResultDto.setData(null);
 
         try {
+            ArrayList<UserFollowInfoDto> result = mapper.getFollowList(userId);
 
-            ArrayList<UserFollowInfoDto> result = mapper.getFollowList(userNickname);
+            userResultDto.setData(result);
+        } catch (Exception e) {
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("팔로우 목록 조회 실패");
+        }
+        return userResultDto;
+    }
 
+    @Override
+    public UserResultDto getFollowingList(String userId) {
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("팔로잉 목록 조회 성공");
+        userResultDto.setData(null);
+
+        try {
+            ArrayList<UserFollowingInfoDto> result = mapper.getFollowingList(userId);
             userResultDto.setData(result);
 
         } catch (Exception e) {
             userResultDto.setStatus("500");
-            userResultDto.setMsg("팔로우 목록 조회 실패");
+            userResultDto.setMsg("서버 에러 발생");
         }
 
         return userResultDto;
