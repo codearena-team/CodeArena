@@ -1,5 +1,6 @@
 package com.ssafy.codearena.problem.service;
 
+import com.ssafy.codearena.problem.dto.ProblemDetailDto;
 import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
 import com.ssafy.codearena.problem.dto.ResultDto;
 import com.ssafy.codearena.problem.dto.SubmitDto;
@@ -19,6 +20,6 @@ public interface ProblemService {
     ResultDto insertSubmit(String problemId, SubmitDto submitDto);
     ResultDto getSubmitList(HashMap<String, String> params);
     ResultDto getSubmitStatistics(String problemId, HashMap<String, String> params);
-
     ResultDto getProblemDetailForUpdate(String problemId);
+    ResultDto updateProblem(ProblemForInsertDto problemForInsertDto);
 }

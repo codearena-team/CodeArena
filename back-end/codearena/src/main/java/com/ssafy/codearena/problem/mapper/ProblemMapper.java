@@ -35,4 +35,8 @@ public interface ProblemMapper {
 
     ProblemForInsertDto getProblemDetailForUpdateByProblemId(String problemId) throws SQLException;
 
+    void deleteProblemTagsByProblemId(int problemId) throws SQLException;
+
+    int updateProblemByProblemId(ProblemForInsertDto problemForInsertDto) throws SQLException;
+
 }

@@ -1,6 +1,7 @@
 package com.ssafy.codearena.problem.controller;
 
 
+import com.ssafy.codearena.problem.dto.ProblemDetailDto;
 import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
 import com.ssafy.codearena.problem.dto.ResultDto;
 import com.ssafy.codearena.problem.dto.SubmitDto;
@@ -40,6 +41,12 @@ public class ProblemController {
     private ResponseEntity<ResultDto> deleteProblem(@PathVariable String problemId){
         log.debug("params : {}", problemId);
         ResultDto resultDto = service.deleteProblem(problemId);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+    @PutMapping("{problemId}")
+    private ResponseEntity<ResultDto> updateProblem(@RequestBody ProblemForInsertDto problemForInsertDto){
+        log.debug("params : {}", problemForInsertDto);
+        ResultDto resultDto = service.updateProblem(problemForInsertDto);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
@@ -82,6 +89,4 @@ public class ProblemController {
         ResultDto resultDto = service.getSubmitStatistics(problemId, params);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
-
-
 }

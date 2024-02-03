@@ -7,7 +7,15 @@ import com.ssafy.codearena.problem.dto.*;
 import com.ssafy.codearena.problem.mapper.ProblemMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.transaction.Transaction;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.xml.transform.Result;
 import java.util.ArrayList;
@@ -29,6 +37,8 @@ public class ProblemServiceImpl implements ProblemService{
     private static final int ALARM_TYPE = 1;
     private static final int BASIC_SPP = 15;
     private static final int BASIC_PGNO = 1;
+
+
     @Override
     public ResultDto getProblemList(HashMap<String, String> map) {
         ResultDto resultDto = new ResultDto();
@@ -381,6 +391,34 @@ public class ProblemServiceImpl implements ProblemService{
             resultDto.setMsg("문제가 발생했습니다.");
         }finally{
             resultDto.setData(problem);
+            return resultDto;
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResultDto updateProblem(ProblemForInsertDto problemForInsertDto) {
+        ResultDto resultDto = new ResultDto();
+        resultDto.setMsg("문제정보가 정상적으로 업데이트 되었습니다.");
+        resultDto.setStatus("200");
+        try{
+            int update = mapper.updateProblemByProblemId(problemForInsertDto);
+            if(update == 0) throw new DataIntegrityViolationException("PK 오류");
+            TagListDto tagListDto = new TagListDto();
+            int problemId = problemForInsertDto.getProblemId();
+            tagListDto.setProblemId(problemId);
+            tagListDto.setTagList(problemForInsertDto.getTagList());
+            mapper.deleteProblemTagsByProblemId(problemId);
+            mapper.insertProblemTagList(tagListDto);
+        }catch(DataIntegrityViolationException e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("404");
+            resultDto.setMsg("해당하는 문제 정보를 찾을 수 없습니다.");
+        }catch(Exception e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("문제 업데이트 도중 에러가 발생하였습니다.");
+        }finally {
             return resultDto;
         }
     }

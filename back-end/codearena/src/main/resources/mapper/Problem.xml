@@ -347,4 +347,34 @@
             ps_list
         where problem_id=${problemId}
     </select>
+
+    <delete id="deleteProblemTagsByProblemId" parameterType="int">
+        delete from ps_problem_tag where problem_id=${problemId}
+    </delete>
+    <!--
+    private String userId;
+    private Integer problemId;
+    private String problemTitle;
+    private String problemContent;
+    private String problemInputDesc;
+    private String problemOutputDesc;
+    private String problemValidationCode;
+    private String problemValidationLang;
+    private String problemExInput;
+    private String problemExOutput;
+    private String problemTime;
+    private String problemMem;
+    private Integer problemRating;
+     -->
+    <update id="updateProblemByProblemId" parameterType="problemDetailDto">
+        update
+        ps_list
+        set problem_title='${problemTitle}', problem_content='${problemContent}',
+            problem_input_desc='${problemInputDesc}', problem_output_desc='${problemOutputDesc}',
+            problem_validation_code=#{problemValidationCode}, problem_validation_lang='${problemValidationLang}',
+            problem_ex_input='${problemExInput}', problem_ex_output='${problemExOutput}',
+            problem_time='${problemTime}', problem_mem='${problemMem}'
+        where
+            problem_id=${problemId}
+    </update>
 </mapper>
