@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import SubmitItem from "../../../components/problem/submitItem"
 import javaImg from "../../../images/problem/java.png"
 import pythonImg from "../../../images/problem/python.png"
@@ -15,32 +15,31 @@ export default function Submit() {
   const [nickname, setNickname] = useState('')
   const [problemId, setproblemId] =useState('')
   const [pageCount, setPageCount] = useState(1)
-  const [pgno, setPgno] = useState(1)
   const [submitList, setSubmitList] = useState([])
   const [isvisible, setIsvisible] = useState(false)
   const [statistics, setStatistics] = useState([])
   
   useEffect(()=> {
-    setPgno(searchParams.get('pgno') || 1)
     const problemId = searchParams.get('problemId') || ''
     const pgno = searchParams.get('pgno') || 1
     const orderBy = searchParams.get('orderBy') || 'submitDate'
     const lang = searchParams.get('lang') || ''
-    const tag = searchParams.get('tag') || ''
     const nickname = searchParams.get('nickname') || ''
-    axios({
-      method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}/submit/statistics?userId=6`,
-    })
-    .then((res)=> {
-      console.log(res);
-      setIsvisible(true)
-      setStatistics(res.data.data)
-    })
-    .catch((err)=> {
-      console.log(err);
-      setIsvisible(false)
-    })
+    if (problemId) {
+      axios({
+        method : 'get',
+        url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}/submit/statistics?userId=6`,
+      })
+      .then((res)=> {
+        console.log(res);
+        setIsvisible(true)
+        setStatistics(res.data.data)
+      })
+      .catch((err)=> {
+        console.log(err);
+        setIsvisible(false)
+      })
+    }
     axios({
       method : 'get',
       url : `http://i10d211.p.ssafy.io:8081/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=15&pgno=${pgno}&orderBy=${orderBy}`,
@@ -96,47 +95,47 @@ export default function Submit() {
         {isvisible && 
         <div className="lg:flex gap-2">
           <div>
-            <div class="stats shadow ">
-              <div class="stat p-3">
-                <div class="stat-figure text-secondary ">
-                  <img src={javaImg} alt="java"className="w-16" />
+            <div className="stats shadow ">
+              <div className="stat p-3">
+                <div className="stat-figure text-secondary ">
+                  <img src={javaImg} alt="java"className="w-12" />
                 </div>
-                <div class="stat-title font-bold text-sm">java</div>
-                <div class="stat-value text-base mt-1">310ms</div>
+                <div className="stat-title font-bold text-sm">java</div>
+                <div className="stat-value text-base mt-1">{statistics.avgByLang.java===0 ? '데이터없음' : statistics.avgByLang.java+'ms'}</div>
               </div>
-              <div class="stat p-3">
-                <div class="stat-figure text-secondary">
+              <div className="stat p-3">
+                <div className="stat-figure text-secondary">
                   <img src={pythonImg} alt="python" className="w-12" />
                 </div>
-                <div class="stat-title font-bold text-sm">python</div>
-                <div class="stat-value text-base">420ms</div>
+                <div className="stat-title font-bold text-sm">python</div>
+                <div className="stat-value text-base">{statistics.avgByLang.python===0 ? '데이터없음' : statistics.avgByLang.python+'ms'}</div>
               </div>
-              <div class="stat p-3">
-                <div class="stat-figure text-secondary">
+              <div className="stat p-3">
+                <div className="stat-figure text-secondary">
                   <img src={cppImg} alt="cpp" className="w-12"/>
                 </div>
-                <div class="stat-title font-bold text-sm">cpp</div>
-                <div class="stat-value text-base">120ms</div>
+                <div className="stat-title font-bold text-sm">cpp</div>
+                <div className="stat-value text-base">{statistics.avgByLang.cpp===0 ? '데이터없음' : statistics.avgByLang.cpp+'ms'}</div>
               </div>
             </div>
           </div>
           <div>
-            <div class="stats shadow">
-              <div class="stat place-items-center px-4">
-                <div class="stat-title font-bold text-sm">DP</div>
-                <div class="stat-value text-base">31ms</div>
+            <div className="stats shadow">
+              <div className="stat place-items-center px-4">
+                <div className="stat-title font-bold text-sm">DP</div>
+                <div className="stat-value text-base">31ms</div>
               </div>
-              <div class="stat place-items-center px-4">
-                <div class="stat-title font-bold text-sm">수학</div>
-                <div class="stat-value text-base">420ms</div>
+              <div className="stat place-items-center px-4">
+                <div className="stat-title font-bold text-sm">수학</div>
+                <div className="stat-value text-base">420ms</div>
               </div>
-              <div class="stat place-items-center px-4">
-                <div class="stat-title font-bold text-sm">이분탐색</div>
-                <div class="stat-value text-base">120ms</div>
+              <div className="stat place-items-center px-4">
+                <div className="stat-title font-bold text-sm">이분탐색</div>
+                <div className="stat-value text-base">120ms</div>
               </div>
-              <div class="stat place-items-center px-4">
-                <div class="stat-title font-bold text-sm">완전탐색</div>
-                <div class="stat-value text-base">120ms</div>
+              <div className="stat place-items-center px-4">
+                <div className="stat-title font-bold text-sm">완전탐색</div>
+                <div className="stat-value text-base">120ms</div>
               </div>
             </div>
           </div>

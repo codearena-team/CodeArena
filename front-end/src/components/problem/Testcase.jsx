@@ -1,9 +1,6 @@
 import CodeMirror from '@uiw/react-codemirror';
 
 export default function Testcase (probs) {
-  const onClick = (e) => {
-    e.preventDefault();
-  }
   return(
     <div className='grid grid-cols-2 gap-4 mb-5'>
       <div>

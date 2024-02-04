@@ -9,6 +9,8 @@ import { logout } from '../../features/login/authSlice'
 import axios from 'axios'
 import accessSlice from '../../features/login/accessSlice'
 import { setAccessToken } from '../../features/login/accessSlice'
+import { error, get } from 'jquery'
+
 
 
 const navigation = [ 
@@ -31,6 +33,19 @@ export default function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
+  const test = () => {
+    axios({
+      url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew', // refresh로 재발급받는 axios
+      method : 'post',
+      data : {
+        refreshToken : 'asdas'
+      }
+    })
+    .then((res)=>{
+      console.log(res);
+    })
+  }
+  
   const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
 
 
@@ -126,7 +141,6 @@ export default function NavBar() {
                         <BellIcon className="h-6 w-6" aria-hidden="true" /> 
                       </button>
                     )}
-
                   {/* 프로필 드롭다운위치 */}
                     {isLogin && (
                       <Menu as="div" className="relative ml flex">
