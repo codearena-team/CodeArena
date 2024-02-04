@@ -12,7 +12,7 @@ export default function GroupList() {
   const [selectedButton, setSelectedButton] = useState('group'); // 선택된 버튼 타입 -> 단체전
   const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
   const [isModalOpen, setIsModalOpen] = useState(false); // 방생성 모달 열고 닫기
-  
+
   // 가상의 단체전 방 데이터 (일단은 10개정도..)
   const [problemData, setProblemData] = useState([
     { id: 1, roomTitle: '파이썬 초보만 ㅋㅋ', problemTitle: '두 정수 더하기', roomleader: ['방장1'], selectedLanguage: 'Python', mode: '스피드전', spectators: 32, isFull: false },
@@ -161,9 +161,8 @@ export default function GroupList() {
               // 단체전 입장 또는 관전하기
               <div className="flex">
                 <GroupEnterModal groupViewId={item.id}/> {/* 관전하기 */}
-                <div className="ml-4">
-                  <GroupLobbyModal groupId={item.id} /> {/* 참여하기 */}
-                </div>
+                {/* <button className="btn" onClick={() => document.getElementById(`groupModal_${item.id}`).showModal()}>참여하기</button> */}
+                <GroupLobbyModal groupId={item.id}/> {/* 참여하기 */}
               </div>
             )}
           </div>
