@@ -19,11 +19,10 @@ export default function ProblemEdit() {
   const [rating, setRating] = useState(1)
   const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
-
-
+  const problemId = params.problemId
   useEffect(() => {
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/${params.problemId}/modify`,
+      url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}/modify`,
       method : "get",
     })
     .then((res) => {
@@ -40,11 +39,14 @@ export default function ProblemEdit() {
       setMem(res.data.data.problemMem)
       setSelectedList(res.data.data.tagList.map((tag)=>{return tag.tagName}))
       let tmp = cateList
-      res.data.data.tagList.map((tag)=>{tmp = tmp.filter((el)=>{return el != tag.tagName})})
+      res.data.data.tagList.map((tag)=>{
+        tmp = tmp.filter((el)=>{return el !== tag.tagName})
+        return 0
+      })
       setCateList(tmp)
     })
 
-  },[]) 
+  },[problemId,]) 
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value)

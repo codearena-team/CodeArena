@@ -4,6 +4,7 @@ import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { useState, useCallback, useEffect } from "react";
+import AlarmModal from "../../../../components/problem/AlramModal";
 import axios from "axios";
 import "../../../css/problemdetail.css"
 
@@ -17,7 +18,6 @@ export default function ProblemDetail() {
   const [selectedList, setSelectedList] = useState([])
   const [cate, setCate] = useState('선택')
   const [problem, setProblem] = useState({})
-  
   
   useEffect(()=> {
     axios({
@@ -65,8 +65,8 @@ export default function ProblemDetail() {
         <div className="leftUp drop-shadow-xl p-5">
           <h1 className="text-3xl mb-2 ">{problem.problemTitle}
            <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-neutral btn-sm rounded-full ms-2">문제 수정</Link>
-           <Link to="/problem/create" className="btn btn-neutral btn-sm rounded-full ms-2">문제 수정 요청</Link>
-
+           <div class="btn btn-neutral btn-sm rounded-full ms-2" onClick={()=>document.getElementById(`alarmModal`).showModal()}>문제 수정 요청</div>
+           <AlarmModal alarmId={'alarmModal'}/>
            </h1>
           <Link className="btn btn-xs btn-neutral me-2 rounded-full">질문게시판</Link>
           <Link className="btn btn-xs btn-neutral rounded-full">제출현황</Link>

@@ -8,7 +8,6 @@ export default function TestCaseModal() {
   const [isVisible, setIsVisible] = useState(false)
 
 
-
   const testCaseList = [
     {
       input:"0 1 1 0\n0 0 0 0\n0 1 1 0\n0 0 0 0",
