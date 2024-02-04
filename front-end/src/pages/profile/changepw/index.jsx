@@ -13,7 +13,7 @@ export default function ChangePassword(){
 
   // 변경할비밀번호와 비밀번호확인이 일치하는지확인하고
   const handleChange = ()=>{
-    if (password == passwordconfirm) {
+    if (password === passwordconfirm) {
       axios({
         url : 'http://i10d211.p.ssafy.io:8081/api/user/password',
         method : 'put',

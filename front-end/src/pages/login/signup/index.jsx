@@ -15,15 +15,15 @@ export default function Signup(){
 
   // 이메일 유효성검사
   const checkEmail = () =>{
-    const regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+    const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
     return regExp.test(email)
   }
 
   // 8~10자 영문자 조합 비밀번호 유효성검사
-  const checkPassword = () =>{ 
-    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/
-    return regExp.test(password)
-  }
+  // const checkPassword = () =>{ 
+  //   const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/
+  //   return regExp.test(password)
+  // }
 
   // 닉네임 유효성검사
   const checkNickname = () =>{
@@ -49,7 +49,7 @@ export default function Signup(){
     if (password !== passwordconfirm) {
       alert('비밀번호와 비밀번호 확인이 일치하지 않습니다');
     }
-    if(checkEmail() && checkNickname() && checkIntroduce() && password == passwordconfirm) {
+    if(checkEmail() && checkNickname() && checkIntroduce() && password === passwordconfirm) {
       axios({
         url:'http://i10d211.p.ssafy.io:8081/api/user/join',
         method:'post',
