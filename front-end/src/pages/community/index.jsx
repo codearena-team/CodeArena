@@ -11,12 +11,10 @@ export default function Community() {
   const [ boardType,setBoardType ] = useState('')
   // 정렬기준 time : 최신순 ,hit 조회수순 
   const [lang,setLang] = useState('')
-  const [pgno, setPgno] = useState(1)
   const [word, setWord] = useState('')
   const [pageCount, setPageCount] = useState(1)
   
   useEffect(()=> {
-    setPgno(searchParams.get('pgno') || 1)
     const pgno = searchParams.get('pgno') || 1
     const lang = searchParams.get('lang') || ''
     const boardType = searchParams.get('boardType') || ''
@@ -67,7 +65,7 @@ export default function Community() {
   const pageNation = () => {
     const result = [];
     for (let i = 0; i < pageCount; i++) {
-      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i==0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
+      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i===0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
     }
     return result;
   };

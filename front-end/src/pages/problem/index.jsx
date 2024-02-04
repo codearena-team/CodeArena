@@ -14,10 +14,8 @@ export default function Ps() {
   const [cateList, setCateList] = useState(["전체","DP","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [tag, setTag] =useState('전체')
   const [pageCount, setPageCount] = useState(1)
-  const [pgno, setPgno] = useState(1)
 
   useEffect(()=> {
-    setPgno(searchParams.get('pgno') || 1)
     const pgno = searchParams.get('pgno') || 1
     const orderBy = searchParams.get('orderBy') || 'date'
     const cate = searchParams.get('cate') || ''
@@ -85,7 +83,7 @@ export default function Ps() {
   const pageNation = () => {
     const result = [];
     for (let i = 0; i < pageCount; i++) {
-      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i==0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
+      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i===0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
     }
     return result;
   };

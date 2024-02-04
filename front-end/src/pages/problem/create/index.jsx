@@ -1,5 +1,6 @@
 import CodeMirror from '@uiw/react-codemirror';
-import {useState, useCallback} from "react";
+import {useState, useCallback, useEffect} from "react";
+import { useAuthCheck } from '../../../features/useAuthCheck';
 import axios from 'axios';
 
 export default function ProblemCreate() {
@@ -18,8 +19,11 @@ export default function ProblemCreate() {
   const [rating, setRating] = useState(1)
   const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
+  const [authCheck] = useAuthCheck()
 
-
+  useEffect(()=> {
+    console.log(authCheck())
+  },[authCheck])
   
   const onChangeInputFile = (event) => {
     if (event.target.files[0].type === "text/plain") {
