@@ -62,7 +62,7 @@ export default function CommunityCreate() {
     })
     .then((res)=>{
       console.log(res)
-      //navigate로 게시글목록 이동
+      navigate('/community')
     })
     .catch((err)=>{
       console.log(err)

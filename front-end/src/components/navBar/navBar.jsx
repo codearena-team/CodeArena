@@ -6,9 +6,9 @@ import Logo from '../../images/common/logo.png'
 import Profile from '../../images/common/profile.png'
 import { useSelector,useDispatch } from 'react-redux'
 import { logout } from '../../features/login/authSlice'
-import axios from 'axios'
-import accessSlice from '../../features/login/accessSlice'
-import { setAccessToken } from '../../features/login/accessSlice'
+// import axios from 'axios'
+// import accessSlice from '../../features/login/accessSlice'
+// import { setAccessToken } from '../../features/login/accessSlice'
 
 
 const navigation = [ 
@@ -31,7 +31,7 @@ export default function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
-  const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
+  const filterNav = isLogin ? navigation.filter(item => item.name !== 'Login') : navigation;
 
 
     // access토큰 있는지 검사 ->만약 만료되서 없으면 refresh토큰으로 access토큰 재발급받은 후 access토큰으로 들어갈지 여부 결정

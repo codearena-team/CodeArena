@@ -10,7 +10,7 @@ export default function Alarm() {
   const userId = useSelector(state => state.auth.userId)
   const [alarmtype, setAlarmtype] = useState('receive') 
   // 처리여부 드롭다운 
-  const [process, setProcess] = useState('처리중')  
+  // const [process, setProcess] = useState('처리중')  
   const [sendList, setSendList] = useState([])
   const [receiveList, setReceiveList] = useState([])
 

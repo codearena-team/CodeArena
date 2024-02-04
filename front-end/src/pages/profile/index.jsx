@@ -4,7 +4,7 @@ import Rank from '../../images/common/rank.png'
 import '../css/profile.css'
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom'
-import React, { PureComponent } from 'react';
+import React from 'react';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from 'recharts';

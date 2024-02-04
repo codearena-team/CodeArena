@@ -7,13 +7,13 @@ export default function ReceiveListItem(probs) {
   const [alarmStatus,setAlarmStatus] = useState(probs.receiveItem.alarmStatus)
   let word = ""
 
-  if (cate == 1){
+  if (cate === 1){
     word = "문제생성요청";
-  } else if (cate == 2){
+  } else if (cate === 2){
     word = "문제수정요청"
-  } else if (cate == 3){
+  } else if (cate === 3){
     word = "게임초대"
-  } else if (cate == 4){
+  } else if (cate === 4){
     word = "공지사항"
   }
 
