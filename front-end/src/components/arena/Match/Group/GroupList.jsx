@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../../css/shake.css';
-import CreateModal from '../modal/CreateModal';
-import GroupEnterModal from '../modal/GroupEnterModal';
-import GroupLobbyModal from '../modal/GroupLobbyModal';
+import '../../../css/shake.css';
+import CreateModal from '../../modal/Group/CreateModal';
+import GroupEnterModal from '../../modal/Group/GroupEnterModal';
+import GroupLobbyModal from '../../modal/Group/GroupLobbyModal';
 
 export default function GroupList() {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 표시 데이터

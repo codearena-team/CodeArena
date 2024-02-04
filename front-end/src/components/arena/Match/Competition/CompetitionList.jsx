@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../../css/shake.css';
-import EnterModal from '../modal/CompEnterModal';
+import '../../../css/shake.css';
+import EnterModal from '../../modal/Competition/CompEnterModal';
 
 export default function CompetitionList() {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 표시 데이터

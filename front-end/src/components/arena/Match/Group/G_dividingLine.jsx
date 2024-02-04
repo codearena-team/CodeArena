@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import '../../css/G_dividingLine.css';
+import '../../../css/G_dividingLine.css';
 
 export default function DividingLine({ onDivider }) {
   // 상태 관리를 통해 마우스 커서 상태 및 구분선 위치 관리

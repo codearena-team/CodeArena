@@ -5,7 +5,7 @@ export default function CompetitionExitModal() {
     
     return (
         <div>
-            <dialog id="Exit" className="modal">
+            <dialog id="compPlay_Exit" className="modal">
             <div className="modal-box">
                 <h3 className="font-bold text-lg mb-4 text-center">정말로 나가시겠습니까?</h3>
                 <div className="modal-action flex justify-center">

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import GroupLobbyLine from "./GroupLobbyLine";
-import GroupLobbyExitModal from '../modal/GroupLobbyExitModal'
-import StartModal from "../modal/StartModal";
+import GroupLobbyExitModal from '../../modal/Group/GroupLobbyExitModal'
+import StartModal from "../../modal/Group/StartModal";
 
-import cat_one from '../../../images/arena/GroupView/cat_one.png';
-import cat_two from '../../../images/arena/GroupView/cat_two.png';
-import cat_three from '../../../images/arena/GroupView/cat_three.png';
-import cat_four from '../../../images/arena/GroupView/cat_four.png';
-import cat_five from '../../../images/arena/GroupView/cat_five.png';
-import cat_six from '../../../images/arena/GroupView/cat_six.png';
+import cat_one from '../../../../images/arena/GroupView/cat_one.png';
+import cat_two from '../../../../images/arena/GroupView/cat_two.png';
+import cat_three from '../../../../images/arena/GroupView/cat_three.png';
+import cat_four from '../../../../images/arena/GroupView/cat_four.png';
+import cat_five from '../../../../images/arena/GroupView/cat_five.png';
+import cat_six from '../../../../images/arena/GroupView/cat_six.png';
 
 export default function GroupLobby() {
 

@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import G_ExitModal from "../modal/G_ExitModal";
+import AbstentionModal from '../../modal/Group/GroupabstentionModal';
 
-import cat_one from '../../../images/arena/GroupView/cat_one.png';
-import cat_two from '../../../images/arena/GroupView/cat_two.png';
-import cat_three from '../../../images/arena/GroupView/cat_three.png';
-import cat_four from '../../../images/arena/GroupView/cat_four.png';
-import cat_five from '../../../images/arena/GroupView/cat_five.png';
-import cat_six from '../../../images/arena/GroupView/cat_six.png';
-import cat_seven from '../../../images/arena/GroupView/cat_seven.png';
-import cat_eight from '../../../images/arena/GroupView/cat_eight.png';
-import cat_nine from '../../../images/arena/GroupView/cat_nine.png';
+import cat_one from '../../../../images/arena/GroupView/cat_one.png';
+import cat_two from '../../../../images/arena/GroupView/cat_two.png';
+import cat_three from '../../../../images/arena/GroupView/cat_three.png';
+import cat_four from '../../../../images/arena/GroupView/cat_four.png';
+import cat_five from '../../../../images/arena/GroupView/cat_five.png';
+import cat_six from '../../../../images/arena/GroupView/cat_six.png';
+import cat_seven from '../../../../images/arena/GroupView/cat_seven.png';
+import cat_eight from '../../../../images/arena/GroupView/cat_eight.png';
+import cat_nine from '../../../../images/arena/GroupView/cat_nine.png';
 
 export default function UserInfo() {
   const [panelWidths, setPanelWidths] = useState({
@@ -74,26 +74,15 @@ export default function UserInfo() {
         className="justify-center items-center mt-2 ml-10"
         style={{ width: `${panelWidths.right}%`, height: '12.5vh' }}
       >
-        {/* 문제보기 버튼 */}
-        <button
-          className="rounded-lg shadow-lg px-4 py-2 focus:outline-none text-2xl font-bold hover:scale-105"
-          style={{ width: '100%', height:'100%', backgroundColor: '#F5EBDB' }}
-          onClick={() => {
-            // 버튼 클릭 시 처리할 기능 필요함
-          }}
-        >
-          문제보기
-        </button>
-
         {/* 나가기 버튼 */}
         <button
           className="rounded-lg mt-3 shadow-lg px-4 py-2 focus:outline-none text-2xl font-bold hover:scale-105"
           style={{ width: '100%', height:'100%', backgroundColor: '#F5EBDB' }}
-          onClick={() => document.getElementById('Exit').showModal()}
+          onClick={() => document.getElementById('abstention').showModal()}
         >
           나가기
         </button>
-        {<G_ExitModal />}
+        {<AbstentionModal />}
       </div>
     </div>
   );
