@@ -55,6 +55,12 @@
         </if>
     </sql>
 
+    <!-- 게시글 언어 조건 동적쿼리 -->
+    <sql id="lang">
+        <if test="langType != null and langType != ''">
+            AND board_lang = #{langType}
+        </if>
+    </sql>
 
     <select id="boardDetail" parameterType="string" resultMap="detail">
         SELECT article_no, user_id as userId, (SELECT user_nickname FROM user WHERE user_id = userId) as user_nickname, problem_id, board_title, board_type, board_lang, board_content, board_code, board_hit, board_spoiler, board_date
@@ -85,6 +91,7 @@
             <where>
                 <include refid="type"/>
                 <include refid="search"/>
+                <include refid="lang"/>
             </where>
         <include refid="sort"/>
         LIMIT ${start}, ${listSize}
