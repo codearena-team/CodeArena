@@ -4,6 +4,7 @@ import Login from './pages/login/index';
 import Community from './pages/community/index';
 import CommunityCreate from './pages/community/create/index';
 import CommunityDetail from './pages/community/detail/index';
+import CommunityEdit from './pages/community/edit/index';
 import Problem from './pages/problem/index';
 import ProblemDetail from "./pages/problem/problemId/detail/index";
 import ProblemEdit from "./pages/problem/problemId/edit/index";
@@ -63,7 +64,7 @@ export default function Router () {
       <Route path="/community" element={<Community />} />
       <Route path="/community/create" element={<ProtectedRoute><CommunityCreate /></ProtectedRoute>} />
       <Route path="/community/:communityId/detail" element={<CommunityDetail />} />
-    
+      <Route path="/community/:communityId/edit" element={<CommunityEdit />} />
 
       <Route path="/problem" element={<Problem />} />
       <Route path="/problem/create" element={<ProtectedRoute><ProblemCreate /></ProtectedRoute>} />

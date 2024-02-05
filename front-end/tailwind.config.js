@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}",],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily:{
+        'sulight' :['sulight']
+      }
+    },
     animatedSettings: {
       animatedSpeed: 1000,
       heartBeatSpeed: 500,
