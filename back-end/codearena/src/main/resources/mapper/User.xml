@@ -110,5 +110,12 @@
         from follow
         where from_id=#{fromUserNickname} and to_id=#{toUserNickname};
     </select>
+
+    <select id="searchUserList" parameterType="userSearchDto" resultType="userSearchListDto">
+        select a.user_id, a.user_nickname, count() as isFollow
+        from user as a, follow as b
+        where b.from_
+
+    </select>
     
 </mapper>
