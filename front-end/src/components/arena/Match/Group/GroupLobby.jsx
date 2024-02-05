@@ -29,12 +29,12 @@ export default function GroupLobby() {
 
   // 가상 데이터
   const userData = [
-    { name: "유저 화면 1", id: 1 },
-    { name: "유저 화면 2", id: 2 },
-    { name: "유저 화면 3", id: 3 },
-    { name: "유저 화면 4", id: 4 },
-    { name: "유저 화면 5", id: 5 },
-    { name: "유저 화면 6", id: 6 },
+    { name: "유저 화면 1", id: 1, superuser: true },
+    { name: "유저 화면 2", id: 2, superuser: false },
+    { name: "유저 화면 3", id: 3, superuser: false },
+    { name: "유저 화면 4", id: 4, superuser: false },
+    { name: "유저 화면 5", id: 5, superuser: false },
+    { name: "유저 화면 6", id: 6, superuser: false },
   ];
 
   // 가상 화면
@@ -121,15 +121,23 @@ export default function GroupLobby() {
             style={{ width: `100%`, height: '12.5vh' }}
           >
             {/* 아레나 스타트 버튼 */}
-            <button
-              className="rounded-lg shadow-lg py-2 mr-3 focus:outline-none text-2xl font-bold hover:scale-105"
-              style={{ width: '100%', height:'100%', backgroundColor: '#FFB5A6' }}
-              onClick={() => {
-                // 버튼 클릭 시 처리할 기능 필요함
-              }}
-            >
-              <StartModal ArenaGroupId={userData.id} />
-            </button>
+            {userData.map((user) => (
+              // 방장인 경우에만 Arena Start 버튼이 보인다.
+              user.superuser && (
+                <button
+                  key={user.id}
+                  className="rounded-lg shadow-lg py-2 mr-3 focus:outline-none text-2xl font-bold hover:scale-105"
+                  style={{ width: '100%', height: '100%', backgroundColor: '#FFB5A6' }}
+                  onClick={() => {
+                    document.getElementById(`ArenaStart_${user.id}`).showModal()
+                  }}
+                >
+                  Arena Start !
+                  {/* Arena Start 모달 소환 */}
+                  <StartModal ArenaGroupId={user.id} />
+                </button>
+              )
+            ))}
 
             {/* 나가기 버튼 */}
             <button

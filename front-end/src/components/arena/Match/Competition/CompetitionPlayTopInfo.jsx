@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import CompAbstentionModal from '../../modal/Competition/CompabstentionModal';
+import CompGoResultModal from "../../modal/Competition/CompGoResultModal";
 
 import cat_one from '../../../../images/arena/GroupView/cat_one.png';
 import cat_two from '../../../../images/arena/GroupView/cat_two.png';
@@ -83,6 +84,16 @@ export default function UserInfo() {
           나가기
         </button>
         {<CompAbstentionModal />}
+
+        {/* 결과창 이동 버튼 */}
+        <button
+          className="rounded-lg mt-3 shadow-lg px-4 py-2 focus:outline-none text-2xl font-bold hover:scale-105"
+          style={{ width: '100%', height:'100%', backgroundColor: '#F5EBDB' }}
+        >
+          결과창 이동(임시)
+        </button>
+        <CompGoResultModal />
+
       </div>
     </div>
   );
