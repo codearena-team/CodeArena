@@ -24,5 +24,6 @@ public interface UserMapper {
     ArrayList<UserFollowInfoDto> getFollowList(String userId) throws SQLException;
     ArrayList<UserFollowingInfoDto> getFollowingList(String userId) throws SQLException;
     int isFollow(UserSearchDto userSearchDto) throws SQLException;
+    ArrayList<UserSearchListDto> searchUserList(String userNickname) throws SQLException;
 
 }

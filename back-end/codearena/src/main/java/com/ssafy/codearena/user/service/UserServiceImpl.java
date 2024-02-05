@@ -327,6 +327,28 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserResultDto searchUserList(String userNickname) {
+        ArrayList<UserSearchListDto> userSearchList = new ArrayList<>();
+
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("유저 리스트 검색 완료");
+
+        try {
+            userSearchList = mapper.searchUserList(userNickname);
+
+            userResultDto.setData(userSearchList);
+        } catch (Exception e) {
+            log.debug("[searchUserList] : {} " , e);
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 내부 에러");
+        }
+
+        userResultDto.setData(userSearchList);
+        return userResultDto;
+    }
+
+    @Override
     public UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto) {
         UserResultDto userResultDto = new UserResultDto();
 
