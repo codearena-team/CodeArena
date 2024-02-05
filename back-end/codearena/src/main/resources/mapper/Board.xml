@@ -76,7 +76,7 @@
     <update id="boardUpdate" parameterType="com.ssafy.codearena.board.dto.BoardUpdateDto">
         UPDATE board
         SET problem_id = ${problemId}, board_title = "${title}", board_lang = "${lang}", board_content = "${content}", board_code = "${code}", board_spoiler = ${spoiler}
-        WHERE user_id = ${userId};
+        WHERE article_no = #{articleNo} AND user_id = #{userId};
     </update>
 
     <select id="boardList" parameterType="map" resultMap="detail">

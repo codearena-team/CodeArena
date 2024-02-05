@@ -141,7 +141,12 @@ public class BoardServiceImpl implements BoardService{
 
         try {
 
-            boardMapper.boardUpdate(boardUpdateDto);
+            int cnt = boardMapper.boardUpdate(boardUpdateDto);
+            if(cnt == 0) {
+
+                boardResultDto.setStatus("404");
+                boardResultDto.setMsg("게시글 번호 혹은 유저 아이디 재확인 필요");
+            }
         }
         catch (Exception e) {
             boardResultDto.setStatus("500");
