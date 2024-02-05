@@ -29,13 +29,14 @@ public class BoardServiceImpl implements BoardService{
 
 
         try {
+
             BoardDetailDto boardDetailDto = boardMapper.boardDetail(boardId);
-            log.info(String.valueOf(boardDetailDto));
+            boardMapper.hitUpdate(boardId); //조회수 증가
             boardResultDto.setData(boardDetailDto);
 
         }
         catch (Exception e) {
-
+            
             boardResultDto.setStatus("500");
             boardResultDto.setMsg("Server Internal Error");
         }
@@ -140,7 +141,12 @@ public class BoardServiceImpl implements BoardService{
 
         try {
 
-            boardMapper.boardUpdate(boardUpdateDto);
+            int cnt = boardMapper.boardUpdate(boardUpdateDto);
+            if(cnt == 0) {
+
+                boardResultDto.setStatus("404");
+                boardResultDto.setMsg("게시글 번호 혹은 유저 아이디 재확인 필요");
+            }
         }
         catch (Exception e) {
             boardResultDto.setStatus("500");
