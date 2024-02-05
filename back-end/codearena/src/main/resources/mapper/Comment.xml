@@ -8,14 +8,15 @@
     <resultMap id="comment" type="com.ssafy.codearena.board.dto.CommentListDto">
         <result column="comment_id" property="commentId"/>
         <result column="article_no" property="articleNo"/>
-        <result column="user_id" property="writerId"/>
+        <result column="userId" property="writerId"/>
+        <result column="user_nickname" property="writerNickname"/>
         <result column="comment_content" property="comment"/>
         <result column="code" property="code"/>
     </resultMap>
 
 
     <select id="commentList" parameterType="string" resultMap="comment">
-        SELECT comment_id, article_no, user_id, comment_content, code
+        SELECT comment_id, article_no, user_id as userId, (SELECT user_nickname FROM user WHERE user_id = userId) as user_nickname, comment_content, code
         FROM comment
         WHERE article_no = #{articleNo};
     </select>
