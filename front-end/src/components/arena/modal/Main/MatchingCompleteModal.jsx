@@ -47,10 +47,10 @@ export default function MatchingCompleteModal({ onAccept, onCancel }) {
       </div>
 
       <div className="flex justify-center">
-        <Link to={`/game-list/competition/play/${userData.id}`} className="btn btn-primary mx-2">
+        <Link to={`/game-list/competition/play/${userData.id}`} className="btn mx-2">
           수락
         </Link>
-        <button className="btn btn-danger mx-2" onClick={onCancel}>
+        <button className="btn mx-2" onClick={onCancel}>
           취소
         </button>
       </div>

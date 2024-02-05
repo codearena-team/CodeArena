@@ -40,7 +40,7 @@ export default function CompPlayProblem() {
   useEffect(()=> {
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/23`,
+      url : `http://i10d211.p.ssafy.io:8081/api/problem/29`,
     })
     .then((res)=> {
       console.log(res);

@@ -212,7 +212,7 @@ export default function TopBanner() {
       >
         {/* 경쟁 매칭 버튼*/}
         <button
-          className="m-2 rounded-xl hover:scale-110"
+          className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
           style={{ width: '80%', height: 'auto' }}
           onClick={openLanguageModal} // 클릭하면 모달 띄우기
           onMouseEnter={() => setIsFindMatchHovered(true)} // 마우스 호버 In

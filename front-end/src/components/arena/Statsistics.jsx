@@ -67,7 +67,7 @@ export default function StatsisticsPage() {
   return (
     <div className="flex flex-col mt-5 mb-5">
       <br />
-      <h1 className='ml-5 font-bold'>나의 전적</h1>
+      <h1 className='ml-5 font-bold'>나의 최근 전적</h1>
       <div className="flex mt-5 w-full">
         <div className="flex-1 ml-5 w-1/3">
           <h1 style={chartTitleStyle} className="ml-5 font-bold text-center">
