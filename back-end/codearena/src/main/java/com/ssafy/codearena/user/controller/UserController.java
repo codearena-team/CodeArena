@@ -44,8 +44,10 @@ public class UserController {
         return new ResponseEntity<UserResultDto>(userService.reissue(userReissueDto), HttpStatus.OK);
     }
     @GetMapping
-    public ResponseEntity<UserResultDto> searchUser(@RequestParam String userNickname) {
-        return new ResponseEntity<UserResultDto>(userService.searchUser(userNickname) ,HttpStatus.OK);
+    public ResponseEntity<UserResultDto> searchUser(@RequestParam(value="from") String fromUserNickname, @RequestParam(value="to") String toUserNickname) {
+        UserSearchDto userSearchDto = new UserSearchDto(fromUserNickname, toUserNickname);
+        log.debug("{}", userSearchDto);
+        return new ResponseEntity<UserResultDto>(userService.searchUser(userSearchDto) ,HttpStatus.OK);
     }
     @PutMapping("/password")
     public ResponseEntity<UserResultDto> changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto) {

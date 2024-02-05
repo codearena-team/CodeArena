@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserProblemDto {
-    private String problemNo;
+    private int problemId;
     private String problemTitle;
 }

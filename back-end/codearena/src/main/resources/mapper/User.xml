@@ -62,21 +62,7 @@
     <select id="searchUser" parameterType="string" resultMap="userInfoDto">
         select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating
         from user
-        where user_nickname=${userNickname};
-    </select>
-
-    <select id="getSolvedProblem" parameterType="int" resultType="Integer">
-        select distinct problem_id
-        from ps_submit
-        where user_id="${userId}" and submit_status="맞았습니다."
-        order by problem_id;
-    </select>
-
-    <select id="getWrongProblem" parameterType="int" resultType="Integer">
-        select distinct problem_id
-        from ps_submit
-        where user_id="${userId}" and submit_status!="맞았습니다."
-        order by problem_id;
+        where user_nickname=#{userNickname};
     </select>
 
     <update id="saveRefreshToken" parameterType="map">
@@ -117,6 +103,12 @@
         select from_id, b.user_nickname, b.user_email
         from follow as a join user b on (b.user_id=a.from_id)
         where to_id="${userId}";
+    </select>
+
+    <select id="isFollow" parameterType="userSearchDto" resultType="int">
+        select count(*)
+        from follow
+        where from_id=#{fromUserNickname} and to_id=#{toUserNickname};
     </select>
     
 </mapper>
