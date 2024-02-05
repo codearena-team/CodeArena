@@ -435,4 +435,34 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
+
+    @Override
+    public ResultDto updateProblemStatus(String problemId, HashMap<String, String> params, HttpServletRequest request) {
+        ResultDto resultDto = new ResultDto();
+        resultDto.setMsg("업데이트에 성공했습니다.");
+        resultDto.setStatus("200");
+        try{
+            if(problemId == null || "".equals(problemId)) throw new DataIntegrityViolationException("request problemId not found");
+            params.put("problemId", problemId);
+            String token = request.getHeader("Authorization");
+            if("".equals(token) || token == null || !jwtUtil.isAdmin(token)) throw new AuthenticationFailedException("권한이 없습니다.");
+            int update = mapper.updateProblemStatusByProblemId(params);
+            if(update != 1) throw new DataIntegrityViolationException("problem Not Found Exception");
+        } catch(DataIntegrityViolationException e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("404");
+            resultDto.setMsg("problemId "+e.getMessage());
+        }catch(AuthenticationFailedException e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("403");
+            resultDto.setMsg(e.getMessage());
+        } catch(Exception e){
+            log.debug("exception : {},", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("문제 수정 도중 문제가 발생하였습니다.");
+        } finally{
+            return resultDto;
+        }
+
+    }
 }
