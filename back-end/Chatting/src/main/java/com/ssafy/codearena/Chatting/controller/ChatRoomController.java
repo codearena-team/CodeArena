@@ -3,12 +3,15 @@ import com.ssafy.codearena.Chatting.dto.GameCreateDto;
 import com.ssafy.codearena.Chatting.dto.GameInfoDto;
 import com.ssafy.codearena.Chatting.dto.GameResultDto;
 import com.ssafy.codearena.Chatting.service.ChatService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+
+@Tag(name = "채팅방 REST API", description = "채팅방 조회 및 생성 등 API")
 @RequiredArgsConstructor
 @RestController
 @Slf4j

@@ -1,10 +1,12 @@
 package com.ssafy.codearena.Chatting.controller;
 import com.ssafy.codearena.Chatting.dto.ChatMessage;
 import com.ssafy.codearena.Chatting.service.ChatService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+
 @RequiredArgsConstructor
 @Controller
 public class ChatController {
