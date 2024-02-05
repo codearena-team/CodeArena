@@ -84,8 +84,8 @@
             <where>
                 <include refid="type"/>
                 <include refid="search"/>
-                <include refid="sort"/>
             </where>
+        <include refid="sort"/>
         LIMIT ${start}, ${listSize}
     </select>
 
