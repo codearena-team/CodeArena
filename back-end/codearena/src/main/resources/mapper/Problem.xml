@@ -268,7 +268,12 @@
     </sql>
     <sql id="orderBy">
         <if test='orderBy!=null and !"".equals(orderBy)'>
-            order by ${orderBy} desc
+            <if test='"submit_date".equals(orderBy)'>
+                order by ${orderBy} desc
+            </if>
+            <if test='"time_complexity".equals(orderBy)'>
+                order by ${orderBy} asc
+            </if>
         </if>
     </sql>
     <select id="getSubmitCount" resultType="int" parameterType="hashmap">
