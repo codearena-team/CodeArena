@@ -30,6 +30,11 @@
         <collection property="testCase" column="problemId=problem_id" ofType="TestCaseDto" select="selectTCByProblemId"/>
         <collection property="tagList" column="problemId=problem_id" ofType="TagDto" select="getTagListByProblemId"/>
     </resultMap>
+
+    <resultMap id="getProblemIdAndProblemTitle" type="problemForInsertDto">
+        <result property="problemId" column="problem_id"/>
+        <result property="problemTitle" column="problem_title"/>
+    </resultMap>
     
     <resultMap id="problemDetail" type="problemDetailDto">
         <result property="problemId" column="problem_id"/>
@@ -84,6 +89,11 @@
         <result property="submitDate" column="submit_date"/>
         <association property="testCase" column="tid=tid" select="getTestCaseByTid" javaType="testCaseDto"/>
         <collection property="tagList" column="submitNo=submit_no" select="getSubmitTagsBySubmitNo" ofType="SubmitTagDto"/>
+    </resultMap>
+
+    <resultMap id="userProblemCate" type="com.ssafy.codearena.user.dto.UserProblemCateDto">
+        <result property="problemCate" column="problem_cate"/>
+        <result property="problemCateCnt" column="problem_cate_cnt"/>
     </resultMap>
 
     <resultMap id="submitTag" type="submitTagDto">
@@ -376,4 +386,34 @@
         where
             problem_id=${problemId}
     </update>
+
+    <select id="getSolveListByUserNickname" parameterType="String" resultMap="getProblemIdAndProblemTitle">
+        select s.problem_id, l.problem_title from ps_submit s
+        inner join ps_list l
+            on s.problem_id = l.problem_id
+        inner join user u
+            on s.user_id = u.user_id
+        where submit_status = '맞았습니다.' and u.user_nickname = '${nickName}' group by s.problem_id;
+</select>
+
+    <select id="getUnsolveListByUserNickname" parameterType="String" resultMap="getProblemIdAndProblemTitle">
+        select ps_submit.problem_id, problem_title from ps_submit
+            inner join ps_list on ps_submit.problem_id = ps_list.problem_id
+            inner join user on ps_submit.user_id = user.user_id
+        where user_nickname = '${nickname}' and submit_status!='채점중'and ps_submit.problem_id not in (
+            select ps_submit.problem_id from ps_submit
+            where submit_status = '맞았습니다.' and user_nickname = '${nickName}' group by ps_submit.problem_id
+        ) group by problem_id;
+    </select>
+
+    <select id="getProblemCateByNickname" parameterType="String" resultMap="userProblemCate">
+        select tag_name as problem_cate, count(tag_name) as problem_cate_cnt from ps_submit s
+          inner join ps_problem_tag pt
+                     on s.problem_id = pt.problem_id
+          inner join user u
+                     on s.user_id = u.user_id
+        where u.user_nickname = '${nickName}' and s.submit_status='맞았습니다.'
+        group by tag_name
+    </select>
+
 </mapper>

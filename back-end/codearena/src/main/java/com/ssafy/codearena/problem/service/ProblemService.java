@@ -1,12 +1,11 @@
 package com.ssafy.codearena.problem.service;
 
-import com.ssafy.codearena.problem.dto.ProblemDetailDto;
-import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
-import com.ssafy.codearena.problem.dto.ResultDto;
-import com.ssafy.codearena.problem.dto.SubmitDto;
+import com.ssafy.codearena.problem.dto.*;
+import com.ssafy.codearena.user.dto.UserProblemCateDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface ProblemService {
     ResultDto getProblemList(HashMap<String, String> map);
@@ -24,4 +23,7 @@ public interface ProblemService {
     ResultDto getProblemDetailForUpdate(String problemId);
     ResultDto updateProblem(ProblemForInsertDto problemForInsertDto);
     ResultDto updateProblemStatus(String problemId, HashMap<String, String> params, HttpServletRequest request);
+    SolveAndUnsolveDto getSolveAndUnsolveList(String nickName) throws Exception;
+    List<UserProblemCateDto> getProblemCateList(String nickName) throws Exception;
+
 }
