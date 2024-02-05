@@ -10,11 +10,11 @@ export default function CommunityCreate() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [problemId,setProblemId] = useState('');
-  const [lang,setLang] = useState('Java');
+  const [lang,setLang] = useState('java');
   // 1 : 질문, 2: 시간복잡도 ,3:공간복잡도 ,4:반례요청 ,5:반례
-  const [type,setType] = useState('질문');
+  const [type,setType] = useState(1);
   const [spoiler,setSpoiler] = useState(0)
-  // 스포방지버튼 0은 전체공개 1은 스포방지
+  // 스포방지버튼:  0은 전체공개 1은 스포방지
   const [code, setCode] = useState("");
   const [bgcolor,setBgcolor] = useState('#F4F2CA');
   const [showCodeMirror, setShowCodeMirror] = useState(false)
@@ -45,6 +45,7 @@ export default function CommunityCreate() {
     }
   }
 
+  // 게시글 작성
   const createArticle = ()=>{
     axios({
       url : 'http://i10d211.p.ssafy.io:8081/api/board/write',
@@ -84,8 +85,8 @@ export default function CommunityCreate() {
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1" htmlFor="rating">언어</label>
             <select value={lang} onChange={(e)=>{setLang(e.target.value)}}  className="select select-sm select-bordered w-2/12" >
-              <option>Java</option>
-              <option>Python</option>
+              <option>java</option>
+              <option>python</option>
               <option>cpp</option>
             </select>
             <div className='w-9/12'></div>

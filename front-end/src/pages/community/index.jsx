@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useSearchParams, Link } from "react-router-dom"
 import { useEffect,useState } from 'react'
 import CommunityListItem from '../../components/community/CommunityListItem'
+import { useSelector } from 'react-redux'
 
 export default function Community() {
   const [ communityList,setCommunityList ] = useState([])
@@ -13,6 +14,7 @@ export default function Community() {
   const [lang,setLang] = useState('')
   const [word, setWord] = useState('')
   const [pageCount, setPageCount] = useState(1)
+  const isLogin = useSelector(state => state.auth.isLogin);
   
   useEffect(()=> {
     const pgno = searchParams.get('pgno') || 1
@@ -25,7 +27,6 @@ export default function Community() {
       url : `http://i10d211.p.ssafy.io:8081/api/board/list?lang=${lang}&boardType=${boardType}&word=${word}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
-      console.log(res);
       setCommunityList(res.data.data.articles)
       setPageCount(res.data.data.totalPageCount)
     })
@@ -72,6 +73,11 @@ export default function Community() {
 
   return(
     <div className="mx-10 flex flex-col">
+      { isLogin && (
+      <div className='flex justify-end mb-3'>
+        <div className="w-40 flex justify-end"><Link to="/community/create" className="btn btn-neutral btn-sm rounded-full">글쓰기</Link></div>
+      </div>
+      )}
       <div className="flex justify-between align-middle">
         <div className="flex items-end">
           <button onClick={()=>{changeParams('orderBy','date')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='date' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
@@ -127,14 +133,13 @@ export default function Community() {
           </table>
         </div>
       </div>
-      <div className="flex justify-between my-2">
-        <div className="w-40"></div>
-        <div className="join">
+      <div className="flex justify-center my-2">
+          <div className="join">
           <button onClick={()=>{changeParams('pgno','1')}} className="join-item btn btn-sm">{'<<'}</button>
           {pageNation()}
           <button onClick={()=>{changeParams('pgno', pageCount)}} className="join-item btn btn-sm">{'>>'}</button>
         </div>
-        <div className="w-40 flex justify-end"><Link to="/community/create" className="btn btn-neutral btn-sm rounded-full">게시글 작성</Link></div>
+        
       </div>
     </div>
   )

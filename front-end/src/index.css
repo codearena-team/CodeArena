@@ -9,21 +9,25 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F4F5F1;
   min-height: 735px;
+  font-family: "light";
 }
 
-
-
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+} */
+
+
+@font-face{
+  font-family : "sulight";
+  src : url('./fonts/SUITE-Light.ttf');
 }
 
-
-
+/* @font-face{
+  font-family : "suitesemi";
+  src : url('./fonts/SUITE-SemiBold.ttf');
+} */

@@ -21,3 +21,7 @@
   min-height: 670px;
   padding: 35px;
 }
+.noc {
+  caret-color: transparent;
+  outline : none !important;
+}
