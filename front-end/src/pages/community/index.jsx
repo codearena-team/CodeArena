@@ -8,7 +8,7 @@ export default function Community() {
   const [ communityList,setCommunityList ] = useState([])
   const [searchParams, setSearchParams] = useSearchParams();
   // "질문 타입", example = "1 : 질문, 2 : 시간복잡도, 3 : 공간복잡도, 4 : 반례 요청, 5 : 반례"
-  const [ boardType,setBoardType ] = useState('')
+  const [key,setKey ] = useState('board_title')
   // 정렬기준 time : 최신순 ,hit 조회수순 
   const [lang,setLang] = useState('')
   const [word, setWord] = useState('')
@@ -17,12 +17,13 @@ export default function Community() {
   useEffect(()=> {
     const pgno = searchParams.get('pgno') || 1
     const lang = searchParams.get('lang') || ''
-    const boardType = searchParams.get('boardType') || ''
+    const key = searchParams.get('key') || ''
     const word = searchParams.get('word') || ''
+    const sortType = searchParams.get('sortType') || ''
    
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/board/list?lang=${lang}&boardType=${boardType}&word=${word}&pgno=${pgno}&spp=15`,
+      url : `http://i10d211.p.ssafy.io:8081/api/board/list?sortType=${sortType}&key=${key}&word=${word}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       console.log(res);
@@ -47,11 +48,11 @@ export default function Community() {
     } else {
       changeParams('word',word)
     }
-    if(boardType==='') {
-      searchParams.delete('boardType')
+    if(key==='') {
+      searchParams.delete('key')
       setSearchParams(searchParams)
     } else {
-      changeParams('boardType',boardType)
+      changeParams('key',key)
     }
     searchParams.delete('pgno')
     setSearchParams(searchParams)
@@ -74,8 +75,8 @@ export default function Community() {
     <div className="mx-10 flex flex-col">
       <div className="flex justify-between align-middle">
         <div className="flex items-end">
-          <button onClick={()=>{changeParams('orderBy','date')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='date' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
-          <button onClick={()=>{changeParams('orderBy','hit')}} className={searchParams.get('orderBy')==='hit' ? 'orderBy' : 'orderBy unchoice'} value='hit'>조회수순</button>
+          <button onClick={()=>{changeParams('sortType','date')}} className={searchParams.get('sortType')===null||searchParams.get('sortType')==='date' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
+          <button onClick={()=>{changeParams('sortType','hit')}} className={searchParams.get('sortType')==='hit' ? 'orderBy' : 'orderBy unchoice'} value='hit'>조회수순</button>
         </div>
         <div className="flex mb-4 gap-2">
           <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered join-item" >
@@ -84,13 +85,10 @@ export default function Community() {
             <option>python</option>
             <option>cpp</option>
           </select>
-          <select value={boardType} onChange={(e)=>{setBoardType(e.target.value)}} className="select select-sm select-bordered join-item" >
-            <option value={''}>게시판유형</option>
-            <option value={1}>시간복잡도</option>
-            <option value={2}>공간복잡도</option>
-            <option value={3}>공간복잡도</option>
-            <option value={4}>반례요청</option>
-            <option value={5}>반례</option>
+          <select value={key} onChange={(e)=>{setKey(e.target.value)}} className="select select-sm select-bordered join-item" >
+            
+            <option value={'board_title'}>문제제목</option>
+            <option value={'problem_id'}>문제번호</option>
           </select>
           <div className='flex'>
             <input onChange={(e)=>{setWord(e.target.value)}} type="text" placeholder="검색어를 입력하세요." className="input input-bordered w-full max-w-xs input-sm join-item" />

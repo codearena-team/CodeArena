@@ -1,7 +1,7 @@
 /* 임의의 영역 생성 */
 .scrollBar { 
   width: 1000px;
-  height: 1000px;
+  max-height: 1000px;
   overflow-y: scroll;
 }
 

@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import SubmitItem from "../../../components/problem/submitItem"
 import javaImg from "../../../images/problem/java.png"
 import pythonImg from "../../../images/problem/python.png"
 import cppImg from "../../../images/problem/cpp.png"
 import "../../css/problemsolve.css"
+
 import axios from "axios"
+
+
 
 export default function Submit() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,6 +22,7 @@ export default function Submit() {
   const [submitList, setSubmitList] = useState([])
   const [isvisible, setIsvisible] = useState(false)
   const [statistics, setStatistics] = useState([])
+  const [graphData, setGraphData] = useState(['asd'])
   
   useEffect(()=> {
     const problemId = searchParams.get('problemId') || ''
@@ -31,9 +36,12 @@ export default function Submit() {
         url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}/submit/statistics?userId=6`,
       })
       .then((res)=> {
-        console.log(res);
+        console.log(res)
         setIsvisible(true)
         setStatistics(res.data.data)
+        setGraphData(res.data.data.ratioOfAlgo.map((obj)=> {
+          return {name:obj.tagName,value:parseInt(obj.count)}
+        }))
       })
       .catch((err)=> {
         console.log(err);
@@ -88,13 +96,17 @@ export default function Submit() {
     return result;
   };
 
+  const colors = ['#0074CC', '#FF4136', '#000000','#FFFF00'];
+  const formatPercent = (value) => `${(value * 100).toFixed(0)}%`;
+
+
+  
   return(
     <div className="mx-10 flex flex-col">
-     
       <div className="flex justify-between align-middle">
-        {isvisible && 
+        {isvisible && statistics.avgByLang !==null ? (
         <div className="lg:flex gap-2">
-          <div>
+          <div className="flex flex-col justify-center">
             <div className="stats shadow ">
               <div className="stat p-3">
                 <div className="stat-figure text-secondary ">
@@ -119,39 +131,49 @@ export default function Submit() {
               </div>
             </div>
           </div>
-          <div>
-            <div className="stats shadow">
-              <div className="stat place-items-center px-4">
-                <div className="stat-title font-bold text-sm">DP</div>
-                <div className="stat-value text-base">31ms</div>
-              </div>
-              <div className="stat place-items-center px-4">
-                <div className="stat-title font-bold text-sm">수학</div>
-                <div className="stat-value text-base">420ms</div>
-              </div>
-              <div className="stat place-items-center px-4">
-                <div className="stat-title font-bold text-sm">이분탐색</div>
-                <div className="stat-value text-base">120ms</div>
-              </div>
-              <div className="stat place-items-center px-4">
-                <div className="stat-title font-bold text-sm">완전탐색</div>
-                <div className="stat-value text-base">120ms</div>
-              </div>
-            </div>
+          <div style={{width:'400px', marginTop:'-80px', marginBottom:'-100px'}}>
+            <ResponsiveContainer height={300} style={{}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
+              {/* PieChart : 원형 차트 모양으로 변환 */}
+              <PieChart>
+                {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}
+                <Tooltip />
+                {/* Pie : 실제 원형 차트 데이터 삽입 */}
+                <Pie
+                  data={graphData} // 데이터 전달
+                  innerRadius={40} // 내부 반지름
+                  outerRadius={55} // 외부 반지름
+                  paddingAngle={5} // 각 섹션 사이 간격
+                  dataKey="value" // 데이터에서 값에 해당하는 키 지정
+                  label={({ name, percent }) => `${name} ${formatPercent(percent)}`} // 데이터에서의 이름과 퍼센트
+                >
+                  {graphData.map((entry, index) => (
+                    // Cell : 각 섹션의 스타일을 설정하기 위함 -> key는 index값, fill은 컬러 채우기
+                    <Cell key={`cell-${index}`} fill={colors[index]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
+        )
+        :
+        (<div></div>)
         }
         <div></div>
-        <div className="flex join">
-          <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-28 join-item" >
-            <option value={'전체'}>전체</option>
-            <option value={'java'}>java</option>
-            <option value={'python'}>python</option>
-            <option value={'cpp'}>cpp</option>
-          </select>
-          <input onChange={(e)=>{setproblemId(e.target.value)}} type="number" placeholder="문제번호" className="input input-bordered input-sm join-item w-24" />
-          <input onChange={(e)=>{setNickname(e.target.value)}} type="text" placeholder="닉네임" className="input input-bordered input-sm join-item w-32" />
-          <button onClick={onClickHandler} className="btn btn-active btn-neutral btn-sm join-item">검색</button>
+        <div className="flex flex-col justify-center">
+          <div>
+            <div className="flex join align-middle">
+              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-28 join-item" >
+                <option value={'전체'}>전체</option>
+                <option value={'java'}>java</option>
+                <option value={'python'}>python</option>
+                <option value={'cpp'}>cpp</option>
+              </select>
+              <input onChange={(e)=>{setproblemId(e.target.value)}} type="number" placeholder="문제번호" className="input input-bordered input-sm join-item w-24" />
+              <input onChange={(e)=>{setNickname(e.target.value)}} type="text" placeholder="닉네임" className="input input-bordered input-sm join-item w-32" />
+              <button onClick={onClickHandler} className="btn btn-active btn-neutral btn-sm join-item">검색</button>
+            </div>
+          </div>
         </div>
         
       </div>
