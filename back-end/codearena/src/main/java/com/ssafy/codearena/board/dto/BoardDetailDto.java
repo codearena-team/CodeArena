@@ -13,7 +13,10 @@ public class BoardDetailDto {
     
     @Schema(description = "작성자 ID")
     private String userId;
-    
+
+    @Schema(description = "작성자 닉네임")
+    private String nickName;
+
     @Schema(description = "관련 문제 번호")
     private String problemId;
     

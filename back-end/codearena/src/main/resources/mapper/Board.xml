@@ -7,7 +7,8 @@
 
     <resultMap id="detail" type="com.ssafy.codearena.board.dto.BoardDetailDto">
         <result column="article_no" property="articleNo"/>
-        <result column="user_id" property="userId"/>
+        <result column="userId" property="userId"/>
+        <result column="user_nickname" property="nickName"/>
         <result column="problem_id" property="problemId"/>
         <result column="board_title" property="title"/>
         <result column="board_type" property="type"/>
@@ -56,7 +57,7 @@
 
 
     <select id="boardDetail" parameterType="string" resultMap="detail">
-        SELECT article_no, user_id, problem_id, board_title, board_type, board_lang, board_content, board_code, board_hit, board_spoiler, board_date
+        SELECT article_no, user_id as userId, (SELECT user_nickname FROM user WHERE user_id = userId) as user_nickname, problem_id, board_title, board_type, board_lang, board_content, board_code, board_hit, board_spoiler, board_date
         FROM board
         WHERE article_no = ${boardId};
     </select>
@@ -79,7 +80,7 @@
     </update>
 
     <select id="boardList" parameterType="map" resultMap="detail">
-        SELECT article_no, user_id, problem_id, board_title, board_type, board_lang, board_content, board_code, board_hit, board_spoiler, board_date
+        SELECT article_no, user_id as userId, (SELECT user_nickname FROM user WHERE user_id = userId) as user_nickname, problem_id, board_title, board_type, board_lang, board_content, board_code, board_hit, board_spoiler, board_date
         FROM board
             <where>
                 <include refid="type"/>
@@ -97,4 +98,9 @@
         </where>
     </select>
 
+    <update id="hitUpdate" parameterType="string">
+        UPDATE board
+        SET board_hit = board_hit + 1
+        WHERE article_no = #{boardId}
+    </update>
 </mapper>

@@ -29,13 +29,14 @@ public class BoardServiceImpl implements BoardService{
 
 
         try {
+
             BoardDetailDto boardDetailDto = boardMapper.boardDetail(boardId);
-            log.info(String.valueOf(boardDetailDto));
+            boardMapper.hitUpdate(boardId); //조회수 증가
             boardResultDto.setData(boardDetailDto);
 
         }
         catch (Exception e) {
-            e.printStackTrace();
+            
             boardResultDto.setStatus("500");
             boardResultDto.setMsg("Server Internal Error");
         }
