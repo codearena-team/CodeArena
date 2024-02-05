@@ -125,6 +125,7 @@ public class ChatServiceImpl implements ChatService{
         participant--;
         gameParticipants.put(gameId, participant);
     }
+
 //    @Override
 //    public BoardListDto listArticle(Map<String, String> map) throws Exception {
 //        Map<String, Object> param = new HashMap<String, Object>();
