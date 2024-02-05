@@ -90,7 +90,7 @@ public class BoardServiceImpl implements BoardService{
             boardResultDto.setData(boardListDto);
         }
         catch (Exception e) {
-            e.printStackTrace();
+
             boardResultDto.setStatus("500");
             boardResultDto.setMsg("Server Internal Error");
             boardResultDto.setData(null);
