@@ -90,4 +90,11 @@ public class ProblemController {
         ResultDto resultDto = service.getSubmitStatistics(problemId, params);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+
+    @PutMapping("{problemId}/status")
+    private ResponseEntity<ResultDto> changeStatus(@PathVariable String problemId, @RequestBody HashMap<String, String> params, HttpServletRequest request){
+        log.debug("param : {}", params);
+        ResultDto resultDto = service.updateProblemStatus(problemId, params, request);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }

@@ -363,4 +363,12 @@
         where
             problem_id=${problemId}
     </update>
+
+    <update id="updateProblemStatusByProblemId" parameterType="hashmap">
+        update
+        ps_list
+        set problem_visibility='${change}'
+        where
+            problem_id=${problemId}
+    </update>
 </mapper>

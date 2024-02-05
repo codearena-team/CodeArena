@@ -17,11 +17,8 @@ public interface ProblemMapper {
     void insertProblemTagList(TagListDto tagListDto) throws SQLException;
     void deleteProblem(String problemId) throws SQLException;
     List<TagDto> getAllTagNames() throws SQLException;
-
     ProblemDetailDto getProblemDetailByProblemId(String problemId) throws SQLException;
-
     List<TestCaseDto> getTestCasesByProblemId(String problemId) throws SQLException;
-
     void insertSubmit(SubmitDto submitDto) throws SQLException;
     void insertSubmitTags(SubmitTagListDto submitTagListDto) throws SQLException;
     List<SubmitDto> getSubmitList(HashMap<String, String> params) throws SQLException;
@@ -39,4 +36,5 @@ public interface ProblemMapper {
 
     int updateProblemByProblemId(ProblemForInsertDto problemForInsertDto) throws SQLException;
 
+    int updateProblemStatusByProblemId(HashMap<String, String> params) throws SQLException;
 }

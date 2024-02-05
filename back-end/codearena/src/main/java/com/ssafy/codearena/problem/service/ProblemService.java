@@ -23,4 +23,5 @@ public interface ProblemService {
     ResultDto getSubmitStatistics(String problemId, HashMap<String, String> params);
     ResultDto getProblemDetailForUpdate(String problemId);
     ResultDto updateProblem(ProblemForInsertDto problemForInsertDto);
+    ResultDto updateProblemStatus(String problemId, HashMap<String, String> params, HttpServletRequest request);
 }
