@@ -55,6 +55,11 @@
         </if>
     </sql>
 
+    <sql id="lang">
+        <if test="langType != null and langType != ''">
+            AND board_lang = #{langType}
+        </if>
+    </sql>
 
 
     <select id="boardDetail" parameterType="string" resultMap="detail">
@@ -86,6 +91,7 @@
             <where>
                 <include refid="type"/>
                 <include refid="search"/>
+                <include refid="lang"/>
             </where>
         <include refid="sort"/>
         LIMIT ${start}, ${listSize}
