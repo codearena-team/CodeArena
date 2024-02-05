@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
 import 'tailwindcss/tailwind.css';
 import Logo from '../../images/main/LogoHome/Logo.png';
+import '../css/BlinkingElement.css';
+
+const frameInAnimation = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-80%);
+  }
+
+  100%{
+    opacity: 1;
+    transform: translateY(0%);
+  }
+`;
+
+const AnimateContainer = styled.div`
+  &.frame-in {
+    animation: ${frameInAnimation} 1.2s forwards;
+  }
+`;
 
 export default function LogoHome({ scrollToFourElement }) {
-  // const Page2Ref = useRef(null);
+  const [animate, setAnimate] = useState(false);
 
   const handleLogoClick = () => {
     if (scrollToFourElement) {
@@ -11,8 +31,29 @@ export default function LogoHome({ scrollToFourElement }) {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      console.log('Scroll event 발생');
+      // 특정 조건을 확인하여 animate 상태 토글
+      const shouldAnimate = window.scrollY < 700;
+      setAnimate(shouldAnimate);
+    };
+
+    // 스크롤 이벤트 리스너 등록
+    window.addEventListener('scroll', handleScroll);
+
+    // 클린업 함수에서 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <AnimateContainer
+      className={`flex flex-col items-center justify-center h-screen
+        ${animate ? 'frame-in' : ''
+      }`}
+    >
       <img
         src={Logo}
         alt="메인 로고"
@@ -22,6 +63,6 @@ export default function LogoHome({ scrollToFourElement }) {
       <br />
       <br />
       <h1 className="text-2xl font-bold text-gray-400">지금 배틀에 참여하세요!</h1>
-    </div>
+    </AnimateContainer>
   );
 }

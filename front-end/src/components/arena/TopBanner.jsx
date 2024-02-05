@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import BannerCreateModal from './modal/BannerCreateModal';
+import BannerCreateModal from './modal/Main/BannerCreateModal';
+import MatchingCompleteModal  from './modal/Main/MatchingCompleteModal';
 
 import FindMatch from '../../images/arena/TopBanner/FindMatch.gif';
 import FindMatchAsset from '../../images/arena/TopBanner/FindMatch.png';
@@ -13,7 +14,6 @@ import SpeedModeAsset from '../../images/arena/TopBanner/SpeedMode.png';
 import EffiMode from '../../images/arena/TopBanner/EfficiencyMode.gif';
 import EffiModeAsset from '../../images/arena/TopBanner/EfficiencyMode.png';
 
-
 export default function TopBanner() {
   // 호버 기능
   const [isFindMatchHovered, setIsFindMatchHovered] = useState(false);
@@ -22,6 +22,7 @@ export default function TopBanner() {
   const [isSpeedModeHovered, setIsSpeedModeHovered] = useState(false);
   const [isEffiModeHovered, setIsEffiModeHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMatchingComplete, setIsMatchingComplete] = useState(false);
 
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -105,6 +106,7 @@ export default function TopBanner() {
       const minutes = Math.floor(seconds / 60); // 분단위 계산
       const remainingSeconds = seconds % 60; // 초단위 계산
   
+      // 타이머 초마다 상승하고 문자열로 표기
       timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
       seconds += 1;
     };
@@ -113,11 +115,81 @@ export default function TopBanner() {
     timerInterval = setInterval(updateTimer, 1000);
   
     // 원하는 시간까지 진행 후 타이머 중지
-    const desiredTimeInSeconds = 300; // 예시로 일단 5분 -> 추후에 수정
+    const desiredTimeInSeconds = 7; // 예시로 일단 5초 -> 추후에 수정
     setTimeout(() => {
       clearInterval(timerInterval);
       timerElement.textContent = '매칭 완료!'; // 매칭 완료 문구
+      
+      // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
+      handleMatchingComplete();
     }, desiredTimeInSeconds * 1000);
+  };
+
+  // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
+  const handleMatchingComplete = () => {
+    setIsMatchingComplete(true);
+
+    // 1.5초 뒤에 MatchingCompleteModal 띄우기
+    setTimeout(() => {
+      openMatchingCompleteModal();
+    }, 1500);
+  };
+
+  // 5-1. 매칭 완료 후 띄워질 "수락", "취소" 마지막 모달
+  const openMatchingCompleteModal = () => {
+    // MatchingCompleteModal 열기
+    const matchingCompleteModal = document.getElementById('matching_complete_modal');
+    matchingCompleteModal.style.left = '50%';
+    matchingCompleteModal.style.top = '50%';
+    matchingCompleteModal.style.transform = 'translate(-50%, -50%)';
+    matchingCompleteModal.style.zIndex = '3'; // 더 높은 z-index로 설정
+    matchingCompleteModal.showModal();
+
+    // MatchingCompleteModal이 닫힐 때 languageModal 닫도록 이벤트 리스너 추가
+    matchingCompleteModal.addEventListener('close', () => {
+      const languageModal = document.getElementById('language_modal');
+      if (languageModal && languageModal.open) {
+        languageModal.close();
+      }
+    });
+  };
+
+  // 마지막 모달에서 "취소" 모든 모달 닫기 (중복 호출 방지)
+  const handleCancel = () => {
+    const matchingCompleteModal = document.getElementById('matching_complete_modal');
+    const languageModal = document.getElementById('language_modal');
+    const matchingModal = document.getElementById('matching_modal');
+    
+    if (matchingCompleteModal && matchingCompleteModal.open) {
+      matchingCompleteModal.close();
+    }
+
+    if (languageModal && languageModal.open) {
+      languageModal.close();
+    }
+  
+    if (matchingModal && matchingModal.open) {
+      matchingModal.close();
+    }
+  };
+
+  // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수
+  const handleAccept = () => {
+    const matchingCompleteModal = document.getElementById('matching_complete_modal');
+    const languageModal = document.getElementById('language_modal');
+    const matchingModal = document.getElementById('matching_modal');
+    
+    if (matchingCompleteModal && matchingCompleteModal.open) {
+      matchingCompleteModal.close();
+    }
+
+    if (languageModal && languageModal.open) {
+      languageModal.close();
+    }
+  
+    if (matchingModal && matchingModal.open) {
+      matchingModal.close();
+    }
   };
 
   // 게임 생성 모달 닫기
@@ -140,7 +212,7 @@ export default function TopBanner() {
       >
         {/* 경쟁 매칭 버튼*/}
         <button
-          className="m-2 rounded-xl hover:scale-110"
+          className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
           style={{ width: '80%', height: 'auto' }}
           onClick={openLanguageModal} // 클릭하면 모달 띄우기
           onMouseEnter={() => setIsFindMatchHovered(true)} // 마우스 호버 In
@@ -241,6 +313,18 @@ export default function TopBanner() {
               <h3 className="font-bold text-lg mb-5">잠시만 기다려주세요</h3>
               {/* 타이머 00:00부터 1초씩 상승하기 */}
               <div id="matching_timer" className="font-bold text-lg mb-5"></div>
+            </div>
+          </dialog>
+
+          {/* 매칭 완료 모달 후 "수락", "취소" 모달 소환 */}
+          <dialog id="matching_complete_modal" className="modal">
+            <div className="modal-box flex-row justify-center">
+              <MatchingCompleteModal
+                // 수락
+                onAccept={handleAccept}
+                // 취소
+                onCancel={handleCancel}
+              />
             </div>
           </dialog>
         </button>

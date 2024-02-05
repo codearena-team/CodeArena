@@ -27,6 +27,13 @@ import GroupView from './components/arena/Match/GroupView'
 import GroupLobby from './components/arena/Match/GroupLobby'
 import { useAuthCheck } from "./features/useAuthCheck";
 import { useLocation } from 'react-router-dom';
+import CompetitionList from "./components/arena/Match/Competition/CompetitionList";
+import CompetitionView from './components/arena/Match/Competition/CompetitionView';
+import GroupList from "./components/arena/Match/Group/GroupList";
+import GroupView from './components/arena/Match/Group/GroupView';
+import GroupLobby from './components/arena/Match/Group/GroupLobby';
+import CompetitionPlay from './components/arena/Match/Competition/CompetitionPlay';
+import GroupPlay from './components/arena/Match/Group/GroupPlay';
 
 const ProtectedRoute = ({ user, children }) => {
   const [authCheck] = useAuthCheck()
@@ -78,8 +85,13 @@ export default function Router () {
       <Route path="/game-list/competition" element={<CompetitionList />} /> {/* 경쟁전 방리스트 페이지 */}
       <Route path="/game-list/competition/view/:id" element={<CompetitionView />} /> {/* 경쟁전 관전 페이지 */}
       <Route path="/game-list/group" element={<GroupList />} /> {/* 단체전 방 페이지 */}
+
       <Route path="/game-list/group/lobby/:id" element={<GroupLobby />} /> {/* 단체전 플레이 로비 페이지 */}
       <Route path="/game-list/group/view/:id" element={<GroupView />} /> {/* 단체전 관전 페이지 */}
+      
+      <Route path="/game-list/competition/play/:id" element={<CompetitionPlay />} /> {/* 경쟁전 플레이 페이지 */}
+      <Route path="/game-list/group/play/:id" element={<GroupPlay />} /> {/* 단체전 플레이 페이지 */}
+
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />
       <Route path="/login/snssignup" element={<SnsSignup/>} /> 

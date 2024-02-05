@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import GroupLobbyLine from "./GroupLobbyLine";
-import GroupLobbyExitModal from '../modal/GroupLobbyExitModal'
+import GroupLobbyExitModal from '../../modal/Group/GroupLobbyExitModal'
+import StartModal from "../../modal/Group/StartModal";
 
-import cat_one from '../../../images/arena/GroupView/cat_one.png';
-import cat_two from '../../../images/arena/GroupView/cat_two.png';
-import cat_three from '../../../images/arena/GroupView/cat_three.png';
-import cat_four from '../../../images/arena/GroupView/cat_four.png';
-import cat_five from '../../../images/arena/GroupView/cat_five.png';
-import cat_six from '../../../images/arena/GroupView/cat_six.png';
+import cat_one from '../../../../images/arena/GroupView/cat_one.png';
+import cat_two from '../../../../images/arena/GroupView/cat_two.png';
+import cat_three from '../../../../images/arena/GroupView/cat_three.png';
+import cat_four from '../../../../images/arena/GroupView/cat_four.png';
+import cat_five from '../../../../images/arena/GroupView/cat_five.png';
+import cat_six from '../../../../images/arena/GroupView/cat_six.png';
 
 export default function GroupLobby() {
 
@@ -110,8 +111,7 @@ export default function GroupLobby() {
             style={{ height: '50%', backgroundColor: '#F5EBDB' }}
           >
             {/* 팔로우 목록 컨텐츠 */}
-            <div className="user-follow-item">유저1의 팔로우 목록</div>
-            <div className="user-follow-item">유저2의 팔로우 목록</div>
+            <div className="user-follow-item">나의 팔로우 목록</div>
             {/* ... Add more user-follow-item as needed */}
           </div>
 
@@ -128,7 +128,7 @@ export default function GroupLobby() {
                 // 버튼 클릭 시 처리할 기능 필요함
               }}
             >
-              Arena Start !
+              <StartModal ArenaGroupId={userData.id} />
             </button>
 
             {/* 나가기 버튼 */}

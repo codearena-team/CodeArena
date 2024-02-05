@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import C_ExitModal from "../modal/C_ExitModal";
+import C_ExitModal from "../../modal/Competition/C_ExitModal";
 
 export default function TopInfo() {
   const [panelWidths, setPanelWidths] = useState({
@@ -44,7 +44,7 @@ export default function TopInfo() {
         <button
           className="rounded-lg ml-3 mr-3 shadow-lg px-4 py-2 focus:outline-none text-2xl font-bold hover:scale-105"
           style={{ width: '100%', height: '100%', backgroundColor: '#F5EBDB' }}
-          onClick={() => document.getElementById('Exit').showModal()}
+          onClick={() => document.getElementById('compPlay_Exit').showModal()}
         >
           나가기
         </button>

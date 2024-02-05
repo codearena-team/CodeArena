@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import '../../css/C_dividingLine.css';
+import '../../../css/GroupLobbyLine.css';
 
-export default function DividingLine({ onDividerMove }) {
+export default function GroupLobbyLine({ onDividerMove }) {
     // 상태 관리를 통해 마우스 커서 상태 및 구분선 위치 관리
     const [isHovered, setIsHovered] = useState(false); // 구분선 위에 마우스 올렸을 때 보이기, 숨기기
     const [dividerPosition, setDividerPosition] = useState(60); // 초기 위치를 60% : 40% 비율로 설정
@@ -50,13 +50,14 @@ export default function DividingLine({ onDividerMove }) {
 
             // (중요) onDividerMove 콜백함수를 props로 호출하여 왼쪽과 오른쪽 패널의 비율을 조정
             // requestAnimationFrame을 사용하여 최적화 -> 구분선 이동시킬 때 반응속도 빨라짐
-            requestAnimationFrame(() => {
+            if (newPosition <= 75) {
+              requestAnimationFrame(() => {
                 // onDividerMove 콜백함수를 props로 호출하여 왼쪽과 오른쪽 패널의 비율을 조정
                 onDividerMove(newPosition);
-            });
-
-            // 비율 유지를 위해 스타일에 적용
-            setDividerPosition(newPosition);
+              });
+              // 비율 유지를 위해 스타일에 적용
+              setDividerPosition(newPosition);
+            }
 
         }
     };
@@ -77,7 +78,7 @@ export default function DividingLine({ onDividerMove }) {
     return (
         <div className="competition-view">
             <div
-                className={`vertical-dividingLine ${isHovered || isDragging ? 'hovered' : ''}`}
+                className={`vertical-Lobbydivider ${isHovered || isDragging ? 'hovered' : ''}`}
                 style={{ left: `${dividerPosition}%` }}
                 onMouseEnter={handleDividerMouseEnter}
                 onMouseLeave={handleDividerMouseLeave}

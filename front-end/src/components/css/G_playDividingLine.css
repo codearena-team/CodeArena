@@ -1,0 +1,68 @@
+.competition-view {
+  display: flex;
+  height: 100vh;
+}
+
+.left-panel,
+.right-panel {
+  height: 100%;
+  overflow: hidden;
+  /* transition: width 0.3s; */
+}
+
+.vertical-Lobbydivider-play {
+  position: relative;
+  width: 5px; /* 구분선의 너비 */
+  height: 20%;
+  background-color: #ddd; /* 구분선 색상 */
+  cursor: ew-resize; /* 가로로 조절할 수 있는 커서 모양 */
+  position: absolute;
+  border-radius: 10px;
+  bottom: 50%;
+  /* margin-right: 3%; */
+}
+
+.vertical-divider.hovered {
+  background-color: #aaa; /* 마우스 호버시 색상 변경 */
+}
+
+.divider-button {
+  display: flex;
+  /* position: absolute; */
+  width: 40px;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000000;
+  font-weight: bold;
+  cursor: pointer; /* 커서 모양을 pointer로 변경 */
+}
+
+/* .left-wall-png {
+  position: absolute;
+  top: 100%;
+  left: 15%;
+  width: 30%;
+  height: 30%; 
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 10;
+}
+
+.right-wall-png {
+  position: absolute;
+  top: 100%;
+  left: 85%;
+  width: 30%;/
+  height: 30%; 
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 10;
+}
+
+.left-wall-png.show,
+.right-wall-png.show {
+  display: block;
+  z-index: 10;
+} */

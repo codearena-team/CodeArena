@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import styled, { keyframes } from 'styled-components';
 import ProblemSolve from '../../images/main/FourElement/ProblemSolve.gif';
 import ProblemSolveAsset from '../../images/main/FourElement/ProblemSolve.png';
 import CodeArena from '../../images/main/FourElement/CodeArena.gif';
@@ -10,11 +10,61 @@ import CommunityAsset from '../../images/main/FourElement/Community.png';
 import AboutUs from '../../images/main/FourElement/AboutUs.gif';
 import AboutUsAsset from '../../images/main/FourElement/AboutUs.png';
 
+// 스크롤 애니메이트 이벤트 1
+const frameInAnimation_PS = keyframes`
+  0% {opacity: 0; transform: translateX(-100%);}
+  100%{opacity: 1; transform: translateX(0%);}
+`;
+const AnimateContainer_PS = styled.div`
+  &.ease-in {
+    animation: ${frameInAnimation_PS} 1.2s forwards;
+  }
+`;
+
+// 스크롤 애니메이트 이벤트 2
+const frameInAnimation_CA = keyframes`
+  0% {opacity: 0; transform: translateX(100%);}
+  100%{opacity: 1; transform: translateX(0%);}
+`;
+const AnimateContainer_CA = styled.div`
+  &.ease-in {
+    animation: ${frameInAnimation_CA} 1.2s forwards;
+  }
+`;
+
+// 스크롤 애니메이트 이벤트 3
+const frameInAnimation_CM = keyframes`
+  0% {opacity: 0; transform: translateX(-100%);}
+  100%{opacity: 1; transform: translateX(0%);}
+`;
+const AnimateContainer_CM = styled.div`
+  &.ease-in {
+    animation: ${frameInAnimation_CM} 1.2s forwards;
+  }
+`;
+
+// 스크롤 애니메이트 이벤트 4
+const frameInAnimation_AU = keyframes`
+  0% {opacity: 0; transform: translateX(100%);}
+  100%{opacity: 1; transform: translateX(0%);}
+`;
+
+const AnimateContainer_AU = styled.div`
+  &.ease-in {
+    animation: ${frameInAnimation_AU} 1.2s forwards;
+  }
+`;
+
+
 export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
   const [isProblemSolveHovered, setIsProblemSolveHovered] = useState(false);
   const [isCodeArenaHovered, setIsCodeArenaHovered] = useState(false);
   const [isCommunityHovered, setIsCommunityHovered] = useState(false);
   const [isAboutUsHovered, setIsAboutUsHovered] = useState(false);
+  const [animate_PS, setAnimate_PS] = useState(false);
+  const [animate_CA, setAnimate_CA] = useState(false);
+  const [animate_CM, setAnimate_CM] = useState(false);
+  const [animate_AU, setAnimate_AU] = useState(false);
 
   const handleLogoClick = () => {
     if (scrollToAboutUs) {
@@ -28,11 +78,48 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
     navigate('/arena');
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      console.log('스크롤 애니메이트 이벤트 발생 확인');
+      // 특정 조건을 확인하여 animate 상태 토글
+      const shouldAnimate = window.scrollY < 1550 && window.scrollY > 450;
+      setAnimate_PS(shouldAnimate);
+      setAnimate_CA(shouldAnimate);
+    };
+    // 스크롤 이벤트 리스너 등록
+    window.addEventListener('scroll', handleScroll);
+    // 클린업 함수에서 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      console.log('스크롤 애니메이트 이벤트 발생 확인22');
+      // 특정 조건을 확인하여 animate 상태 토글
+      const shouldAnimate = window.scrollY < 1550 && window.scrollY > 450;
+      setAnimate_CM(shouldAnimate);
+      setAnimate_AU(shouldAnimate);
+    };
+    // 스크롤 이벤트 리스너 등록
+    window.addEventListener('scroll', handleScroll);
+    // 클린업 함수에서 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div ref={fromRefLogoHome} className="flex items-center justify-center h-screen relative">
+    <div
+      ref={fromRefLogoHome}
+      className="flex items-center justify-center h-screen relative"
+    > 
       {/* 왼쪽위 - 프라블럼솔브 gif*/}
-      <div
-        className="absolute top-20 left-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden"
+      <AnimateContainer_PS
+        className={`absolute top-20 left-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden
+          ${animate_PS ? 'ease-in' : ''
+        }`}
         style={{
           left: '-20px',
           // 마우스 hover 확대 기능
@@ -59,11 +146,13 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
             <polygon points="0,0 0,1 1,1 0.7,1 1,0" fill="white" />
           </mask>
         </svg>
-      </div>
+      </AnimateContainer_PS>
 
       {/* 우측위 - 코드아레나 gif */}
-      <div
-        className="absolute top-20 right-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden"
+      <AnimateContainer_CA
+        className={`absolute top-20 right-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden
+          ${animate_CA ? 'ease-in' : ''
+        }`}
         style={{
           right: '-20px',
           transform: isCodeArenaHovered ? 'scale(1.15)' : 'scale(1)',
@@ -86,11 +175,13 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
           <polygon points="0,0 1,0 1,1 0,1 0.3,0" fill="white" />
           </mask>
         </svg>
-      </div>
+      </AnimateContainer_CA>
 
       {/* 왼쪽아래 - 커뮤니티 gif */}
-      <div
-        className="absolute bottom-12 left-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden"
+      <AnimateContainer_CM
+        className={`absolute bottom-12 left-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden
+          ${animate_CM ? 'ease-in' : ''
+        }`}
         style={{
           left: '-20px',
           // 마우스 hover 기능 작용
@@ -114,11 +205,13 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
           <polygon points="0,0 0.7,0 1,1 0,1 0,0" fill="white" />
           </mask>
         </svg>
-      </div>
+      </AnimateContainer_CM>
 
       {/* 오른쪽아래 - 어바웃어스 gif */}
-      <div
-        className="absolute bottom-12 right-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden"
+      <AnimateContainer_AU
+        className={`absolute bottom-12 right-0 w-3/5 h-2/5 clip-path-pentagon overflow-hidden cursor-pointer
+          ${animate_AU ? 'ease-in' : ''
+        }`}
         style={{
           right: '-20px',
           // 마우스 hover 기능 작용
@@ -142,7 +235,7 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
           <polygon points="0,0 1,0 1,1 0.3,1 0,0" fill="white" />
           </mask>
         </svg>
-      </div>
+      </AnimateContainer_AU>
     </div>
   );
 }
