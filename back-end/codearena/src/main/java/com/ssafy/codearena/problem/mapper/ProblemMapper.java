@@ -2,6 +2,7 @@ package com.ssafy.codearena.problem.mapper;
 
 
 import com.ssafy.codearena.problem.dto.*;
+import com.ssafy.codearena.user.dto.UserProblemCateDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
@@ -37,4 +38,9 @@ public interface ProblemMapper {
     int updateProblemByProblemId(ProblemForInsertDto problemForInsertDto) throws SQLException;
 
     int updateProblemStatusByProblemId(HashMap<String, String> params) throws SQLException;
+
+    List<ProblemForInsertDto> getSolveListByUserNickname(String nickName) throws SQLException;
+    List<ProblemForInsertDto> getUnsolveListByUserNickname(String nickName) throws SQLException;
+
+    List<UserProblemCateDto> getProblemCateByNickname(String nickName) throws SQLException;
 }

@@ -5,6 +5,7 @@ import com.ssafy.codearena.alarm.dto.AlarmSendDto;
 import com.ssafy.codearena.alarm.mapper.AlarmMapper;
 import com.ssafy.codearena.problem.dto.*;
 import com.ssafy.codearena.problem.mapper.ProblemMapper;
+import com.ssafy.codearena.user.dto.UserProblemCateDto;
 import com.ssafy.codearena.util.JwtUtil;
 import jakarta.mail.AuthenticationFailedException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -482,5 +483,28 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
 
+    }
+
+    @Override
+    public SolveAndUnsolveDto getSolveAndUnsolveList(String nickName) throws Exception{
+        SolveAndUnsolveDto list = new SolveAndUnsolveDto();
+        List<ProblemForInsertDto> solveList = null;
+        List<ProblemForInsertDto> unSolveList = null;
+        solveList = mapper.getSolveListByUserNickname(nickName);
+        unSolveList = mapper.getUnsolveListByUserNickname(nickName);
+        if(solveList == null) solveList = Collections.EMPTY_LIST;
+        if(unSolveList == null) unSolveList = Collections.EMPTY_LIST;
+        list.setSolveList(solveList);
+        list.setSolveCount(solveList.size());
+        list.setUnSolveList(unSolveList);
+        list.setUnSolveCount(unSolveList.size());
+        return list;
+    }
+
+    @Override
+    public List<UserProblemCateDto> getProblemCateList(String nickName) throws Exception {
+        List<UserProblemCateDto> list = null;
+        list = mapper.getProblemCateByNickname(nickName);
+        return list;
     }
 }
