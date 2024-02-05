@@ -3,6 +3,7 @@ package com.ssafy.codearena.problem.service;
 
 import com.ssafy.codearena.alarm.dto.AlarmSendDto;
 import com.ssafy.codearena.alarm.mapper.AlarmMapper;
+import com.ssafy.codearena.alarm.service.AlarmService;
 import com.ssafy.codearena.problem.dto.*;
 import com.ssafy.codearena.problem.mapper.ProblemMapper;
 import com.ssafy.codearena.user.dto.UserProblemCateDto;
@@ -35,7 +36,7 @@ public class ProblemServiceImpl implements ProblemService{
 
     private final ProblemMapper mapper;
 
-    private final AlarmMapper alarmMapper;
+    private final AlarmService alarmService;
     private final JwtUtil jwtUtil;
     private static final int ADMIN_ID = 1;
 
@@ -161,12 +162,13 @@ public class ProblemServiceImpl implements ProblemService{
             resultDto.setStatus("201");
             resultDto.setMsg("문제 임시 생성 및 요청이 성공적으로 보내졌습니다.");
             AlarmSendDto alarmSendDto = new AlarmSendDto();
+
             alarmSendDto.setAlarmMsg("문제 확인 부탁드립니다. 문제번호 : "+ problemForInsertDto.getProblemId());
             alarmSendDto.setAlarmType(ALARM_TYPE);
             alarmSendDto.setAlarmStatus("요청 대기");
             alarmSendDto.setFromId(Integer.parseInt(problemForInsertDto.getUserId()));
             alarmSendDto.setToId(ADMIN_ID);
-            alarmMapper.send(alarmSendDto);
+            alarmService.send(alarmSendDto);
         }catch(Exception e){
             log.error("exception : {}", e);
             resultDto.setStatus("500");
