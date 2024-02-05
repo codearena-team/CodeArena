@@ -4,10 +4,11 @@ import lombok.Data;
 
 @Data
 public class UserInfoDto {
-    private int userId;
+    private String userId;
     private String userEmail;
     private String userNickname;
     private String userIntro;
-    private int speedRating;
-    private int effiRating;
+    private String speedRating;
+    private String effiRating;
+    private int isFollow;
 }

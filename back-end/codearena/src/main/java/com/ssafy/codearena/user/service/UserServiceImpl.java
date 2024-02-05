@@ -1,5 +1,8 @@
 package com.ssafy.codearena.user.service;
 
+import com.ssafy.codearena.problem.dto.ProblemForInsertDto;
+import com.ssafy.codearena.problem.dto.SolveAndUnsolveDto;
+import com.ssafy.codearena.problem.service.ProblemService;
 import com.ssafy.codearena.user.dto.*;
 import com.ssafy.codearena.user.mapper.UserMapper;
 import com.ssafy.codearena.util.JwtUtil;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,6 +24,7 @@ import java.util.Map;
 @Slf4j
 public class UserServiceImpl implements UserService{
 
+    private final ProblemService problemService;
     private final UserMapper mapper;
     private final JavaMailSender javaMailSender;
     private final JwtUtil jwtUtil;
@@ -250,44 +255,70 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResultDto searchUser(String userNickname) {
+    public UserResultDto searchUser(UserSearchDto userSearchDto) {
 
         UserResultDto userResultDto = new UserResultDto();
         userResultDto.setStatus("200");
         userResultDto.setMsg("회원 정보 조회 성공");
 
-        UserSearchDto userSearchDto = new UserSearchDto();
-        UserInfoDto userInfoDto = null;
-
         try {
-            userInfoDto = mapper.searchUser(userNickname);
+            String userNickname = userSearchDto.getFromUserNickname();
+            UserInfoDto fromUser = mapper.searchUser(userNickname);
+            userNickname = userSearchDto.getToUserNickname();
+            UserInfoDto toUser = mapper.searchUser(userNickname);
 
-            System.out.println(userInfoDto);
             // 검색된 회원이 없을 시
-            if (userInfoDto == null) {
+            if ("".equals(fromUser.getUserId()) || fromUser.getUserId() == null || "".equals(toUser.getUserId()) || toUser.getUserId() == null) {
                 userResultDto.setStatus("404");
                 userResultDto.setMsg("해당 이름의 회원 없음");
                 userResultDto.setData(null);
             } else {
-                ArrayList<Integer> solvedProblem = mapper.getSolvedProblem(userInfoDto.getUserId());
-                ArrayList<Integer> wrongProblem = mapper.getWrongProblem(userInfoDto.getUserId());
+                // 푼 문제 가져오기
+                // 못 푼 문제 가져오기
+                UserSearchResultDto userSearchResultDto = new UserSearchResultDto();
 
-                System.out.println("solvedProblem = " + solvedProblem);
-                System.out.println("wrongProblem = " + wrongProblem);
+                SolveAndUnsolveDto solveAndUnsolveDto = problemService.getSolveAndUnsolveList(toUser.getUserNickname());
+                List<UserProblemCateDto> problemCateList = problemService.getProblemCateList(toUser.getUserNickname());
 
-                userSearchDto.setUserInfoDto(userInfoDto);
-                // 1. 회원이 푼 문제
-                userSearchDto.setSolvedProblem(solvedProblem);
-                // 2. 회원이 틀린 문제
-                userSearchDto.setWrongProblem(wrongProblem);
-                // 3. CntOfCate
-                // 일단 지금은 null 상태로 두기
-                userSearchDto.setCntOfCate(null);
+                List<ProblemForInsertDto> solveListP = solveAndUnsolveDto.getSolveList();
+                List<ProblemForInsertDto> unsolveListP = solveAndUnsolveDto.getUnSolveList();
 
-                userResultDto.setData(userSearchDto);
+                List<UserProblemDto> solveListU = new ArrayList<>();
+                List<UserProblemDto> unsolveListU = new ArrayList<>();
+
+
+                for(ProblemForInsertDto p : solveListP) {
+                    UserProblemDto dto = new UserProblemDto();
+                    dto.setProblemId(p.getProblemId());
+                    dto.setProblemTitle(p.getProblemTitle());
+                    solveListU.add(dto);
+                }
+
+                for(ProblemForInsertDto p : unsolveListP) {
+                    UserProblemDto dto = new UserProblemDto();
+                    dto.setProblemId(p.getProblemId());
+                    dto.setProblemTitle(p.getProblemTitle());
+                    unsolveListU.add(dto);
+                }
+
+                UserProblemDto userSolvedProblemDto = new UserProblemDto();
+
+                int isFollow = mapper.isFollow(userSearchDto);
+                toUser.setIsFollow(isFollow);
+
+                // 1. 검색 대상 기본 정보 넣기
+                userSearchResultDto.setUserInfoDto(toUser);
+                // 2. 검색 대상이 푼 문제 리스트 넣기
+                userSearchResultDto.setSolvedProblem(solveListU);
+                // 3. 검색 대상이 못 푼 문제 리스트 넣기
+                userSearchResultDto.setUnsolvedProblem(unsolveListU);
+                // 4. 푼 문제들의 카테고리별 개수를 넣어 주기
+                userSearchResultDto.setProblemCateList(problemCateList);
+
+                userResultDto.setData(userSearchResultDto);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug("Error occured : {} ", e);
             userResultDto.setStatus("500");
             userResultDto.setMsg("서버 내부 에러");
             userResultDto.setData(null);
