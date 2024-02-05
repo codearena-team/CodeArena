@@ -50,8 +50,20 @@ public class ProblemServiceImpl implements ProblemService{
         ProblemListDto problemListDto = new ProblemListDto();
         try{
             int spp = BASIC_SPP;
-            if(map.containsKey("spp") && Integer.parseInt(map.get("spp")) > 0){
-                spp = Integer.parseInt(map.get("spp"));
+            String sppParam = "";
+            int pgno = BASIC_PGNO;
+            String pgnoParam = "";
+            if(map.containsKey("spp")) {
+                sppParam = map.get("spp");
+            }
+            if(sppParam!=null && !"".equals(sppParam)){
+                spp = Integer.parseInt(sppParam);
+            }
+            if(map.containsKey("pgno")){
+                pgnoParam = map.get("pgno");
+            }
+            if(pgnoParam!=null && !"".equals(pgnoParam)){
+                pgno = Integer.parseInt(pgnoParam);
             }
             String cate = "";
             if(map.containsKey("cate")){
@@ -82,10 +94,8 @@ public class ProblemServiceImpl implements ProblemService{
             int totalItemCount = mapper.problemCount(hashMap);
             int totalPageCount = 1;
             if(totalItemCount > spp) totalPageCount = (totalItemCount%spp) == 0 ? totalItemCount/spp : totalItemCount/spp+1;
-            int pgno = BASIC_PGNO;
-            if(map.containsKey("pgno") && Integer.parseInt(map.get("pgno")) > 0){
-                pgno = Integer.parseInt(map.get("pgno"));
-            }
+
+
             if(pgno > totalPageCount) pgno = totalPageCount;
             String orderBy = "";
             if(map.containsKey("orderBy")){
@@ -294,9 +304,11 @@ public class ProblemServiceImpl implements ProblemService{
             String userNickname = "";
             String lang = "";
             String orderBy= "";
+            String pgnoParam = "";
+            String sppParam = "";
             int pgno = BASIC_PGNO;
             if(params.containsKey("spp") && Integer.parseInt(params.get("spp")) > 0){
-                spp = Integer.parseInt(params.get("spp"));
+                sppParam = params.get("spp");
             }
             if(params.containsKey("problemId")){
                 problemId = params.get("problemId");
@@ -311,7 +323,13 @@ public class ProblemServiceImpl implements ProblemService{
                 orderBy = params.get("orderBy");
             }
             if(params.containsKey("pgno")){
-                pgno = Integer.parseInt(params.get("pgno"));
+                pgnoParam = params.get("pgno");
+            }
+            if(pgnoParam != null && !"".equals(pgnoParam)){
+                pgno = Integer.parseInt(pgnoParam);
+            }
+            if(sppParam != null && !"".equals(sppParam)){
+                spp = Integer.parseInt(sppParam);
             }
             params = new HashMap<>();
             params.put("problemId", problemId);
