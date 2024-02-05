@@ -507,6 +507,7 @@ public class ProblemServiceImpl implements ProblemService{
     public List<UserProblemCateDto> getProblemCateList(String nickName) throws Exception {
         List<UserProblemCateDto> list = null;
         list = mapper.getProblemCateByNickname(nickName);
+        if(list == null) list = Collections.EMPTY_LIST;
         return list;
     }
 }
