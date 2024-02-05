@@ -48,15 +48,11 @@ export default function Login() {
         },      
       })
       .then((res)=>{
-        console.log(res)
-        console.log(res.headers.authorization)
-        console.log(res.data.data.refreshToken)
-        if (res.data.status == "404"){
-          alert('이메일,패스워드가 일치하지 않습니다')
+        if (res.data.status === "404"){
+          alert('이메일,패스워드가 틀렸습니다.')
         }else{
           dispatch(setRefreshToken(res.data.data))
           dispatch(setAccessToken(res.headers.authorization)) 
-          alert('로그인성공')
           navigate('/')
         }
       })

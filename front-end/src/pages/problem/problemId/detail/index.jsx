@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom"
+import { useSelector } from "react-redux";
 import CodeMirror from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
@@ -9,7 +10,8 @@ import axios from "axios";
 import "../../../css/problemdetail.css"
 
 export default function ProblemDetail() {
-  
+  const userId = useSelector(state => state.auth.userId)
+  const [isAuthor, setIsAuthor] = useState()
   const params = useParams();
   const problemId = params.problemId
   const [code, setCode] = useState('')
@@ -26,6 +28,7 @@ export default function ProblemDetail() {
     })
     .then((res)=> {
       console.log(res);
+      setIsAuthor(userId === res.data.data.userId)
       setProblem(res.data.data)
     })
     .catch((err)=> {
@@ -63,13 +66,20 @@ export default function ProblemDetail() {
     <div className="grid grid-cols-2 p-8 h-full pt-0">
       <div>
         <div className="leftUp drop-shadow-xl p-5">
-          <h1 className="text-3xl mb-2 ">{problem.problemTitle}
-           <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-neutral btn-sm rounded-full ms-2">문제 수정</Link>
-           <div class="btn btn-neutral btn-sm rounded-full ms-2" onClick={()=>document.getElementById(`alarmModal`).showModal()}>문제 수정 요청</div>
-           <AlarmModal alarmId={'alarmModal'}/>
-           </h1>
-          <Link className="btn btn-xs btn-neutral me-2 rounded-full">질문게시판</Link>
-          <Link className="btn btn-xs btn-neutral rounded-full">제출현황</Link>
+          <div className="flex">
+            <h1 className="text-3xl mb-2 ">{problem.problemTitle}</h1>
+            {isAuthor ?
+            <div>
+              <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-neutral btn-sm rounded-full ms-2">문제 수정</Link>
+            </div> :
+            <div>
+              <div class="btn btn-neutral btn-sm rounded-full ms-2" onClick={()=>document.getElementById(`alarmModal`).showModal()}>문제 수정 요청</div>
+              <AlarmModal alarmId={'alarmModal'}/>
+            </div>
+            }
+          </div>
+          <Link to={`/community?word=${problem.problemId}&key=problem_id`} className="btn btn-xs btn-neutral me-2 rounded-full">질문게시판</Link>
+          <Link to={`/problem/submit?problemId=${problem.problemId}`} className="btn btn-xs btn-neutral rounded-full">제출현황</Link>
         </div>
         <div className="leftDown drop-shadow-xl p-5 ">
           <div className="flex justify-center gap-2 drop-shadow-xl text-center mb-4">

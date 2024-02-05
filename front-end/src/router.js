@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useTransition, useLayoutEffect } from "react";
 import Login from './pages/login/index';
 import Community from './pages/community/index';
 import CommunityCreate from './pages/community/create/index';
@@ -23,7 +24,30 @@ import CompetitionView from './components/arena/Match/CompetitionView';
 import GroupList from "./components/arena/Match/GroupList";
 import GroupView from './components/arena/Match/GroupView'
 import GroupLobby from './components/arena/Match/GroupLobby'
+import { useAuthCheck } from "./features/useAuthCheck";
+import { useLocation } from 'react-router-dom';
 
+const ProtectedRoute = ({ user, children }) => {
+  const [authCheck] = useAuthCheck()
+  const [component, setComponent] = useState(<div></div>);
+  const navigate = useNavigate()
+  const location = useLocation()
+  useEffect(() => {
+    authCheck().then((res)=> {
+      if(res) {
+        setComponent(children)
+      } else {
+        navigate('/login')
+      }
+    })
+  },[component])
+
+  return (
+    <div>
+      {component}
+    </div>
+  );
+}
 
 export default function Router () {
   return (
@@ -35,14 +59,16 @@ export default function Router () {
       <Route path="/profile/changepassword" element={<ChangePassword />} />
       <Route path="/profile/alarm" element={<Alarm />} />
 
+
       <Route path="/community" element={<Community />} />
-      <Route path="/community/create" element={<CommunityCreate />} />
+      <Route path="/community/create" element={<ProtectedRoute><CommunityCreate /></ProtectedRoute>} />
       <Route path="/community/:communityId/detail" element={<CommunityDetail />} />
     
+
       <Route path="/problem" element={<Problem />} />
-      <Route path="/problem/create" element={<ProblemCreate />} />
-      <Route path="/problem/:problemId/edit" element={<ProblemEdit />} />
-      <Route path="/problem/:problemId/detail" element={<ProblemDetail />} />
+      <Route path="/problem/create" element={<ProtectedRoute><ProblemCreate /></ProtectedRoute>} />
+      <Route path="/problem/:problemId/edit" element={<ProtectedRoute><ProblemEdit /></ProtectedRoute>} />
+      <Route path="/problem/:problemId/detail" element={<ProtectedRoute><ProblemDetail /></ProtectedRoute>} />
       <Route path="/problem/tagList" element={<TagList />} />
       <Route path="/problem/submit" element={<ProblemSubmit />} />
 
@@ -56,6 +82,15 @@ export default function Router () {
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />
       <Route path="/login/snssignup" element={<SnsSignup/>} /> 
+
+      <Route
+        path="/test"
+        element={
+          <ProtectedRoute>
+            <Main />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

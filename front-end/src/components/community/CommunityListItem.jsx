@@ -15,7 +15,7 @@ export default function CommunityListItem(probs) {
       <th className="p-1">{probs.communityItem.title}</th>
       {/* <th className="p-1">{probs.communityItem.title} {probs.communityItem.spoiler===1 && <span className="text-red-500">(코드 포함)</span>}</th> */}
       <th className="p-1">{probs.communityItem.lang}</th>
-      <th className="p-1">{probs.communityItem.userId}</th>
+      <th className="p-1">{probs.communityItem.nickName}</th>
       <th className="p-1">{probs.communityItem.hit}</th>
       {/* <th className="p-1">{probs.communityItem.spoiler}</th> */}
       <th className="p-1">{probs.communityItem.date.split(' ')[0]}</th>

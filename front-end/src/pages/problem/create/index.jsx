@@ -22,6 +22,7 @@ export default function ProblemCreate() {
   const [authCheck] = useAuthCheck()
 
   useEffect(()=> {
+    
     console.log(authCheck())
   },[authCheck])
   

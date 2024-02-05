@@ -1,4 +1,6 @@
 import "../css/ProblemListItem.css"
+import TestCaseModal from "./TestcaseModal";
+
 
 export default function SubmitItem(probs) {
   const onClick = () => {
@@ -11,7 +13,15 @@ export default function SubmitItem(probs) {
       <th className="p-1">{probs.submitItem.userNickname}</th>
       <th className="p-1">{probs.submitItem.problemId}</th>
       <th className="p-1">{probs.submitItem.submitStatus}
-      {probs.submitItem.testCase ? <button className="btn btn-xs btn-neutral rounded-full">코드보기</button> : <div></div>}
+      
+      {probs.submitItem.testCase ? 
+      <div>
+        <button className="btn btn-xs btn-neutral rounded-full" 
+        onClick={()=>document.getElementById('testcaseModal').showModal()}>
+        코드보기</button>
+        <TestCaseModal 
+        testcase={[probs.submitItem.testCase]}/>
+      </div> : <div></div>}
       </th>
       <th className="p-1">{probs.submitItem.memory}</th>
       <th className="p-1">{probs.submitItem.timeComplexity}</th>

@@ -1,10 +1,11 @@
 import CodeMirror from '@uiw/react-codemirror';
 import {useState, useCallback, useEffect} from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TestCaseModal from '../../../../components/problem/TestcaseModal';
 
 export default function ProblemEdit() {
+  const navigate = useNavigate()
   const params = useParams()
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -19,6 +20,7 @@ export default function ProblemEdit() {
   const [rating, setRating] = useState(1)
   const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
+  const [testcase, setTestcase] = useState([])
   const problemId = params.problemId
   useEffect(() => {
     axios({
@@ -37,6 +39,7 @@ export default function ProblemEdit() {
       setTestCode(res.data.data.problemValidationCode)
       setTime(res.data.data.problemTime)
       setMem(res.data.data.problemMem)
+      setTestcase(res.data.data.testCase)
       setSelectedList(res.data.data.tagList.map((tag)=>{return tag.tagName}))
       let tmp = cateList
       res.data.data.tagList.map((tag)=>{
@@ -96,10 +99,11 @@ export default function ProblemEdit() {
       return {tagName : selected}
     })
     axios({
-      url : "",
-      method : "post",
+      url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}`,
+      method : "put",
       data : {
         userId:1,
+        problemId:problemId,
         problemTitle:title,
         problemContent:content,
         problemInputDesc:inputDescription,
@@ -110,17 +114,32 @@ export default function ProblemEdit() {
         problemMem:mem,
         problemValidationCode:testCode,
         problemValidationLang:lang,
-        tagList:tagList
+        tagList:tagList,
+        testcase:testcase
       },
     })
     .then((res) => {
       console.log(res);
+      navigate(`/problem/${problemId}/detail`)
     })
     .catch((err) => {
       console.log(err);
     })
   }
 
+  const onDelete = () => {
+    axios({
+      url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}`,
+      method : "delete"
+    })
+    .then((res) => {
+      console.log(res);
+      navigate(`/problem`)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
 
   return (
     <div className="p-20 pt-0">
@@ -202,15 +221,15 @@ export default function ProblemEdit() {
           <CodeMirror value={testCode} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
         </div>
         <div className='flex justify-center mb-4'>
-        <button className="btn btn-sm w-60 text-lg text-center rounded-full drop-shadow" onClick={()=>document.getElementById('my_modal_3').showModal()}>테스트케이스 보기</button>
-        <dialog id="my_modal_3" className="modal">
-          <TestCaseModal />
-        </dialog>
+          <div className="btn w-60 btn-sm text-lg text-center rounded-full drop-shadow" onClick={()=>document.getElementById('testcaseModal').showModal()}>테스트케이스 보기</div>
+          <TestCaseModal 
+          testcase={testcase}
+          />
         </div>
         <div className='flex justify-between'>
           <div className=' w-40'></div>
           <div><button className='btn btn-neutral w-60 text-2xl text-center rounded-full drop-shadow-lg' onClick={onClick} >수 정</button></div>
-          <div><button className='btn w-40 text-xl text-center rounded-full drop-shadow-lg'>삭제</button></div>
+          <div><button className='btn w-40 text-xl text-center rounded-full drop-shadow-lg' onClick={onDelete}>삭제</button></div>
         </div>
       </div>
     </div>

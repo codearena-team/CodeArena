@@ -36,60 +36,67 @@ export function useAuthCheck() {
       return true
     } catch (err){
       console.log(err);
+      return false
     }
-
-
-    // axios({
-    //   url : 'http://i10d211.p.ssafy.io:8081/api/auth',  // access 토큰검사axios
-    //   method : 'get',
-    //   headers : {
-    //     Authorization : accessToken
-    //   }
-    // })
-    // .then((res)=>{
-    //   console.log(res)
-    //   if (res.data.status === '302'){
-    //     axios({
-    //       url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew', // refresh로 재발급받는 axios
-    //       method : 'post',
-    //       data : {
-    //         refreshToken : refreshToken
-    //       }
-    //     })
-    //     .then((res)=>{
-    //       if (res.data.status === '302') {
-    //         navigate('/login')
-    //       } else {
-    //       console.log(res)
-    //       dispatch(setAccessToken(res.headers.authorization))
-    //       axios({
-    //         url : 'http://i10d211.p.ssafy.io:8081/api/auth',
-    //         method : 'get',
-    //         headers : {
-    //           Authorization : res.headers.authorization
-    //         }
-    //       })
-    //       .then((res)=>{
-    //         console.log(res)
-    //       })
-    //       .catch((err)=>{
-    //         console.log(err)
-    //       })
-    //       }
-    //     })
-    //     .catch((err)=>{
-    //       console.log(err)
-    //     })
-    //   } 
-    // })
-    // .catch((err)=>{
-    //   console.log(err)
-    // })
-    
   }
 
-  
+  //   axios({
+  //     url : 'http://i10d211.p.ssafy.io:8081/api/auth',  // access 토큰검사axios
+  //     method : 'get',
+  //     headers : {
+  //       Authorization : accessToken
+  //     }
+  //   })
+  //   .then((res)=>{
+  //     console.log(1, res)
+  //     if (res.data.status === '302'){
+  //       axios({
+  //         url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew', // refresh로 재발급받는 axios
+  //         method : 'post',
+  //         data : {
+  //           refreshToken : refreshToken
+  //         }
+  //       })
+  //       .then((res)=>{
+  //         if (res.data.status === '302') {
+  //           return false
+  //         } else {
+  //         console.log(2, res)
+  //         dispatch(setAccessToken(res.headers.authorization))
+  //         axios({
+  //           url : 'http://i10d211.p.ssafy.io:8081/api/auth',
+  //           method : 'get',
+  //           headers : {
+  //             Authorization : res.headers.authorization
+  //           }
+  //           })
+  //           .then((res)=>{
+  //             console.log(3,res)
+  //             return true
+  //           })
+  //           .catch((err)=>{
+  //             console.log(3, err)
+  //             return false
+  //           }
+  //         )
+  //         }
+  //       })
+  //       .catch((err)=>{
+  //         console.log(2,err)
+  //         return false
+  //       })
+  //     } else {
+  //     return false
+  //     }
+  //   })
+  //   .catch((err)=>{
+  //     console.log(1,err)
+  //     return false
+  //   })
+  // }
 
+  
+  
   // try{
   //   let value = await checkAccess()
   //   console.log(value);

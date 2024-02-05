@@ -7,8 +7,9 @@ import Profile from '../../images/common/profile.png'
 import { useSelector,useDispatch } from 'react-redux'
 import { logout } from '../../features/login/authSlice'
 import axios from 'axios'
-import accessSlice from '../../features/login/accessSlice'
 import { setAccessToken } from '../../features/login/accessSlice'
+import { error, get } from 'jquery'
+
 
 
 const navigation = [ 
@@ -46,55 +47,9 @@ export default function NavBar() {
   
   const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
 
-
-    // access토큰 있는지 검사 ->만약 만료되서 없으면 refresh토큰으로 access토큰 재발급받은 후 access토큰으로 들어갈지 여부 결정
-  // const goProfile = ()=>{
-  //   axios({
-  //     url : 'http://i10d211.p.ssafy.io:8081/api/auth',  // access 토큰검사axios
-  //     method : 'get',
-  //     headers : {
-  //       Authorization : accessToken
-  //     }
-  //   })
-  //   .then((res)=>{
-  //     console.log(res)
-  //     if (res.data.status == '302'){
-  //       axios({
-  //         url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew', // refresh로 재발급받는 axios
-  //         method : 'post',
-  //         data : {
-  //           refreshToken : refreshToken
-  //         }
-  //       })
-  //       .then((res)=>{
-  //         console.log(res)
-  //         dispatch(setAccessToken(res.headers.authorization))
-  //         axios({
-  //           url : 'http://i10d211.p.ssafy.io:8081/api/auth',
-  //           method : 'get',
-  //           headers : {
-  //             Authorization : res.headers.authorization
-  //           }
-  //         })
-  //         .then((res)=>{
-  //           console.log(res)
-  //         })
-  //         .catch((err)=>{
-  //           console.log(err)
-  //         })
-  //       })
-  //       .catch((err)=>{
-  //         console.log(err)
-  //       })
-  //     }
-  //   })
-  //   .catch((err)=>{
-  //     console.log(err)
-  //   })
-  // }
-
   const handleLogout = ()=>{
     dispatch(logout());
+    dispatch(setAccessToken(null));
     alert('로그아웃되었습니다')
     navigate('/')
   }
