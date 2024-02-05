@@ -53,6 +53,7 @@ public class BoardServiceImpl implements BoardService{
         param.put("word", map.get("word") == null ? "" : map.get("word"));  //검색조건 있다면 put
         param.put("boardType", map.get("boardType") == null ? "" : map.get("boardType"));   //질문 타입도 검색조건 default : 1
         param.put("langType", map.get("langType") == null ? "" : map.get("langType"));     //언어 타입도 검색조건
+
         int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));    //특정 페이지 번호 요청이 없다면 1번
         int sizePerPage = Integer.parseInt(map.get("spp") == null ? "15" : map.get("spp"));
 
