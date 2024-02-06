@@ -14,11 +14,11 @@ public interface UserService {
     UserResultDto checkDuplicatedEmail(String email);
     UserResultDto reissue(UserReissueDto userReissueDto);
     UserResultDto searchUser(UserSearchDto userSearchDto);
+    UserResultDto searchUserList(UserSearchListDto userSearchListDto);
     UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto);
     UserResultDto changeUserInfo(UserChangeInfoDto userChangeInfoDto);
     UserResultDto follow(UserFollowDto userFollowDto);
     UserResultDto unfollow(UserFollowDto userFollowDto);
     UserResultDto getFollowList(String userNickname);
     UserResultDto getFollowingList(String userNickname);
-    UserResultDto searchUserList(String userNickname);
 }

@@ -50,8 +50,11 @@ public class UserController {
         return new ResponseEntity<UserResultDto>(userService.searchUser(userSearchDto) ,HttpStatus.OK);
     }
     @GetMapping("/list")
-    public ResponseEntity<UserResultDto> searchUserList(@RequestParam String userNickname) {
-        return new ResponseEntity<UserResultDto>(userService.searchUserList(userNickname), HttpStatus.OK);
+    public ResponseEntity<UserResultDto> searchUserList(@RequestParam String fromId, @RequestParam String toNickname) {
+        UserSearchListDto userSearchListDto = new UserSearchListDto();
+        userSearchListDto.setFromId(fromId);
+        userSearchListDto.setToNickname(toNickname);
+        return new ResponseEntity<UserResultDto>(userService.searchUserList(userSearchListDto), HttpStatus.OK);
     }
     @PutMapping("/password")
     public ResponseEntity<UserResultDto> changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto) {

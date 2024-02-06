@@ -327,19 +327,18 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResultDto searchUserList(String userNickname) {
-        ArrayList<UserSearchListDto> userSearchList = new ArrayList<>();
+    public UserResultDto searchUserList(UserSearchListDto userSearchListDto) {
+        ArrayList<UserSearchResultListDto> userSearchList = new ArrayList<>();
 
         UserResultDto userResultDto = new UserResultDto();
         userResultDto.setStatus("200");
         userResultDto.setMsg("유저 리스트 검색 완료");
 
         try {
-            userSearchList = mapper.searchUserList(userNickname);
-
+            userSearchList = mapper.searchUserList(userSearchListDto);
             userResultDto.setData(userSearchList);
         } catch (Exception e) {
-            log.debug("[searchUserList] : {} " , e);
+            log.debug("Exception : {}" , e);
             userResultDto.setStatus("500");
             userResultDto.setMsg("서버 내부 에러");
         }
@@ -454,8 +453,8 @@ public class UserServiceImpl implements UserService{
         userResultDto.setData(null);
 
         try {
-//            ArrayList<UserFollowingInfoDto> result = mapper.getFollowingList(userId);
-//            userResultDto.setData(result);
+            ArrayList<UserFollowingInfoDto> result = mapper.getFollowingList(userId);
+            userResultDto.setData(result);
 
         } catch (Exception e) {
             userResultDto.setStatus("500");

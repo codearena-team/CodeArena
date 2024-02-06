@@ -31,6 +31,11 @@
         <result column="user_email" property="userEmail"/>
     </resultMap>
 
+    <resultMap id="userSearchResultListDto" type="UserSearchResultListDto">
+        <result column="is_follow" property="isFollow"/>
+        <result column="target_nickname" property="userNickname"/>
+    </resultMap>
+
     <insert id="join" parameterType="userJoinDto">
         insert into user(user_email, user_password, user_nickname, user_intro) values("${userEmail}" ,"${userPassword}" , "${userNickname}", "${userIntro}");
     </insert>
@@ -44,7 +49,7 @@
     </select>
 
     <select id="login" parameterType="userLoginDto" resultMap="tokenDataDto">
-        select user_id, user_nickname, user_email
+        select user_id, user_nickname, user_email, speed_rating, effi_rating
         from user
         where user_email=#{userEmail} and user_password=#{userPassword};
     </select>
@@ -80,7 +85,7 @@
     <update id="changeUserInfo" parameterType="userChangeInfoDto">
         update user
         set user_nickname=#{userNickname}, user_intro=#{userIntro}
-        where user_id={userId};
+        where user_id=#{userId};
     </update>
     
     <insert id="follow" parameterType="userFollowDto">
@@ -111,11 +116,17 @@
         where from_id=#{fromUserNickname} and to_id=#{toUserNickname};
     </select>
 
-<!--    <select id="searchUserList" parameterType="userSearchDto" resultType="userSearchListDto">-->
-<!--        select a.user_id, a.user_nickname, count() as isFollow-->
-<!--        from user as a, follow as b-->
-<!--        where b.from_-->
-
-<!--    </select>-->
+    <select id="searchUserList" parameterType="userSearchListDto" resultMap="userSearchResultListDto">
+        select
+            case
+                when isnull(to_id) then 0
+                else 1
+                end as is_follow,
+            target_nickname
+        from follow as a right outer join (
+            select user_id as target_id, user_nickname as target_nickname
+            from user
+            where user_nickname like CONCAT("${toNickname}",'%')) as b on ((a.from_id="${fromId}") and (a.to_id = b.target_id));
+    </select>
     
 </mapper>

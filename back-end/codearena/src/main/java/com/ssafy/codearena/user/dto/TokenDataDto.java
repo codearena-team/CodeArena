@@ -8,4 +8,6 @@ public class TokenDataDto {
     private String userId;
     private String userEmail;
     private String userNickname;
+    private String speedRating;
+    private String effiRating;
 }
