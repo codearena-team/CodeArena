@@ -9,7 +9,8 @@ export default function CommunityListItem(probs) {
     navigate((`/community/${probs.communityItem.articleNo}/detail`))
   }
   return(
-    <tr onClick={onClick} className={((probs.index%2)===0) ? 'even ' : ''} >
+
+    <tr onClick={onClick} className="cell-height2 border-b-2 border-gray">
       <th className="p-1">{probs.communityItem.articleNo}</th>
       <th className="p-1">{probs.communityItem.problemId}</th>
       <th className="p-1">{probs.communityItem.title}</th>
@@ -18,7 +19,9 @@ export default function CommunityListItem(probs) {
       <th className="p-1">{probs.communityItem.nickName}</th>
       <th className="p-1">{probs.communityItem.hit}</th>
       {/* <th className="p-1">{probs.communityItem.spoiler}</th> */}
-      <th className="p-1">{probs.communityItem.date.split(' ')[0]}</th>
+      <th className="p-1">{probs.communityItem.date.split(' ')[0]}</th> 
+      <hr  />
     </tr>
+
   )
 }

@@ -56,7 +56,7 @@ export default function Router () {
       <Route path="/" element={<Main />} />
       <Route path="/login" element={<Login />} />
       <Route path="/profile/:nickname" element={<Profile />} />
-      <Route path="/profile/:nickname/edit" element={<Edit />} />
+      <Route path="/profile/edit" element={<Edit />} />
       <Route path="/profile/changepassword" element={<ChangePassword />} />
       <Route path="/profile/alarm" element={<Alarm />} />
 
