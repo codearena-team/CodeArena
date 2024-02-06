@@ -17,6 +17,8 @@
         <result column="user_id" property="userId"/>
         <result column="user_nickname" property="userNickname"/>
         <result column="user_email" property="userEmail"/>
+        <result column="speed_rating" property="speedRating"/>
+        <result column="effi_rating" property="effiRating"/>
     </resultMap>
 
     <resultMap id="userFollowInfoDto" type="UserFollowInfoDto">
