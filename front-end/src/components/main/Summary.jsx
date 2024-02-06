@@ -7,8 +7,8 @@ import Plus from '../../images/main/Summary/Plus.png';
 
 // 스크롤 애니메이트 이벤트 1
 const frameInAnimation_text = keyframes`
-  0% {opacity: 0; transform: translateX(-100%);}
-  100%{opacity: 1; transform: translateX(0%);}
+  0% {opacity: 0; transform: translateY(100%);}
+  100%{opacity: 1; transform: translateY(0%);}
 `;
 const AnimateContainer_text = styled.div`
   &.ease-out {
@@ -34,7 +34,7 @@ const frameInAnimation_que = keyframes`
 `;
 const AnimateContainer_que = styled.div`
   &.ease-out {
-    animation: ${frameInAnimation_que} 1.1s forwards;
+    animation: ${frameInAnimation_que} 1.2s forwards;
   }
 `;
 
@@ -45,7 +45,7 @@ const frameInAnimation_add = keyframes`
 `;
 const AnimateContainer_add = styled.div`
   &.ease-out {
-    animation: ${frameInAnimation_add} 1.1s forwards;
+    animation: ${frameInAnimation_add} 1.2s forwards;
   }
 `;
 
@@ -59,7 +59,7 @@ export default function Summary() {
     const handleScroll = () => {
       console.log('스크롤 애니메이트 이벤트 발생 확인');
       // 특정 조건을 확인하여 animate 상태 토글
-      const shouldAnimate = window.scrollY < 2000 && window.scrollY > 1000;
+      const shouldAnimate = window.scrollY < 2000 && window.scrollY > 1150;
       setAnimate_text(shouldAnimate);
       // setAnimate_rank(shouldAnimate);
       setAnimate_que(shouldAnimate);

@@ -96,7 +96,7 @@ export default function AboutUs({ fromRefFourElement }) {
 
           {/* 오른쪽 - About Us 문구 */}
           <AnimateContainer_font
-            className={`absolute top-24 right-0 mt-2 flex flex-col w-full md:w-1/3 lg:w-1/3 xl:w-1/2 z-10 mb-72
+            className={`absolute top-44 right-0 mt-2 flex flex-col w-full md:w-1/3 lg:w-1/3 xl:w-1/2 z-10 mb-72
               ${animate ? 'frame-in' : ''
             }`}>
             <h1 className="text-3xl font-bold mb-4">About Us</h1>

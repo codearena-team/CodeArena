@@ -31,6 +31,8 @@ import CompetitionPlay from './components/arena/Match/Competition/CompetitionPla
 import GroupPlay from './components/arena/Match/Group/GroupPlay';
 import NotFound from './pages/notfound/index'
 import Test from './pages/test/test'
+import CompResult from './components/arena/Match/Competition/CompResult';
+import GroupResult from './components/arena/Match/Group/GroupResult';
 
 const ProtectedRoute = ({ user, children }) => {
   const [authCheck] = useAuthCheck()
@@ -88,6 +90,8 @@ export default function Router () {
       
       <Route path="/game-list/competition/play/:id" element={<CompetitionPlay />} /> {/* 경쟁전 플레이 페이지 */}
       <Route path="/game-list/group/play/:id" element={<GroupPlay />} /> {/* 단체전 플레이 페이지 */}
+      <Route path="/game-list/competition/result/:id" element={<CompResult />} /> {/* 경쟁전 결과 페이지 */}
+      <Route path="/game-list/group/result/:id" element={<GroupResult />} /> {/* 단체전 결과 페이지 */}
 
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />

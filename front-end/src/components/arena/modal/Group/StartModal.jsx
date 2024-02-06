@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function GameStart({ArenaGroupId}) {
+export default function GameStart({ ArenaGroupId }) {
 
   const ArenaStartPath = `/game-list/group/play/${ArenaGroupId}`
 
   return (
     <div>
-      <button className="btn" onClick={() => document.getElementById(`ArenaStart_${ArenaGroupId}`).showModal()}>Arena Start !</button>
+      {/* <button className="btn" onClick={() => document.getElementById(`ArenaStart_${ArenaGroupId}`).showModal()}>Arena Start !</button> */}
       <dialog id={`ArenaStart_${ArenaGroupId}`} className="modal">
         <div className="modal-box">
             <h3 className="font-bold text-lg mb-4 text-center">게임을 시작할까요?</h3>
