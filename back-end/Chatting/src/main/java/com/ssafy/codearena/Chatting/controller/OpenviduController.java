@@ -37,8 +37,15 @@ public class OpenviduController {
     public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
         SessionProperties properties = SessionProperties.fromJson(params).build();
-        Session session = openvidu.createSession(properties);
-        return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
+
+        try {
+            Session session = openvidu.createSession(properties);
+            return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("이미 존재하는 게임방 ID입니다.", HttpStatus.OK);
+        }
+
     }
     /**
      * @param sessionId The Session in which to create the Connection
