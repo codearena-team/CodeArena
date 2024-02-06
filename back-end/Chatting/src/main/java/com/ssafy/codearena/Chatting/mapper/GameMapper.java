@@ -14,4 +14,5 @@ public interface GameMapper {
     public List<GameInfoDto> findAllRoom(Map<String, Object> map) throws Exception;
     public int getTotalGameCount(Map<String, Object> map) throws Exception;
     public void createPrivateRoom(GameCreateDto gameCreateDto) throws Exception;
+    public void terminateGame(String gameId, String winner) throws Exception;
 }

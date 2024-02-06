@@ -41,6 +41,14 @@
             ORDER BY start_time ASC
         </if>
     </sql>
+
+    <!-- 승자 판단 동적쿼리-->
+    <sql id="winner">
+        <if test='winner != null and winner != ""'>
+            SET winner = #{winner}
+        </if>
+    </sql>
+
     <!-- 랜덤 문제번호 조회 -->
     <select id="findProblemById" resultType="int">
         SELECT problem_id
@@ -78,4 +86,13 @@
             <include refid="search"></include>
         </where>
     </select>
+
+    <update id="terminateGame" parameterType="string">
+        UPDATE competitive_game_list
+        SET end_time = now()
+        <set>
+            <include refid="winner"></include>
+        </set>
+        WHERE game_id = #{gameId};
+    </update>
 </mapper>
