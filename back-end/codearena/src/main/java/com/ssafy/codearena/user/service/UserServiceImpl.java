@@ -404,6 +404,7 @@ public class UserServiceImpl implements UserService{
         try {
             mapper.follow(userFollowDto);
         } catch (Exception e) {
+            log.debug("Exception : {}", e);
             userResultDto.setStatus("500");
             userResultDto.setMsg("서버 내부 에러");
         }
@@ -453,8 +454,8 @@ public class UserServiceImpl implements UserService{
         userResultDto.setData(null);
 
         try {
-            ArrayList<UserFollowingInfoDto> result = mapper.getFollowingList(userId);
-            userResultDto.setData(result);
+//            ArrayList<UserFollowingInfoDto> result = mapper.getFollowingList(userId);
+//            userResultDto.setData(result);
 
         } catch (Exception e) {
             userResultDto.setStatus("500");

@@ -49,7 +49,7 @@ public class UserController {
         log.debug("{}", userSearchDto);
         return new ResponseEntity<UserResultDto>(userService.searchUser(userSearchDto) ,HttpStatus.OK);
     }
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<UserResultDto> searchUserList(@RequestParam String userNickname) {
         return new ResponseEntity<UserResultDto>(userService.searchUserList(userNickname), HttpStatus.OK);
     }
