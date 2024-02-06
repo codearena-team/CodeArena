@@ -1,23 +1,34 @@
 package com.ssafy.codearena.Chatting.service;
-import com.ssafy.codearena.Chatting.dto.GameCreateDto;
-import com.ssafy.codearena.Chatting.dto.GameInfoDto;
-import com.ssafy.codearena.Chatting.dto.GameListDto;
-import com.ssafy.codearena.Chatting.dto.GameResultDto;
+import com.ssafy.codearena.Chatting.controller.OpenviduController;
+import com.ssafy.codearena.Chatting.dto.*;
 import com.ssafy.codearena.Chatting.mapper.GameMapper;
+import io.openvidu.java.client.OpenVidu;
+import io.openvidu.java.client.Session;
+import io.openvidu.java.client.SessionProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class ChatServiceImpl implements ChatService{
-    private Map<String, Integer> gameParticipants;  //Redis로 관리
+    private Map<String, CompetitiveManageDto> gameManage;  //Redis로 관리
     private final GameMapper gameMapper;
+    private final OpenviduController openviduController;
+
+    @Value("${OPENVIDU_URL}")
+    private String OPENVIDU_URL;
+    @Value("${OPENVIDU_SECRET}")
+    private String OPENVIDU_SECRET;
+    private OpenVidu openvidu;
+
     @PostConstruct
     private void init() {
-        gameParticipants = new LinkedHashMap<>();
+        gameManage = new LinkedHashMap<>();
+        this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
     /*
      * 모든 방 리스트 찾기
@@ -48,11 +59,11 @@ public class ChatServiceImpl implements ChatService{
              * */
             for(GameInfoDto gameInfo : list) {
                 String curId = gameInfo.getGameId();
-                if(gameParticipants.get(curId) == null) {
+                if(gameManage.get(curId) == null) {
                     gameInfo.setParticipants(0);
                 }
                 else {
-                    gameInfo.setParticipants(gameParticipants.get(gameInfo.getGameId()));
+                    gameInfo.setParticipants(gameManage.get(gameInfo.getGameId()).getParticipants());
                 }
             }
             GameListDto gameListDto = new GameListDto();
@@ -80,7 +91,7 @@ public class ChatServiceImpl implements ChatService{
 //            log.info(gameId);
             GameInfoDto gameInfoDto = gameMapper.findRoomById(gameId);
             //참여자 수 조회
-            gameInfoDto.setParticipants(gameParticipants.get(gameInfoDto.getGameId()));
+            gameInfoDto.setParticipants(gameManage.get(gameInfoDto.getGameId()).getParticipants());
             gameResultDto.setData(gameInfoDto);
         }
         catch (Exception e) {
@@ -91,21 +102,42 @@ public class ChatServiceImpl implements ChatService{
         return gameResultDto;
     }
     @Override
-    public GameResultDto createPrivateRoom(GameCreateDto gameCreateDto) {
+    public GameResultDto createCompetitiveRoom(GameCreateDto gameCreateDto) {
         GameResultDto gameResultDto = new GameResultDto();
         gameResultDto.setStatus("200");
         gameResultDto.setMsg("성공적으로 1:1 게임방이 생성되었습니다.");
         gameResultDto.setData(null);
         try {
-            //게임 제목 지정 (닉네임으로 어떻게 지정할건지 보류)
-            String title = gameCreateDto.getUserRed() + " vs " + gameCreateDto.getUserBlue();
-            gameCreateDto.setTitle(title);
+
+            //랜덤 UUID 생성
+            UUID uuid = UUID.randomUUID();
             //랜덤 문제 배정
+            CreateCompetitiveResultDto createCompetitiveResultDto = new CreateCompetitiveResultDto();
             int randomProblem = gameMapper.findProblemById();
+            createCompetitiveResultDto.setProblemId(Integer.toString(randomProblem));   //응답객체 값 저장
+            createCompetitiveResultDto.setGameId(String.valueOf(uuid));     //응답객체 값 저장
+
             gameCreateDto.setProblemId(Integer.toString(randomProblem));
-            gameMapper.createPrivateRoom(gameCreateDto);
-            gameResultDto.setData(randomProblem);   //배정된 문제번호 세팅
-            gameParticipants.put(gameCreateDto.getGameId(), 0); //참여자 수 관리 리소스 생성
+
+            gameMapper.createPrivateRoom(gameCreateDto);    //DB I/O
+
+            //게임 매니저 객체 생성 및 내부 리소스 추가
+            CompetitiveManageDto competitiveManageDto = new CompetitiveManageDto();
+            competitiveManageDto.setParticipants(0);
+            competitiveManageDto.setPlayer1(gameCreateDto.getUserRed());
+            competitiveManageDto.setPlayer1(gameCreateDto.getUserBlue());
+            competitiveManageDto.setPlayer1_leave(false);
+            competitiveManageDto.setPlayer2_leave(false);
+            gameManage.put(gameCreateDto.getGameId(), competitiveManageDto);
+
+            Map<String, String> map = new HashMap<>();
+            map.put("CustomId", String.valueOf(uuid));
+            SessionProperties properties = SessionProperties.fromJson(map).build();
+            Session session = openvidu.createSession(properties);
+            createCompetitiveResultDto.setViduSession(session.getSessionId());
+
+            gameResultDto.setData(createCompetitiveResultDto);   //배정된 게임방ID, vidu 세션 ID, 랜덤 문제번호
+
         }
         catch (Exception e) {
             gameResultDto.setStatus("500");
@@ -115,46 +147,45 @@ public class ChatServiceImpl implements ChatService{
     }
     @Override
     public void plusParticipants(String gameId) {
-        Integer participant = gameParticipants.get(gameId);
-        participant++;
-        gameParticipants.put(gameId, participant);
+        CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
+        competitiveManageDto.setParticipants(competitiveManageDto.getParticipants() + 1);
     }
     @Override
     public void minusParticipants(String gameId) {
-        Integer participant = gameParticipants.get(gameId);
-        participant--;
-        gameParticipants.put(gameId, participant);
+        CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
+        competitiveManageDto.setParticipants(competitiveManageDto.getParticipants() - 1);
     }
 
-//    @Override
-//    public BoardListDto listArticle(Map<String, String> map) throws Exception {
-//        Map<String, Object> param = new HashMap<String, Object>();
-//        param.put("word", map.get("word") == null ? "" : map.get("word"));
-//        int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
-//        int sizePerPage = Integer.parseInt(map.get("spp") == null ? "20" : map.get("spp"));
-//        System.out.println("??");
-//        int boardtype = Integer.parseInt(map.get("boardtype") == null ? "1" : map.get("boardtype"));
-//        System.out.println("??");
-//        int start = currentPage * sizePerPage - sizePerPage;
-//        param.put("start", start);
-//        param.put("listsize", sizePerPage);
-//        param.put("boardtype", boardtype);
-//
-//        String key = map.get("key");
-//        param.put("key", key == null ? "" : key);
-//        if ("user_id".equals(key))
-//            param.put("key", key == null ? "" : "b.user_id");
-//        List<BoardDto> list = boardMapper.listArticle(param);
-//        if ("user_id".equals(key))
-//            param.put("key", key == null ? "" : "user_id");
-//        int totalArticleCount = boardMapper.getTotalArticleCount(param);
-//        int totalPageCount = (totalArticleCount - 1) / sizePerPage + 1;
-//
-//        BoardListDto boardListDto = new BoardListDto();
-//        boardListDto.setArticles(list);
-//        boardListDto.setCurrentPage(currentPage);
-//        boardListDto.setTotalPageCount(totalPageCount);
-//
-//        return boardListDto;
-//    }
+    @Override
+    public boolean playerLeaveEvent(String gameId, String playerId) {
+
+        CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
+        if(competitiveManageDto.getPlayer1().equals(playerId)) {
+            competitiveManageDto.setPlayer1_leave(true);
+        }
+        else {
+            competitiveManageDto.setPlayer2_leave(true);
+        }
+
+        if(competitiveManageDto.isPlayer1_leave() && competitiveManageDto.isPlayer2_leave()) {
+            terminateGame(gameId, "");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void terminateGame(String gameId, String winner) {
+
+        gameManage.remove(gameId);
+
+        try {
+
+            gameMapper.terminateGame(gameId, winner);
+        }
+        catch (Exception ignored) {
+
+        }
+    }
+
 }
