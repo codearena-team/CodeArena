@@ -2,6 +2,7 @@ package com.ssafy.codearena.Chatting.mapper;
 
 import com.ssafy.codearena.Chatting.dto.GameCreateDto;
 import com.ssafy.codearena.Chatting.dto.GameInfoDto;
+import com.ssafy.codearena.Chatting.dto.WinnerInfoDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface GameMapper {
     public int getTotalGameCount(Map<String, Object> map) throws Exception;
     public void createPrivateRoom(GameCreateDto gameCreateDto) throws Exception;
     public void terminateGame(String gameId, String winner) throws Exception;
-    public void passProblem(String gameId, String userId) throws Exception;
+    public int passProblem(String gameId, String player1, String player2) throws Exception;
+    public WinnerInfoDto winnerSearch(String gameId) throws Exception;
 }
