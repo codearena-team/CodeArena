@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, } from 'react';
 // import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import BannerCreateModal from './modal/Main/BannerCreateModal';
@@ -15,7 +15,6 @@ import SpeedModeAsset from '../../images/arena/TopBanner/SpeedMode.png';
 import EffiMode from '../../images/arena/TopBanner/EfficiencyMode.gif';
 import EffiModeAsset from '../../images/arena/TopBanner/EfficiencyMode.png';
 
-var socket;
 export default function TopBanner() {
   const navigate = useNavigate();
   // 호버 기능
@@ -33,70 +32,84 @@ export default function TopBanner() {
   // const [type, setType] = useState('');
   // 모드 선택 useState
   // const [selectedMode, setSelectedMode] = useState(null);
+  const socket = useRef(null);
   const type = useRef();
-  const problemId = useRef();
-
-  const [matchData, setmatchData] = useState({
-    matchId: '',
-    userId: '',
-    rating: '',
-    gameMode: '',
-    lang: '',
-    content: '',
-    problemId: '',
-    queueKey: '',
-    userNickname: '',
-  });
+  const matchId = useRef('');
+  const userId = useRef('');
+  const rating = useRef('');
+  const gameMode = useRef('');
+  const lang = useRef('');
+  const content = useRef('');
+  const problemId = useRef('');
+  const queueKey = useRef('');
+  const userNickname = useRef('');
+  const gameId = useRef('');
+  const viduSession = useRef('');
+  // const [matchData, setmatchData] = useState({
+  //   matchId: '',
+  //   userId: '',
+  //   rating: '',
+  //   gameMode: '',
+  //   lang: '',
+  //   content: '',
+  //   problemId: '',
+  //   queueKey: '',
+  //   userNickname: '',
+  // });
 
   useEffect(() => {
-    socket = new WebSocket('ws://192.168.100.208:8080/matching');
+    socket.current = new WebSocket('ws://192.168.0.20:8080/matching');
 
-    socket.addEventListener("open", function (event) {
+    socket.current.addEventListener("open", function (event) {
       console.log(event)
     })
 
-    socket.addEventListener("message", function (event) {
+    socket.current.addEventListener("message", function (event) {
       console.log("Message from server ", event.data);
-
+  
       const object = JSON.parse(event.data)
-      const new_obj = {
-        matchId: object.matchId,
-        userId: object.userId,
-        rating: object.rating,
-        gameMode: object.gameMode,
-        lang: object.lang,
-        content: object.content,
-        problemId: object.problemId,
-        queueKey: object.queueKey,
-        userNickname: object.userNickname,
-      }
+      
+      type.current = object.type;
       
       if (object.type && object.type !== 'RESPONSE') {
-        setmatchData(new_obj)
+        matchId.current = object.matchId;
+        userId.current = object.userId;
+        rating.current = object.rating;
+        gameMode.current = object.gameMode;
+        lang.current = object.lang;
+        content.current = object.content;
+        problemId.current = object.problemId;
+        queueKey.current = object.queueKey;
+        userNickname.current = object.userNickname;
+        gameId.current = object.gameId;
+        viduSession.current = object.viduSession;
         // console.log("new obj 데이타!! :", new_obj)
         // console.log("현재 타입 :", object.type)
       }
-
-      type.current = object.type;
-
+  
       if (object.type && object.type === 'INGAME') {
-        navigate(`/game-list/competition/play/${object.matchId}`)
+        // problemId를 props로 내려주기 -> navigate 활용
+        navigate(
+          {pathname: `/game-list/competition/play/${object.matchId}`},
+          {state: problemId},
+        )
       }
       
       if (object.type && object.type === 'CONTINUE') {
         console.log('')
       }
-
-      if (socket.readyState === WebSocket.OPEN && type.current) {
+  
+      if (socket.current.readyState === WebSocket.OPEN && type.current) {
         startMatchingTimer();
       }
-
+  
     });
 
     return () => {
-      socket.close();
+      socket.current.close();
     };
   }, []);
+
 
   
   ////////////////// 위에서 websocket 통신 연결 //////////////////////////
@@ -187,10 +200,20 @@ export default function TopBanner() {
       }
 
       if (seconds === 0) {
-        console.log("startQueryTimer의 matchData: ", matchData)
-        socket.send(
+        // console.log("startQueryTimer의 matchData: ", )
+        socket.current.send(
           JSON.stringify({
-            ...matchData,
+            matchId: matchId.current,
+            userId: userId.current,
+            rating: rating.current,
+            gameMode: gameMode.current,
+            lang: lang.current,
+            content: content.current,
+            problemId: problemId.current,
+            queueKey: queueKey.current,
+            userNickname: userNickname.current,
+            gameId: gameId.current,
+            viduSession: viduSession.current,
             type: 'NO',
           })
         )
@@ -267,13 +290,25 @@ export default function TopBanner() {
   // 마지막 모달에서 "취소" 모든 모달 닫기 (중복 호출 방지)
   const handleCancel = () => {
     const send_obj = {
-      ...matchData,
+      matchId: matchId.current,
+      userId: userId.current,
+      rating: rating.current,
+      gameMode: gameMode.current,
+      lang: lang.current,
+      content: content.current,
+      problemId: problemId.current,
+      queueKey: queueKey.current,
+      userNickname: userNickname.current,
+      gameId: gameId.current,
+      viduSession: viduSession.current,
       type: 'NO',
     };
     // console.log(send_obj)
-    socket.send (
+    socket.current.send (
       JSON.stringify (send_obj)
     );
+    
+    clearInterval(timerInterval)
 
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
@@ -295,11 +330,21 @@ export default function TopBanner() {
   // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수
   const handleAccept = () => {
     const send_obj = {
-      ...matchData,
+      matchId: matchId.current,
+      userId: userId.current,
+      rating: rating.current,
+      gameMode: gameMode.current,
+      lang: lang.current,
+      content: content.current,
+      problemId: problemId.current,
+      queueKey: queueKey.current,
+      userNickname: userNickname.current,
+      gameId: gameId.current,
+      viduSession: viduSession.current,
       type: 'YES',
     };
 
-    socket.send (
+    socket.current.send (
       JSON.stringify (send_obj)
     );
 
@@ -399,7 +444,7 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsSpeedModeHovered(true)}
                     onMouseLeave={() => setIsSpeedModeHovered(false)}
                     onClick={() => {
-                      socket.send(
+                      socket.current.send(
                         JSON.stringify ({
                           type : "ENQUEUE",
                           userId : "123123123",
@@ -423,7 +468,7 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsEffiModeHovered(true)}
                     onMouseLeave={() => setIsEffiModeHovered(false)}
                     onClick={() => {
-                      socket.send(
+                      socket.current.send(
                         JSON.stringify ({
                           type : "ENQUEUE",
                           userId : "123123123",
@@ -450,7 +495,7 @@ export default function TopBanner() {
                   className="btn btn-sm btn-circle btn-ghost absolute bottom-0"
                   style={{ width: '10%', left: '50%', transform: 'translateX(-50%)' }}
                   onClick={() => {
-                    socket.send(
+                    socket.current.send(
                       JSON.stringify ({
                         "type" : "NO",
                         "userId" : "123123123",
@@ -479,7 +524,7 @@ export default function TopBanner() {
             <div className="modal-box flex-row justify-center">
               <MatchingCompleteModal
                 // 수락
-                onAccept={handleAccept}
+                onAccept={handleAccept} problemId={problemId}
                 // 취소
                 onCancel={handleCancel}
               />

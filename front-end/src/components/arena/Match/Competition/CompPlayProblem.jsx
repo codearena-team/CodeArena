@@ -8,7 +8,8 @@ import axios from "axios";
 import "../../../css/CompetitionPlay.css";
 import C_playDividingLine from "./C_playDividingLine";
 
-export default function CompPlayProblem() {
+export default function CompPlayProblem({ problemId }) {
+  console.log("problemId 넘어왔니? :", problemId)
   // const params = useParams();
   // const problemId = params.problemId
   const [code, setCode] = useState('')
@@ -33,14 +34,15 @@ export default function CompPlayProblem() {
       setPanelWidths({ left: leftPanelWidth, right: rightPanelWidth });
   };
 
-  const onChangeCode = useCallback((code, viewUpdate) => {
+  const onChangeCode = useCallback((code) => {
     setCode(code);
   }, []);
   
   useEffect(()=> {
+    console.log("여기서 진짜 넘어와야함 :", problemId)
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/29`,
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
     })
     .then((res)=> {
       console.log(res);
@@ -49,7 +51,7 @@ export default function CompPlayProblem() {
     .catch((err)=> {
       console.log(err);
     })
-  },[]);
+  },[problemId]);
 
   const onClickCate = (e)=>{
     const arr = cateList

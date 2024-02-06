@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CompetitionPlayTopInfo from './CompetitionPlayTopInfo';
 import CompPlayProblem from "./CompPlayProblem";
 
 export default function CompetitionPlay() {
+  const Location = useLocation()
+
+  const [problemId, setProblemId] = useState();
+
+  useEffect(() => {
+    console.log("여긴 로케이션 : ", Location.state.current)
+    setProblemId(Location.state.current);
+  }, [])
 
   return (
     <div>
@@ -15,7 +24,7 @@ export default function CompetitionPlay() {
 
       {/* 해당 문제 불러오기 */}
       <div className="mt-10">
-        <CompPlayProblem />
+        <CompPlayProblem problemId={problemId}/>
       </div>
     </div>
   );

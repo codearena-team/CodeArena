@@ -5,7 +5,7 @@ import Hae from '../../../../images/arena/HotMatch/hae.png'
 import Kim from '../../../../images/arena/HotMatch/kim.png'
 import VS from '../../../../images/arena/HotMatch/VS.png'
 
-export default function MatchingCompleteModal({ onAccept, onCancel }) {
+export default function MatchingCompleteModal({ onAccept, onCancel, problemId }) {
   // 매칭 완료되면 나타날 가상 데이터 (추후 삭제)
   const userData = [
     { id: 1, profileImage: Hae, username: '회창일타강사', profileImage2: Kim, username2: 'Beemo99', rating: 1100, rating2: 1105 },
@@ -47,9 +47,9 @@ export default function MatchingCompleteModal({ onAccept, onCancel }) {
       </div>
 
       <div className="flex justify-center">
-        <div onClick={onAccept} className="btn mx-2">
+        <button onClick={onAccept} className="btn mx-2" problemId={problemId}>
           수락
-        </div>
+        </button>
         <button className="btn mx-2" onClick={onCancel}>
           취소
         </button>
