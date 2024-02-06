@@ -301,10 +301,16 @@ public class UserServiceImpl implements UserService{
                     unsolveListU.add(dto);
                 }
 
-                UserProblemDto userSolvedProblemDto = new UserProblemDto();
+                UserIsFollowDto userIsFollowDto = new UserIsFollowDto();
 
-                int isFollow = mapper.isFollow(userSearchDto);
+                userIsFollowDto.setFromId(fromUser.getUserId());
+                userIsFollowDto.setToId(toUser.getUserId());
+
+                int isFollow = mapper.isFollow(userIsFollowDto);
                 toUser.setIsFollow(isFollow);
+
+                log.debug("isFollow : {}", isFollow);
+                log.debug("toUser : {}", toUser);
 
                 // 1. 검색 대상 기본 정보 넣기
                 userSearchResultDto.setUserInfoDto(toUser);

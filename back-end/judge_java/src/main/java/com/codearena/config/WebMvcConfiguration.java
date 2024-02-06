@@ -15,7 +15,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry
                 .addMapping("/**")
 //                .allowedOrigins("http://192.168.0.29:3000")
-              .allowedOriginPatterns("*")
+                .allowedOriginPatterns("*")
 //			    .allowedOrigins("http://localhost:5173", "http://localhost:5174")
                 .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
                         HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
