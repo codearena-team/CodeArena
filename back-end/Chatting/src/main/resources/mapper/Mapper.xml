@@ -53,6 +53,7 @@
     <select id="findProblemById" resultType="int">
         SELECT problem_id
         FROM code_arena.ps_list
+        WHERE problem_visibility = 1
         ORDER BY RAND() LIMIT 1;
     </select>
     <!-- 특정 게임방 조회 -->
