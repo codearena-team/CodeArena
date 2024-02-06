@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+// import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 import BannerCreateModal from './modal/Main/BannerCreateModal';
 import MatchingCompleteModal  from './modal/Main/MatchingCompleteModal';
 
@@ -14,7 +15,9 @@ import SpeedModeAsset from '../../images/arena/TopBanner/SpeedMode.png';
 import EffiMode from '../../images/arena/TopBanner/EfficiencyMode.gif';
 import EffiModeAsset from '../../images/arena/TopBanner/EfficiencyMode.png';
 
+var socket;
 export default function TopBanner() {
+  const navigate = useNavigate();
   // 호버 기능
   const [isFindMatchHovered, setIsFindMatchHovered] = useState(false);
   const [isGameCreateHovered, setIsGameCreateHovered] = useState(false);
@@ -23,14 +26,86 @@ export default function TopBanner() {
   const [isEffiModeHovered, setIsEffiModeHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMatchingComplete, setIsMatchingComplete] = useState(false);
-
+  
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   
+  // const [type, setType] = useState('');
+  // 모드 선택 useState
+  // const [selectedMode, setSelectedMode] = useState(null);
+  const type = useRef();
+  const problemId = useRef();
+
+  const [matchData, setmatchData] = useState({
+    matchId: '',
+    userId: '',
+    rating: '',
+    gameMode: '',
+    lang: '',
+    content: '',
+    problemId: '',
+    queueKey: '',
+    userNickname: '',
+  });
+
+  useEffect(() => {
+    socket = new WebSocket('ws://192.168.100.208:8080/matching');
+
+    socket.addEventListener("open", function (event) {
+      console.log(event)
+    })
+
+    socket.addEventListener("message", function (event) {
+      console.log("Message from server ", event.data);
+
+      const object = JSON.parse(event.data)
+      const new_obj = {
+        matchId: object.matchId,
+        userId: object.userId,
+        rating: object.rating,
+        gameMode: object.gameMode,
+        lang: object.lang,
+        content: object.content,
+        problemId: object.problemId,
+        queueKey: object.queueKey,
+        userNickname: object.userNickname,
+      }
+      
+      if (object.type && object.type !== 'RESPONSE') {
+        setmatchData(new_obj)
+        // console.log("new obj 데이타!! :", new_obj)
+        // console.log("현재 타입 :", object.type)
+      }
+
+      type.current = object.type;
+
+      if (object.type && object.type === 'INGAME') {
+        navigate(`/game-list/competition/play/${object.matchId}`)
+      }
+      
+      if (object.type && object.type === 'CONTINUE') {
+        console.log('')
+      }
+
+      if (socket.readyState === WebSocket.OPEN && type.current) {
+        startMatchingTimer();
+      }
+
+    });
+
+    return () => {
+      socket.close();
+    };
+  }, []);
+
+  
+  ////////////////// 위에서 websocket 통신 연결 //////////////////////////
+
   // 1. 언어 3가지 중 하나 선택하기
-  const handleLanguageSelection = (language) => {
-    setSelectedLanguage(language);
+  const handleLanguageSelection = (lang) => {
+    setSelectedLanguage(lang);
   };
+
 
   // 2. 언어 선택 모달 활성화
   const openLanguageModal = () => {
@@ -86,16 +161,48 @@ export default function TopBanner() {
   let timerInterval
   const closeMatchingModalHandler = () => {
     clearInterval(timerInterval);
-    console.log('매칭 중지!!');
-
+    console.log('타이머 중지!!');
+    
     // 모든 모달 닫기
-    document.getElementById('matching_modal').close();
-    document.getElementById('language_modal').close();
+    // document.getElementById('matching_modal').close();
+    // document.getElementById('language_modal').close();
 
     // 선택된 언어 초기화
     setSelectedLanguage(null);
   };
   
+  const startQueryTimer = () => {
+    let seconds = 60;
+    const timerElements = document.getElementById('matching_timer');
+  
+    const updateTimer = () => {
+      const minutes = Math.floor(seconds / 60); // 분단위 계산
+      const remainingSeconds = seconds % 60; // 초단위 계산
+  
+      // 타이머 초마다 상승하고 문자열로 표기
+      timerElements.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+      
+      if (type && type === 'CONTINUE') {
+        clearInterval(timerInterval); // 초기화
+      }
+
+      if (seconds === 0) {
+        console.log("startQueryTimer의 matchData: ", matchData)
+        socket.send(
+          JSON.stringify({
+            ...matchData,
+            type: 'NO',
+          })
+        )
+        closeMatchingModalHandler();
+      }
+
+      seconds -= 1;
+    };
+    
+    // 1초마다 타이머 업데이트
+    timerInterval = setInterval(updateTimer, 1000);
+  }
 
   // 4. 매칭이 돌아가면 타이머 소환
   const startMatchingTimer = () => {
@@ -115,14 +222,15 @@ export default function TopBanner() {
     timerInterval = setInterval(updateTimer, 1000);
   
     // 원하는 시간까지 진행 후 타이머 중지
-    const desiredTimeInSeconds = 7; // 예시로 일단 5초 -> 추후에 수정
-    setTimeout(() => {
+    // const desiredTimeInSeconds = 10;
+    
+    console.log('Start Matching Timer type : ', type.current)
+    if (type.current && type.current === "QUERY") {
       clearInterval(timerInterval);
-      timerElement.textContent = '매칭 완료!'; // 매칭 완료 문구
-      
-      // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
-      handleMatchingComplete();
-    }, desiredTimeInSeconds * 1000);
+      handleMatchingComplete(); // 수락&취소 모달 함수 호출
+    }
+
+
   };
 
   // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
@@ -145,6 +253,8 @@ export default function TopBanner() {
     matchingCompleteModal.style.zIndex = '3'; // 더 높은 z-index로 설정
     matchingCompleteModal.showModal();
 
+    startQueryTimer();
+
     // MatchingCompleteModal이 닫힐 때 languageModal 닫도록 이벤트 리스너 추가
     matchingCompleteModal.addEventListener('close', () => {
       const languageModal = document.getElementById('language_modal');
@@ -156,6 +266,15 @@ export default function TopBanner() {
 
   // 마지막 모달에서 "취소" 모든 모달 닫기 (중복 호출 방지)
   const handleCancel = () => {
+    const send_obj = {
+      ...matchData,
+      type: 'NO',
+    };
+    // console.log(send_obj)
+    socket.send (
+      JSON.stringify (send_obj)
+    );
+
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
@@ -175,6 +294,15 @@ export default function TopBanner() {
 
   // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수
   const handleAccept = () => {
+    const send_obj = {
+      ...matchData,
+      type: 'YES',
+    };
+
+    socket.send (
+      JSON.stringify (send_obj)
+    );
+
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
@@ -199,7 +327,6 @@ export default function TopBanner() {
 
   return (
     <div className='flex flex-col items-center justify-center relative'>
-      {/* 상단 배너 선 */}
       <div
         className="absolute top-5 left-0 right-0 h-1 z-0"
         style={{ backgroundColor: '#E3E6D9'}}>
@@ -241,21 +368,21 @@ export default function TopBanner() {
               <button
                 className={`btn mr-5 ${selectedLanguage === 'Python' ? 'btn-selected' : ''}`}
                 style={{ backgroundColor: selectedLanguage === 'Python' ? '#F9C7C6' : '#E3E6D9' }}
-                onClick={() => handleLanguageSelection('Python')}
+                onClick={() => handleLanguageSelection('python')}
               >
                 Python
               </button>
               <button
                 className={`btn mr-5 ${selectedLanguage === 'Java' ? 'btn-selected' : ''}`}
                 style={{ backgroundColor: selectedLanguage === 'Java' ? '#F9C7C6' : '#E3E6D9' }}
-                onClick={() => handleLanguageSelection('Java')}
+                onClick={() => handleLanguageSelection('java')}
               >
                 Java
               </button>
               <button
                 className={`btn mb-5 ${selectedLanguage === 'C++' ? 'btn-selected' : ''}`}
                 style={{ backgroundColor: selectedLanguage === 'C++' ? '#F9C7C6' : '#E3E6D9' }}
-                onClick={() => handleLanguageSelection('C++')}
+                onClick={() => handleLanguageSelection('cpp')}
               >
                 C++
               </button>
@@ -272,8 +399,19 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsSpeedModeHovered(true)}
                     onMouseLeave={() => setIsSpeedModeHovered(false)}
                     onClick={() => {
-                      document.getElementById('language_modal').close();
+                      socket.send(
+                        JSON.stringify ({
+                          type : "ENQUEUE",
+                          userId : "123123123",
+                          rating : "1250",
+                          gameMode : 'speed',
+                          lang: selectedLanguage,
+                          userNickname: "트런들",
+                        })
+                      );
+                      // document.getElementById('language_modal').close(); // 클릭 시 언어 선택 모달 닫고,
                       openMatchingModal(); // 매칭 진행 모달 열기
+
                     }}
                   />
                   {/* 효율전모드 */}
@@ -285,7 +423,17 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsEffiModeHovered(true)}
                     onMouseLeave={() => setIsEffiModeHovered(false)}
                     onClick={() => {
-                      document.getElementById('language_modal').close();
+                      socket.send(
+                        JSON.stringify ({
+                          type : "ENQUEUE",
+                          userId : "123123123",
+                          rating: "1250",
+                          gameMode: 'eff',
+                          lang : selectedLanguage,
+                          userNickname: "트런들",
+                        })
+                      );
+                      // document.getElementById('language_modal').close(); // 클릭 시 언어 선택 모달 닫고,
                       openMatchingModal(); // 매칭 진행 모달 열기
                     }}
                   />
@@ -302,6 +450,16 @@ export default function TopBanner() {
                   className="btn btn-sm btn-circle btn-ghost absolute bottom-0"
                   style={{ width: '10%', left: '50%', transform: 'translateX(-50%)' }}
                   onClick={() => {
+                    socket.send(
+                      JSON.stringify ({
+                        "type" : "NO",
+                        "userId" : "123123123",
+                        "rating" : "1250",
+                        "gameMode" : "speed",
+                        "lang" : "cpp",
+                        "userNickname": "트런들",
+                      })
+                    );
                     document.getElementById('language_modal').close(); // 언어&모드 선택 모달 닫기
                     setSelectedLanguage(null); // 닫을 때 선택된 언어 초기화
                   }}

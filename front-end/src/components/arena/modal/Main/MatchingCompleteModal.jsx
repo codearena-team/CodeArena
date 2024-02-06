@@ -47,11 +47,9 @@ export default function MatchingCompleteModal({ onAccept, onCancel }) {
       </div>
 
       <div className="flex justify-center">
-        {userData.map((user) => (
-          <Link key={user.id} to={`/game-list/competition/play/${user.id}`} className="btn mx-2">
-            수락
-          </Link>
-        ))}
+        <div onClick={onAccept} className="btn mx-2">
+          수락
+        </div>
         <button className="btn mx-2" onClick={onCancel}>
           취소
         </button>
