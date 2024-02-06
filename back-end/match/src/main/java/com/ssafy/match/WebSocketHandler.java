@@ -51,9 +51,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
             MessageDto receive = objectMapper.readValue(message.getPayload(), MessageDto.class);
             log.debug("받은 데이터 : {}", receive);
             if (receive.getType() == MessageDto.MessageType.POP) {
-                session.close();
                 CLIENTS.remove(session.getId());
                 redisTemplate.opsForZSet().remove(receive.getQueueKey(), receive.getUserId() + " " + receive.getUserNickname());
+                session.close();
             } else if (receive.getType() == MessageDto.MessageType.ENQUEUE) {
                 userWithSessionId.put(receive.getUserId() + " " + receive.getUserNickname(), session.getId());
                 UserDto userDto = new UserDto();
