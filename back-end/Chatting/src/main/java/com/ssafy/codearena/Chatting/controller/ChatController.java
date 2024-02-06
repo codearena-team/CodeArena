@@ -1,10 +1,10 @@
 package com.ssafy.codearena.Chatting.controller;
 import com.ssafy.codearena.Chatting.dto.ChatMessage;
 import com.ssafy.codearena.Chatting.dto.ChatSubmitMessage;
+import com.ssafy.codearena.Chatting.dto.ChatLeaveMessage;
 import com.ssafy.codearena.Chatting.dto.SubmitResultDto;
 import com.ssafy.codearena.Chatting.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -30,13 +30,21 @@ public class ChatController {
         else if(message.getType() == ChatMessage.MessageType.EXIT) {
             chatService.minusParticipants(gameId);
         }
+
+    }
+
+    @MessageMapping("chat/leave")
+    public void leave(ChatLeaveMessage message) {
         //유저 도중 퇴장
-        else if(message.getType() == ChatMessage.MessageType.PLAYER_EXIT) {
+        if(message.getType() == ChatLeaveMessage.LeaveType.PLAYER_EXIT) {
             //두 명의 유저의 게임진행유무를 판별하고
             //두 사람 모두 나갔다면 TERMINATED
             //한 사람만 나갔다면 경기 속행
             boolean flag = chatService.playerLeaveEvent(message.getGameId(), message.getSender());
+
             if(flag) {
+
+                //winner 탐색
 
                 SubmitResultDto submitResultDto = new SubmitResultDto();
                 submitResultDto.setType(SubmitResultDto.resultType.END);
@@ -48,7 +56,7 @@ public class ChatController {
             }
         }
         //타임아웃
-        else if(message.getType() == ChatMessage.MessageType.TERMINATED) {
+        else if(message.getType() == ChatLeaveMessage.LeaveType.TERMINATED) {
             terminateGame(message.getGameId(), message.getSender());
             messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
         }

@@ -12,5 +12,6 @@ public interface ChatService {
     public void minusParticipants(String gameId);
     public boolean playerLeaveEvent(String gameId, String playerId);
     public void terminateGame(String gameId, String winner);
+    public void findWinner(String gameId);
 
 }

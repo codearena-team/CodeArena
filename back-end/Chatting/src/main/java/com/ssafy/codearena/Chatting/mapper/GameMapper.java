@@ -15,4 +15,5 @@ public interface GameMapper {
     public int getTotalGameCount(Map<String, Object> map) throws Exception;
     public void createPrivateRoom(GameCreateDto gameCreateDto) throws Exception;
     public void terminateGame(String gameId, String winner) throws Exception;
+    public void passProblem(String gameId, String userId) throws Exception;
 }
