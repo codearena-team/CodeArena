@@ -64,7 +64,7 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("해당하는 방이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
