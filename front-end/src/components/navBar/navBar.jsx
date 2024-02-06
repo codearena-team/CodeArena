@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { useState, Fragment } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/24/outline'
@@ -13,9 +13,9 @@ import { error, get } from 'jquery'
 
 
 const navigation = [ 
-  { name: 'Community', href: '/community' },
-  { name: 'problem', href: '/problem' },
+  { name: 'problem', href: '/problem'},
   { name: 'Arena', href: '/arena'},
+  { name: 'Community', href: '/community' },
   { name: 'Login', href: '/login'},
 ]
 
@@ -27,23 +27,8 @@ function classNames(...classes) {
 export default function NavBar() {
   const isLogin = useSelector(state => state.auth.isLogin);
   const nickName = useSelector(state => state.auth.userNickname)
-  const accessToken = useSelector(state => state.access.accessToken)
-  const refreshToken = useSelector(state => state.auth.refreshToken )
   const dispatch = useDispatch();
   const navigate = useNavigate()
-
-  const test = () => {
-    axios({
-      url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew', // refresh로 재발급받는 axios
-      method : 'post',
-      data : {
-        refreshToken : 'asdas'
-      }
-    })
-    .then((res)=>{
-      console.log(res);
-    })
-  }
   
   const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
 
@@ -53,6 +38,7 @@ export default function NavBar() {
     alert('로그아웃되었습니다')
     navigate('/')
   }
+
 
   return (
     <Disclosure as="nav">
@@ -71,7 +57,7 @@ export default function NavBar() {
                   />
                 </Link>
                 </div>
-           
+                
                 <div className="flex justify-center items-center">
                   <div className="flex space-x-4">
                     {filterNav.map((item) => (

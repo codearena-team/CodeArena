@@ -7,13 +7,13 @@
   margin: 0px;
 }
 
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F4F5F1;
   min-height: 735px;
-  font-family: "light";
 }
 
 /* code {

@@ -51,7 +51,7 @@ export default function Signup(){
     }
     if(checkEmail() && checkNickname() && checkIntroduce() && password === passwordconfirm) {
       axios({
-        url:'http://i10d211.p.ssafy.io:8081/api/user/join',
+        url:'https://i10d211.p.ssafy.io/api/user/join',
         method:'post',
         data:{
           userEmail : email,
@@ -77,7 +77,7 @@ export default function Signup(){
     // console.log(e.target.value)
     // 이메일 중복 검사 요청보내기
     axios({
-      url:`http://192.168.100.207:80/api/user/email/duplicate?userEmail=${e.target.value}`,
+      url:`https://i10d211.p.ssafy.io/api/user/email/duplicate?userEmail=${e.target.value}`,
       method:'get',
     })
     .then((res)=>{
@@ -99,7 +99,7 @@ export default function Signup(){
     setNickname(e.target.value)
     // 닉네임 중복 검사 요청보내기
     axios({
-      url:`http://192.168.100.207:80/api/user/nick/duplicate?userNickname=${e.target.value}`,
+      url:`https://i10d211.p.ssafy.io/api/user/nick/duplicate?userNickname=${e.target.value}`,
       method:'get',
     })
     .then((res)=>{

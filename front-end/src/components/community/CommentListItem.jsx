@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../../pages/css/problemdetail.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 export default function CommentListItem(props) {
   // 코드에 아무것도 없는 null은 객체라서 오류나니깐 ..
@@ -29,6 +30,10 @@ export default function CommentListItem(props) {
     })
   }
 
+  const onChangeCode = useCallback((code, viewUpdate) => {
+    setCode(code);
+  }, []);
+  
   const updateComment = () =>{
     axios({
       url : 'http://i10d211.p.ssafy.io:8081/api/comment/update',
@@ -42,7 +47,6 @@ export default function CommentListItem(props) {
     .then((res)=>{
       console.log(res)
       navigate(`/community/${articleNo}/detail`)
-
     })
     .catch((err)=>{
       console.log(err)
@@ -52,22 +56,28 @@ export default function CommentListItem(props) {
 
   return(
     <div>
-    <div className="p-7 rounded-3xl drop-shadow-md" style={{backgroundColor: "#F5F5EC"}}>
+    <div className="p-7 rounded-3xl drop-shadow" style={{backgroundColor: "#F5F5EC"}}>
       <div className='flex justify-start'>
-        <div className="mb-2 w-2/12">작성자 : {props.commentItem.writerNickname}</div>
+        <div className='w-1/12'></div>
+        <div className="mb-2">작성자 : {props.commentItem.writerNickname}</div>
       </div>
-      <div className='flex justify-start mb-2'>
+      <div className='flex mb-2'>
+        <div className='w-1/12'></div>
         <textarea className="textarea textarea-bordered resize-none w-full" rows="4"
         value={userId === commentId ? comment : props.commentItem.comment }
         onChange={(e)=>setComment(e.target.value)}>
         </textarea>
+        <div className='w-1/12'></div>
       </div>
       {code && (
-      <div className='flex justify-start mb-10'>
-        <CodeMirror className='w-full' height="200px" id="inputEx"
-        onChange = {(e)=>setCode(e.target.value)}
-        value={ userId === commentId ? code : props.commentItem.code }
+      <div className='flex mb-10'>
+        <div className='w-1/12'></div>
+        <CodeMirror className='w-full' height="200px" id="in0putEx"
+        value={userId === commentId? code : props.commentItem.code}
+        onChange = {onChangeCode}
+        editable={userId === commentId}
         />
+        <div className='w-1/12'></div>
       </div>
       )}
       { userId === commentId && (

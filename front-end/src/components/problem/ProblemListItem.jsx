@@ -8,7 +8,7 @@ export default function ProblemListItem(probs) {
     navigate((`/problem/${probs.problemItem.problemId}/detail`))
   }
   return(
-    <tr onClick={onClick} className={((probs.index%2)===0) ? 'even ' : ''} >
+    <tr onClick={onClick} className="font-sulight" >
       <th className="p-1">{probs.problemItem.problemId}</th>
       <th className="p-1">{probs.problemItem.problemTitle}</th>
       <th className="p-1">{probs.problemItem.userNickname}</th>

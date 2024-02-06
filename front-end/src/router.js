@@ -29,6 +29,8 @@ import GroupView from './components/arena/Match/Group/GroupView';
 import GroupLobby from './components/arena/Match/Group/GroupLobby';
 import CompetitionPlay from './components/arena/Match/Competition/CompetitionPlay';
 import GroupPlay from './components/arena/Match/Group/GroupPlay';
+import NotFound from './pages/notfound/index'
+import Test from './pages/test/test'
 
 const ProtectedRoute = ({ user, children }) => {
   const [authCheck] = useAuthCheck()
@@ -58,7 +60,7 @@ export default function Router () {
       <Route path="/" element={<Main />} />
       <Route path="/login" element={<Login />} />
       <Route path="/profile/:nickname" element={<Profile />} />
-      <Route path="/profile/:nickname/edit" element={<Edit />} />
+      <Route path="/profile/edit" element={<Edit />} />
       <Route path="/profile/changepassword" element={<ChangePassword />} />
       <Route path="/profile/alarm" element={<Alarm />} />
 
@@ -90,13 +92,13 @@ export default function Router () {
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />
       <Route path="/login/snssignup" element={<SnsSignup/>} /> 
+      <Route path="*" element={<NotFound/>} /> 
+      
 
       <Route
         path="/test"
         element={
-          <ProtectedRoute>
-            <Main />
-          </ProtectedRoute>
+          <Test />
         }
       />
     </Routes>
