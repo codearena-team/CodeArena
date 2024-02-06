@@ -54,8 +54,8 @@ public class JwtUtil {
         claims.put("userEmail", tokenDataDto.getUserEmail());
         claims.put("userId" , tokenDataDto.getUserId());
         claims.put("userNickname", tokenDataDto.getUserNickname());
-        claims.put("speedRating", tokenDataDto.getSpeedRating());
-        claims.put("effiRating", tokenDataDto.getEffiRating());
+        claims.put("speed", tokenDataDto.getSpeedRating());
+        claims.put("eff", tokenDataDto.getEffiRating());
 
 
         String jwt = Jwts.builder()
