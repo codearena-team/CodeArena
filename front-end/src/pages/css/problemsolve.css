@@ -1,11 +1,11 @@
 .problemTable{
-  background-color: #F9F9F7;
+  background-color: #F4F5F1;
   border-radius: 15px;
   border-top-left-radius: 0px;
 }
 
 tbody tr:hover{
-  background-color: #dcdcd2;
+  background-color: rgb(227, 230, 217);
 }
 
 .orderBy{
@@ -14,13 +14,18 @@ tbody tr:hover{
   width: 100px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  background-color: #F9F9F7;
+  background-color: rgb(227, 230, 217);
 }
 
 .unchoice{
-  background-color: #dcdcd2;
+  background-color: #F4F5F1;
 }
 
-.even {
-  background-color: #F9F6ED;
+.cell-height {
+  height: 3rem;
+}
+
+
+.cell-height2 {
+  height: 3rem;
 }

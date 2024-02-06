@@ -65,6 +65,7 @@ export default function Community() {
   }
   
   const pageNation = () => {
+
     const result = [];
     for (let i = 0; i < pageCount; i++) {
       result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i===0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
@@ -73,7 +74,7 @@ export default function Community() {
   };
 
   return(
-    <div className="mx-10 flex flex-col">
+    <div className="ml-20 mr-20 flex flex-col">
       { isLogin && (
       <div className='flex justify-end mb-3'>
         <div className="w-40 flex justify-end"><Link to="/community/create" className="btn btn-neutral btn-sm rounded-full">글쓰기</Link></div>
@@ -106,19 +107,19 @@ export default function Community() {
       <div>
         {/* 문제 목록 테이블 */}
         <div className="overflow-x-auto">
-          <table className="problemTable w-full">
+          <table className=" w-full" style={{backgroundColor:'rgb(227, 230, 217)'}}>
             <thead>
               <tr>
-                <th className="p-1.5">게시글번호</th>
-                <th className="p-1.5">문제번호</th>
-                <th className="p-1.5 w-2/5">제목</th>
-                <th className="p-1.5">언어</th>
-                <th className="p-1.5">작성자</th>
-                <th className="p-1.5">조회수</th>
-                <th className="p-1.5">제출일</th>
+                <th className="p-1.5 cell-height">게시글번호</th>
+                <th className="p-1.5 cell-height">문제번호</th>
+                <th className="p-1.5 cell-height w-2/5">제목</th>
+                <th className="p-1.5 cell-height">언어</th>
+                <th className="p-1.5 cell-height">작성자</th>
+                <th className="p-1.5 cell-height">조회수</th>
+                <th className="p-1.5 cell-height">제출일</th>
               </tr>
             </thead>
-            <tbody className="font-normal">
+            <tbody className="problemTable font-normal">
              {communityList.map((community,index)=>{
               return(
              <CommunityListItem 

@@ -1,11 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useState,useEffect } from "react"
+import { useState,useEffect,useCallback } from "react"
 import axios from "axios"
 import "../../css/problemdetail.css"
 import CodeMirror from '@uiw/react-codemirror';
 import { useSelector } from 'react-redux'
 import CommentListItem from '../../../components/community/CommentListItem'
-
 
 
 export default function CommunityDetail(){
@@ -115,40 +114,44 @@ export default function CommunityDetail(){
     navigate((`/community/${boardId}/edit`))
   }
 
+  const onChangeCode = useCallback((code, viewUpdate) => {
+    setCommentCode(code);
+  }, []);
+  
   return (
-    <div className="p-20 pt-0"> 
-      <div className="p-10 rounded-3xl drop-shadow-2xl mb-7" style={{backgroundColor: "#F5F5EC"}}>
+    <div className="ml-64 mr-64 mt-10"> 
+      <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
         <div className='flex justify-end mb-4'>
           <h1 className="mr-3">조회수 : {board.hit}</h1>
           <h1>작성자 : {articleNickname}</h1>
+          <div className="w-1/12"></div>
         </div>
         <div className='flex justify-end mb-4'>
           <label className="me-1 py-3" htmlFor="title">제목</label>
-          <input type="text" id="title" className="input input-bordered w-11/12 noc" value={board.title} />
+          <input type="text" id="title" className="input input-bordered noc w-10/12" value={board.title} />
+          <div className="w-1/12"></div>
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="me-1 py-3" htmlFor="title">문제번호</label>
-          <input type="text" id="title" className="input input-bordered w-11/12 noc" value={board.problemId} />
+        <div className='flex mb-4'>
+          <div className="flex">
+            <label className="me-1 py-3 ml-5" htmlFor="title">문제번호</label>
+            <input type="text" id="title" className="input input-bordered w-1/12 noc mr-6" value={board.problemId} />
+            <label className="me-1 py-3 ml-10" htmlFor="rating">언어</label>
+            <input id="rating" className="input input-bordered w-3/12 noc mr-6" type="text" value={board.lang}/>
+            <label className="me-1 py-3 ml-20" htmlFor="rating">카테고리</label>
+            <input id="rating" className="input input-bordered w-3/12 noc" type="text" value={cate}/>     
+          </div>
+          <div className="w-1/12"></div>
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="me-1" htmlFor="rating">언어</label>
-          <input id="rating" className="input input-bordered w-2/12 noc" type="text" value={board.lang}/>     
-          <div className='w-9/12'></div>
-        </div>
-        <div className='flex justify-end mb-4'>
-          <label className="me-1" htmlFor="rating">카테고리</label>
-          <input id="rating" className="input input-bordered w-2/12 noc" type="text" value={cate}/>     
-          <div className='w-9/12'></div>
-        </div>
-        <div className='flex justify-end mb-4'>
+          <div className='flex justify-end mb-4'>
           <label className="me-1"htmlFor="content">내용</label>
-          <textarea className="textarea textarea-bordered w-11/12 resize-none noc" rows="10" 
+          <textarea className="textarea textarea-bordered w-10/12 resize-none noc" rows="10" 
           value={board.content}>
           </textarea>
+          <div className="w-1/12"></div>
         </div>
         <div className='flex justify-between mb-4'>
           <div className="w-1/12"></div>
-          <div className="w-11/12 flex justify-between">
+          <div className="w-10/12 flex justify-between">
             <button className="btn btn-sm rounded-full drop-shadow-xl" 
             style={{backgroundColor:bgcolor,border:'1px solid black'}}
             onClick={colorChange}>코드보기
@@ -158,23 +161,21 @@ export default function CommunityDetail(){
             onClick={()=>document.getElementById('modal').showModal()}
             >댓글쓰기
             </button>
+            
             {/* 댓글 모달창 */}
             <dialog id="modal" className="modal">
               <div className="modal-box" style={{backgroundColor: "#F5F5EC"}}>
                 <div className='flex justify-end mb-4'>
-                  <label className="me-1"htmlFor="content">내용</label>
-                  <textarea className="textarea textarea-bordered w-11/12 resize-none" rows="5"
+                  <textarea className="textarea textarea-bordered w-full resize-none" rows="5"
                   onChange={(e)=>{setComment(e.target.value)}} >
                   </textarea>
                 </div>
                 <div className='flex justify-end mb-4'>
-                  <label className="me-1"htmlFor="inputEx">코드</label>
-                  <CodeMirror className='w-11/12' height="200px" id="inputEx"
-                  onChange={(e)=>{setCommentCode(e.target.value)}}/>
+                  <CodeMirror className='w-full' height="200px" id="inputEx"
+                  onChange={onChangeCode}/>
                 </div>
-                <div className="flex">
-                  <div className="w-1/12"></div>
-                  <div className="flex justify-between w-11/12 modal-action">
+                <div className="flex justify-between">   
+                  <div className="modal-action ">
                     <form method="dialog" className="mt-0">
                       <div className=""><button className="btn btn-sm rounded-full" 
                       style={{border:'1px solid black'}}
@@ -183,17 +184,19 @@ export default function CommunityDetail(){
                     </form>    
                     <form method="dialog">
                       <button className="btn btn-sm rounded-full" style={{border:'1px solid black'}}>닫기</button>
-                    </form>                    
-                  </div>
+                    </form>
+                  </div>                  
                 </div>
               </div>
             </dialog>
           </div>
+          <div className="w-1/12"></div>
         </div>
         { showCodeMirror && (
-          <div className='flex justify-end mb-4'>
-            <label className="me-1"htmlFor="inputEx"></label>
+          <div className='flex mb-4'>
+            <div className="w-1/12"></div>
             <CodeMirror className='w-11/12 ' height="400px" id="inputEx" value={board.code} readOnly/>
+            <div className="w-1/12"></div>
           </div>
         )}
         { articleId === userId &&(
@@ -204,6 +207,7 @@ export default function CommunityDetail(){
           <button className="btn btn-sm rounded-full drop-shadow-xl btn-active"
           style={{backgroundColor:'#E4E4DA',border:'1px solid black'}}
           onClick={boardDelete}>삭제</button>
+          <div className="w-1/12"></div>
         </div>
         )}
       </div>
