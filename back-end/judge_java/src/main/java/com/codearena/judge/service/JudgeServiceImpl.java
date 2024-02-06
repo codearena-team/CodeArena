@@ -33,12 +33,12 @@ public class JudgeServiceImpl implements JudgeService{
         judgeResultDto.setStatus("200");
         judgeResultDto.setMsg("문제 유효성 검사 완료");
 
-        String submitStatus = "";
         JudgeValidateResultDto result = new JudgeValidateResultDto();
 
         if(judgeUtil.checkSystemCallInCode(userInput.getProblemValidationCode())) {
             judgeResultDto.setStatus("404");
             judgeResultDto.setMsg("코드 내 시스템 콜 감지");
+            judgeResultDto.setData(null);
             return judgeResultDto;
         }
 
@@ -62,14 +62,13 @@ public class JudgeServiceImpl implements JudgeService{
             // 코드 검증하기
             result = judgeUtil.validate(runtime, cmd, testCase, timeLimit, path);
 
-
         } catch (Exception e) {
             log.debug("Exception : {}" , e);
             judgeResultDto.setStatus("500");
             judgeResultDto.setMsg("서버 내부 에러");
         }
 
-        judgeResultDto.setData(submitStatus);
+        judgeResultDto.setData(result);
 
         return judgeResultDto;
     }
