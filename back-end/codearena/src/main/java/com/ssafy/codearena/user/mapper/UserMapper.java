@@ -24,6 +24,6 @@ public interface UserMapper {
     void unfollow(UserFollowDto userFollowDto) throws SQLException;
     ArrayList<UserFollowInfoDto> getFollowList(String userId) throws SQLException;
     ArrayList<UserFollowingInfoDto> getFollowingList(String userId) throws SQLException;
-    int isFollow(UserSearchDto userSearchDto) throws SQLException;
+    int isFollow(UserIsFollowDto userIsFollowDto) throws SQLException;
 
 }
