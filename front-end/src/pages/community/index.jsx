@@ -11,21 +11,20 @@ export default function Community() {
   // "질문 타입", example = "1 : 질문, 2 : 시간복잡도, 3 : 공간복잡도, 4 : 반례 요청, 5 : 반례"
   const [key,setKey ] = useState('board_title')
   // 정렬기준 time : 최신순 ,hit 조회수순 
-  const [lang,setLang] = useState('')
   const [word, setWord] = useState('')
   const [pageCount, setPageCount] = useState(1)
   const isLogin = useSelector(state => state.auth.isLogin);
   
   useEffect(()=> {
     const pgno = searchParams.get('pgno') || 1
-    const lang = searchParams.get('lang') || ''
+    const langType = searchParams.get('lang') || ''
     const key = searchParams.get('key') || ''
     const word = searchParams.get('word') || ''
     const sortType = searchParams.get('sortType') || ''
    
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/board/list?sortType=${sortType}&key=${key}&word=${word}&pgno=${pgno}&spp=15`,
+      url : `http://i10d211.p.ssafy.io:8081/api/board/list?sortType=${sortType}&key=${key}&word=${word}&langType=${langType}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       setCommunityList(res.data.data.articles)
@@ -37,12 +36,6 @@ export default function Community() {
   },[searchParams])
   
   const onClickHandler = () => {
-    if(lang==='') {
-      searchParams.delete('lang')
-      setSearchParams(searchParams)
-    } else {
-      changeParams('lang',lang)
-    }
     if(word==='') {
       searchParams.delete('word')
       setSearchParams(searchParams)
@@ -63,8 +56,10 @@ export default function Community() {
     searchParams.set(key,value)
     setSearchParams(searchParams)
   }
-  
+
+
   const pageNation = () => {
+
     const result = [];
     for (let i = 0; i < pageCount; i++) {
       result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i===0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
@@ -73,7 +68,7 @@ export default function Community() {
   };
 
   return(
-    <div className="mx-10 flex flex-col">
+    <div className="ml-20 mr-20 flex flex-col">
       { isLogin && (
       <div className='flex justify-end mb-3'>
         <div className="w-40 flex justify-end"><Link to="/community/create" className="btn btn-neutral btn-sm rounded-full">글쓰기</Link></div>
@@ -85,18 +80,18 @@ export default function Community() {
           <button onClick={()=>{changeParams('sortType','hit')}} className={searchParams.get('sortType')==='hit' ? 'orderBy' : 'orderBy unchoice'} value='hit'>조회수순</button>
         </div>
         <div className="flex mb-4 gap-2">
-          <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered join-item" >
-            <option value="">언어</option>
-            <option>java</option>
-            <option>python</option>
-            <option>cpp</option>
+          <select value={searchParams.get('lang') || ''} onChange={(e)=>{changeParams('lang',e.target.value)}} className="select select-sm select-bordered join-item" >
+            <option value="">전체</option>
+            <option value="java">java</option>
+            <option value="python">python</option>
+            <option value="cpp">cpp</option>
           </select>
+          
+          <div className='flex join'>
           <select value={key} onChange={(e)=>{setKey(e.target.value)}} className="select select-sm select-bordered join-item" >
-            
             <option value={'board_title'}>문제제목</option>
             <option value={'problem_id'}>문제번호</option>
           </select>
-          <div className='flex'>
             <input onChange={(e)=>{setWord(e.target.value)}} type="text" placeholder="검색어를 입력하세요." className="input input-bordered w-full max-w-xs input-sm join-item" />
             <button onClick={onClickHandler} className="btn btn-active btn-neutral btn-sm join-item">검색</button>
           </div>
@@ -106,19 +101,19 @@ export default function Community() {
       <div>
         {/* 문제 목록 테이블 */}
         <div className="overflow-x-auto">
-          <table className="problemTable w-full">
+          <table className=" w-full" style={{backgroundColor:'rgb(227, 230, 217)'}}>
             <thead>
               <tr>
-                <th className="p-1.5">게시글번호</th>
-                <th className="p-1.5">문제번호</th>
-                <th className="p-1.5 w-2/5">제목</th>
-                <th className="p-1.5">언어</th>
-                <th className="p-1.5">작성자</th>
-                <th className="p-1.5">조회수</th>
-                <th className="p-1.5">제출일</th>
+                <th className="p-1.5 cell-height">게시글번호</th>
+                <th className="p-1.5 cell-height">문제번호</th>
+                <th className="p-1.5 cell-height w-2/5">제목</th>
+                <th className="p-1.5 cell-height">언어</th>
+                <th className="p-1.5 cell-height">작성자</th>
+                <th className="p-1.5 cell-height">조회수</th>
+                <th className="p-1.5 cell-height">제출일</th>
               </tr>
             </thead>
-            <tbody className="font-normal">
+            <tbody className="problemTable font-normal">
              {communityList.map((community,index)=>{
               return(
              <CommunityListItem 

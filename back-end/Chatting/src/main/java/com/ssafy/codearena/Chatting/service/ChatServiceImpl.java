@@ -109,13 +109,11 @@ public class ChatServiceImpl implements ChatService{
         gameResultDto.setData(null);
         try {
 
-            //랜덤 UUID 생성
-            UUID uuid = UUID.randomUUID();
             //랜덤 문제 배정
             CreateCompetitiveResultDto createCompetitiveResultDto = new CreateCompetitiveResultDto();
             int randomProblem = gameMapper.findProblemById();
             createCompetitiveResultDto.setProblemId(Integer.toString(randomProblem));   //응답객체 값 저장
-            createCompetitiveResultDto.setGameId(String.valueOf(uuid));     //응답객체 값 저장
+            createCompetitiveResultDto.setGameId(gameCreateDto.getGameId());     //응답객체 값 저장
 
             gameCreateDto.setProblemId(Integer.toString(randomProblem));
 
@@ -131,11 +129,11 @@ public class ChatServiceImpl implements ChatService{
             gameManage.put(gameCreateDto.getGameId(), competitiveManageDto);
 
             Map<String, String> map = new HashMap<>();
-            map.put("CustomId", String.valueOf(uuid));
+            map.put("CustomId", String.valueOf(gameCreateDto.getGameId()));
             SessionProperties properties = SessionProperties.fromJson(map).build();
             Session session = openvidu.createSession(properties);
-            createCompetitiveResultDto.setViduSession(session.getSessionId());
-
+            createCompetitiveResultDto.setViduSession(session.getSessionId());  //Session Id 저장
+            
             gameResultDto.setData(createCompetitiveResultDto);   //배정된 게임방ID, vidu 세션 ID, 랜덤 문제번호
 
         }
@@ -186,6 +184,32 @@ public class ChatServiceImpl implements ChatService{
         catch (Exception ignored) {
 
         }
+    }
+
+    @Override
+    public void findWinner(String gameId) {
+        CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
+        String player1 = competitiveManageDto.getPlayer1();
+        String player2 = competitiveManageDto.getPlayer2();
+
+        //첫번째 유저의 채점현황에서 '맞았습니다.' 결과가 있는지
+        try {
+
+            gameMapper.passProblem(gameId, player1);
+        }
+        catch (Exception e) {
+
+        }
+
+        //두번째 유저의 채점현황에서 '맞았습니다.' 결과가 있는지
+        try {
+
+            gameMapper.passProblem(gameId, player2);
+        }
+        catch (Exception e) {
+
+        }
+
     }
 
 }
