@@ -54,6 +54,9 @@ public class JwtUtil {
         claims.put("userEmail", tokenDataDto.getUserEmail());
         claims.put("userId" , tokenDataDto.getUserId());
         claims.put("userNickname", tokenDataDto.getUserNickname());
+        claims.put("speed", tokenDataDto.getSpeedRating());
+        claims.put("eff", tokenDataDto.getEffiRating());
+
 
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT").setClaims(claims) // Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.

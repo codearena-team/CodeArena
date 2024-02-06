@@ -19,6 +19,7 @@
     "gsap": "^3.12.5",
     "jquery": "^3.7.1",
     "jwt-decode": "^4.0.0",
+    "openvidu-browser": "^2.29.1",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",

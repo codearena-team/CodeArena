@@ -16,6 +16,7 @@ public interface UserMapper {
     int logout(String userEmail) throws SQLException;
     int reissue(UserReissueDto userReissueDto) throws SQLException;
     UserInfoDto searchUser(String userNickname) throws SQLException;
+    ArrayList<UserSearchResultListDto> searchUserList(UserSearchListDto userSearchListDto) throws SQLException;
     void saveRefreshToken(Map<String, String> map) throws SQLException;
     int changePassword(UserChangePasswordDto userChangePasswordDto) throws SQLException;
     int changeUserInfo(UserChangeInfoDto userChangeInfoDto) throws SQLException;
@@ -23,6 +24,6 @@ public interface UserMapper {
     void unfollow(UserFollowDto userFollowDto) throws SQLException;
     ArrayList<UserFollowInfoDto> getFollowList(String userId) throws SQLException;
     ArrayList<UserFollowingInfoDto> getFollowingList(String userId) throws SQLException;
-    int isFollow(UserSearchDto userSearchDto) throws SQLException;
+    int isFollow(UserIsFollowDto userIsFollowDto) throws SQLException;
 
 }

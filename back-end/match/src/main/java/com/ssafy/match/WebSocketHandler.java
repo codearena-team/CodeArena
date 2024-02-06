@@ -3,6 +3,7 @@ package com.ssafy.match;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.handler.codec.compression.Zstd;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.DefaultTypedTuple;
@@ -20,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Slf4j
 public class WebSocketHandler extends TextWebSocketHandler {
     private static final ConcurrentHashMap<String, WebSocketSession> CLIENTS = new ConcurrentHashMap<>();
     private static final HashMap<String, String> userWithSessionId = new HashMap<>();
@@ -44,6 +46,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         MessageDto receive = objectMapper.readValue(message.getPayload(), MessageDto.class);
+        log.debug("버그고치기");
         System.out.println(receive);
         if(receive.getType() == MessageDto.MessageType.POP){
             session.close();

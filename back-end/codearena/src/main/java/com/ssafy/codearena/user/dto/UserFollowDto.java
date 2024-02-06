@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserFollowDto {
-    private String fromID;
+    private String fromId;
     private String toId;
 }

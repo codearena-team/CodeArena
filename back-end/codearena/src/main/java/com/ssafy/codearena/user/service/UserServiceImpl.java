@@ -301,10 +301,16 @@ public class UserServiceImpl implements UserService{
                     unsolveListU.add(dto);
                 }
 
-                UserProblemDto userSolvedProblemDto = new UserProblemDto();
+                UserIsFollowDto userIsFollowDto = new UserIsFollowDto();
 
-                int isFollow = mapper.isFollow(userSearchDto);
+                userIsFollowDto.setFromId(fromUser.getUserId());
+                userIsFollowDto.setToId(toUser.getUserId());
+
+                int isFollow = mapper.isFollow(userIsFollowDto);
                 toUser.setIsFollow(isFollow);
+
+                log.debug("isFollow : {}", isFollow);
+                log.debug("toUser : {}", toUser);
 
                 // 1. 검색 대상 기본 정보 넣기
                 userSearchResultDto.setUserInfoDto(toUser);
@@ -323,6 +329,27 @@ public class UserServiceImpl implements UserService{
             userResultDto.setMsg("서버 내부 에러");
             userResultDto.setData(null);
         }
+        return userResultDto;
+    }
+
+    @Override
+    public UserResultDto searchUserList(UserSearchListDto userSearchListDto) {
+        ArrayList<UserSearchResultListDto> userSearchList = new ArrayList<>();
+
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("유저 리스트 검색 완료");
+
+        try {
+            userSearchList = mapper.searchUserList(userSearchListDto);
+            userResultDto.setData(userSearchList);
+        } catch (Exception e) {
+            log.debug("Exception : {}" , e);
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 내부 에러");
+        }
+
+        userResultDto.setData(userSearchList);
         return userResultDto;
     }
 
@@ -382,6 +409,7 @@ public class UserServiceImpl implements UserService{
         try {
             mapper.follow(userFollowDto);
         } catch (Exception e) {
+            log.debug("Exception : {}", e);
             userResultDto.setStatus("500");
             userResultDto.setMsg("서버 내부 에러");
         }

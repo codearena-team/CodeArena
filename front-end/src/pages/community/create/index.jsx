@@ -72,54 +72,59 @@ export default function CommunityCreate() {
 
 
   return(
-    <div className="p-20 pt-0">
-      <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
+    <div className="ml-64 mr-64 mt-10">
+      <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
         <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1 py-3" htmlFor="title">제목</label>
-          <input type="text" placeholder="제목을 입력하세요" id="title" onChange={(e)=>{setTitle(e.target.value)}} className="input input-bordered w-11/12" />
+          <label className="me-1 py-3" htmlFor="title">제목</label>
+          <input type="text" placeholder="제목을 입력하세요" id="title" onChange={(e)=>{setTitle(e.target.value)}} className="input input-bordered w-10/12" />
+          <div className='w-1/12'></div>        
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1 py-3" htmlFor="title">문제번호</label>
-          <input type="text" placeholder="문제번호를 입력하세요" id="title" onChange={(e)=>{setProblemId(e.target.value)}} className="input input-bordered w-11/12" />
+        <div className='flex mb-4'>
+          <label className="me-1 py-3 ml-4" htmlFor="title">문제번호</label>
+          <input type="text" placeholder="문제번호를 입력하세요" id="title" onChange={(e)=>{setProblemId(e.target.value)}} className="input input-bordered w-5/12" />
+          <div className='w-1/12'></div>  
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1" htmlFor="rating">언어</label>
-            <select value={lang} onChange={(e)=>{setLang(e.target.value)}}  className="select select-sm select-bordered w-2/12" >
-              <option>java</option>
-              <option>python</option>
-              <option>cpp</option>
-            </select>
-            <div className='w-9/12'></div>
-        </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1" htmlFor="rating">카테고리</label>
-            <select value={type} onChange={(e)=>{setType(e.target.value)}} className="select select-sm select-bordered w-2/12" >
+        <div className='flex mb-4'>
+          <div className='w-4/12'>
+          <label className="me-1 py-3 ml-3" htmlFor="rating">카테고리</label>
+            <select value={type} onChange={(e)=>{setType(e.target.value)}} className="select select-sm select-bordered " >
               <option value={1}>질문</option>
               <option value={2}>시간복잡도</option>
               <option value={3}>공간복잡도</option>
               <option value={4}>반례요청</option>
               <option value={5}>반례</option>
             </select>
-            <div className='w-9/12'></div>
-        </div>
-        <div className="flex mb-4">
-          <label className="cursor-pointer label font-bold me-1">스포방지여부</label>
+          </div>
+          <div className='w-4/12'>
+          <label className="me-1 py-3 ml-10" htmlFor="rating">언어</label>
+            <select value={lang} onChange={(e)=>{setLang(e.target.value)}}  className="select select-sm select-bordered mr-6" >
+              <option>java</option>
+              <option>python</option>
+              <option>cpp</option>
+            </select>
+          </div>
+          <div className='flex w-4/12'>  
+            <label className="cursor-pointer label me-1">스포방지여부</label>
             <div className='flex items-center'><input type="checkbox" className="checkbox checkbox-warning" style={{borderColor:'black'}} onClick={onClickCheckbox}/></div>
-        </div>
+          </div>
+        </div>        
         <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="content">내용</label>
-          <textarea className="textarea textarea-bordered w-11/12 resize-none" onChange={(e)=>{setContent(e.target.value)}} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
+          <label className="me-1"htmlFor="content">내용</label>
+          <textarea className="textarea textarea-bordered w-10/12 resize-none" onChange={(e)=>{setContent(e.target.value)}} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
+          <div className='w-1/12'></div>
         </div>
         <div className='flex justify-end mb-4'>
           <button className="btn btn-sm rounded-full drop-shadow-xl" 
           style={{backgroundColor:bgcolor,border:'1px solid black'}}
           onClick={colorChange}>코드블럭 추가하기
           </button>
+          <div className='w-1/12'></div>
         </div>
         { showCodeMirror && (
           <div className='flex justify-end mb-4'>
-            <label className="font-bold me-1"htmlFor="inputEx">검증용 코드</label>
+            <label className="me-1"htmlFor="inputEx">검증용 코드</label>
             <CodeMirror onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
+            <div className='w-1/12'></div>
           </div>
         )}
         <div className='flex justify-end mb-4'>
@@ -128,6 +133,7 @@ export default function CommunityCreate() {
             onClick={createArticle}
             >글쓰기
           </button>
+          <div className='w-1/12'></div>
         </div>
       </div>
     </div>

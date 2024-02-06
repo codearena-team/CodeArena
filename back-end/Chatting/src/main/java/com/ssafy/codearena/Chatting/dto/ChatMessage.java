@@ -7,11 +7,11 @@ import lombok.Data;
 public class ChatMessage {
 
     public enum MessageType {
-        ENTER, TALK, EXIT
+        ENTER, TALK, EXIT;
     }
 
     private MessageType type;
-    private String roomId;
+    private String gameId;
     private String sender;
     private String message;
 }
