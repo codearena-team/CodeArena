@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily:{
+        'sans' :['sulight'],
         'sulight' :['sulight']
       }
     },

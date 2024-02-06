@@ -20,6 +20,11 @@ import Alarm from "./pages/profile/alarm/index";
 import Signup from './pages/login/signup/index';
 import SnsSignup from './pages/login/snssignup/index';
 import FindPassword from './pages/login/findpassword/index';
+import CompetitionList from "./components/arena/Match/CompetitionList";
+import CompetitionView from './components/arena/Match/CompetitionView';
+import GroupList from "./components/arena/Match/GroupList";
+import GroupView from './components/arena/Match/GroupView'
+import GroupLobby from './components/arena/Match/GroupLobby'
 import { useAuthCheck } from "./features/useAuthCheck";
 import { useLocation } from 'react-router-dom';
 import CompetitionList from "./components/arena/Match/Competition/CompetitionList";
@@ -90,13 +95,13 @@ export default function Router () {
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />
       <Route path="/login/snssignup" element={<SnsSignup/>} /> 
+      <Route path="*" element={<NotFound/>} /> 
+      
 
       <Route
         path="/test"
         element={
-          <ProtectedRoute>
-            <Main />
-          </ProtectedRoute>
+          <Test />
         }
       />
     </Routes>

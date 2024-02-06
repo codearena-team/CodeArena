@@ -11,21 +11,20 @@ export default function Community() {
   // "질문 타입", example = "1 : 질문, 2 : 시간복잡도, 3 : 공간복잡도, 4 : 반례 요청, 5 : 반례"
   const [key,setKey ] = useState('board_title')
   // 정렬기준 time : 최신순 ,hit 조회수순 
-  const [lang,setLang] = useState('')
   const [word, setWord] = useState('')
   const [pageCount, setPageCount] = useState(1)
   const isLogin = useSelector(state => state.auth.isLogin);
   
   useEffect(()=> {
     const pgno = searchParams.get('pgno') || 1
-    const lang = searchParams.get('lang') || ''
+    const langType = searchParams.get('lang') || ''
     const key = searchParams.get('key') || ''
     const word = searchParams.get('word') || ''
     const sortType = searchParams.get('sortType') || ''
    
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/board/list?sortType=${sortType}&key=${key}&word=${word}&pgno=${pgno}&spp=15`,
+      url : `http://i10d211.p.ssafy.io:8081/api/board/list?sortType=${sortType}&key=${key}&word=${word}&langType=${langType}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       setCommunityList(res.data.data.articles)
@@ -37,12 +36,6 @@ export default function Community() {
   },[searchParams])
   
   const onClickHandler = () => {
-    if(lang==='') {
-      searchParams.delete('lang')
-      setSearchParams(searchParams)
-    } else {
-      changeParams('lang',lang)
-    }
     if(word==='') {
       searchParams.delete('word')
       setSearchParams(searchParams)
@@ -63,7 +56,8 @@ export default function Community() {
     searchParams.set(key,value)
     setSearchParams(searchParams)
   }
-  
+
+
   const pageNation = () => {
 
     const result = [];
@@ -86,18 +80,18 @@ export default function Community() {
           <button onClick={()=>{changeParams('sortType','hit')}} className={searchParams.get('sortType')==='hit' ? 'orderBy' : 'orderBy unchoice'} value='hit'>조회수순</button>
         </div>
         <div className="flex mb-4 gap-2">
-          <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered join-item" >
-            <option value="">언어</option>
-            <option>java</option>
-            <option>python</option>
-            <option>cpp</option>
+          <select value={searchParams.get('lang') || ''} onChange={(e)=>{changeParams('lang',e.target.value)}} className="select select-sm select-bordered join-item" >
+            <option value="">전체</option>
+            <option value="java">java</option>
+            <option value="python">python</option>
+            <option value="cpp">cpp</option>
           </select>
+          
+          <div className='flex join'>
           <select value={key} onChange={(e)=>{setKey(e.target.value)}} className="select select-sm select-bordered join-item" >
-            
             <option value={'board_title'}>문제제목</option>
             <option value={'problem_id'}>문제번호</option>
           </select>
-          <div className='flex'>
             <input onChange={(e)=>{setWord(e.target.value)}} type="text" placeholder="검색어를 입력하세요." className="input input-bordered w-full max-w-xs input-sm join-item" />
             <button onClick={onClickHandler} className="btn btn-active btn-neutral btn-sm join-item">검색</button>
           </div>
