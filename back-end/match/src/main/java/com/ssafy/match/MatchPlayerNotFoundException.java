@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
 
-public class MatchPlayerNotFoundException extends Throwable {
+public class MatchPlayerNotFoundException extends Exception {
     static final ObjectMapper objectMapper = new ObjectMapper();
     static TextMessage TEXT_MESSAGE ;
-
+    static MessageDto msg = new MessageDto();
     static{
         MessageDto messageDto = new MessageDto();
         messageDto.setType(MessageDto.MessageType.EXCEPTION);
@@ -18,6 +18,7 @@ public class MatchPlayerNotFoundException extends Throwable {
             throw new RuntimeException(e);
         }
     }
+
     TextMessage getTextMessage(){
         return TEXT_MESSAGE;
     }
