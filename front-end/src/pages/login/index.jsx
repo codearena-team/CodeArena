@@ -9,6 +9,7 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'; 
 import { setRefreshToken } from '../../features/login/authSlice';
 import { setAccessToken } from '../../features/login/accessSlice';
+import { setRecord } from '../../features/login/authSlice'
 
 axios.defaults.withCredentials = true;
 
@@ -40,7 +41,7 @@ export default function Login() {
     // }
     if (checkEmail()) {
       axios({
-        url: 'http://i10d211.p.ssafy.io:8081/api/user/login',
+        url: 'https://i10d211.p.ssafy.io/api/user/login',
         method:'post',
         data: {
           userEmail : email, 
@@ -51,8 +52,10 @@ export default function Login() {
         if (res.data.status === "404"){
           alert('이메일,패스워드가 틀렸습니다.')
         }else{
-          dispatch(setRefreshToken(res.data.data))
+          dispatch(setRefreshToken(res.data.data,res))
           dispatch(setAccessToken(res.headers.authorization)) 
+          dispatch(setRecord(res.headers.authorization))
+          // console.log(res.headers.authorization);
           navigate('/')
         }
       })

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, } from 'react';
 // import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { UseSelector, useSelector } from 'react-redux/es/hooks/useSelector';
 import BannerCreateModal from './modal/Main/BannerCreateModal';
 import MatchingCompleteModal  from './modal/Main/MatchingCompleteModal';
 
@@ -17,7 +18,12 @@ import EffiModeAsset from '../../images/arena/TopBanner/EfficiencyMode.png';
 
 export default function TopBanner() {
   const navigate = useNavigate();
-  // 호버 기능
+  const params = useParams();
+  
+   
+  const [speedRating, setSpeedRating] = useState('');
+  const [effRating, setEffRating] = useState('');
+
   const [isFindMatchHovered, setIsFindMatchHovered] = useState(false);
   const [isGameCreateHovered, setIsGameCreateHovered] = useState(false);
   const [isGameSearchHovered, setIsGameSearchHovered] = useState(false);
@@ -28,21 +34,20 @@ export default function TopBanner() {
   
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  
-  // const [type, setType] = useState('');
-  // 모드 선택 useState
-  // const [selectedMode, setSelectedMode] = useState(null);
+
   const socket = useRef(null);
   const type = useRef();
   const matchId = useRef('');
-  const userId = useRef('');
+  const userId = useRef(useSelector(state => state.auth.userId));
   const rating = useRef('');
+  const eff = useRef(useSelector(state => state.auth.eff));
+  const speed = useRef(useSelector(state => state.auth.speed));
   const gameMode = useRef('');
   const lang = useRef('');
   const content = useRef('');
   const problemId = useRef('');
   const queueKey = useRef('');
-  const userNickname = useRef('');
+  const userNickname = useRef(useSelector(state => state.auth.userNickname));
   const gameId = useRef('');
   const viduSession = useRef('');
   // const [matchData, setmatchData] = useState({
@@ -287,7 +292,7 @@ export default function TopBanner() {
     });
   };
 
-  // 마지막 모달에서 "취소" 모든 모달 닫기 (중복 호출 방지)
+  // 마지막 모달에서 "거절" 모든 모달 닫기 (중복 호출 방지)
   const handleCancel = () => {
     const send_obj = {
       matchId: matchId.current,
@@ -444,14 +449,15 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsSpeedModeHovered(true)}
                     onMouseLeave={() => setIsSpeedModeHovered(false)}
                     onClick={() => {
+                      rating = speed
                       socket.current.send(
                         JSON.stringify ({
                           type : "ENQUEUE",
-                          userId : "123123123",
-                          rating : "1250",
+                          userId : userId,
+                          rating : rating,
                           gameMode : 'speed',
                           lang: selectedLanguage,
-                          userNickname: "트런들",
+                          userNickname: userNickname,
                         })
                       );
                       // document.getElementById('language_modal').close(); // 클릭 시 언어 선택 모달 닫고,
@@ -468,14 +474,15 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsEffiModeHovered(true)}
                     onMouseLeave={() => setIsEffiModeHovered(false)}
                     onClick={() => {
+                      rating = eff
                       socket.current.send(
                         JSON.stringify ({
                           type : "ENQUEUE",
-                          userId : "123123123",
-                          rating: "1250",
+                          userId : userId,
+                          rating: rating,
                           gameMode: 'eff',
                           lang : selectedLanguage,
-                          userNickname: "트런들",
+                          userNickname: userNickname,
                         })
                       );
                       // document.getElementById('language_modal').close(); // 클릭 시 언어 선택 모달 닫고,
@@ -497,12 +504,12 @@ export default function TopBanner() {
                   onClick={() => {
                     socket.current.send(
                       JSON.stringify ({
-                        "type" : "NO",
-                        "userId" : "123123123",
-                        "rating" : "1250",
-                        "gameMode" : "speed",
-                        "lang" : "cpp",
-                        "userNickname": "트런들",
+                        type : "NO",
+                        userId : userId,
+                        rating : rating,
+                        gameMode : "speed",
+                        lang: "cpp",
+                        userNickname: userNickname,
                       })
                     );
                     document.getElementById('language_modal').close(); // 언어&모드 선택 모달 닫기
@@ -525,7 +532,7 @@ export default function TopBanner() {
               <MatchingCompleteModal
                 // 수락
                 onAccept={handleAccept} problemId={problemId}
-                // 취소
+                // 거절
                 onCancel={handleCancel}
               />
             </div>

@@ -8,7 +8,9 @@ export const authSlice = createSlice({
     isLogin : false,
     userId : null,
     userEmail : null,
-    userNickname : null
+    userNickname : null,
+    speed : null,
+    eff : null,
   },
   reducers : {
     // action.payload 는 res.data.data
@@ -26,8 +28,12 @@ export const authSlice = createSlice({
       state.userEmail = null;
       state.userNickname = null;
     },
+    setRecord: (state,action) => {
+      state.speed = jwtDecode(action.payload).speed
+      state.eff = jwtDecode(action.payload).eff
+    }
   }  
 })
 
-export const { setRefreshToken,logout } = authSlice.actions
+export const { setRefreshToken,logout,setRecord } = authSlice.actions
 export default authSlice.reducer
