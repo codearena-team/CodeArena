@@ -193,7 +193,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
             } else if (receive.getType() == MessageDto.MessageType.NO) {
                 String recMatchId = receive.getMatchId();
-                matchValidation(session, receive);
                 matchMap.get(recMatchId).get(receive.getUserId() + " " + receive.getUserNickname()).setIsOk(false);
                 Collection<MatchDto> players = (Collection<MatchDto>) matchMap.get(recMatchId).values();
 
@@ -207,8 +206,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         session.close();
                     }
                 }
+
                 if (noCount == 2) {
-                    matchMap.remove(recMatchId);
+                    if(recMatchId !=null && matchMap.containsKey(recMatchId)){
+                        matchMap.remove(recMatchId);
+                    }
                 }
             }
 
