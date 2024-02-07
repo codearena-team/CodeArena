@@ -13,8 +13,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.transaction.Transaction;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -22,6 +24,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.xml.transform.Result;
 import java.util.ArrayList;
@@ -43,6 +46,9 @@ public class ProblemServiceImpl implements ProblemService{
     private static final int ALARM_TYPE = 1;
     private static final int BASIC_SPP = 15;
     private static final int BASIC_PGNO = 1;
+
+    @Value("${judge.java.url}")
+    private String judgeJava;
 
 
     @Override
@@ -153,11 +159,6 @@ public class ProblemServiceImpl implements ProblemService{
             tagListDto.setProblemId(problemForInsertDto.getProblemId());
             tagListDto.setTagList(problemForInsertDto.getTagList());
             mapper.insertProblemTagList(tagListDto);
-            /*
-            * webFlux를 통해 데이터 전송
-            *
-            *
-            * */
 
             resultDto.setStatus("201");
             resultDto.setMsg("문제 임시 생성 및 요청이 성공적으로 보내졌습니다.");
@@ -273,7 +274,9 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
-
+    private WebClient getClient(String url){
+        return WebClient.create(url);
+    }
     @Override
     public ResultDto insertSubmit(String problemId, SubmitDto submitDto) {
         ResultDto resultDto = new ResultDto();
@@ -284,9 +287,15 @@ public class ProblemServiceImpl implements ProblemService{
         log.debug("params : {}", submitDto);
         try{
             mapper.insertSubmit(submitDto);
-            /*
-            * WebFlux 채점서버 제출부
-            * */
+            WebClient client = getClient(judgeJava);
+            Integer submitNo = submitDto.getSubmitNo();
+            HashMap<String, String> params = new HashMap<>();
+            log.debug("url : {}", judgeJava);
+            params.put("submitNo", String.valueOf(submitNo));
+            params.put("userId", null);
+            params.put("problemId", submitDto.getProblemId());
+            params.put("code", submitDto.getCode());
+            client.post().uri("/judge/normal").contentType(MediaType.APPLICATION_JSON).bodyValue(params).retrieve().bodyToMono(HashMap.class);
             SubmitTagListDto listDto = new SubmitTagListDto();
             listDto.setSubmitNo(submitDto.getSubmitNo());
             listDto.setTagList(submitDto.getTagList());
