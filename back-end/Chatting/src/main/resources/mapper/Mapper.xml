@@ -12,6 +12,12 @@
         <result column="start_time" property="startTime"/>
         <result column="game_language" property="language"/>
     </resultMap>
+
+    <resultMap id="winnerInfo" type="WinnerInfoDto">
+        <result column="user_id" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+    </resultMap>
+
     <!-- 검색조건 동적쿼리 -->
     <sql id="search">
         <if test='word != null and word != ""'>
@@ -45,14 +51,36 @@
     <!-- 승자 판단 동적쿼리-->
     <sql id="winner">
         <if test='winner != null and winner != ""'>
-            SET winner = #{winner}
+            , winner = #{winner}
         </if>
     </sql>
+
+    <!-- 레이팅 조회 동적쿼리 -->
+    <sql id="rating">
+        <if test='gamemode == "0"'>
+            SELECT speed_rating
+        </if>
+        <if test='gamemode == "1"'>
+            SELECT effi_rating
+        </if>
+    </sql>
+
+    <!-- gameMode SET 동적쿼리 -->
+    <sql id="modeset">
+        <if test='gamemode == "0"'>
+            speed_rating = #{rating}
+        </if>
+        <if test='gamemode == "1"'>
+            effi_rating = #{rating}
+        </if>
+    </sql>
+
 
     <!-- 랜덤 문제번호 조회 -->
     <select id="findProblemById" resultType="int">
         SELECT problem_id
         FROM code_arena.ps_list
+        WHERE problem_visibility = 1
         ORDER BY RAND() LIMIT 1;
     </select>
     <!-- 특정 게임방 조회 -->
@@ -89,10 +117,35 @@
 
     <update id="terminateGame" parameterType="string">
         UPDATE competitive_game_list
-        SET end_time = now()
         <set>
+            end_time = now()
             <include refid="winner"></include>
         </set>
         WHERE game_id = #{gameId};
+    </update>
+
+    <select id="passProblem" parameterType="string" resultType="int">
+        SELECT DISTINCT(user_id)
+        FROM arena_submit_status
+        WHERE game_id = #{gameId} AND (user_id = #{player1} OR user_id = #{player2}) AND submit_status = '맞았습니다.';
+    </select>
+
+    <select id="winnerSearch" parameterType="string" resultMap="winnerInfo">
+        SELECT user_id, user_nickname
+        FROM arena_submit_status
+        WHERE game_id = #{gameId} AND submit_status = '맞았습니다.'
+        ORDER BY time_complexity ASC , submit_date ASC LIMIT 1;
+    </select>
+
+    <select id="isRating" parameterType="map" resultType="int">
+        <include refid="rating"></include>
+        FROM user
+        WHERE user_id = #{player}
+    </select>
+
+    <update id="refreshRating" parameterType="string">
+        UPDATE user
+        <set><include refid="modeset"></include></set>
+        WHERE user_id = #{userId};
     </update>
 </mapper>

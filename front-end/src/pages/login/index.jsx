@@ -9,6 +9,7 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'; 
 import { setRefreshToken } from '../../features/login/authSlice';
 import { setAccessToken } from '../../features/login/accessSlice';
+import swal from 'sweetalert'
 
 axios.defaults.withCredentials = true;
 
@@ -40,7 +41,7 @@ export default function Login() {
     // }
     if (checkEmail()) {
       axios({
-        url: 'http://i10d211.p.ssafy.io:8081/api/user/login',
+        url: 'https://i10d211.p.ssafy.io/api/user/login',
         method:'post',
         data: {
           userEmail : email, 
@@ -49,8 +50,9 @@ export default function Login() {
       })
       .then((res)=>{
         if (res.data.status === "404"){
-          alert('이메일,패스워드가 틀렸습니다.')
+          swal('로그인 실패', "이메일,비밀번호가 틀렸습니다", 'warning');
         }else{
+          swal("로그인성공", "", "success");
           dispatch(setRefreshToken(res.data.data))
           dispatch(setAccessToken(res.headers.authorization)) 
           navigate('/')
@@ -62,6 +64,11 @@ export default function Login() {
       }
     }
 
+    const handleKeyDown = (e) => {
+      if (e.keyCode === 13) {
+        handleLogin()
+      }
+    };
 
   return (
     <div className='flex justify-center'>
@@ -86,7 +93,9 @@ export default function Login() {
           </div>
           <div className="container">
             <div className="inputs">
-              <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input type='password' value={password} 
+              onKeyDown={handleKeyDown}
+              onChange={(e) => setPassword(e.target.value)} required />
               <label>비밀번호</label>
             </div>
           </div>
@@ -96,7 +105,7 @@ export default function Login() {
             <Link to='/login/signup'><p className='text-sm'>회원가입</p></Link>
           </div>
           <br />
-          <button className="btn btn-neutral w-full rounded-full" onClick={handleLogin}>로그인</button>
+          <button className="btn btn-neutral w-full rounded-full" onClick={handleLogin} onKeyDown={handleKeyDown}>로그인</button>
           <br />
           <br />    
           <div className='flex justify-evenly'>

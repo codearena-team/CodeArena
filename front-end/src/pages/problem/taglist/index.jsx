@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import "../../css/problemsolve.css"
 
 export default function TagList() {
-  const [tagList, setTagList] = useState(["제목1", "제목1","제목1","제목1","제목1", "제목1","제목1","제목1","제목1"])
+  const navigate = useNavigate()
+  const [tagList, setTagList] = useState([])
   useEffect(()=> {
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/category`,
+      url : `https://i10d211.p.ssafy.io/api/problem/category`,
     })
     .then((res)=> {
       console.log(res);
@@ -24,29 +26,23 @@ export default function TagList() {
 
   return(
     <div className="mx-10 flex flex-col">
-      <div>
+      <div className="text-center">
         {/* 문제 목록 테이블 */}
-        <div className="overflow-x-auto">
-          <table className="problemTable w-full">
-            <thead>
-              <tr>
-                <th className="p-1.5">알고리즘 유형 명</th>
-              </tr>
-            </thead>
-            <tbody className="font-normal">
-            
-              {tagList.map((tag, index)=> {
-                return(
-                  <tr onClick={onClick} className={((index%2)===0) ? 'even ' : ''} >
-                    <th className="p-1">{tag.tagName}</th>
-                  </tr>
-                )
-              })}
-              
-            
-            </tbody>
-          </table>
+      <div
+        className=" bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
+        style={{ backgroundColor: '#E3E6D9' }}
+      >
+        <div className="text-center">알고지즘 카테고리</div>
+      </div>
+
+      {/* 데이터 리스트 */}
+      {tagList.map((item, index) => (
+        <div key={index} className="w-full border-b items-center rounded-xl shadow-sm hover:bg-gray-300">
+          <div className="py-4" onClick={()=>navigate(`/problem?orderBy=percent&tag=${item.tagName}`)}>
+            <div className="text-center w-full">{item.tagName}</div>
+          </div>
         </div>
+      ))}
       </div>
     </div>
   )

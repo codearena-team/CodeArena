@@ -1,15 +1,13 @@
-import CodeMirror from '@uiw/react-codemirror';
 import Testcase from './Testcase';
 import "../css/testcasemodal.css"
-import { useState } from 'react';
 
 
 export default function TestCaseModal(props) {
   const testCaseList = props.testcase
   return(
     <div>
-      <dialog id="testcaseModal" className="modal">
-        <div className="modal-box p-0 scrollBar" style={{maxWidth:"1000px", width:"80%"}}>
+      <dialog id={`testCaseModal${props.submitNo}`} className="modal">
+        <div className="modal-box p-0 scrollBar" style={{maxWidth:"1000px"}}>
           <div className='z-50 sticky p-2' style={{backgroundColor:"#F4ECE4", top:"0px"}}>
             <form method="dialog" className='flex justify-between' >
               <div className='w-36'>

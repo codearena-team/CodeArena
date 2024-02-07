@@ -2,6 +2,7 @@ import '../../css/custom.css'
 import { useState } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import swal from 'sweetalert';
 
 export default function Signup(){
   const navigate = useNavigate()
@@ -62,6 +63,9 @@ export default function Signup(){
       })
       .then((res)=>{
         console.log(res)
+        swal("회원가입되었습니다","success", {
+         
+        });
         navigate('/')
       })
       .catch((err)=>{

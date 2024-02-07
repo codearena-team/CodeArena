@@ -18,7 +18,7 @@ export default function Alarm() {
   // 알림 목록 요청보내기 렌더링 될때는 기본이 받는알림함보기
   useEffect(()=> {
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/alarm/receive?userId=${userId}`,
+      url : `https://i10d211.p.ssafy.io/api/alarm/receive?userId=${userId}`,
       method : 'get',
     })
     .then((res)=>{
@@ -36,7 +36,7 @@ export default function Alarm() {
 
   useEffect(()=>{
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/alarm/send/list?userId=${userId}`,
+      url : `https://i10d211.p.ssafy.io/api/alarm/send/list?userId=${userId}`,
       method : 'get',
     })
     .then((res)=>{
@@ -50,8 +50,8 @@ export default function Alarm() {
 
 
   return(
-    <div className="mx-10 flex flex-col">
-      <div className="flex justify-between align-middle">
+    <div className="mx-20 flex flex-col">
+      <div className="flex justify-between align-middle mt-5">
         <div className="flex items-end">
           {/* 클릭시에 받은알림 , 보낸알림 목록 axios요청하는 함수 */}
           <button onClick={(e)=>{setAlarmtype(e.target.value)}} className={alarmtype==='receive' ? 'orderBy' : 'orderBy unchoice'} value='receive'>받은알림</button>  
@@ -63,13 +63,13 @@ export default function Alarm() {
         <div className="overflow-x-auto">
           <table className="problemTable w-full">
             <thead>
-              <tr>
-                <th className="p-1.5">번호</th>
-                <th className="p-1.5">카테고리</th>
-                <th className="p-1.5">처리여부</th>
-                <th className="p-1.5 w-1/2">내용</th>
-                <th className="p-1.5">{(alarmtype==='send') ?'받은사람' : '보낸사람'}</th>
-                <th className="p-1.5">날짜</th>
+              <tr style={{backgroundColor:'rgb(227, 230, 217)'}}>
+                <th className="p-1.5 font-thin">번호</th>
+                <th className="p-1.5 font-thin">카테고리</th>
+                <th className="p-1.5 font-thin">처리여부</th>
+                <th className="p-1.5 w-1/2 font-thin">내용</th>
+                <th className="p-1.5 font-thin">{(alarmtype==='send') ?'받은사람' : '보낸사람'}</th>
+                <th className="p-1.5 font-thin">날짜</th>
               </tr>
             </thead>
 
@@ -97,13 +97,7 @@ export default function Alarm() {
         </div>
       </div>
 
-      {/* 페이지네이션 */}
-      <div class="join flex justify-center my-2">
-        <button class="join-item btn btn-sm">1</button>
-        <button class="join-item btn btn-sm btn-active">2</button>
-        <button class="join-item btn btn-sm">3</button>
-        <button class="join-item btn btn-sm">4</button>
-      </div>
+    
     </div>
   )
 }

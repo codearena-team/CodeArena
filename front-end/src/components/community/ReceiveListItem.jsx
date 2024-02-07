@@ -20,19 +20,19 @@ export default function ReceiveListItem(probs) {
 
   return(
     <tr className={((probs.isRead)===1) ? 'even' : ''} >
-      <th className="p-1">{probs.receiveItem.alarmId}</th>
-      <th className="p-1">{word}</th>
+      <th className="p-1 font-thin">{probs.receiveItem.alarmId}</th>
+      <th className="p-1 font-thin">{word}</th>
       {/* 처리여부는 드롭다운박스 */}
       <th> 
-        <select value={alarmStatus} onChange={(e)=>{setAlarmStatus(e.target.value)}} className="select select-sm select-bordered w-28" >
+        <select value={alarmStatus} onChange={(e)=>{setAlarmStatus(e.target.value)}} className="select select-sm font-thin select-bordered w-28" >
           <option>처리중</option>
           <option>처리완료</option>
           <option>거절</option>
         </select>
       </th>
-      <th className="p-1">{probs.receiveItem.alarmMsg}</th>
-      <th className="p-1">{probs.receiveItem.fromNickname}</th>
-      <th className="p-1">{probs.receiveItem.alarmDate}</th>
+      <th className="p-1 font-thin">{probs.receiveItem.alarmMsg}</th>
+      <th className="p-1 font-thin">{probs.receiveItem.fromNickname}</th>
+      <th className="p-1 font-thin">{probs.receiveItem.alarmDate}</th>
     </tr>
   )
 }

@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class ChatSubmitMessage {
 
-    public enum GameMode {
+    public enum MessageType {
         SPEED, EFFI;
     }
 
-    private GameMode mode;
+    private MessageType mode;
     private String gameId;
     private String sender;
     private String result;
