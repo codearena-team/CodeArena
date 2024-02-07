@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import Rank from '../../images/main/Summary/Rank.png';
 import Hand from '../../images/main/Summary/hand.png';
 import Plus from '../../images/main/Summary/Plus.png';
+import axios from 'axios';
 
 // 스크롤 애니메이트 이벤트 1
 const frameInAnimation_text = keyframes`
@@ -56,6 +57,17 @@ export default function Summary() {
   const [animate_add, setAnimate_add] = useState(false);
 
   useEffect(() => {
+    axios.get('https://i10d211.p.ssafy.io/api/problem?orderBy=date&cate=&word=&pgno=1&spp=5&tag=')
+    .then((res)=> {
+      console.log(res);
+      setaddProblemSolve(res.data.data.problemWithSearch)
+    }).catch((err)=> {
+      console.log(err);
+    })
+
+
+
+
     const handleScroll = () => {
       console.log('스크롤 애니메이트 이벤트 발생 확인');
       // 특정 조건을 확인하여 animate 상태 토글
@@ -92,8 +104,8 @@ export default function Summary() {
         ${animate_add ? 'ease-out' : ''
       }`}
     >
-        <p className="text-lg font-semibold mb-2">{problem.title}</p>
-      <p className="text-gray-500">{problem.description}</p>
+        <p className="text-lg font-semibold mb-2">#{problem.problemId}</p>
+      <p className="text-gray-500">{problem.problemTitle}</p>
     </AnimateContainer_add>
   );
 
@@ -122,20 +134,20 @@ export default function Summary() {
   // ]
 
   // 질문게시판과 연동하여 수정필요
-  const popularQuestions = [
+  const [popularQuestions, setPopularQuestions] = useState([
       { title: '1524 코드', description: '코드 질문이요~' },
       { title: '반례', description: '반례 좀 찾아주실분?' },
       { title: '아레나', description: '팀 구합니다' },
       { title: '아레나', description: '관련 질문이요' },
-    ];
+    ]);
   // 문제페이지와 연동하여 수정 필요
-  const addProblemSolve = [
+  const [addProblemSolve, setaddProblemSolve] = useState([
       { title: '#6152', description: '별찍기 정복 8' },
       { title: '#6153', description: '별찍기 정복 9' },
       { title: '#6154', description: '별찍기 정복 10' },
       { title: '#6155', description: '별찍기 정복 11' },
       { title: '#6156', description: '별찍기 정복 12' },
-  ]
+  ])
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

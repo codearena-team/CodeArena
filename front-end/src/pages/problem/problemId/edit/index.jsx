@@ -1,10 +1,12 @@
 import CodeMirror from '@uiw/react-codemirror';
 import {useState, useCallback, useEffect} from "react";
 import { useParams, useNavigate } from 'react-router-dom';
+import { UseSelector, useSelector } from 'react-redux';
 import axios from 'axios';
 import TestCaseModal from '../../../../components/problem/TestcaseModal';
 
 export default function ProblemEdit() {
+  const userId = useSelector(state => state.auth.userId)
   const navigate = useNavigate()
   const params = useParams()
   const [title, setTitle] = useState("");
@@ -24,7 +26,7 @@ export default function ProblemEdit() {
   const problemId = params.problemId
   useEffect(() => {
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}/modify`,
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/modify`,
       method : "get",
     })
     .then((res) => {
@@ -102,7 +104,7 @@ export default function ProblemEdit() {
       url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}`,
       method : "put",
       data : {
-        userId:1,
+        userId:userId,
         problemId:problemId,
         problemTitle:title,
         problemContent:content,
@@ -129,7 +131,7 @@ export default function ProblemEdit() {
 
   const onDelete = () => {
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}`,
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
       method : "delete"
     })
     .then((res) => {
@@ -217,8 +219,12 @@ export default function ProblemEdit() {
           </div> 
         </div>
         <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="inputEx">검증용 코드</label>
-          <CodeMirror value={testCode} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
+          <label className="font-bold me-1"htmlFor="inputEx">
+            검증용 코드
+            <div>
+            <button className='btn btn-sm btn-neutral'>컴파일</button>
+            </div>
+          </label>          <CodeMirror value={testCode} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
         </div>
         <div className='flex justify-center mb-4'>
           <div className="btn w-60 btn-sm text-lg text-center rounded-full drop-shadow" onClick={()=>document.getElementById('testcaseModal').showModal()}>테스트케이스 보기</div>

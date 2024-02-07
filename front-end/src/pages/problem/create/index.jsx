@@ -1,9 +1,14 @@
 import CodeMirror from '@uiw/react-codemirror';
 import {useState, useCallback, useEffect} from "react";
+import { UseSelector, useSelector } from 'react-redux';
 import { useAuthCheck } from '../../../features/useAuthCheck';
+import { java } from '@codemirror/lang-java';
+import { python } from '@codemirror/lang-python';
+import { cpp } from '@codemirror/lang-cpp';
 import axios from 'axios';
 
 export default function ProblemCreate() {
+  const userId = useSelector(state => state.auth.userId)
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [inputDescription, setInputDescription] = useState("");
@@ -130,10 +135,10 @@ export default function ProblemCreate() {
       return {tagName : selected}
     })
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/problem`,
+      url : `https://i10d211.p.ssafy.io/api/problem`,
       method : "post",
       data : {
-        userId:1,
+        userId:userId,
         problemTitle:title,
         problemContent:content,
         problemInputDesc:inputDescription,
@@ -201,27 +206,32 @@ export default function ProblemCreate() {
           
           <div className='grid grid-cols-2 gap-5'>
             <div className='flex justify-end'>
-              <label className="font-bold me-1"htmlFor="rating">검증코드언어</label>
+              <label className="font-bold me-1"htmlFor="rating">언어</label>
               <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-8/12" >
                 <option>java</option>
                 <option>python</option>
                 <option>cpp</option>
               </select>
             </div>
-            <div className='flex justify-end'>
+            <div className='text-center'>
+              <span>공지사항을 먼저 읽고 입출력을 작성해 주세요.</span><br />
+              <span className=' text-blue-700'>입출력 파일 공지사항</span>
+            </div>
+            {/* <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="rating">문제 등급</label>
               <input value={rating} onChange={(e)=>{setRating(e.target.value)}} className="w-8/12 bg-white rounded-lg bor input input-sm input-bordered" id="rating" type="number" />
-            </div>
+            </div> */}
             
           </div>
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-3 gap-5">
+            <div></div>
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="time">시간제한</label>
-              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-8/12" />
+              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-6/12" />
             </div>
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="mem">메모리제한</label>
-              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-8/12" />
+              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-6/12" />
             </div>
           </div>
         </div>
@@ -243,11 +253,17 @@ export default function ProblemCreate() {
           </div> 
         </div>
         <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="inputEx">검증용 코드</label>
-          <CodeMirror onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
+          <label className="font-bold me-1"htmlFor="inputEx">
+            검증용 코드
+            <div>
+            <button className='btn btn-sm btn-neutral'>컴파일</button>
+            </div>
+          </label>
+          <CodeMirror extensions={[java(),python(),cpp()]} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
         </div>
         <div className='flex justify-center'>
           <button className='btn btn-neutral w-60 text-2xl text-center rounded-full' onClick={onClick} >제 출</button>
+          <div></div>
         </div>
       </div>
     </div>

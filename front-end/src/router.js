@@ -47,7 +47,7 @@ const ProtectedRoute = ({ user, children }) => {
         navigate('/login')
       }
     })
-  },[component])
+  },[component,children])
 
   return (
     <div>
