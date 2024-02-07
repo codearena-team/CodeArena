@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../../css/shake.css';
 import EnterModal from '../../modal/Competition/CompEnterModal';
+import axios from 'axios';
 
 export default function CompetitionList() {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 표시 데이터
@@ -11,18 +12,7 @@ export default function CompetitionList() {
   const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
 
   // 가상의 단체전 방 데이터 (일단은 10개정도..)
-  const [problemData, setProblemData] = useState([
-    { id: 1, problemNumber: '#1000', problemTitle: '두 정수 더하기', participants: ['user1', 'user2'], mode: '스피드전', spectators: 5, isFull: false },
-    { id: 2, problemNumber: '#1001', problemTitle: '두 정수 빼기', participants: ['user3', 'user4'], mode: '스피드전', spectators: 8, isFull: false },
-    { id: 3, problemNumber: '#1002', problemTitle: '두 정수 곱하기', participants: ['user5', 'user6'], mode: '효율전', spectators: 2, isFull: true },
-    { id: 4, problemNumber: '#1003', problemTitle: '두 정수 나누기', participants: ['user7', 'user8'], mode: '효율전', spectators: 10, isFull: false },
-    { id: 5, problemNumber: '#1004', problemTitle: '짝수와 홀수', participants: ['user9', 'user10'], mode: '스피드전', spectators: 3, isFull: true },
-    { id: 6, problemNumber: '#1005', problemTitle: '평균 구하기', participants: ['user11', 'user12'], mode: '스피드전', spectators: 4, isFull: false },
-    { id: 7, problemNumber: '#1006', problemTitle: '최댓값과 최솟값', participants: ['user13', 'user14'], mode: '효율전', spectators: 6, isFull: true },
-    { id: 8, problemNumber: '#1007', problemTitle: '최소공배수와 최대공약수', participants: ['user15', 'user16'], mode: '효율전', spectators: 7, isFull: false },
-    { id: 9, problemNumber: '#1008', problemTitle: 'A/B', participants: ['user17', 'user18'], mode: '스피드전', spectators: 9, isFull: true },
-    { id: 10, problemNumber: '#1009', problemTitle: '분산처리', participants: ['user19', 'user20'], mode: '스피드전', spectators: 2, isFull: false },
-  ]);
+  const [problemData, setProblemData] = useState([]);
     
   const PAGE_SIZE = 10; // 한 페이지에 보여줄 방 개수
 
@@ -77,6 +67,14 @@ export default function CompetitionList() {
 
   // 초기 렌더링 시 데이터 설정
   useEffect(() => {
+    axios.get('https://i10d211.p.ssafy.io/game/chat/rooms')
+    .then(res=> {
+      console.log(res);
+      setProblemData(res.data.data.gameRooms)
+    }) .catch(err=> {
+      console.log(err);
+    })
+
     updatePaginatedData();
   }, []);
 
@@ -124,12 +122,13 @@ export default function CompetitionList() {
 
       {/* 테이블 헤더 */}
       <div
-        className="grid grid-cols-6 bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
+        className="grid grid-cols-7 bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
         style={{ backgroundColor: '#E3E6D9' }}
       >
         <div className="text-center">문제번호</div>
         <div className="text-center">문제제목</div>
-        <div className="text-center">참여자</div>
+        <div className="text-center">플레이어1</div>
+        <div className="text-center">플레이어2</div>
         <div className="text-center">모드</div>
         <div className="text-center">관전자</div>
         <div className="text-center">입장 여부</div>
@@ -137,18 +136,19 @@ export default function CompetitionList() {
 
       {/* 데이터 리스트 */}
       {paginatedData.map((item, index) => (
-        <div key={index} className="grid w-full grid-cols-6 border-b py-2 items-center rounded-xl shadow-sm hover:bg-gray-300">
-          <div className="text-center">{item.problemNumber}</div>
-          <div className="text-center">{item.problemTitle}</div>
-          <div className="text-center">{item.participants ? item.participants.join(', ') : ''}</div>
-          <div className="text-center">{item.mode}</div>
-          <div className="text-center">{item.spectators}</div>
+        <div key={index} className="grid w-full grid-cols-7 border-b py-2 items-center rounded-xl shadow-sm hover:bg-gray-300">
+          <div className="text-center">{item.problemId}</div>
+          <div className="text-center">{item.title}</div>
+          <div className="text-center">{item.userRed}</div>
+          <div className="text-center">{item.userBlue} </div>
+          <div className="text-center">{item.gameMode ? '효율' : '스피드'}</div>
+          <div className="text-center">{item.participants}</div>
           <div className="text-center">
             {item.isFull ? (
             <button className="btn btn-disabled" disabled>입장불가</button>
             ) : (
               // 경쟁전 관전 페이지로 입장하기
-              <EnterModal competitionId={item.id} />
+              <EnterModal competitionId={item.gameId} />
             )}
           </div>
         </div>

@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import registerServiceWorker from './../../registerServiceWorker';
+import Webrtc from "./Webrtc";
 
 export default function Test () {
-  const [sessionId,setSessionId ] = useState()
+  const [sessionId,setSessionId ] = useState('')
   const create = ()=> {
     axios({
       url : 'https://i10d211.p.ssafy.io/game/vidu/sessions',
@@ -37,11 +39,12 @@ export default function Test () {
 
   return (
     <div>
-    <input className="input w-96" type="text" onClick={e=>{setSessionId(e.target.value)}} />
+    <input className="input w-96" type="text" onChange={e=>{setSessionId(e.target.value)}} />
     <button className="btn btn-neutral mx-4" onClick={create}>create</button>
     <button className="btn btn-neutral" onClick={join}>join</button>
-
+    <Webrtc />
 
     </div>
   )
 }
+registerServiceWorker();
