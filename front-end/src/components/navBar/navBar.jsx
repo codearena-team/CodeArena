@@ -10,6 +10,7 @@ import axios from 'axios'
 import { setAccessToken } from '../../features/login/accessSlice'
 import { error, get } from 'jquery'
 import swal from 'sweetalert'
+import '../css/dropdown.css'
 
 
 
@@ -40,6 +41,7 @@ export default function NavBar() {
     navigate('/')
   }
 
+  const [showDropdown,setShowDropdown ] = useState(false)
 
   return (
     <Disclosure as="nav">
@@ -59,15 +61,29 @@ export default function NavBar() {
                 <div className="flex justify-center items-center">
                   <div className="flex space-x-4">
                     {filterNav.map((item) => (
+                      <div key={item.name} className='relative'>
                       <Link
                         key={item.name} 
                         to={item.href}
                         className={classNames(
-                         'text-xl hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium'
+                         'text-xl rounded-md px-3 py-2 font-medium hover:bg-gray-700 hover:text-white'
                         )}
+                        onMouseEnter={() => setShowDropdown(item.name ==='Problem' ? true : false)}
+                        onMouseLeave={() => setShowDropdown(false)}
                       >
                         {item.name}
                       </Link>
+                      {/* // 드롭다운 메뉴위치 */}
+                      {item.name === 'Problem' && showDropdown && (
+                        <div className="absolute top-full left-0 rounded-md z-50 mt-0.5" style={{backgroundColor:'#F4F5F1'}}
+                        onMouseEnter={() => setShowDropdown(true)}
+                        onMouseLeave={() => setShowDropdown(false)}
+                        >
+                          <Link to="/problem/submit" className="text-xl block rounded-md px-3 py-3 font-medium hover:bg-gray-700 hover:text-white">Submit</Link>
+                          <Link to="/problem/tagList" className="text-xl block rounded-md px-3 py-2 font-medium hover:bg-gray-700 hover:text-white">Category</Link>
+                        </div>
+                      )}
+                      </div>
                     ))}
                   {/* 벨아이콘 알림함 */}
                     { isLogin && (

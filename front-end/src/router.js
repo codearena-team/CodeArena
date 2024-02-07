@@ -33,6 +33,14 @@ import NotFound from './pages/notfound/index'
 import Test from './pages/test/test'
 import CompResult from './components/arena/Match/Competition/CompResult';
 import GroupResult from './components/arena/Match/Group/GroupResult';
+import SpeedResult from './components/arena/resultpage/speedresult';
+import SpeedDraw from './components/arena/resultpage/speeddraw';
+import EffiResult from './components/arena/resultpage/effiresult';
+
+
+
+
+
 
 const ProtectedRoute = ({ user, children }) => {
   const [authCheck] = useAuthCheck()
@@ -98,6 +106,12 @@ export default function Router () {
       <Route path="/login/snssignup" element={<SnsSignup/>} /> 
       <Route path="*" element={<NotFound/>} /> 
       
+      
+      <Route path="/speedresult" element={<SpeedResult/>} />
+      <Route path="/speeddraw" element={<SpeedDraw/>} />
+      <Route path="/effiresult" element={<EffiResult/>} />
+
+
 
       <Route
         path="/test"
