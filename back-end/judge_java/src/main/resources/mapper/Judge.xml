@@ -23,8 +23,8 @@
 
     <update id="updatePsSubmit" parameterType="judgeValidateResultDto">
         update ps_submit
-        set submit_status="#{msg}", time_complexity="#{time}", tid="#{wrongTestCaseNo}"
-        where submit_no="#{submitNo}";
+        set submit_status=#{msg}, time_complexity=#{time}, tid=#{wrongTestCaseNo}
+        where submit_no=#{submitNo};
     </update>
 
 </mapper>

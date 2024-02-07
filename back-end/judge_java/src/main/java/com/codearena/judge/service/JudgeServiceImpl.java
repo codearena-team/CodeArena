@@ -112,7 +112,7 @@ public class JudgeServiceImpl implements JudgeService{
             result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
             log.info("[validationCheck] judgeValidationResult : {}" , result);
 
-//            mapper.updatePsSubmit(result);
+            mapper.updatePsSubmit(result);
 
         } catch (Exception e) {
             judgeResultDto.setStatus("500");
@@ -135,13 +135,13 @@ public class JudgeServiceImpl implements JudgeService{
 
         JudgeValidateResultDto result = null;
 
-        // 시스템 콜 체크
-//        if(judgeUtil.checkSystemCallInCode(userInput.getCode())) {
-//            judgeResultDto.setStatus("404");
-//            judgeResultDto.setMsg("코드 내 시스템 콜 감지");
-//            judgeResultDto.setData(null);
-//            return judgeResultDto;
-//        }
+//         시스템 콜 체크
+        if(judgeUtil.checkSystemCallInCode(userInput.getCode())) {
+            judgeResultDto.setStatus("404");
+            judgeResultDto.setMsg("코드 내 시스템 콜 감지");
+            judgeResultDto.setData(null);
+            return judgeResultDto;
+        }
 
         try {
             // 문제 정보 가져오기
@@ -157,11 +157,16 @@ public class JudgeServiceImpl implements JudgeService{
             judgeUtil.createCodeFile(userInput.getCode(), path);
             // 코드 검증하기
             result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
-            log.info("[validationCheck] judgeValidationResult : {}" , result);
+            log.info("[normal] judgeValidationResult : {}" , result);
 
+            result.setSubmitNo(userInput.getSubmitNo());
+            log.info("userInput : {}" , userInput);
+            log.info("result : {}" , result);
             mapper.updatePsSubmit(result);
 
         } catch (Exception e) {
+            log.debug("Exception : {}", e);
+
             judgeResultDto.setStatus("500");
             judgeResultDto.setMsg("서버 내부 에러");
         }

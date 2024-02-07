@@ -48,6 +48,7 @@ public class JudgeUtil {
         if(file.createNewFile());
 
         FileWriter fw = new FileWriter(file);
+        log.info("code : {}", code);
         fw.write(code);
         fw.close();
     }
@@ -199,8 +200,8 @@ public class JudgeUtil {
 
         // 결과 반영 했으면 디렉토리 삭제하기
         // 내부 파일부터 삭제하고 디렉토리 삭제
-        javaFile.delete();
-        dirFile.delete();
+//        javaFile.delete();
+//        dirFile.delete();
 
         return result;
     }
