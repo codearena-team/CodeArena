@@ -40,7 +40,7 @@ public class JudgeUtil {
     }
 
     public void createCodeFile(String code, String path) throws IOException {
-        File file = new File(path, "solution.java");
+        File file = new File(path, "Solution.java");
 
         log.info("파일 생성 중. {}");
         log.info("path : {}" + path);
