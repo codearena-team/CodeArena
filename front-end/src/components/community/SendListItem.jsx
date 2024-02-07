@@ -18,13 +18,13 @@ export default function SendListItem(probs) {
 
   return(
     <tr className={((probs.isRead)===1) ? 'even ' : ''} >
-      <th className="p-1">{probs.sendItem.alarmId}</th>
-      <th className="p-1">{word}</th>
+      <th className="p-1 font-thin">{probs.sendItem.alarmId}</th>
+      <th className="p-1 font-thin">{word}</th>
       {/* 처리여부는 드롭다운박스 */}
-      <th className="p-1">{probs.sendItem.alarmStatus}</th>
-      <th className="p-1">{probs.sendItem.alarmMsg}</th>
-      <th className="p-1">{probs.sendItem.toNickname}</th>
-      <th className="p-1">{probs.sendItem.alarmDate}</th>
+      <th className="p-1 font-thin">{probs.sendItem.alarmStatus}</th>
+      <th className="p-1 font-thin">{probs.sendItem.alarmMsg}</th>
+      <th className="p-1 font-thin">{probs.sendItem.toNickname}</th>
+      <th className="p-1 font-thin">{probs.sendItem.alarmDate}</th>
     </tr>
   )
 }
