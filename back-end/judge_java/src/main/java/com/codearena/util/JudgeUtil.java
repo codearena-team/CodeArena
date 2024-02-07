@@ -179,7 +179,7 @@ public class JudgeUtil {
         } else {
             timeSum *= 1000;
             timeSum /= testCase.size();
-            timeSum = Math.round(timeSum);
+            timeSum = Math.floor(timeSum);
             timeResult = timeSum + "";
         }
 
