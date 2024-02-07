@@ -1,11 +1,15 @@
 package com.codearena.util;
 
+import com.codearena.judge.dto.JudgeProblemInfoDto;
 import com.codearena.judge.dto.JudgeValidateResultDto;
 import com.codearena.judge.dto.TestCaseDto;
+import com.codearena.judge.mapper.JudgeMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -13,7 +17,10 @@ import java.util.regex.Pattern;
 
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class JudgeUtil {
+
+    private final JudgeMapper mapper;
 
     public void createFolder(String path) {
         // 폴더 생성
@@ -53,11 +60,38 @@ public class JudgeUtil {
         return (matcher.find());
     }
 
-    public JudgeValidateResultDto validate(Runtime runtime,
-                                           String cmd,
+    public JudgeProblemInfoDto getProblemInfo(String problemId) {
+        JudgeProblemInfoDto judgeProblemInfoDto = new JudgeProblemInfoDto();
+
+        List<TestCaseDto> testCaseList = new ArrayList<>();
+
+        try {
+            judgeProblemInfoDto = mapper.getProblemInfo(problemId);
+            testCaseList = mapper.getTestCase(problemId);
+            judgeProblemInfoDto.setTestCaseList(testCaseList);
+        } catch (Exception e) {
+            log.debug("Exception : {} ", e);
+        }
+
+        return judgeProblemInfoDto;
+    }
+
+    /**
+     *
+     * @param cmd : 런타임에서 실행할 명령
+     * @param testCase : 채점 테스트 케이스
+     * @param timeLimit : 시간제한
+     * @param path : 디렉토리 생성 경로
+     * @return JudgeValidateResultDto
+     * @throws Exception
+     */
+    public JudgeValidateResultDto validate(String cmd,
                                            List<TestCaseDto> testCase,
                                            Long timeLimit,
                                            String path) throws Exception {
+
+        // 런타임 생성하기
+        Runtime runtime = Runtime.getRuntime();
 
         JudgeValidateResultDto result = new JudgeValidateResultDto();
 

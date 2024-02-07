@@ -1,9 +1,6 @@
 package com.codearena.judge.service;
 
-import com.codearena.judge.dto.JudgeResultDto;
-import com.codearena.judge.dto.JudgeValidateResultDto;
-import com.codearena.judge.dto.JudgeValidationCheckDto;
-import com.codearena.judge.dto.TestCaseDto;
+import com.codearena.judge.dto.*;
 import com.codearena.judge.mapper.JudgeMapper;
 import com.codearena.util.JudgeUtil;
 import lombok.RequiredArgsConstructor;
@@ -51,19 +48,19 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "java" + path + "/solution.java";
+            String cmd = "java " + path + "/solution.java";
+            log.info("CMD : {}", cmd);
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
             // 코드 파일 생성하기 (solution.java)
             judgeUtil.createCodeFile(userInput.getProblemValidationCode(), path);
-            // 런타임 생성하기
-            Runtime runtime = Runtime.getRuntime();
             // 코드 검증하기
-            result = judgeUtil.validate(runtime, cmd, testCase, timeLimit, path);
+            result = judgeUtil.validate(cmd, testCase, timeLimit, path);
+            log.info("judgeValidationResultn[validationCheck] : {}" , result);
 
         } catch (Exception e) {
-            log.debug("Exception : {}" , e);
+            log.debug("Exception[validationCheck] : {}" , e);
             judgeResultDto.setStatus("500");
             judgeResultDto.setMsg("서버 내부 에러");
         }
@@ -73,4 +70,50 @@ public class JudgeServiceImpl implements JudgeService{
         return judgeResultDto;
     }
 
+    @Override
+    public JudgeResultDto judgeArena(JudgeArenaDto judgeArenaDto) {
+        return null;
+    }
+
+    @Override
+    public JudgeResultDto judgeNormal(JudgeNormalDto userInput) {
+        JudgeResultDto judgeResultDto = new JudgeResultDto();
+
+        judgeResultDto.setStatus("200");
+        judgeResultDto.setMsg("일반 문제 채점 완료");
+
+        judgeResultDto.setData(null);
+
+        // 시스템 콜 체크
+        if(judgeUtil.checkSystemCallInCode(userInput.getUserCode())) {
+            judgeResultDto.setStatus("404");
+            judgeResultDto.setMsg("코드 내 시스템 콜 감지");
+            judgeResultDto.setData(null);
+            return judgeResultDto;
+        }
+
+        try {
+            // 문제 정보 가져오기
+            JudgeProblemInfoDto problemInfo = judgeUtil.getProblemInfo(userInput.getProblemId());
+
+            String path = UUID.randomUUID().toString();
+
+            String cmd = "java " + path + "/solution.java";
+
+            // 폴더 생성하기
+            judgeUtil.createFolder(path);
+            // 코드 파일 생성하기 (solution.java)
+            judgeUtil.createCodeFile(userInput.getUserCode(), path);
+            // 코드 검증하기
+//            result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
+
+
+
+        } catch (Exception e) {
+            judgeResultDto.setStatus("500");
+            judgeResultDto.setMsg("서버 내부 에러");
+        }
+
+        return judgeResultDto;
+    }
 }
