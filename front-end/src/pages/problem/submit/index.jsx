@@ -33,7 +33,7 @@ export default function Submit() {
     if (problemId) {
       axios({
         method : 'get',
-        url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}/submit/statistics?userId=6`,
+        url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/submit/statistics?userId=6`,
       })
       .then((res)=> {
         console.log(res)
@@ -50,7 +50,7 @@ export default function Submit() {
     }
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=15&pgno=${pgno}&orderBy=${orderBy}`,
+      url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=15&pgno=${pgno}&orderBy=${orderBy}`,
     })
     .then((res)=> {
       console.log(res);
@@ -102,7 +102,7 @@ export default function Submit() {
 
   
   return(
-    <div className="mx-10 flex flex-col">
+    <div className="mx-20 flex flex-col">
       <div className="flex justify-between align-middle">
         {isvisible && statistics.avgByLang !==null ? (
         <div className="lg:flex gap-2">
@@ -112,21 +112,21 @@ export default function Submit() {
                 <div className="stat-figure text-secondary ">
                   <img src={javaImg} alt="java"className="w-12" />
                 </div>
-                <div className="stat-title font-bold text-sm">java</div>
+                <div className="stat-title  text-sm">java</div>
                 <div className="stat-value text-base mt-1">{statistics.avgByLang.java===0 ? '데이터없음' : statistics.avgByLang.java+'ms'}</div>
               </div>
               <div className="stat p-3">
                 <div className="stat-figure text-secondary">
                   <img src={pythonImg} alt="python" className="w-12" />
                 </div>
-                <div className="stat-title font-bold text-sm">python</div>
+                <div className="stat-title  text-sm">python</div>
                 <div className="stat-value text-base">{statistics.avgByLang.python===0 ? '데이터없음' : statistics.avgByLang.python+'ms'}</div>
               </div>
               <div className="stat p-3">
                 <div className="stat-figure text-secondary">
                   <img src={cppImg} alt="cpp" className="w-12"/>
                 </div>
-                <div className="stat-title font-bold text-sm">cpp</div>
+                <div className="stat-title  text-sm">cpp</div>
                 <div className="stat-value text-base">{statistics.avgByLang.cpp===0 ? '데이터없음' : statistics.avgByLang.cpp+'ms'}</div>
               </div>
             </div>
@@ -177,7 +177,7 @@ export default function Submit() {
         </div>
         
       </div>
-      <div className="flex items-end justify-end">
+      <div className="flex items-end">
         <button onClick={()=>{changeParams('orderBy','submitDate')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='submitDate' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
         <button onClick={()=>{changeParams('orderBy','timeComplexity')}} className={searchParams.get('orderBy')==='timeComplexity' ? 'orderBy' : 'orderBy unchoice'} value='time'>시간복잡도순</button>
       </div>
@@ -186,16 +186,16 @@ export default function Submit() {
         <div className="overflow-x-auto">
           <table className="problemTable w-full rounded-xl rounded-tr-none">
             <thead>
-              <tr>
-                <th className="p-1.5">제출번호</th>
-                <th className="p-1.5">제출자</th>
-                <th className="p-1.5">문제번호</th>
-                <th className="p-1.5 w-3/12">결과</th>
-                <th className="p-1.5">메모리</th>
-                <th className="p-1.5">시간</th>
-                <th className="p-1.5">언어</th>
-                <th className="p-1.5">코드길이</th>
-                <th className="p-1.5">제출날짜</th>
+              <tr className="orderBy w-full">
+                <th className="p-1.5 font-light">제출번호</th>
+                <th className="p-1.5 font-light">제출자</th>
+                <th className="p-1.5 font-light">문제번호</th>
+                <th className="p-1.5 font-light w-3/12">결과</th>
+                <th className="p-1.5 font-light">메모리</th>
+                <th className="p-1.5 font-light">시간</th>
+                <th className="p-1.5 font-light">언어</th>
+                <th className="p-1.5 font-light">코드길이</th>
+                <th className="p-1.5 font-light">제출날짜</th>
               </tr>
             </thead>
             <tbody className="font-normal">
