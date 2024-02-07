@@ -166,7 +166,6 @@ public class ChatServiceImpl implements ChatService{
         }
 
         if(competitiveManageDto.isPlayer1_leave() && competitiveManageDto.isPlayer2_leave()) {
-            terminateGame(gameId, "");
             return true;
         }
         return false;
@@ -187,29 +186,39 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public void findWinner(String gameId) {
+    public WinnerInfoDto findWinner(String gameId) {
         CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
         String player1 = competitiveManageDto.getPlayer1();
         String player2 = competitiveManageDto.getPlayer2();
-
-        //첫번째 유저의 채점현황에서 '맞았습니다.' 결과가 있는지
+        int result = 0;
+        //player1, player2의 '맞았습니다' 결과 개수 탐색
         try {
 
-            gameMapper.passProblem(gameId, player1);
+            result = gameMapper.passProblem(gameId, player1, player2);
         }
         catch (Exception e) {
 
+            log.error("Exception Msg", e);
         }
 
-        //두번째 유저의 채점현황에서 '맞았습니다.' 결과가 있는지
-        try {
+        WinnerInfoDto winnerInfoDto = new WinnerInfoDto();
+        if(result > 0) {
+            //승자 탐색
+            try {
+                winnerInfoDto = gameMapper.winnerSearch(gameId);
+            }
+            catch (Exception e) {
 
-            gameMapper.passProblem(gameId, player2);
+                log.error("Exception Msg", e);
+            }
         }
-        catch (Exception e) {
-
+        else {
+            winnerInfoDto = null;
         }
+        //두 유저 모두 '맞았습니다.' 결과가 존재할 경우 승자 탐색
 
+
+        return winnerInfoDto;
     }
 
 }
