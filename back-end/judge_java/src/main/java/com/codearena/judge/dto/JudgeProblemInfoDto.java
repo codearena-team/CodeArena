@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class JudgeProblemInfoDto {
-    private String problemTime;
+    private Long problemTime;
     private String problemMem;
     private List<TestCaseDto> testCaseList;
 }
