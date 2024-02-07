@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, } from 'react';
 // import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { UseSelector, useSelector } from 'react-redux/es/hooks/useSelector';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 import BannerCreateModal from './modal/Main/BannerCreateModal';
 import MatchingCompleteModal  from './modal/Main/MatchingCompleteModal';
 
@@ -18,11 +18,6 @@ import EffiModeAsset from '../../images/arena/TopBanner/EfficiencyMode.png';
 
 export default function TopBanner() {
   const navigate = useNavigate();
-  const params = useParams();
-  
-   
-  const [speedRating, setSpeedRating] = useState('');
-  const [effRating, setEffRating] = useState('');
 
   const [isFindMatchHovered, setIsFindMatchHovered] = useState(false);
   const [isGameCreateHovered, setIsGameCreateHovered] = useState(false);
@@ -63,7 +58,7 @@ export default function TopBanner() {
   // });
 
   useEffect(() => {
-    socket.current = new WebSocket('ws://192.168.0.20:8080/matching');
+    socket.current = new WebSocket('wss://i10d211.p.ssafy.io/matching');
 
     socket.current.addEventListener("open", function (event) {
       console.log(event)
@@ -76,15 +71,15 @@ export default function TopBanner() {
       
       type.current = object.type;
       
-      if (object.type && object.type !== 'RESPONSE') {
+      if (object.type) {
         matchId.current = object.matchId;
         userId.current = object.userId;
         rating.current = object.rating;
         gameMode.current = object.gameMode;
         lang.current = object.lang;
         content.current = object.content;
-        problemId.current = object.problemId;
         queueKey.current = object.queueKey;
+        problemId.current = object.problemId;
         userNickname.current = object.userNickname;
         gameId.current = object.gameId;
         viduSession.current = object.viduSession;
@@ -110,8 +105,14 @@ export default function TopBanner() {
   
     });
 
+    socket.current.addEventListener("error", function (event) {
+      console.error("웹소켓 error:", event);
+    });
+
     return () => {
-      socket.current.close();
+      if (socket.current) {
+        socket.current.close();
+      }
     };
   }, []);
 
@@ -294,6 +295,7 @@ export default function TopBanner() {
 
   // 마지막 모달에서 "거절" 모든 모달 닫기 (중복 호출 방지)
   const handleCancel = () => {
+    console.log("매칭을 거절했어요 !")
     const send_obj = {
       matchId: matchId.current,
       userId: userId.current,
@@ -334,6 +336,7 @@ export default function TopBanner() {
 
   // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수
   const handleAccept = () => {
+    console.log("매칭을 수락했어요 !")
     const send_obj = {
       matchId: matchId.current,
       userId: userId.current,
@@ -449,15 +452,14 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsSpeedModeHovered(true)}
                     onMouseLeave={() => setIsSpeedModeHovered(false)}
                     onClick={() => {
-                      rating = speed
                       socket.current.send(
                         JSON.stringify ({
-                          type : "ENQUEUE",
-                          userId : userId,
-                          rating : rating,
+                          type: "ENQUEUE",
+                          userId: userId.current,
+                          rating : speed.current,
                           gameMode : 'speed',
                           lang: selectedLanguage,
-                          userNickname: userNickname,
+                          userNickname: userNickname.current,
                         })
                       );
                       // document.getElementById('language_modal').close(); // 클릭 시 언어 선택 모달 닫고,
@@ -474,15 +476,14 @@ export default function TopBanner() {
                     onMouseEnter={() => setIsEffiModeHovered(true)}
                     onMouseLeave={() => setIsEffiModeHovered(false)}
                     onClick={() => {
-                      rating = eff
                       socket.current.send(
                         JSON.stringify ({
                           type : "ENQUEUE",
-                          userId : userId,
-                          rating: rating,
+                          userId : userId.current,
+                          rating: eff.current,
                           gameMode: 'eff',
                           lang : selectedLanguage,
-                          userNickname: userNickname,
+                          userNickname: userNickname.current,
                         })
                       );
                       // document.getElementById('language_modal').close(); // 클릭 시 언어 선택 모달 닫고,
@@ -504,12 +505,13 @@ export default function TopBanner() {
                   onClick={() => {
                     socket.current.send(
                       JSON.stringify ({
-                        type : "NO",
-                        userId : userId,
-                        rating : rating,
+                        type : "POP",
+                        queueKey: queueKey.current,
+                        userId : userId.current,
+                        rating : rating.current,
                         gameMode : "speed",
                         lang: "cpp",
-                        userNickname: userNickname,
+                        userNickname: userNickname.current,
                       })
                     );
                     document.getElementById('language_modal').close(); // 언어&모드 선택 모달 닫기
@@ -526,12 +528,12 @@ export default function TopBanner() {
             </div>
           </dialog>
 
-          {/* 매칭 완료 모달 후 "수락", "취소" 모달 소환 */}
+          {/* 매칭 완료 모달 후 "수락", "거절" 모달 소환 */}
           <dialog id="matching_complete_modal" className="modal">
             <div className="modal-box flex-row justify-center">
               <MatchingCompleteModal
                 // 수락
-                onAccept={handleAccept} problemId={problemId}
+                onAccept={handleAccept}
                 // 거절
                 onCancel={handleCancel}
               />
