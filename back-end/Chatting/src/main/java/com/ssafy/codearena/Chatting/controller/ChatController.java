@@ -34,11 +34,11 @@ public class ChatController {
     @MessageMapping("chat/leave")
     public void leave(ChatLeaveMessage message) {
 
-        SubmitResultDto submitResultDto = new SubmitResultDto();
+        SubmitResultMessage submitResultDto = new SubmitResultMessage();
         submitResultDto.setGameId(message.getGameId());
 
         //유저 도중 퇴장
-        if(message.getType() == ChatLeaveMessage.LeaveType.PLAYER_EXIT) {
+        if(message.getType() == ChatLeaveMessage.MessageType.PLAYER_EXIT) {
             //두 명의 유저의 게임진행유무를 판별하고
             //두 사람 모두 나갔다면 TERMINATED
             //한 사람만 나갔다면 경기 속행
@@ -50,7 +50,7 @@ public class ChatController {
                 //스피드전의 경우 무승부 처리
                 if(message.getMode().equals("0")) {
 
-                    submitResultDto.setType(SubmitResultDto.resultType.END);
+                    submitResultDto.setType(SubmitResultMessage.resultType.END);
                     submitResultDto.setWinner("");
                     submitResultDto.setResult("무승부 처리 되었습니다.");
                     terminateGame(message.getGameId(), "");
@@ -64,14 +64,14 @@ public class ChatController {
 
                     if(Objects.isNull(winnerInfoDto)) {
                         terminateGame(message.getGameId(), "");
-                        submitResultDto.setType(SubmitResultDto.resultType.END);
+                        submitResultDto.setType(SubmitResultMessage.resultType.END);
                         submitResultDto.setWinner(message.getSender());
                         submitResultDto.setResult("무승부 처리 되었습니다.");
                         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
                     }
                     else {
                         terminateGame(message.getGameId(), winnerInfoDto.getUserId());
-                        submitResultDto.setType(SubmitResultDto.resultType.END);
+                        submitResultDto.setType(SubmitResultMessage.resultType.END);
                         submitResultDto.setWinner(message.getSender());
                         submitResultDto.setResult(winnerInfoDto.getUserNickname() + "님이 승리하였습니다.");
                         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
@@ -82,13 +82,13 @@ public class ChatController {
 
             //한 사람만 탈주한 경우
 
-            submitResultDto.setType(SubmitResultDto.resultType.CONTINUE);
+            submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
             submitResultDto.setWinner("");
             submitResultDto.setResult(message.getSender() + "님이 퇴장하였습니다.");
             messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
         }
         //타임아웃
-        else if(message.getType() == ChatLeaveMessage.LeaveType.TERMINATED) {
+        else if(message.getType() == ChatLeaveMessage.MessageType.TERMINATED) {
 
             if(message.getMode().equals("0")) {
                 terminateGame(message.getGameId(), "");
@@ -104,11 +104,11 @@ public class ChatController {
 
 
         //스피드전
-        if(message.getMode() == ChatSubmitMessage.GameMode.SPEED) {
+        if(message.getMode() == ChatSubmitMessage.MessageType.SPEED) {
             //승패 분기
             if(message.getResult().equals("맞았습니다")) {
-                SubmitResultDto submitResultDto = new SubmitResultDto();
-                submitResultDto.setType(SubmitResultDto.resultType.END);
+                SubmitResultMessage submitResultDto = new SubmitResultMessage();
+                submitResultDto.setType(SubmitResultMessage.resultType.END);
                 submitResultDto.setGameId(message.getGameId());
                 submitResultDto.setWinner(message.getSender());
                 submitResultDto.setResult(message.getSender() + "님이 승리하였습니다.");
@@ -118,8 +118,8 @@ public class ChatController {
             //경기 속행 시 별다른 메시지는 보내지 않음.
             else {
 
-                SubmitResultDto submitResultDto = new SubmitResultDto();
-                submitResultDto.setType(SubmitResultDto.resultType.CONTINUE);
+                SubmitResultMessage submitResultDto = new SubmitResultMessage();
+                submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
                 submitResultDto.setGameId(message.getGameId());
                 submitResultDto.setWinner(message.getSender());
                 submitResultDto.setResult(message.getSender() + "님이 제출하였지만 틀렸습니다.");
@@ -128,11 +128,11 @@ public class ChatController {
         }
 
         //효율전
-        else if(message.getMode() == ChatSubmitMessage.GameMode.EFFI){
+        else if(message.getMode() == ChatSubmitMessage.MessageType.EFFI){
 
             if(message.getResult().equals("맞았습니다")) {
-                SubmitResultDto submitResultDto = new SubmitResultDto();
-                submitResultDto.setType(SubmitResultDto.resultType.END);
+                SubmitResultMessage submitResultDto = new SubmitResultMessage();
+                submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
                 submitResultDto.setGameId(message.getGameId());
                 submitResultDto.setWinner(message.getSender());
                 submitResultDto.setResult(message.getSender() + "님의 제출 결과 : 맞았습니다.");
@@ -141,8 +141,8 @@ public class ChatController {
             //경기 속행 시 별다른 메시지는 보내지 않음.
             else {
 
-                SubmitResultDto submitResultDto = new SubmitResultDto();
-                submitResultDto.setType(SubmitResultDto.resultType.CONTINUE);
+                SubmitResultMessage submitResultDto = new SubmitResultMessage();
+                submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
                 submitResultDto.setGameId(message.getGameId());
                 submitResultDto.setWinner(message.getSender());
                 submitResultDto.setResult(message.getSender() + "님의 제출 결과 : 틀렸습니다.");
