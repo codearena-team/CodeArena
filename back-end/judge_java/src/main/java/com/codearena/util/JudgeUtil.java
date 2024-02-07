@@ -97,7 +97,7 @@ public class JudgeUtil {
 
         result.setSolve(true);
         // 실행 결과 담기
-        String msg = "";
+        String msg = "맞았습니다.";
         // 시간의 총 합.
         double timeSum = 0.0;
         // 에러가 발생 했는지
@@ -180,7 +180,7 @@ public class JudgeUtil {
             timeSum *= 1000;
             timeSum /= testCase.size();
             timeSum = Math.floor(timeSum);
-            timeResult = timeSum + "";
+            timeResult = (int)timeSum + "";
         }
 
         result.setMsg(msg);
@@ -197,4 +197,18 @@ public class JudgeUtil {
 
         return result;
     }
+
+    public JudgeValidateResultDto validateNormal(String cmd,
+                                                 List<TestCaseDto> testCase,
+                                                 Long timeLimit,
+                                                 String path) throws Exception {
+
+        JudgeValidateResultDto result = new JudgeValidateResultDto();
+
+
+        return result;
+
+    }
+
+
 }

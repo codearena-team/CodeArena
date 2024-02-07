@@ -25,12 +25,10 @@ public class JudgeController {
     public ResponseEntity<JudgeResultDto> validationCheck(@RequestBody JudgeValidationCheckDto judgeValidationCheckDto) {
         return new ResponseEntity<JudgeResultDto>(judgeService.validationCheck(judgeValidationCheckDto), HttpStatus.OK);
     }
-    // 효율전 채점 로직
     @PostMapping("/arena")
     public ResponseEntity<JudgeResultDto> judgeArena(@RequestBody JudgeArenaDto judgeArenaDto) {
         return new ResponseEntity<JudgeResultDto>(judgeService.judgeArena(judgeArenaDto), HttpStatus.OK);
     }
-    // 스피드전 채점 로직
     @PostMapping("/normal")
     public ResponseEntity<JudgeResultDto>  judgeNormal(@RequestBody JudgeNormalDto judgeNormalDto) {
         return new ResponseEntity<JudgeResultDto>(judgeService.judgeNormal(judgeNormalDto), HttpStatus.OK);

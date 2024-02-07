@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class JudgeArenaDto {
-    private String submitId;
+    private String submitNo;
     private String userId;
     private String problemId;
-    private String userCode;
+    private String code;
+    private String roomType;
 }
