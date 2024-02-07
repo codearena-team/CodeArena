@@ -5,13 +5,13 @@ import SubmitItem from "../../../components/problem/submitItem"
 import javaImg from "../../../images/problem/java.png"
 import pythonImg from "../../../images/problem/python.png"
 import cppImg from "../../../images/problem/cpp.png"
-import "../../css/problemsolve.css"
-
+import { useSelector } from "react-redux";
 import axios from "axios"
 
 
 
 export default function Submit() {
+  const accessToken = useSelector(state => state.access.accessToken)
   const [searchParams, setSearchParams] = useSearchParams();
   // 검색 카테고리   problemId : 문제번호, problemTitle : 문제제목 , userNickname : 작성자 
   const [lang, setLang] = useState('전체')  
@@ -51,6 +51,9 @@ export default function Submit() {
     axios({
       method : 'get',
       url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=15&pgno=${pgno}&orderBy=${orderBy}`,
+      headers : {
+        Authorization : accessToken
+      }
     })
     .then((res)=> {
       console.log(res);
