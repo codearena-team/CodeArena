@@ -24,8 +24,8 @@
             <if test="key == 'problem_id'">
                 AND ${key} = #{word}
             </if>
-            <if test="key == 'userId'">
-                AND player1 = #{word} OR player2 = #{word}
+            <if test="key == 'userNickname'">
+                AND player1 IN(SELECT user_id FROM user WHERE user_id = #{word}) OR player2 IN(SELECT user_id FROM user WHERE user_id = #{word})
             </if>
         </if>
     </sql>
