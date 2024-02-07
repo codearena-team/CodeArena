@@ -23,4 +23,5 @@ public class ProblemDetailDto {
     private String problemExOutput;
     private String problemVisibility;
     private List<TagDto> tagList;
+    private Boolean isSolve;
 }

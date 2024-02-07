@@ -221,11 +221,22 @@ public class ProblemServiceImpl implements ProblemService{
         resultDto.setData(problemDetail);
         resultDto.setStatus("200");
         try{
+            HashMap<String, String> params = new HashMap<>();
+            params.put("problemId", problemId);
             String token = request.getHeader("Authorization");
             log.debug("token : {}",token);
             problemDetail = mapper.getProblemDetailByProblemId(problemId);
-            log.debug("{}",jwtUtil.isAdmin(token));
+            //log.debug("{}",jwtUtil.isAdmin(token));
+            String userId = "";
+            problemDetail.setIsSolve(true);
             if("0".equals(problemDetail.getProblemVisibility()) && (token==null || "".equals(token) || !jwtUtil.isAdmin(token))) throw new AuthenticationFailedException("권한 없음");
+            if("1".equals(problemDetail.getProblemVisibility()) && (token==null || "".equals(token))) problemDetail.setIsSolve(false);
+            else userId = jwtUtil.getUserId(token);
+            if(userId !=null && !"".equals(userId)){
+                params.put("userId", userId);
+                int isAccept = mapper.isAccept(params);
+                problemDetail.setIsSolve((isAccept >= 1));
+            }
         }catch(AuthenticationFailedException e){
             log.debug("exception : {}", e);
             resultDto.setStatus("403");
@@ -240,7 +251,6 @@ public class ProblemServiceImpl implements ProblemService{
             resultDto.setData(problemDetail);
             return resultDto;
         }
-
     }
 
     @Override

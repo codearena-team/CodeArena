@@ -309,7 +309,7 @@
         limit ${start}, ${offset}
     </select>
 
-    <select id="isAccept" parameterType="String" resultType="int">
+    <select id="isAccept" parameterType="hashmap" resultType="int">
         select count(user_id) from ps_submit where submit_status like concat('%','맞았습니다.','%') and problem_id=${problemId} and user_id=${userId};
     </select>
 
