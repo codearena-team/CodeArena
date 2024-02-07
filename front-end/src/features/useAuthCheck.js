@@ -11,12 +11,12 @@ export function useAuthCheck() {
 
   const checkAccess = async function () {
     const headers = {Authorization : accessToken}
-    return (axios.get('http://i10d211.p.ssafy.io:8081/api/auth', {headers}))
+    return (axios.get('https://i10d211.p.ssafy.io/api/auth', {headers}))
   }
 
   const auseRefresh = async function () {
     const data = {refreshToken : refreshToken}
-    return axios.post('http://i10d211.p.ssafy.io:8081/api/auth/renew',data)
+    return axios.post('https://i10d211.p.ssafy.io/api/auth/renew',data)
   }
 
   const authCheck = async () => {

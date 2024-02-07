@@ -48,7 +48,7 @@ export default function CommunityCreate() {
   // 게시글 작성
   const createArticle = ()=>{
     axios({
-      url : 'http://i10d211.p.ssafy.io:8081/api/board/write',
+      url : 'https://i10d211.p.ssafy.io/api/board/write',
       method : 'post',
       data : {
         userId : userId,
