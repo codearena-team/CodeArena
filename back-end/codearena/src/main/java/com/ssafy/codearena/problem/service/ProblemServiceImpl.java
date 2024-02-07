@@ -295,7 +295,7 @@ public class ProblemServiceImpl implements ProblemService{
             params.put("userId", null);
             params.put("problemId", submitDto.getProblemId());
             params.put("code", submitDto.getCode());
-            client.post().uri("/judge/normal").contentType(MediaType.APPLICATION_JSON).bodyValue(params).retrieve().bodyToMono(HashMap.class);
+            client.post().uri("/judge/normal").contentType(MediaType.APPLICATION_JSON).bodyValue(params).retrieve().bodyToMono(HashMap.class).subscribe();
             SubmitTagListDto listDto = new SubmitTagListDto();
             listDto.setSubmitNo(submitDto.getSubmitNo());
             listDto.setTagList(submitDto.getTagList());
