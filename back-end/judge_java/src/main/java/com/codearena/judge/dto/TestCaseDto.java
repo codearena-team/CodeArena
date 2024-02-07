@@ -8,4 +8,5 @@ import lombok.Data;
 public class TestCaseDto {
     private String input;
     private String output;
+    private String tid;
 }

@@ -10,7 +10,7 @@
     </resultMap>
 
     <select id="getTestCase" parameterType="string" resultType="testCaseDto">
-        select input, output
+        select input, output, tid
         from ps_testcase
         where problem_id=#{problemId};
     </select>
@@ -21,9 +21,9 @@
         where problem_id=#{problemId};
     </select>
 
-    <update id="updatePsSubmit" parameterType="hudgeNormalResultDto">
+    <update id="updatePsSubmit" parameterType="judgeValidateResultDto">
         update ps_submit
-        set submit_status="#{msg}", time_complexity="#{totlaTime}"
+        set submit_status="#{msg}", time_complexity="#{time}", tid="#{wrongTestCaseNo}"
         where submit_no="#{submitNo}";
     </update>
 

@@ -103,6 +103,8 @@ public class JudgeUtil {
         // 에러가 발생 했는지
         boolean isError = false;
 
+        String wrongTC = null;
+
         // TC 불러왔으면 검사하는 로직 수행하기
         for (int tc = 0; tc < testCase.size(); tc++) {
             // 컴파일 하고 실행시키기
@@ -119,6 +121,7 @@ public class JudgeUtil {
 
             if (!process.waitFor(timeLimit + 4000 + 1000, TimeUnit.MILLISECONDS)) {
                 msg = "시간 초과";
+                wrongTC = testCase.get(tc).getTid();
                 isError = true;
                 break;
             }
@@ -142,6 +145,7 @@ public class JudgeUtil {
                 String[] frags = error.split(" ");
 
                 isError = true;
+                wrongTC = testCase.get(tc).getTid();
 
                 switch (frags[0]) {
                     case "Exception":
@@ -153,11 +157,14 @@ public class JudgeUtil {
                         msg = "컴파일 에러";
                         break;
                 }
+//                if("error:".equals(frags[1]))
+//                    msg = "컴파일 에러";
                 break;
             }
 
             if (!testCase.get(tc).getOutput().equals(str)) {
                 msg = "틀렸습니다";
+                wrongTC = testCase.get(tc).getTid();
                 isError = true;
                 break;
             }
@@ -185,7 +192,8 @@ public class JudgeUtil {
 
         result.setMsg(msg);
         result.setSolve(!isError);
-        result.setTotalTime(timeResult);
+        result.setTime(timeResult);
+        result.setWrongTestCaseNo(wrongTC);
 
         File dirFile = new File(path);
         File javaFile = new File(path, "Solution.java");
@@ -197,18 +205,4 @@ public class JudgeUtil {
 
         return result;
     }
-
-    public JudgeValidateResultDto validateNormal(String cmd,
-                                                 List<TestCaseDto> testCase,
-                                                 Long timeLimit,
-                                                 String path) throws Exception {
-
-        JudgeValidateResultDto result = new JudgeValidateResultDto();
-
-
-        return result;
-
-    }
-
-
 }

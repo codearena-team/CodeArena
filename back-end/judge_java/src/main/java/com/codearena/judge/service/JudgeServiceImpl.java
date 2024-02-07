@@ -45,7 +45,7 @@ public class JudgeServiceImpl implements JudgeService{
         try {
             // problemExInput, Output 를 테스트케이스에 포함시킴
             List<TestCaseDto> testCase = userInput.getTestCase();
-            testCase.add(new TestCaseDto(userInput.getProblemExInput(), userInput.getProblemExOutput()));
+            testCase.add(new TestCaseDto(userInput.getProblemExInput(), userInput.getProblemExOutput(), null));
 
             // 테케 내용들 로그 출력
             for (int tc = 0; tc < testCase.size(); tc++) {
@@ -97,7 +97,7 @@ public class JudgeServiceImpl implements JudgeService{
         judgeResultDto.setMsg("일반 문제 채점 완료");
         judgeResultDto.setData(null);
 
-        JudgeNormalResultDto result = null;
+        JudgeValidateResultDto result = null;
 
         // 시스템 콜 체크
         if(judgeUtil.checkSystemCallInCode(userInput.getUserCode())) {
@@ -120,10 +120,10 @@ public class JudgeServiceImpl implements JudgeService{
             // 코드 파일 생성하기 (solution.java)
             judgeUtil.createCodeFile(userInput.getUserCode(), path);
             // 코드 검증하기
-//            result = judgeUtil.validateNormal(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
+            result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
             log.info("[validationCheck] judgeValidationResult : {}" , result);
 
-            mapper.updatePsSubmit(result);
+//            mapper.updatePsSubmit(result);
 
         } catch (Exception e) {
             judgeResultDto.setStatus("500");
