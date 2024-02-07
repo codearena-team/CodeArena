@@ -225,15 +225,15 @@ class Webrtc extends Component {
             </div>
 
             
-            <div id="video-container" className="col-md-6">
+            <div id="video-container" className="flex">
               {this.state.publisher !== undefined ? (
-                <div className="stream-container col-md-6 col-xs-6" >
+                <div className="stream-container" >
                   <UserVideoComponent
                     streamManager={this.state.publisher} />
                 </div>
               ) : null}
               {this.state.subscribers.map((sub, i) => (
-                <div key={sub.id} className="stream-container col-md-6 col-xs-6" >
+                <div key={sub.id} className="stream-container" >
                   <span>{sub.id}</span>
                   <UserVideoComponent streamManager={sub} />
                 </div>
