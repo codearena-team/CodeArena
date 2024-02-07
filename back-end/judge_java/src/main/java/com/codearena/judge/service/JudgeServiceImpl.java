@@ -32,6 +32,8 @@ public class JudgeServiceImpl implements JudgeService{
 
         JudgeValidateResultDto result = new JudgeValidateResultDto();
 
+        log.info("{}", userInput.getProblemValidationCode());
+
         if(judgeUtil.checkSystemCallInCode(userInput.getProblemValidationCode())) {
             judgeResultDto.setStatus("404");
             judgeResultDto.setMsg("코드 내 시스템 콜 감지");
@@ -44,11 +46,16 @@ public class JudgeServiceImpl implements JudgeService{
             List<TestCaseDto> testCase = userInput.getTestCase();
             testCase.add(new TestCaseDto(userInput.getProblemExInput(), userInput.getProblemExOutput()));
 
+            // 테케 내용들 로그 출력
+            for (int tc = 0; tc < testCase.size(); tc++) {
+                log.info("{}", testCase.get(tc));
+            }
+
             long timeLimit = Long.parseLong(userInput.getProblemTime());
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "java " + path + "/solution.java";
+            String cmd = "java " + path + "/Solution.java";
             log.info("CMD : {}", cmd);
 
             // 폴더 생성하기
@@ -98,7 +105,7 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "java " + path + "/solution.java";
+            String cmd = "java " + path + "/Solution.java";
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);

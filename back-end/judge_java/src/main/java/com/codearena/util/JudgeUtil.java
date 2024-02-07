@@ -102,6 +102,7 @@ public class JudgeUtil {
         double timeSum = 0.0;
         // 에러가 발생 했는지
         boolean isError = false;
+        boolean isSolve = true;
 
         // TC 불러왔으면 검사하는 로직 수행하기
         for (int tc = 0; tc < testCase.size(); tc++) {
@@ -117,9 +118,10 @@ public class JudgeUtil {
 
             double beforeTime = System.currentTimeMillis();
 
-            if (!process.waitFor(timeLimit + 2000 + 1000, TimeUnit.MILLISECONDS)) {
+            if (!process.waitFor(timeLimit + 4000 + 1000, TimeUnit.MILLISECONDS)) {
                 msg = "시간 초과";
                 isError = true;
+                isSolve= false;
                 break;
             }
 
@@ -133,10 +135,14 @@ public class JudgeUtil {
             log.info("tc : {} 시간 측정 결과 : {}\n", tc, (afterTime-beforeTime)/1000);
 
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            log.info("processExitValue : {}  (0 = 정상작동)", process.exitValue());
 
             if (process.exitValue() != 0) {
                 String error = errorReader.readLine();
+                log.info("errorMsg : {}", error);
+
                 String[] frags = error.split(" ");
+
                 isError = true;
 
                 switch (frags[0]) {
@@ -181,7 +187,7 @@ public class JudgeUtil {
         result.setTotalTime(timeResult);
 
         File dirFile = new File(path);
-        File javaFile = new File(path, "solution.java");
+        File javaFile = new File(path, "Solution.java");
 
         // 결과 반영 했으면 디렉토리 삭제하기
         // 내부 파일부터 삭제하고 디렉토리 삭제
