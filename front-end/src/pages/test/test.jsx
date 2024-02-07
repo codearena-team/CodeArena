@@ -1,10 +1,14 @@
 import axios from "axios";
+import { useState } from "react";
+import registerServiceWorker from './../../registerServiceWorker';
+import Webrtc from "./Webrtc";
 
 export default function Test () {
+  const [sessionId,setSessionId ] = useState('')
   const create = ()=> {
     axios({
       url : 'https://i10d211.p.ssafy.io/game/vidu/sessions',
-      data : {customSessionId:'qwe123asd'},
+      data : {customSessionId:sessionId},
       method : 'post',
       headers: {'Content-Type': 'application/json'},
       withCredentials: true,
@@ -19,7 +23,7 @@ export default function Test () {
 
   const join = ()=> {
     axios({
-      url : 'https://i10d211.p.ssafy.io/game/vidu/sessions/qwe123asd/connections',
+      url : `https://i10d211.p.ssafy.io/game/vidu/sessions/${sessionId}/connections`,
       data : {},
       method : 'post',
       headers: {'Content-Type': 'application/json'},
@@ -35,10 +39,12 @@ export default function Test () {
 
   return (
     <div>
-    <button className="btn" onClick={create}>create</button>
-    <button className="btn" onClick={join}>join</button>
-
+    <input className="input w-96" type="text" onChange={e=>{setSessionId(e.target.value)}} />
+    <button className="btn btn-neutral mx-4" onClick={create}>create</button>
+    <button className="btn btn-neutral" onClick={join}>join</button>
+    <Webrtc />
 
     </div>
   )
 }
+registerServiceWorker();

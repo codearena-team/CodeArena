@@ -15,6 +15,8 @@ import axios from 'axios';
 import SolvedItem from '../../components/profile/SolveList';
 import UnsolvedItem from '../../components/profile/UnsolveList';
 import { useNavigate } from 'react-router-dom'
+import swal from 'sweetalert';
+
 
 // to 프로필주인 , from 로그인한유저 ,
 // isFollow가 0이면 from뒤의 사람이 to뒤의사람을 팔로우안한거, 1이면 팔로우 한거
@@ -44,11 +46,11 @@ export default function MyPage() {
   // 프로필화면시 그프로필 회원정보요청하는 axios
   useEffect(()=>{
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/user?to=${profileNickname}&from=${loginNickname}`,
+      url : `https://i10d211.p.ssafy.io/api/user?to=${profileNickname}&from=${loginNickname}`,
       method : 'get'
     })
     .then((res)=>{
-      console.log(res.data.data)
+      console.log(res)
       setProfileIntro(res.data.data.userInfoDto.userIntro)
       setProfileUser(res.data.data.userInfoDto.userNickname)
       setEffi(res.data.data.userInfoDto.effiRating)
@@ -70,7 +72,7 @@ export default function MyPage() {
     }
      //자기가 팔로우하는사람 = 팔로잉조회
     axios({
-      url: `http://i10d211.p.ssafy.io:8081/api/user/follow/${profileId} `,
+      url: `https://i10d211.p.ssafy.io/api/user/follow/${profileId} `,
       method : 'get'
     })
     .then((res)=>{
@@ -81,7 +83,7 @@ export default function MyPage() {
       console.log(err)
     })
     axios({
-      url: `http://i10d211.p.ssafy.io:8081/api/user/follow/${loginId} `,
+      url: `https://i10d211.p.ssafy.io/api/user/follow/${loginId} `,
       method : 'get'
     })
     .then((res)=>{
@@ -95,7 +97,7 @@ export default function MyPage() {
 
     // 자기를 팔로우하는사람 = 팔로워 조회
     axios({
-      url :`http://i10d211.p.ssafy.io:8081/api/user/following/${profileId} `, 
+      url :`https://i10d211.p.ssafy.io/api/user/following/${profileId} `, 
       method : 'get'
     })
     .then((res)=>{
@@ -106,7 +108,7 @@ export default function MyPage() {
       console.log(err)
     })
     axios({
-      url :`http://i10d211.p.ssafy.io:8081/api/user/following/${loginId} `, 
+      url :`https://i10d211.p.ssafy.io/api/user/following/${loginId} `, 
       method : 'get'
     })
     .then((res)=>{
@@ -124,7 +126,7 @@ const goEdit = () =>{
 
 const goFollow = () =>{
   axios({
-    url : 'http://i10d211.p.ssafy.io:8081/api/user/follow',
+    url : 'https://i10d211.p.ssafy.io/api/user/follow',
     method : 'post',
     data : {
       fromId : loginId,
@@ -142,6 +144,7 @@ const goFollow = () =>{
     newFollowerList.length += 1
     setFollowerList(newFollowerList)
     setIsFollow(1)
+ 
   })
   .catch((err)=>{
     console.log(err)
@@ -150,7 +153,7 @@ const goFollow = () =>{
 
 const goUnfollow = () =>{
   axios({
-    url : 'http://i10d211.p.ssafy.io:8081/api/user/follow',
+    url : 'https://i10d211.p.ssafy.io/api/user/follow',
     method : 'delete',
     data : {
       fromId : loginId,
@@ -197,7 +200,7 @@ const goUnfollow = () =>{
   const searchInput = (e) =>{
     setWord(e.target.value)
     axios({
-      url :`http://i10d211.p.ssafy.io:8081/api/user/list?fromId=${loginId}&toNickname=${e.target.value}`,
+      url :`https://i10d211.p.ssafy.io/api/user/list?fromId=${loginId}&toNickname=${e.target.value}`,
       method : 'get'
     })
     .then((res)=>{
@@ -237,41 +240,44 @@ const goUnfollow = () =>{
     }
   };
 
-  const handleAutocompleteClick = (item) =>{
-    setWord(item.userNickname)
-  }
-  
-  
+  const inputClick = (e)=>{
+    setWord(e.target.value);
+    setModalList([]);
+  }  
+
   return (
     <div className='container mx-auto'>
       <div className='flex p-40 pt-0 pb-0 justify-end mr-3'>
-        
-        <input type="text" placeholder="닉네임을 입력하세요" className="input input-bordered w-xl h-8 max-w-xs mb-2" 
-        style={{outline:'none',borderBottomRightRadius: '0',borderTopRightRadius: '0'}}
-        onChange={searchInput}
-        onKeyDown={handleKeyDown}/>
-        {/* {modalList.length > 0 && (
-        <div className="dropdown" >
-        <ul className="dropdown-menu" style={{ display: 'block', position: 'absolute', zIndex: '1' }}>
-          {modalList.map((item, index) => (
-            <li key={index}>
-              <button className="btn btn-sm">
-                {item.userNickname}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      )} */}
-    
+        <div>
+          <input type="text" placeholder="닉네임을 입력하세요" className="input input-bordered w-xl h-8 max-w-xs mb-2" 
+          style={{outline:'none',borderBottomRightRadius: '0',borderTopRightRadius: '0'}}
+          value={word}
+          onChange={searchInput}
+          onKeyDown={handleKeyDown}/>
+          {modalList.length > 0 &&  word.length > 0 &&(
+          <div className="dropdown" >
+          <ul className="dropdown-menu" style={{ display: 'block', position: 'absolute', zIndex: '1',right:'0px', top:'10px' }}>
+            {modalList.map((item, index) => (
+              <li key={index}>
+                <input type="text" className="input input-bordered w-xl h-8 max-w-xs" 
+                style={{outline:'none',cursor: 'text'}}
+                value={item.userNickname}
+                onClick={inputClick}
+                />
+              </li>
+            ))}
+            </ul>
+            </div>
+          )}
+        </div> 
         <button className="btn btn-active btn-sm text-md" style={{backgroundColor:'#E2E2E2',borderBottomLeftRadius: '0',borderTopLeftRadius: '0'}}
         onClick={searchNickname}>검색</button>  
       </div>
-      
+    
       <div className="grid grid-cols-12 p-20 pb-0 pt-0">
         <div className="col-span-2 gap-4 mt-5">
           <div className='grid grid-cols-1 gap-4'>
-            <div className='flex justify-center'><img style={{width:130}} src={Profile} alt="" /></div>
+            <div className='flex justify-center mt-5'><img style={{width:130}} src={Profile} alt="" /></div>
             <h1 className='text-3xl text-center'>{profileUser}</h1>
             <h1 className='text-md text-center'>{profileIntro}</h1>
             {profileId !== loginId && (
@@ -402,7 +408,7 @@ const goUnfollow = () =>{
               </div>
               <div>
                 <div className='text-sm p-3 font-bold'>EFFICIENCY SCORE</div>
-                <div className='text-center'>{effi}</div>
+                <div className='text-center mb-3'>{effi}</div>
               </div>
           </div>
         </div>

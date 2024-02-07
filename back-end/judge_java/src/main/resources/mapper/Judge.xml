@@ -4,4 +4,21 @@
 
 <mapper namespace="com.codearena.judge.mapper.JudgeMapper">
 
+    <resultMap id="judgeProblemInfoMap" type="judgeProblemInfoDto">
+        <result column="problem_time" property="problemTime"/>
+        <result column="problem_mem" property="problemMem"/>
+    </resultMap>
+
+    <select id="getTestCase" parameterType="string" resultType="testCaseDto">
+        select input, output
+        from ps_testcase
+        where problem_id=#{problemId};
+    </select>
+
+    <select id="getProblemInfo" parameterType="string" resultMap="judgeProblemInfoMap">
+        select problem_time, problem_mem
+        from ps_list
+        where problem_id=#{problemId};
+    </select>
+
 </mapper>

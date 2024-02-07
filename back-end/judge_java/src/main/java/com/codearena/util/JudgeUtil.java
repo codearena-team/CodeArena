@@ -1,11 +1,15 @@
 package com.codearena.util;
 
+import com.codearena.judge.dto.JudgeProblemInfoDto;
 import com.codearena.judge.dto.JudgeValidateResultDto;
 import com.codearena.judge.dto.TestCaseDto;
+import com.codearena.judge.mapper.JudgeMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -13,7 +17,10 @@ import java.util.regex.Pattern;
 
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class JudgeUtil {
+
+    private final JudgeMapper mapper;
 
     public void createFolder(String path) {
         // 폴더 생성
@@ -53,11 +60,38 @@ public class JudgeUtil {
         return (matcher.find());
     }
 
-    public JudgeValidateResultDto validate(Runtime runtime,
-                                           String cmd,
+    public JudgeProblemInfoDto getProblemInfo(String problemId) {
+        JudgeProblemInfoDto judgeProblemInfoDto = new JudgeProblemInfoDto();
+
+        List<TestCaseDto> testCaseList = new ArrayList<>();
+
+        try {
+            judgeProblemInfoDto = mapper.getProblemInfo(problemId);
+            testCaseList = mapper.getTestCase(problemId);
+            judgeProblemInfoDto.setTestCaseList(testCaseList);
+        } catch (Exception e) {
+            log.debug("Exception : {} ", e);
+        }
+
+        return judgeProblemInfoDto;
+    }
+
+    /**
+     *
+     * @param cmd : 런타임에서 실행할 명령
+     * @param testCase : 채점 테스트 케이스
+     * @param timeLimit : 시간제한
+     * @param path : 디렉토리 생성 경로
+     * @return JudgeValidateResultDto
+     * @throws Exception
+     */
+    public JudgeValidateResultDto validate(String cmd,
                                            List<TestCaseDto> testCase,
                                            Long timeLimit,
                                            String path) throws Exception {
+
+        // 런타임 생성하기
+        Runtime runtime = Runtime.getRuntime();
 
         JudgeValidateResultDto result = new JudgeValidateResultDto();
 
@@ -68,6 +102,7 @@ public class JudgeUtil {
         double timeSum = 0.0;
         // 에러가 발생 했는지
         boolean isError = false;
+        boolean isSolve = true;
 
         // TC 불러왔으면 검사하는 로직 수행하기
         for (int tc = 0; tc < testCase.size(); tc++) {
@@ -83,9 +118,10 @@ public class JudgeUtil {
 
             double beforeTime = System.currentTimeMillis();
 
-            if (!process.waitFor(timeLimit + 2000 + 1000, TimeUnit.MILLISECONDS)) {
+            if (!process.waitFor(timeLimit + 4000 + 1000, TimeUnit.MILLISECONDS)) {
                 msg = "시간 초과";
                 isError = true;
+                isSolve= false;
                 break;
             }
 
@@ -99,10 +135,14 @@ public class JudgeUtil {
             log.info("tc : {} 시간 측정 결과 : {}\n", tc, (afterTime-beforeTime)/1000);
 
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            log.info("processExitValue : {}  (0 = 정상작동)", process.exitValue());
 
             if (process.exitValue() != 0) {
                 String error = errorReader.readLine();
+                log.info("errorMsg : {}", error);
+
                 String[] frags = error.split(" ");
+
                 isError = true;
 
                 switch (frags[0]) {
@@ -147,7 +187,7 @@ public class JudgeUtil {
         result.setTotalTime(timeResult);
 
         File dirFile = new File(path);
-        File javaFile = new File(path, "solution.java");
+        File javaFile = new File(path, "Solution.java");
 
         // 결과 반영 했으면 디렉토리 삭제하기
         // 내부 파일부터 삭제하고 디렉토리 삭제

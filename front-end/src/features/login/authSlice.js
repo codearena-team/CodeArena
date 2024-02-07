@@ -13,6 +13,9 @@ export const authSlice = createSlice({
     eff : null,
   },
   reducers : {
+    setUserNickname : (state,action) =>{
+      state.userNickname = action.payload
+    },
     // action.payload 는 res.data.data
     setRefreshToken : (state,action) =>{
       state.refreshToken = action.payload.refreshToken;
@@ -35,5 +38,5 @@ export const authSlice = createSlice({
   }  
 })
 
-export const { setRefreshToken,logout,setRecord } = authSlice.actions
+export const { setRefreshToken,logout,setUserNickname,setRecord } = authSlice.actions
 export default authSlice.reducer

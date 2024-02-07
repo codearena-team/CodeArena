@@ -15,7 +15,7 @@ export default function ChangePassword(){
   const handleChange = ()=>{
     if (password === passwordconfirm) {
       axios({
-        url : 'http://i10d211.p.ssafy.io:8081/api/user/password',
+        url : 'https://i10d211.p.ssafy.io/api/user/password',
         method : 'put',
         data : {
           userEmail : email,

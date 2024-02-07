@@ -8,7 +8,7 @@ export default function SolveList(props) {
   }
 
   return(
-    <button className="btn mr-2"
+    <button className="btn mr-2 drop-shadow"
     onClick={goProblem}>#{problemId}</button>
   )
 }

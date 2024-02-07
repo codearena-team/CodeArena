@@ -3,7 +3,7 @@ package com.ssafy.codearena.Chatting.dto;
 import lombok.Data;
 
 @Data
-public class SubmitResultDto {
+public class SubmitResultMessage {
     public enum resultType {
         CONTINUE, END;
     }

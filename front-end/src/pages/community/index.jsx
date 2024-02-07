@@ -24,7 +24,7 @@ export default function Community() {
    
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/board/list?sortType=${sortType}&key=${key}&word=${word}&langType=${langType}&pgno=${pgno}&spp=15`,
+      url : `https://i10d211.p.ssafy.io/api/board/list?sortType=${sortType}&key=${key}&word=${word}&langType=${langType}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       setCommunityList(res.data.data.articles)
@@ -70,8 +70,8 @@ export default function Community() {
   return(
     <div className="ml-20 mr-20 flex flex-col">
       { isLogin && (
-      <div className='flex justify-end mb-3'>
-        <div className="w-40 flex justify-end"><Link to="/community/create" className="btn btn-neutral btn-sm rounded-full">글쓰기</Link></div>
+      <div className='flex justify-end mb-1'>
+        <div className="w-40 flex justify-end"><Link to="/community/create" className="btn btn-neutral btn-sm rounded-xl">글쓰기</Link></div>
       </div>
       )}
       <div className="flex justify-between align-middle">
@@ -104,13 +104,13 @@ export default function Community() {
           <table className=" w-full" style={{backgroundColor:'rgb(227, 230, 217)'}}>
             <thead>
               <tr>
-                <th className="p-1.5 cell-height">게시글번호</th>
-                <th className="p-1.5 cell-height">문제번호</th>
-                <th className="p-1.5 cell-height w-2/5">제목</th>
-                <th className="p-1.5 cell-height">언어</th>
-                <th className="p-1.5 cell-height">작성자</th>
-                <th className="p-1.5 cell-height">조회수</th>
-                <th className="p-1.5 cell-height">제출일</th>
+                <th className="p-1.5 font-thin">게시글번호</th>
+                <th className="p-1.5 font-thin">문제번호</th>
+                <th className="p-1.5 w-2/5 font-thin">제목</th>
+                <th className="p-1.5 font-thin">언어</th>
+                <th className="p-1.5 font-thin">작성자</th>
+                <th className="p-1.5 font-thin">조회수</th>
+                <th className="p-1.5 font-thin">제출일</th>
               </tr>
             </thead>
             <tbody className="problemTable font-normal">

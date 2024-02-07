@@ -90,7 +90,10 @@ export default function Ps() {
 
 
   return(
-    <div className="mx-10 flex flex-col">
+    <div className="mx-20 flex flex-col">
+      <div className="flex justify-end">
+        <Link to="/problem/create" className="btn btn-neutral btn-sm rounded-xl mb-1">문제 생성</Link>
+      </div>
       <div className="flex justify-between align-middle">
         <div className="flex items-end">
           <button onClick={()=>{changeParams('orderBy','date')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='date' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
@@ -98,8 +101,8 @@ export default function Ps() {
           <button onClick={()=>{changeParams('orderBy','accept')}} className={searchParams.get('orderBy')==='accept' ? 'orderBy' : 'orderBy unchoice'} value='accept'>정답자순</button>
           <button onClick={()=>{changeParams('orderBy','percent')}} className={searchParams.get('orderBy')==='percent' ? 'orderBy' : 'orderBy unchoice'} value='percent'>정답률순</button>
         </div>
+        
         <div className="flex">
-          <Link to="/problem/create" className="btn btn-neutral me-2 btn-sm rounded-xl">문제 생성</Link>
           <div className="flex mb-4 join">
             <select onChange={(e)=> {setTag(e.target.value)}} className="select select-sm select-bordered join-item">
               {cateList.map((cate)=>{
