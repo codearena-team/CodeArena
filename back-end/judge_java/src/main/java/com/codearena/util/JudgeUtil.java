@@ -147,18 +147,17 @@ public class JudgeUtil {
                 isError = true;
                 wrongTC = testCase.get(tc).getTid();
 
+                msg = "컴파일 에러";
                 switch (frags[0]) {
                     case "Exception":
                         log.debug("error : {}", error);
                         msg = "Exception : " + frags[4];
                         break;
-                    case "Error:":
+                    case "error:":
                         log.debug("error : {}", error);
                         msg = "컴파일 에러";
                         break;
                 }
-//                if("error:".equals(frags[1]))
-//                    msg = "컴파일 에러";
                 break;
             }
 

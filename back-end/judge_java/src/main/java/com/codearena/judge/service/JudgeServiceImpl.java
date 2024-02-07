@@ -79,18 +79,7 @@ public class JudgeServiceImpl implements JudgeService{
     }
 
     @Override
-    public JudgeResultDto judgeArena(JudgeArenaDto judgeArenaDto) {
-        JudgeResultDto judgeResultDto = new JudgeResultDto();
-
-
-
-
-        return judgeResultDto;
-    }
-
-    @Override
-    public JudgeResultDto judgeNormal(JudgeNormalDto userInput) {
-
+    public JudgeResultDto judgeArena(JudgeArenaDto userInput) {
         JudgeResultDto judgeResultDto = new JudgeResultDto();
 
         judgeResultDto.setStatus("200");
@@ -100,7 +89,7 @@ public class JudgeServiceImpl implements JudgeService{
         JudgeValidateResultDto result = null;
 
         // 시스템 콜 체크
-        if(judgeUtil.checkSystemCallInCode(userInput.getUserCode())) {
+        if(judgeUtil.checkSystemCallInCode(userInput.getCode())) {
             judgeResultDto.setStatus("404");
             judgeResultDto.setMsg("코드 내 시스템 콜 감지");
             judgeResultDto.setData(null);
@@ -118,12 +107,59 @@ public class JudgeServiceImpl implements JudgeService{
             // 폴더 생성하기
             judgeUtil.createFolder(path);
             // 코드 파일 생성하기 (solution.java)
-            judgeUtil.createCodeFile(userInput.getUserCode(), path);
+            judgeUtil.createCodeFile(userInput.getCode(), path);
             // 코드 검증하기
             result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
             log.info("[validationCheck] judgeValidationResult : {}" , result);
 
 //            mapper.updatePsSubmit(result);
+
+        } catch (Exception e) {
+            judgeResultDto.setStatus("500");
+            judgeResultDto.setMsg("서버 내부 에러");
+        }
+
+        judgeResultDto.setData(result);
+
+        return judgeResultDto;
+    }
+
+    @Override
+    public JudgeResultDto judgeNormal(JudgeNormalDto userInput) {
+
+        JudgeResultDto judgeResultDto = new JudgeResultDto();
+
+        judgeResultDto.setStatus("200");
+        judgeResultDto.setMsg("일반 문제 채점 완료");
+        judgeResultDto.setData(null);
+
+        JudgeValidateResultDto result = null;
+
+        // 시스템 콜 체크
+        if(judgeUtil.checkSystemCallInCode(userInput.getCode())) {
+            judgeResultDto.setStatus("404");
+            judgeResultDto.setMsg("코드 내 시스템 콜 감지");
+            judgeResultDto.setData(null);
+            return judgeResultDto;
+        }
+
+        try {
+            // 문제 정보 가져오기
+            JudgeProblemInfoDto problemInfo = judgeUtil.getProblemInfo(userInput.getProblemId());
+
+            String path = UUID.randomUUID().toString();
+
+            String cmd = "java " + path + "/Solution.java";
+
+            // 폴더 생성하기
+            judgeUtil.createFolder(path);
+            // 코드 파일 생성하기 (solution.java)
+            judgeUtil.createCodeFile(userInput.getCode(), path);
+            // 코드 검증하기
+            result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
+            log.info("[validationCheck] judgeValidationResult : {}" , result);
+
+            mapper.updatePsSubmit(result);
 
         } catch (Exception e) {
             judgeResultDto.setStatus("500");
