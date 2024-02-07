@@ -22,14 +22,13 @@ export default function CompetitionView() {
   useEffect(() => {
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
     const stompClient = Stomp.over(socket);
-    console.log("useEffect stompClient :",stompClient)
+    console.log("useEffect stompClient :", stompClient)
 
     stompClient.connect({}, () => {
       // 연결
-      console.log('채팅과 연결중 ..')
-      
+      console.log('채팅과 연결이 되었어요 !')
       // 구독하기
-      stompClient.subscribe(`{/sub/chat/room/${params.id}}`, (message) => {
+      stompClient.subscribe(`/sub/chat/room/${params.id}`, (message) => {
         // 받은 메시지에 대한 처리
         console.log('채팅을 받았어요:', message.body);
         setChatList((prevChatList) => [...prevChatList, message.body]);
@@ -52,8 +51,8 @@ export default function CompetitionView() {
   // 메세지 보내기 조작할 함수
   const handleSendMessage = (event) => {
     event.preventDefault() // 새로고침 방지
-    console.log("여긴 stompClient", currentStompClient)
-    console.log("여긴 inputMessage :", inputMessage.trim())
+    // console.log("여긴 stompClient", currentStompClient)
+    // console.log("여긴 inputMessage :", inputMessage.trim())
     if (currentStompClient && inputMessage.trim() !== '') {
       console.log("메시지 보냈어요")
       currentStompClient.send(`/pub/chat/message`, {}, JSON.stringify({
