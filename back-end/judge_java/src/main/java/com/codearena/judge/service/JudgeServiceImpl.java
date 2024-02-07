@@ -136,12 +136,12 @@ public class JudgeServiceImpl implements JudgeService{
         JudgeValidateResultDto result = null;
 
         // 시스템 콜 체크
-        if(judgeUtil.checkSystemCallInCode(userInput.getCode())) {
-            judgeResultDto.setStatus("404");
-            judgeResultDto.setMsg("코드 내 시스템 콜 감지");
-            judgeResultDto.setData(null);
-            return judgeResultDto;
-        }
+//        if(judgeUtil.checkSystemCallInCode(userInput.getCode())) {
+//            judgeResultDto.setStatus("404");
+//            judgeResultDto.setMsg("코드 내 시스템 콜 감지");
+//            judgeResultDto.setData(null);
+//            return judgeResultDto;
+//        }
 
         try {
             // 문제 정보 가져오기
