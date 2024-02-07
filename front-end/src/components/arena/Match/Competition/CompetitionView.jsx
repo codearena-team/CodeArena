@@ -1,8 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import * as StompJs from '@stomp/stompjs';
 import C_DividingLine from "./C_dividingLine";
 import CompTopInfo from "./CompTopInfo";
 
 export default function CompetitionView() {
+  // const [chatList, setChatList] = useState();
+  // const [chat, setchat] = useState();
+
+  // const { userId } = useParams();
+  // const client = useRef({});
+
+  // const connect = () => {
+  //   client.current = new StompJs.Clinet({
+  //     brokerURL: '',
+  //     onConnect: () => {
+  //       subscribe();
+  //     },
+  //   });
+  //   client.current.activate();
+  // }
+
+  // const disconnect = () => {
+  //   client.current.deactivate();
+  // }
+
+  // useEffect(() => {
+  //   connect();
+
+  //   return () => disconnect();
+  // }, []);
+
+
   // 왼쪽과 오른쪽 패널의 너비를 나타내는 상태 -> 처음 렌더링 되었을 때 6:4 비율 
   const [panelWidths, setPanelWidths] = useState({
       left: 60,
