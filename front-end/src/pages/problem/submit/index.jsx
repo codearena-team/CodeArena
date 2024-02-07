@@ -22,7 +22,7 @@ export default function Submit() {
   const [submitList, setSubmitList] = useState([])
   const [isvisible, setIsvisible] = useState(false)
   const [statistics, setStatistics] = useState([])
-  const [graphData, setGraphData] = useState(['asd'])
+  const [graphData, setGraphData] = useState([])
   
   useEffect(()=> {
     const problemId = searchParams.get('problemId') || ''

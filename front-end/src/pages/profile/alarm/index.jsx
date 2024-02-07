@@ -80,6 +80,7 @@ export default function Alarm() {
                   key={receiveItem.receiveId}
                   receiveItem={receiveItem}
                   index={index}
+                  // onClick={}
                   />
                 ))
                 ) :( 
