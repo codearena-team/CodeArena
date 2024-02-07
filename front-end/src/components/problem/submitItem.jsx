@@ -1,4 +1,4 @@
-import "../css/ProblemListItem.css"
+
 import TestCaseModal from "./TestcaseModal";
 import CodeMirror from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
@@ -14,7 +14,7 @@ export default function SubmitItem(probs) {
   }
   return(
     
-    <tr className={((probs.index%2)===0) ? 'even ' : ''} >
+    <tr className=" border-b-2" >
       <th className="p-1 font-light">{probs.submitItem.submitNo}</th>
       <th className="p-1 font-light">{probs.submitItem.userNickname}</th>
       <th className="p-1 font-light">{probs.submitItem.problemId}</th>

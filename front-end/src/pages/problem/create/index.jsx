@@ -115,7 +115,7 @@ export default function ProblemCreate() {
     setSelectedList(tmp)
   }
   const onClickSelected = (e)=>{
-    const text = e.target.innerText.split("(")[0]
+    const text = e.target.innerText.split(" X")[0]
     const arr = selectedList
     const filtered = arr.filter((element) => element !== text);
     setSelectedList(filtered)
@@ -210,13 +210,13 @@ export default function ProblemCreate() {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
-          <div className='flex justify-end'>
-            <label className="font-bold me-1"htmlFor="inputFile">입력 파일</label>
-            <input onChange={onChangeInputFile} id="inputFile"  type="file" className="file-input file-input-bordered file-input-sm w-10/12" />
+          <div  className='flex justify-end'>
+            <label abel className="font-bold me-1"htmlFor="inputFile">입력 파일</label>
+            <input onClick={e=>e.target.value=null} onChange={onChangeInputFile} id="inputFile"  type="file" className="file-input file-input-bordered file-input-sm w-10/12" />
           </div>
           <div className='flex justify-end'>
             <label className="font-bold me-1"htmlFor="inputFile">출력 파일</label>
-            <input onChange={onChangeOutputFile} id="outputFile"  type="file" className="file-input file-input-bordered file-input-sm w-10/12" />
+            <input onClick={e=>e.target.value=null} onChange={onChangeOutputFile} id="outputFile"  type="file" className="file-input file-input-bordered file-input-sm w-10/12" />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
@@ -241,33 +241,50 @@ export default function ProblemCreate() {
             
           </div>
           <div className="grid grid-cols-3 gap-5">
-            <div></div>
+            <div className='flex justify-end'>
+              <button className="btn btn-sm btn-neutral" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
+              <dialog id="TagModal" className="modal">
+                <div className="modal-box">
+                  <div className="modal-action flex justify-between mb-4 mt-0">
+                    <div className="w-12"></div>
+                    <h3 className="font-bold text-lg text-center ms-">문제의 알고리즘 유형을 선택하세요</h3>
+                    <form method="dialog">
+                      <button className="btn-sm btn rounded-full">X</button>
+                    </form>
+                  </div>
+                  <div className="text-center">
+                    <div>
+                      <label className="font-bold ms-4 mt-1 me-2">알고리즘</label>
+                      <select value={'선택'} onChange={onClickCate} className="select select-sm select-bordered w-20" >
+                        <option disabled='true'>선택</option>
+                        {cateList.map((cate)=>{
+                          return(
+                            <option key={cate} onClick={onClickCate}>{cate}</option>
+                          )
+                        })}
+                      </select>
+                    </div>
+                    <div className="px-4 mt-4 grid grid-cols-3 gap-4" >
+                      {selectedList.map((selected)=>{
+                        return(
+                          <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </dialog>
+
+            </div>
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="time">시간제한</label>
-              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-6/12" />
+              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-5/12" />
             </div>
             <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="mem">메모리제한</label>
-              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-6/12" />
+              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-5/12" />
             </div>
           </div>
-        </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="time">알고리즘</label>
-          <select onChange={onClickCate} className="select select-sm select-bordered" style={{width:"15.5%"}} >
-            {cateList.map((cate)=>{
-              return(
-                <option onClick={onClickCate}>{cate}</option>
-              )
-            })}
-          </select>
-          <div className="w-9/12 ms-5" >
-            {selectedList.map((selected)=>{
-              return(
-                <span className='mx-2' onClick={onClickSelected}>{selected}(삭제)</span>
-              )
-            })}
-          </div> 
         </div>
         <div className='flex justify-end mb-4'>
           <label className="font-bold me-1"htmlFor="inputEx">

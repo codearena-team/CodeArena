@@ -7,6 +7,7 @@ import { cpp } from '@codemirror/lang-cpp';
 import { useState, useCallback, useEffect } from "react";
 import { useAuthCheck } from "../../../../features/useAuthCheck";
 import AlarmModal from "../../../../components/problem/AlramModal";
+import TagModal from "../../../../components/problem/TagModal";
 import axios from "axios";
 import "../../../css/problemdetail.css"
 
@@ -20,9 +21,6 @@ export default function ProblemDetail() {
   const problemId = params.problemId
   const [code, setCode] = useState('public class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
   const [lang, setLang] = useState('java')
-  const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
-  const [selectedList, setSelectedList] = useState([])
-  const [cate, setCate] = useState('선택')
   const [problem, setProblem] = useState({})
   
   useEffect(()=> {
@@ -47,25 +45,8 @@ export default function ProblemDetail() {
     })
   },[])
 
-  const onClickCate = (e)=>{
-    const arr = cateList
-    const filtered = arr.filter((element) => element !== e.target.value);
-    setCateList(filtered)
-    const tmp = selectedList
-    tmp.push(e.target.value)
-    setSelectedList(tmp)
-    setCate('선택')
-  }
-  const onClickSelected = (e)=>{
-    const text = e.target.innerText.split("(")[0]
-    const arr = selectedList
-    const filtered = arr.filter((element) => element !== text);
-    setSelectedList(filtered)
-    const tmp = cateList
-    tmp.push(text)
-    setCateList(tmp)
-  }
-  
+
+
   const inpustClipboard = () => {
     navigator.clipboard.writeText(problem.problemExInput);
   }
@@ -78,12 +59,9 @@ export default function ProblemDetail() {
     setCode(code);
   }, []);
 
-  const onClickHandler = (e) => {
-    console.log(code);
-    axios.post('ad',{code:code}).then((res)=>console.log(res))
-  }
+
   
-  const onCHangeLang = (e) => {
+  const onChangeLang = (e) => {
     setLang(e.target.value)
     if (e.target.value==='java') {
       setCode('public class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
@@ -185,33 +163,22 @@ export default function ProblemDetail() {
       <div className="right drop-shadow p-5 sticky">
         <div className="flex ">
           <label className="font-bold ms-1 mt-1 me-2">언어</label>
-          <select value={lang} onChange={onCHangeLang} className=" mb-2 select select-sm select-bordered" >
+          <select value={lang} onChange={onChangeLang} className=" mb-2 select select-sm select-bordered" >
             <option>java</option>
             <option>python</option>
             <option>cpp</option>
           </select>
-          <label className="font-bold ms-4 mt-1 me-2">알고리즘</label>
-          <select value={cate} onChange={onClickCate} className="select select-sm select-bordered w-20" >
-            <option isabled="true">선택</option>
-            {cateList.map((cate)=>{
-              return(
-                <option key={cate} onClick={onClickCate}>{cate}</option>
-              )
-            })}
-          </select>
-          <div className="" >
-            {selectedList.map((selected)=>{
-              return(
-                <span className='mx-2' onClick={onClickSelected}>{selected}</span>
-              )
-            })}
-          </div>
-
+          
         </div>
         
-        <CodeMirror value={code} height="75vh" extensions={[java(),python(),cpp()]} onChange={onChangeCode} />
+        <CodeMirror value={code} height="77vh" extensions={[java(),python(),cpp()]} onChange={onChangeCode} />
         <div className="flex justify-end">
-          <button onClick={onClickHandler} className="mt- btn bg-rose-200 rounded-xl">제 출</button>
+          <button onClick={()=>document.getElementById('TagModal').showModal()} className="mt-2 btn bg-rose-200 rounded-xl">제 출</button>
+          <TagModal 
+          code={code}
+          userId={userId}
+          problemId={problem.problemId}
+          />
         </div>
       </div>
     </div>

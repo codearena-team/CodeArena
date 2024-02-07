@@ -6,7 +6,7 @@ export default function TestCaseModal(props) {
   const testCaseList = props.testcase
   return(
     <div>
-      <dialog id={`testCaseModal${props.submitNo}`} className="modal">
+      <dialog id={`testCaseModal${props.submitNo || ''}`} className="modal">
         <div className="modal-box p-0 scrollBar" style={{maxWidth:"1000px"}}>
           <div className='z-50 sticky p-2' style={{backgroundColor:"#F4ECE4", top:"0px"}}>
             <form method="dialog" className='flex justify-between' >
