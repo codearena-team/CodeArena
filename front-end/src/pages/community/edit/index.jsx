@@ -33,7 +33,7 @@ export default function CommunityEdit(){
 
   useEffect(()=>{
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/board/detail/${boardId}`,
+      url : `https://i10d211.p.ssafy.io/api/board/detail/${boardId}`,
       method : 'get'
     })
     .then((res)=>{
@@ -63,7 +63,7 @@ export default function CommunityEdit(){
   //게시글 수정
   const updateArticle = ()=>{
     axios({
-      url : 'http://i10d211.p.ssafy.io:8081/api/board/update',
+      url : 'https//i10d211.p.ssafy.io/api/board/update',
       method : 'patch',
       data : {
         articleNo : boardId,

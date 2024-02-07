@@ -37,7 +37,7 @@ export default function CommunityDetail(){
   // 게시글상세조회
   useEffect(()=>{
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/board/detail/${boardId}`,
+      url : `https://i10d211.p.ssafy.io/api/board/detail/${boardId}`,
       method : 'get'
     })
     .then((res)=>{
@@ -55,7 +55,7 @@ export default function CommunityDetail(){
   // 게시글삭제
   const boardDelete = ()=>{
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/board/delete/${boardId}`,
+      url : `https://i10d211.p.ssafy.io/api/board/delete/${boardId}`,
       method : 'delete'
     })
     .then((res)=>{
@@ -71,7 +71,7 @@ export default function CommunityDetail(){
   //댓글작성
   const createComment = () =>{
     axios({
-      url : 'http://i10d211.p.ssafy.io:8081/api/comment/write',
+      url : 'https://i10d211.p.ssafy.io/api/comment/write',
       method : 'post',
       data : {
         articleNo : boardId,
@@ -93,7 +93,7 @@ export default function CommunityDetail(){
   useEffect(()=>{
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/comment/list?articleNo=${boardId}`,
+      url : `https://i10d211.p.ssafy.io/api/comment/list?articleNo=${boardId}`,
     })
     .then((res)=> {
       console.log(res)

@@ -9,11 +9,12 @@ import { logout } from '../../features/login/authSlice'
 import axios from 'axios'
 import { setAccessToken } from '../../features/login/accessSlice'
 import { error, get } from 'jquery'
+import swal from 'sweetalert'
 
 
 
 const navigation = [ 
-  { name: 'problem', href: '/problem'},
+  { name: 'Problem', href: '/problem'},
   { name: 'Arena', href: '/arena'},
   { name: 'Community', href: '/community' },
   { name: 'Login', href: '/login'},
@@ -35,7 +36,7 @@ export default function NavBar() {
   const handleLogout = ()=>{
     dispatch(logout());
     dispatch(setAccessToken(null));
-    alert('로그아웃되었습니다')
+    swal("로그아웃되었습니다", "", "success");
     navigate('/')
   }
 
@@ -45,9 +46,7 @@ export default function NavBar() {
       {({ open }) => (
         <>
             <div className="relative flex h-16 justify-start mb-5">
-              <div className="flex-initial absolute inset-y-0 left-0 flex items-center sm:hidden">
-              </div>
-              <div className="flex flex-1 justify-between align-middle">
+              <div className="flex flex-1 justify-between align-middle mx-20">
                 <div className="flex flex-shrink-0 items-center">
                 <Link to="/">
                   <img
@@ -57,7 +56,6 @@ export default function NavBar() {
                   />
                 </Link>
                 </div>
-                
                 <div className="flex justify-center items-center">
                   <div className="flex space-x-4">
                     {filterNav.map((item) => (
@@ -142,15 +140,13 @@ export default function NavBar() {
                           )}
                         </Menu.Item>
                       </Menu.Items>
-
                       </Transition>
                       </Menu>
                     )}     
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              </div>
+              
             </div>
      
           <Disclosure.Panel className="sm:hidden">

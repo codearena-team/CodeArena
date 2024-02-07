@@ -34,6 +34,7 @@
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.8",
+    "sweetalert": "^2.1.2",
     "tailwindcss-animatecss": "^3.0.5",
     "web-vitals": "^2.1.4"
   },
