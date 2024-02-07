@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setRefreshToken } from '../../features/login/authSlice';
 import { setAccessToken } from '../../features/login/accessSlice';
 import swal from 'sweetalert'
+import { setRecord } from '../../features/login/authSlice'
 
 axios.defaults.withCredentials = true;
 
@@ -52,9 +53,10 @@ export default function Login() {
         if (res.data.status === "404"){
           swal('로그인 실패', "이메일,비밀번호가 틀렸습니다", 'warning');
         }else{
-          swal("로그인성공", "", "success");
           dispatch(setRefreshToken(res.data.data))
           dispatch(setAccessToken(res.headers.authorization)) 
+          dispatch(setRecord(res.headers.authorization))
+          // console.log(res.headers.authorization);
           navigate('/')
         }
       })

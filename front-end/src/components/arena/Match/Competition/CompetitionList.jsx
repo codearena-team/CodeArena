@@ -5,8 +5,8 @@ import EnterModal from '../../modal/Competition/CompEnterModal';
 import axios from 'axios';
 
 export default function CompetitionList() {
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 표시 데이터
-  const [paginatedData, setPaginatedData] = useState([]); // 페이지네이션 데이터
+  // const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 표시 데이터
+  // const [paginatedData, setPaginatedData] = useState([]); // 페이지네이션 데이터
   const [searchText, setSearchText] = useState(''); // 검색어 텍스트 입력
   const [selectedButton, setSelectedButton] = useState('competition'); // 선택된 버튼 타입-> 첫 렌더링되었을 때 "경쟁전" 화면부터 보이도록
   const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
@@ -14,30 +14,30 @@ export default function CompetitionList() {
   // 가상의 단체전 방 데이터 (일단은 10개정도..)
   const [problemData, setProblemData] = useState([]);
     
-  const PAGE_SIZE = 10; // 한 페이지에 보여줄 방 개수
+  // const PAGE_SIZE = 10; // 한 페이지에 보여줄 방 개수
 
-  const getPaginatedData = () => {
-    const startIndex = (currentPage - 1) * PAGE_SIZE;
-    const endIndex = startIndex + PAGE_SIZE;
-    return problemData.slice(startIndex, endIndex);
-  };
+  // const getPaginatedData = () => {
+  //   const startIndex = (currentPage - 1) * PAGE_SIZE;
+  //   const endIndex = startIndex + PAGE_SIZE;
+  //   return problemData.slice(startIndex, endIndex);
+  // };
 
-  const updatePaginatedData = () => {
-    const newData = getPaginatedData();
-    setPaginatedData(newData);
-  };
+  // const updatePaginatedData = () => {
+  //   const newData = getPaginatedData();
+  //   setPaginatedData(newData);
+  // };
 
-  // 페이지네이션 이전 페이지로 이동
-  const handlePrevPage = () => {
-    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
-    updatePaginatedData();
-  };
+  // // 페이지네이션 이전 페이지로 이동
+  // const handlePrevPage = () => {
+  //   setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  //   updatePaginatedData();
+  // };
 
-  // 페이지네이션 다음 페이지로 이동
-  const handleNextPage = () => {
-    setCurrentPage(prevPage => Math.min(prevPage + 1, Math.ceil(problemData.length / PAGE_SIZE)));
-    updatePaginatedData();
-  };
+  // // 페이지네이션 다음 페이지로 이동
+  // const handleNextPage = () => {
+  //   setCurrentPage(prevPage => Math.min(prevPage + 1, Math.ceil(problemData.length / PAGE_SIZE)));
+  //   updatePaginatedData();
+  // };
 
   // 검색어 입력 핸들러
   const handleSearch = () => {
@@ -49,7 +49,7 @@ export default function CompetitionList() {
         setSearchAnimation(false);
     }, 1000); // 애니메이트 1초
     setSearchText(''); // 검색 후 input창 초기화
-    updatePaginatedData();
+    // updatePaginatedData();
   };
 
   // Enter 키 눌렀을 때 검색 함수 호출
@@ -62,20 +62,21 @@ export default function CompetitionList() {
   // 경쟁전, 단체전 버튼 클릭 핸들러
   const handleButtonClick = (btn) => {
     setSelectedButton(btn);
-    updatePaginatedData();
+    // updatePaginatedData();
   };
 
   // 초기 렌더링 시 데이터 설정
   useEffect(() => {
     axios.get('https://i10d211.p.ssafy.io/game/chat/rooms')
-    .then(res=> {
+    .then((res)=> {
       console.log(res);
-      setProblemData(res.data.data.gameRooms)
+      setProblemData(res.data.data.gameRooms);
+      console.log(res.data.data.gameRooms);
     }) .catch(err=> {
       console.log(err);
     })
 
-    updatePaginatedData();
+    // updatePaginatedData();
   }, []);
 
   return (
@@ -135,7 +136,7 @@ export default function CompetitionList() {
       </div>
 
       {/* 데이터 리스트 */}
-      {paginatedData.map((item, index) => (
+      {problemData.map((item, index) => (
         <div key={index} className="grid w-full grid-cols-7 border-b py-2 items-center rounded-xl shadow-sm hover:bg-gray-300">
           <div className="text-center">{item.problemId}</div>
           <div className="text-center">{item.title}</div>
@@ -155,7 +156,7 @@ export default function CompetitionList() {
       ))}
 
       {/* 페이지네이션 */}
-      <div className="flex justify-center mt-5">
+      {/* <div className="flex justify-center mt-5">
         <div className='relative bottom-0 mb-5'>
           <button
             className="btn btn-pagination"
@@ -182,7 +183,7 @@ export default function CompetitionList() {
             {'>'}
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
