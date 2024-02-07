@@ -22,11 +22,10 @@ export function useAuthCheck() {
   const authCheck = async () => {
     try{
       let value = await checkAccess()
-      console.log(value);
       if (value.data.status === '302') {
         let value2 = await auseRefresh()
-        console.log(value2);
         if (value2.data.status === '302') {
+          navigate('/login')
           return false
         }
         dispatch(setAccessToken(value2.headers.authorization))
@@ -35,7 +34,7 @@ export function useAuthCheck() {
       }
       return true
     } catch (err){
-      console.log(err);
+      navigate('/login')
       return false
     }
   }
