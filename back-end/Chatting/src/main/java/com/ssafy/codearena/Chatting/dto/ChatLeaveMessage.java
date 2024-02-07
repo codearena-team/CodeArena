@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class ChatLeaveMessage {
-    public enum LeaveType {
+    public enum MessageType {
         PLAYER_EXIT, TERMINATED;
     }
 
-    private LeaveType type;
+    private MessageType type;
     private String gameId;
     private String mode;
     private String sender;
