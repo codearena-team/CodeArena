@@ -18,4 +18,6 @@ public interface GameMapper {
     public void terminateGame(String gameId, String winner) throws Exception;
     public int passProblem(String gameId, String player1, String player2) throws Exception;
     public WinnerInfoDto winnerSearch(String gameId) throws Exception;
+    public int isRating(Map<String, String> param) throws Exception;
+    public void refreshRating(String userId, String rating, String gamemode) throws Exception;
 }

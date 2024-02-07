@@ -153,7 +153,7 @@ public class ChatController {
     }
 
     public void terminateGame(String gameId, String winner) {
-        //winner는 승자의 닉네임
+        //winner는 승자의 ID값
 
         chatService.terminateGame(gameId, winner);
     }

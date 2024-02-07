@@ -57,5 +57,13 @@ public class ChatRoomController {
         return chatService.createCompetitiveRoom(gameCreateDto);
     }
 
+    @PostMapping("/test")
+    public String test(@RequestParam String gameId, String winner) {
+
+        log.info(gameId);
+        return chatService.terminateGame(gameId, winner);
+
+    }
+
 
 }
