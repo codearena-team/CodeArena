@@ -10,6 +10,7 @@ import axios from "axios";
 import "../../../css/problemdetail.css"
 
 export default function ProblemDetail() {
+  const accessToken = useSelector(state => state.access.accessToken)
   const userId = useSelector(state => state.auth.userId)
   const [isAuthor, setIsAuthor] = useState()
   const params = useParams();
@@ -25,6 +26,9 @@ export default function ProblemDetail() {
     axios({
       method : 'get',
       url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      headers : {
+        Authorization : accessToken 
+      }
     })
     .then((res)=> {
       console.log(res);

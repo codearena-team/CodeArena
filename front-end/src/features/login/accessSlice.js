@@ -8,6 +8,7 @@ export const accessSlice = createSlice({
   reducers : {
     setAccessToken :(state,action) =>{
       state.accessToken = action.payload
+      
     }
   }
 })

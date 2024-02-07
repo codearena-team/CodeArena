@@ -1,6 +1,7 @@
 import CodeMirror from '@uiw/react-codemirror';
 import {useState, useCallback, useEffect} from "react";
-import { UseSelector, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useAuthCheck } from '../../../features/useAuthCheck';
 import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
@@ -8,7 +9,10 @@ import { cpp } from '@codemirror/lang-cpp';
 import axios from 'axios';
 
 export default function ProblemCreate() {
+  const params = useParams()
+  const navigate = useNavigate()
   const userId = useSelector(state => state.auth.userId)
+  const userNickname = useSelector(state => state.auth.userNickname)
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [inputDescription, setInputDescription] = useState("");
@@ -155,6 +159,19 @@ export default function ProblemCreate() {
     })
     .then((res) => {
       console.log(res);
+      navigate(`/problem`)
+      axios.post('https://i10d211.p.ssafy.io/api/alarm/send',
+      {
+        alarmType : 1,
+        fromId : userId,
+        toId : 1,
+        alarmMsg : `${userNickname}님(userId:${userId})이 문제를 생성을 요청하였습니다.(prblemId:${params.problemId}) `,
+      }
+      )
+      .then(res=> {
+        console.log(res);
+        navigate('/problem')
+      })
     })
     .catch((err) => {
       console.log(err);
