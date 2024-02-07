@@ -1,36 +1,69 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import * as StompJs from '@stomp/stompjs';
+import { useParams, useNavigate } from "react-router-dom";
+// import * as StompJs from '@stomp/stompjs';
 import C_DividingLine from "./C_dividingLine";
 import CompTopInfo from "./CompTopInfo";
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { useSelector } from "react-redux";
 
 export default function CompetitionView() {
-  // const [chatList, setChatList] = useState();
-  // const [chat, setchat] = useState();
+  const params = useParams()
+  const [chatList, setChatList] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [stompClient, setStompClient] = useState(null);
 
-  // const { userId } = useParams();
-  // const client = useRef({});
+  // const type = useRef();
+  const sender = useRef(useSelector(state => state.auth.userNickname));
+  // const message = useRef('');
+  // const gameId = useSelector(state => state.arena.gameId)
+  
+  useEffect(() => {
+    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+    const stompClient = Stomp.over(socket);
+    console.log("useEffect stompClient :",stompClient)
 
-  // const connect = () => {
-  //   client.current = new StompJs.Clinet({
-  //     brokerURL: '',
-  //     onConnect: () => {
-  //       subscribe();
-  //     },
-  //   });
-  //   client.current.activate();
-  // }
+    stompClient.connect({}, () => {
+      // 연결
+      console.log('채팅과 연결중 ..')
 
-  // const disconnect = () => {
-  //   client.current.deactivate();
-  // }
+      // 구독하기
+      stompClient.subscribe(`{/sub/chat/room/${params.id}}`, (message) => {
+        // 받은 메시지에 대한 처리
+        console.log('채팅을 받았어요:', message.body);
+        setChatList((prevChatList) => [...prevChatList, message.body]);
+      });
+    }, error => {
+      // 에러
+      console.error("채팅 연결 에러났음", error)
+    });
 
-  // useEffect(() => {
-  //   connect();
+    return () => {
+      console.log("연결 끊었어요!!")
+      stompClient.disconnect();
+    }
+  }, [params.id]);
 
-  //   return () => disconnect();
-  // }, []);
+  
+  // 메세지 보내기 조작할 함수
+  const handleSendMessage = () => {
+    console.log("여긴 스톰프클라이언트", stompClient)
+    console.log("여긴 인풋메세지 :", inputMessage.trim())
+    if (stompClient && inputMessage.trim() !== '') {
+      console.log("메시지 보냈어요")
+      stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
+        sender: sender.current,
+        message: inputMessage,
+        type: 'TALK',
+      }));
+      setInputMessage('');
+    }
+  };
 
+  // 메시지 input 작동
+  const handleInputChange = (e) => {
+    setInputMessage(e.target.value);
+  };
 
   // 왼쪽과 오른쪽 패널의 너비를 나타내는 상태 -> 처음 렌더링 되었을 때 6:4 비율 
   const [panelWidths, setPanelWidths] = useState({
@@ -72,27 +105,14 @@ export default function CompetitionView() {
         {/* 오른쪽(4)에 해당하는 부분 */}
         <div className="right-panel mr-3 mt-1" style={{ width: `${panelWidths.right}%`, display: 'flex', flexDirection: 'column' }}>
           {/* 채팅 div */}
-          <div
-            className="ml-5 flex-grow"
-            style={{ maxHeight: "calc(100% - 40px)", overflowY: "auto" }}
-          >
-            <div className="chat chat-end mt-3">
-              <div className="chat-bubble chat-bubble-info">저거 저렇게 접근하는게 맞나요?</div>
-            </div>
-            <div className="chat chat-start mt-3">
-              <div className="chat-bubble chat-bubble-primary">저렇게하면 시간 초과 뜨던데 ㅋㅋ</div>
-            </div>
-            <div className="chat chat-start mt-3">
-              <div className="chat-bubble chat-bubble-secondary">아하 자바로 작성하면 저렇게 접근하는구나?</div>
-            </div>
-            <div className="chat chat-start mt-3">
-              <div className="chat-bubble chat-bubble-accent">이녀석 코딩 좀 하는녀석인가?</div>
-            </div>
-            <div className="chat chat-end mt-3">
-              <div className="chat-bubble chat-bubble-success">ㅋㅋㅋㅋㅋ</div>
-            </div>
-            <div className="chat chat-start mt-3">
-              <div className="chat-bubble chat-bubble-warning">아 꿀잼 ㅋㅋ</div>
+          <div className="ml-5 flex-grow" style={{ maxHeight: "calc(100% - 40px)", overflowY: "auto" }}>
+            {/* 채팅 주고받고 할 곳 */}
+            <div className="chat-list">
+              {chatList.map((message, index) => (
+                <div key={index}>
+                  {message}
+                </div>
+              ))}
             </div>
           </div>
           {/* 입력 폼 */}
@@ -103,12 +123,12 @@ export default function CompetitionView() {
                   type="text"
                   className="rounded-full border-2 border-gray-300 px-4 py-2 flex-grow focus:outline-none focus:border-blue-400"
                   placeholder=" 메시지를 입력하세요...!"
+                  value={inputMessage}
+                  onChange={handleInputChange}
                 />
                 <button
                   className="bg-blue-500 text-white rounded-full px-4 py-2 ml-2 focus:outline-none"
-                  onClick={() => {
-                      // 입력 버튼 클릭 시 처리할 기능 필요함
-                  }}
+                  onClick={handleSendMessage}
                 >
                   입력
                 </button>

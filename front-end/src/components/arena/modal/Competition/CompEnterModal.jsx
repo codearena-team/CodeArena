@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setGameId } from "../../../../features/arena/arenaSlice";
 
 export default function EnterModal({ competitionId }) {
-  
+  const dispatch = useDispatch()
   const competitionPath = `/game-list/competition/view/${competitionId}`;
-
+  dispatch(setGameId(competitionId))
   return (
     <div>
       <button className="btn" onClick={() => document.getElementById(competitionId).showModal()}>관전하기</button>
