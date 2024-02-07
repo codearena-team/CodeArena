@@ -132,7 +132,7 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
         onMouseEnter={() => setIsProblemSolveHovered(true)}
         onMouseLeave={() => setIsProblemSolveHovered(false)}
       > 
-        <Link to="/problemsolve">
+        <Link to="/problem">
         <img
           // 마우스 올리면 gif, 마우스 나가면 png
           src={isProblemSolveHovered ? ProblemSolve : ProblemSolveAsset}
@@ -192,7 +192,7 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
         }}
         onMouseEnter={() => setIsCommunityHovered(true)}
         onMouseLeave={() => setIsCommunityHovered(false)}
-      > <Link to="/board">
+      > <Link to="/community">
         <img
           src={isCommunityHovered ? Community : CommunityAsset}
           alt="Community"

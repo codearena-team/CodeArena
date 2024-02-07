@@ -48,6 +48,7 @@ public class JudgeUtil {
         if(file.createNewFile());
 
         FileWriter fw = new FileWriter(file);
+        log.info("code : {}", code);
         fw.write(code);
         fw.close();
     }
@@ -97,11 +98,13 @@ public class JudgeUtil {
 
         result.setSolve(true);
         // 실행 결과 담기
-        String msg = "";
+        String msg = "맞았습니다.";
         // 시간의 총 합.
         double timeSum = 0.0;
         // 에러가 발생 했는지
         boolean isError = false;
+
+        String wrongTC = null;
 
         // TC 불러왔으면 검사하는 로직 수행하기
         for (int tc = 0; tc < testCase.size(); tc++) {
@@ -119,6 +122,7 @@ public class JudgeUtil {
 
             if (!process.waitFor(timeLimit + 4000 + 1000, TimeUnit.MILLISECONDS)) {
                 msg = "시간 초과";
+                wrongTC = testCase.get(tc).getTid();
                 isError = true;
                 break;
             }
@@ -142,13 +146,15 @@ public class JudgeUtil {
                 String[] frags = error.split(" ");
 
                 isError = true;
+                wrongTC = testCase.get(tc).getTid();
 
+                msg = "컴파일 에러";
                 switch (frags[0]) {
                     case "Exception":
                         log.debug("error : {}", error);
                         msg = "Exception : " + frags[4];
                         break;
-                    case "Error:":
+                    case "error:":
                         log.debug("error : {}", error);
                         msg = "컴파일 에러";
                         break;
@@ -158,6 +164,7 @@ public class JudgeUtil {
 
             if (!testCase.get(tc).getOutput().equals(str)) {
                 msg = "틀렸습니다";
+                wrongTC = testCase.get(tc).getTid();
                 isError = true;
                 break;
             }
@@ -180,20 +187,21 @@ public class JudgeUtil {
             timeSum *= 1000;
             timeSum /= testCase.size();
             timeSum = Math.floor(timeSum);
-            timeResult = timeSum + "";
+            timeResult = (int)timeSum + "";
         }
 
         result.setMsg(msg);
         result.setSolve(!isError);
-        result.setTotalTime(timeResult);
+        result.setTime(timeResult);
+        result.setWrongTestCaseNo(wrongTC);
 
         File dirFile = new File(path);
         File javaFile = new File(path, "Solution.java");
 
         // 결과 반영 했으면 디렉토리 삭제하기
         // 내부 파일부터 삭제하고 디렉토리 삭제
-        javaFile.delete();
-        dirFile.delete();
+//        javaFile.delete();
+//        dirFile.delete();
 
         return result;
     }

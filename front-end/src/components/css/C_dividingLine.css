@@ -7,7 +7,6 @@
 .right-panel {
   height: 100%;
   overflow: hidden;
-  transition: width 0.3s;
 }
 
 .vertical-dividingLine {

@@ -2,6 +2,8 @@ import Profile from '../../images/common/profile.png'
 import Finger from '../../images/common/finger.png'
 import Message from '../../images/common/message.png'
 import Rank from '../../images/common/rank.png'
+import Speed from '../../images/common/speed.png'
+import Effi from '../../images/common/effi.png'
 import '../css/profile.css'
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom'
@@ -16,6 +18,7 @@ import SolvedItem from '../../components/profile/SolveList';
 import UnsolvedItem from '../../components/profile/UnsolveList';
 import { useNavigate } from 'react-router-dom'
 import swal from 'sweetalert';
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts'
 
 
 // to 프로필주인 , from 로그인한유저 ,
@@ -41,6 +44,7 @@ export default function MyPage() {
   const [modalList,setModalList] = useState([])
   const [loginFollowinglist,setLoginFollowingList] = useState([])
   const [loginFollowerlist,setLoginFollwerList] = useState([])
+  const [graphData, setGraphData] = useState([])
 
 
   // 프로필화면시 그프로필 회원정보요청하는 axios
@@ -50,7 +54,7 @@ export default function MyPage() {
       method : 'get'
     })
     .then((res)=>{
-      console.log(res)
+      console.log(res.data.data)
       setProfileIntro(res.data.data.userInfoDto.userIntro)
       setProfileUser(res.data.data.userInfoDto.userNickname)
       setEffi(res.data.data.userInfoDto.effiRating)
@@ -59,6 +63,14 @@ export default function MyPage() {
       setSolveList(res.data.data.solvedProblem)
       setUnsolveList(res.data.data.unsolvedProblem)
       setProfileId(res.data.data.userInfoDto.userId)
+      // setGraphData(res.data.data.ratioOfAlgo.map((obj)=> {
+      //   return {name:obj.tagName,value:parseInt(obj.count)}
+      // })) 
+      // })
+      setGraphData(res.data.data.problemCateList.map((item)=>{
+        return {name:item.problemCate,value:parseInt(item.problemCateCnt)}
+      }))
+        
     })
     .catch((err)=>{
       console.log(err)
@@ -179,8 +191,9 @@ const goUnfollow = () =>{
 
 
 
-
-
+const formatPercent = (value) => `${(value * 100).toFixed(0)}%`;
+const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
+'BC8F8F','#8FBC8F','#20B2AA','#A9A9A9','#EEE8AA'];
 
   const getFollowing = () =>{
     //팔로잉목록모달열기
@@ -198,7 +211,10 @@ const goUnfollow = () =>{
   }
   // 닉네임 검색 인풋창변화시
   const searchInput = (e) =>{
-    setWord(e.target.value)
+    setWord(e.target.value.trim());
+    if (!e.target.value.trim()) {
+      return
+    }
     axios({
       url :`https://i10d211.p.ssafy.io/api/user/list?fromId=${loginId}&toNickname=${e.target.value}`,
       method : 'get'
@@ -212,27 +228,6 @@ const goUnfollow = () =>{
     })
   }
 
-  // 그래프 그릴 데이터
-  const data = [
-    {
-      subject: 'a', A: 120, B: 110, fullMark: 150,
-    },
-    {
-      subject: 'b', A: 98, B: 130, fullMark: 150,
-    },
-    {
-      subject: 'c', A: 86, B: 130, fullMark: 150,
-    },
-    {
-      subject: 'd', A: 99, B: 100, fullMark: 150,
-    },
-    {
-      subject: 'e', A: 85, B: 90, fullMark: 150,
-    },
-    {
-      subject: 'f', A: 65, B: 85, fullMark: 150,
-    },
-  ];
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -247,14 +242,14 @@ const goUnfollow = () =>{
 
   return (
     <div className='container mx-auto'>
-      <div className='flex p-40 pt-0 pb-0 justify-end mr-3'>
+      <div className='flex p-40 pt-0 pb-0 justify-end mr-3 mb-5'>
         <div>
           <input type="text" placeholder="닉네임을 입력하세요" className="input input-bordered w-xl h-8 max-w-xs mb-2" 
           style={{outline:'none',borderBottomRightRadius: '0',borderTopRightRadius: '0'}}
           value={word}
           onChange={searchInput}
           onKeyDown={handleKeyDown}/>
-          {modalList.length > 0 &&  word.length > 0 &&(
+          {modalList.length > 0 &&  word.length > 0  &&(
           <div className="dropdown" >
           <ul className="dropdown-menu" style={{ display: 'block', position: 'absolute', zIndex: '1',right:'0px', top:'10px' }}>
             {modalList.map((item, index) => (
@@ -367,7 +362,7 @@ const goUnfollow = () =>{
         </div>
         <div className="col-span-6 ml-10">
        
-          <div className='yellowbox drop-shadow-xl p-5 mb-5 font-bold'>
+          <div className='yellowbox drop-shadow p-5 mb-5 font-bold'>
             <div className='mb-2'>맞힌문제</div>
             {solveList.map((solve,index)=>{
               return(
@@ -378,7 +373,7 @@ const goUnfollow = () =>{
               )
             })}
           </div>
-          <div className='yellowbox  drop-shadow-xl p-5 font-bold'>
+          <div className='yellowbox  drop-shadow p-5 font-bold'>
             <div className='mb-2'>틀린문제</div>
             {unsolveList.map((unsolve,index)=>{
               return(
@@ -391,25 +386,44 @@ const goUnfollow = () =>{
           </div>
         </div>
         <div className="col-span-4 ml-10">
-          <div className='pinkbox drop-shadow-xl mb-5'>
-            {/* 그래프 위치 */} 
-            <RadarChart cx={200} cy={175} outerRadius={120} width={400} height={400} data={data}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis />
-                <Radar name="aa" dataKey="A" stroke="#ffffff" fill="#8884d8" fillOpacity={0.7} />
-            </RadarChart>  
+          <div className='pinkbox drop-shadow mb-5'>
+            <ResponsiveContainer height={300} style={{fontSize:'14px'}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
+              {/* PieChart : 원형 차트 모양으로 변환 */}
+              <PieChart>
+                {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}
+                <Tooltip />
+                {/* Pie : 실제 원형 차트 데이터 삽입 */}
+                <Pie
+                  data={graphData} // 데이터 전달
+                  innerRadius={40} // 내부 반지름
+                  outerRadius={70} // 외부 반지름
+                  paddingAngle={1} // 각 섹션 사이 간격
+
+                  dataKey="value" // 데이터에서 값에 해당하는 키 지정
+                  label={({ name, percent }) => `${name} ${formatPercent(percent)}`} // 데이터에서의 이름과 퍼센트
+                >
+                  {graphData.map((entry, index) => (
+                    // Cell : 각 섹션의 스타일을 설정하기 위함 -> key는 index값, fill은 컬러 채우기
+                    <Cell key={`cell-${index}`} fill={colors[index]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+       
           </div>
-          <div className='pinkbox drop-shadow-xl flex justify-between'>
-            <img style={{width:40,height:40}} src={Rank} alt="" className='ml-4 mt-3'/>
-              <div>
-                <div className='text-sm p-3 font-bold'>SPEED SCORE</div>
-                <div className='text-center'>{speed}</div>
-              </div>
-              <div>
-                <div className='text-sm p-3 font-bold'>EFFICIENCY SCORE</div>
-                <div className='text-center mb-3'>{effi}</div>
-              </div>
+          <div className='pinkbox drop-shadow flex mb-5 P-2'>
+            <img style={{width:50,height:50}} src={Speed} alt="" className='ml-4 w-3/12 mt-2'/>
+            <div className='w-9/12'>
+              <div className='text-center font-bold p-2'>SPEED SCORE</div>
+              <div className='text-center pb-2'>{speed}</div>
+            </div>
+          </div>
+          <div className='pinkbox drop-shadow flex mb-5 P-2'>  
+            <div className='w-9/12'>
+              <div className='text-center font-bold p-2'>EFFICIENCY SCORE</div>
+              <div className='text-center pb-2'>{effi}</div>
+            </div>
+            <img style={{width:50,height:50}} src={Effi} alt="" className='ml-4 w-3/12 mt-2'/>
           </div>
         </div>
       </div>
