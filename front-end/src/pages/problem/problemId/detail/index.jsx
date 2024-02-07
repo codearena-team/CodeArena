@@ -1,21 +1,24 @@
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux";
 import CodeMirror from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { useState, useCallback, useEffect } from "react";
+import { useAuthCheck } from "../../../../features/useAuthCheck";
 import AlarmModal from "../../../../components/problem/AlramModal";
 import axios from "axios";
 import "../../../css/problemdetail.css"
 
 export default function ProblemDetail() {
+  const [authCheck] = useAuthCheck()
+  const navigate = useNavigate()
   const accessToken = useSelector(state => state.access.accessToken)
   const userId = useSelector(state => state.auth.userId)
   const [isAuthor, setIsAuthor] = useState()
   const params = useParams();
   const problemId = params.problemId
-  const [code, setCode] = useState('public class Main {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
+  const [code, setCode] = useState('public class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
   const [lang, setLang] = useState('java')
   const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
@@ -23,6 +26,7 @@ export default function ProblemDetail() {
   const [problem, setProblem] = useState({})
   
   useEffect(()=> {
+    
     axios({
       method : 'get',
       url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
@@ -31,9 +35,12 @@ export default function ProblemDetail() {
       }
     })
     .then((res)=> {
-      console.log(res);
+      if (res.data.status === '403') {
+        navigate('/notfound')
+      }
       setIsAuthor(userId === res.data.data.userId)
       setProblem(res.data.data)
+      console.log(res.data);
     })
     .catch((err)=> {
       console.log(err);
@@ -63,6 +70,10 @@ export default function ProblemDetail() {
     navigator.clipboard.writeText(problem.problemExInput);
   }
 
+  const outpustClipboard = () => {
+    navigator.clipboard.writeText(problem.problemExOutput);
+  }
+
   const onChangeCode = useCallback((code, viewUpdate) => {
     setCode(code);
   }, []);
@@ -75,12 +86,22 @@ export default function ProblemDetail() {
   const onCHangeLang = (e) => {
     setLang(e.target.value)
     if (e.target.value==='java') {
-      setCode('public class Main {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
+      setCode('public class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
     } else if (e.target.value==='cpp') {
       setCode('code":"#include <iostream>\n\nint main() {\n    // 여기에 코드를 작성해주세요.\n    return 0;\n}')
     } else (
       setCode('')
     )
+  }
+
+  const onClickApprove = () => {
+    authCheck()
+    const headers = {
+      Authorization : accessToken 
+    }
+    axios.put(`https://i10d211.p.ssafy.io/api/problem/${problemId}/status`,{change:1},{headers})
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
   }
 
   return(
@@ -90,18 +111,24 @@ export default function ProblemDetail() {
           <div className="flex">
             <h1 className="text-3xl mb-2 ">{problem.problemTitle}</h1>
           </div>
-          <div className="flex">
-            <Link to={`/community?word=${problem.problemId}&key=problem_id`} className="btn btn-sm bg-rose-200 me-2 rounded-xl drop-shadow-sm">질문게시판</Link>
-            <Link to={`/problem/submit?problemId=${problem.problemId}`} className="btn btn-sm bg-rose-200 rounded-xl drop-shadow-sm">제출현황</Link>
-            {isAuthor ?
-              <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-sm bg-rose-200 rounded-xl ms-2 py-1 px-2 drop-shadow-sm">문제 수정</Link>
-            :
-            <div>
-              <div class="btn btn-sm bg-rose-200 rounded-xl ms-2 py-1 px-2 drop-shadow-sm" onClick={()=>document.getElementById(`alarmModal`).showModal()}>문제 수정 요청</div>
-              <AlarmModal alarmId={'alarmModal'}/>
+          { problem.problemVisibility === '1' ?
+            <div className="flex">
+              <Link to={`/community?word=${problem.problemId}&key=problem_id`} className="btn btn-sm bg-rose-200 me-2 rounded-xl drop-shadow-sm">질문게시판</Link>
+              <Link to={`/problem/submit?problemId=${problem.problemId}`} className="btn btn-sm bg-rose-200 rounded-xl drop-shadow-sm">제출현황</Link>
+              {isAuthor ?
+                <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-sm bg-rose-200 rounded-xl ms-2 py-1 px-2 drop-shadow-sm">문제 수정</Link>
+              :
+                <div>
+                  <div className="btn btn-sm bg-rose-200 rounded-xl ms-2 py-1 px-2 drop-shadow-sm" onClick={()=>document.getElementById(`alarmModal`).showModal()}>문제 수정 요청</div>
+                  <AlarmModal alarmId={'alarmModal'}/>
+                </div>
+              }
             </div>
-            }
-          </div>
+          :
+            <div>
+              <button onClick={onClickApprove} className="btn btn-sm bg-rose-200 rounded-xl ms-2 py-1 px-2 drop-shadow-sm">승인</button>
+            </div>
+          }
         </div>
         <div className="leftDown drop-shadow p-5 ">
           <div className="flex justify-center gap-2 drop-shadow-xl text-center mb-4">
@@ -123,7 +150,7 @@ export default function ProblemDetail() {
                 <p>{problem.acceptCount}</p>
               </div>
               <div className="join-item p-2">
-                <p>제출률</p>
+                <p>정답률</p>
                 <p>{problem.percentage}</p>
               </div>
             </div>
@@ -146,7 +173,10 @@ export default function ProblemDetail() {
               <CodeMirror height="100%" value={problem.problemExInput} onChange={onChangeCode} editable={false} />
             </div>
             <div>
-              <p className="text-xl">출력예제</p>
+              <div className="flex">
+                <p className="text-xl">출력예제</p>
+                <button className="btn btn-xs bg-rose-200 ms-2" onClick={outpustClipboard}>복사</button>
+              </div>
               <CodeMirror height="100%" value={problem.problemExOutput} onChange={onChangeCode} editable={false} />
             </div>
           </div>
