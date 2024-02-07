@@ -178,6 +178,7 @@ export default function ProblemDetail() {
           code={code}
           userId={userId}
           problemId={problem.problemId}
+          lang={lang}
           />
         </div>
       </div>

@@ -8,6 +8,7 @@ export default function TagModal (props) {
   const code = props.code
   const userId = props.userId
   const problemId = props.problemId
+  const lang = props.lang
   useEffect(()=> {
     axios({
       method : 'get',
@@ -44,7 +45,7 @@ export default function TagModal (props) {
   
   const onClickHandler = (e) => {
     const taglist = cateList.map((el)=> {return {'tagName' : el}})
-    axios.post(`https://i10d211.p.ssafy.io/api/problem/${problemId}/submit`,{code:code, taglist:taglist, userId:userId}).then((res)=>console.log(res))
+    axios.post(`https://i10d211.p.ssafy.io/api/problem/${problemId}/submit`,{code:code, taglist:taglist, userId:userId, lang:lang}).then((res)=>console.log(res))
   }
   
   return (
