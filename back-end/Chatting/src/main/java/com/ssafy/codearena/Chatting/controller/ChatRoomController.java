@@ -61,8 +61,8 @@ public class ChatRoomController {
         return chatService.createCompetitiveRoom(gameCreateDto);
     }
 
-    @GetMapping("/test")
-    public List<CompetitiveTopMatchResultDto> test() {
+    @GetMapping("/hotmatch")
+    public List<CompetitiveTopMatchResultDto> getTopMatch() {
         List<CompetitiveTopMatchResultDto> list = chatService.getTopFiveMatch();
 
         return list;
