@@ -14,4 +14,6 @@ public interface JudgeMapper {
     JudgeProblemInfoDto getProblemInfo(String problemId) throws SQLException;
     List<TestCaseDto> getTestCase(String problemId) throws SQLException;
     void updatePsSubmit(JudgeValidateResultDto judgeValidateResultDto) throws SQLException;
+    void updateArenaSubmit(JudgeValidateResultDto judgeValidateResultDto) throws SQLException;
+
 }

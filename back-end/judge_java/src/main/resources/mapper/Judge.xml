@@ -27,4 +27,10 @@
         where submit_no=#{submitNo};
     </update>
 
+    <update id="updateArenaSubmit" parameterType="judgeValidateResultDto">
+        update arena_submit_status
+        set submit_status=#{msg}, time_complexity=#{time}
+        where submit_no=#{submitNo};
+    </update>
+
 </mapper>
