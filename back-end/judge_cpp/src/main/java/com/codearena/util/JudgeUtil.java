@@ -40,7 +40,7 @@ public class JudgeUtil {
     }
 
     public void createCodeFile(String code, String path) throws IOException {
-        File file = new File(path, "Solution.java");
+        File file = new File(path, "Solution.cpp");
 
         log.info("파일 생성 중. {}");
         log.info("path : {}" + path);
@@ -120,7 +120,7 @@ public class JudgeUtil {
 
             double beforeTime = System.currentTimeMillis();
 
-            if (!process.waitFor(timeLimit + 4000 + 1000, TimeUnit.MILLISECONDS)) {
+            if (!process.waitFor(timeLimit + 1000, TimeUnit.MILLISECONDS)) {
                 msg = "시간 초과";
                 wrongTC = testCase.get(tc).getTid();
                 isError = true;
