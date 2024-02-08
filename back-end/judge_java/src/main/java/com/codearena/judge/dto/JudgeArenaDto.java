@@ -7,5 +7,5 @@ public class JudgeArenaDto {
     private String submitNo;
     private String problemId;
     private String code;
-    private String roomType;
+    private String gameType;
 }
