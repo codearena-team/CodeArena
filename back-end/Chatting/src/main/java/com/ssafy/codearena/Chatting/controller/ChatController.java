@@ -25,6 +25,9 @@ public class ChatController {
         }
         //관전 채팅방 대화 Publishing
         else if (message.getType() == ChatMessage.MessageType.TALK) {
+            log.info("-----------TALK 타입으로 메시지 수신---------");
+            log.info(message.getGameId());
+            log.info(String.valueOf(message));
             messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
         }
         //관전 채팅방 퇴장
