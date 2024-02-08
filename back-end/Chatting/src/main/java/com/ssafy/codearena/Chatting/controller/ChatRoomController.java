@@ -1,8 +1,5 @@
 package com.ssafy.codearena.Chatting.controller;
-import com.ssafy.codearena.Chatting.dto.CreateCompetitiveResultDto;
-import com.ssafy.codearena.Chatting.dto.GameCreateDto;
-import com.ssafy.codearena.Chatting.dto.GameInfoDto;
-import com.ssafy.codearena.Chatting.dto.GameResultDto;
+import com.ssafy.codearena.Chatting.dto.*;
 import com.ssafy.codearena.Chatting.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,11 +61,11 @@ public class ChatRoomController {
         return chatService.createCompetitiveRoom(gameCreateDto);
     }
 
-    @PostMapping("/test")
-    public String test(@RequestParam String gameId, String winner) {
+    @GetMapping("/test")
+    public List<CompetitiveTopMatchResultDto> test() {
+        List<CompetitiveTopMatchResultDto> list = chatService.getTopFiveMatch();
 
-        log.info(gameId);
-        return chatService.terminateGame(gameId, winner);
+        return list;
 
     }
 

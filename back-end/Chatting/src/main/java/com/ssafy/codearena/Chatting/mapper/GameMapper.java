@@ -1,8 +1,6 @@
 package com.ssafy.codearena.Chatting.mapper;
 
-import com.ssafy.codearena.Chatting.dto.GameCreateDto;
-import com.ssafy.codearena.Chatting.dto.GameInfoDto;
-import com.ssafy.codearena.Chatting.dto.WinnerInfoDto;
+import com.ssafy.codearena.Chatting.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -20,4 +18,5 @@ public interface GameMapper {
     public WinnerInfoDto winnerSearch(String gameId) throws Exception;
     public int isRating(Map<String, String> param) throws Exception;
     public void refreshRating(String userId, String rating, String gamemode) throws Exception;
+    public CompetitiveUserInfoDto getUserInfo(String userId, String gamemode) throws Exception;
 }

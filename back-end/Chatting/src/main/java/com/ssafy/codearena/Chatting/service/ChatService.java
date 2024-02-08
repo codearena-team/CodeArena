@@ -1,4 +1,5 @@
 package com.ssafy.codearena.Chatting.service;
+import com.ssafy.codearena.Chatting.dto.CompetitiveTopMatchResultDto;
 import com.ssafy.codearena.Chatting.dto.GameCreateDto;
 import com.ssafy.codearena.Chatting.dto.GameResultDto;
 import com.ssafy.codearena.Chatting.dto.WinnerInfoDto;
@@ -15,5 +16,6 @@ public interface ChatService {
     public boolean playerLeaveEvent(String gameId, String playerId);
     public String terminateGame(String gameId, String winner);
     public WinnerInfoDto findWinner(String gameId);
+    public List<CompetitiveTopMatchResultDto> getTopFiveMatch();
 
 }

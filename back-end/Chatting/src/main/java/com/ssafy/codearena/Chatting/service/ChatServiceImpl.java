@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -125,6 +127,7 @@ public class ChatServiceImpl implements ChatService{
 
             //게임 매니저 객체 생성 및 내부 리소스 추가
             CompetitiveManageDto competitiveManageDto = new CompetitiveManageDto();
+            competitiveManageDto.setGameId(gameCreateDto.getGameId());
             competitiveManageDto.setParticipants(0);
             competitiveManageDto.setPlayer1(gameCreateDto.getUserRed());
             competitiveManageDto.setPlayer2(gameCreateDto.getUserBlue());
@@ -135,11 +138,11 @@ public class ChatServiceImpl implements ChatService{
             log.info(String.valueOf(competitiveManageDto));
             gameManage.put(gameCreateDto.getGameId(), competitiveManageDto);
 
-//            Map<String, String> map = new HashMap<>();
-//            map.put("CustomId", String.valueOf(gameCreateDto.getGameId()));
-//            SessionProperties properties = SessionProperties.fromJson(map).build();
-//            Session session = openvidu.createSession(properties);
-//            createCompetitiveResultDto.setViduSession(session.getSessionId());  //Session Id 저장
+            Map<String, String> map = new HashMap<>();
+            map.put("CustomId", String.valueOf(gameCreateDto.getGameId()));
+            SessionProperties properties = SessionProperties.fromJson(map).build();
+            Session session = openvidu.createSession(properties);
+            createCompetitiveResultDto.setViduSession(session.getSessionId());  //Session Id 저장
             
             gameResultDto.setData(createCompetitiveResultDto);   //배정된 게임방ID, vidu 세션 ID, 랜덤 문제번호
 
@@ -311,6 +314,74 @@ public class ChatServiceImpl implements ChatService{
 
 
         return winnerInfoDto;
+    }
+
+    @Override
+    public List<CompetitiveTopMatchResultDto> getTopFiveMatch() {
+
+        //Map 데이터 정렬
+        List<CompetitiveManageDto> list = new ArrayList<>(gameManage.values());
+        Collections.sort(list);
+
+        List<CompetitiveTopMatchResultDto> topMatch = new ArrayList<>();
+
+        //Top 5
+        if(gameManage.size() >= 5) {
+            for (int i = 0; i < 5; i++) {
+                CompetitiveManageDto competitiveManageDto = list.get(i);
+                log.info(String.valueOf(competitiveManageDto));
+                try {
+                    CompetitiveTopMatchResultDto competitiveTopMatchResultDto = new CompetitiveTopMatchResultDto();
+
+                    //두 유저의 정보 조회
+                    CompetitiveUserInfoDto player1Info = gameMapper.getUserInfo(competitiveManageDto.getPlayer1(), competitiveManageDto.getGamemode());
+                    CompetitiveUserInfoDto player2Info = gameMapper.getUserInfo(competitiveManageDto.getPlayer2(), competitiveManageDto.getGamemode());
+
+                    competitiveTopMatchResultDto.setPlayer1Nickname(player1Info.getUserNickname());
+                    competitiveTopMatchResultDto.setPlayer1Rating(player1Info.getUserRating());
+                    competitiveTopMatchResultDto.setPlayer2Nickname(player2Info.getUserNickname());
+                    competitiveTopMatchResultDto.setPlayer2Rating(player2Info.getUserRating());
+                    competitiveTopMatchResultDto.setGameId(competitiveManageDto.getGameId());
+                    competitiveTopMatchResultDto.setParticipants(competitiveManageDto.getParticipants());
+
+                    topMatch.add(competitiveTopMatchResultDto);
+                } catch (Exception e) {
+
+                    log.error("Exception Msg", e);
+                    break;
+                }
+            }
+        }
+        //진행중인 게임이 5미만이라면 방 개수만큼 탐색
+        else {
+
+            for (int i = 0; i < list.size(); i++) {
+                CompetitiveManageDto competitiveManageDto = list.get(i);
+                log.info(String.valueOf(competitiveManageDto));
+
+                try {
+                    CompetitiveTopMatchResultDto competitiveTopMatchResultDto = new CompetitiveTopMatchResultDto();
+
+                    CompetitiveUserInfoDto player1Info = gameMapper.getUserInfo(competitiveManageDto.getPlayer1(), competitiveManageDto.getGamemode());
+                    CompetitiveUserInfoDto player2Info = gameMapper.getUserInfo(competitiveManageDto.getPlayer2(), competitiveManageDto.getGamemode());
+
+                    competitiveTopMatchResultDto.setPlayer1Nickname(player1Info.getUserNickname());
+                    competitiveTopMatchResultDto.setPlayer1Rating(player1Info.getUserRating());
+                    competitiveTopMatchResultDto.setPlayer2Nickname(player2Info.getUserNickname());
+                    competitiveTopMatchResultDto.setPlayer2Rating(player2Info.getUserRating());
+                    competitiveTopMatchResultDto.setGameId(competitiveManageDto.getGameId());
+                    competitiveTopMatchResultDto.setParticipants(competitiveManageDto.getParticipants());
+
+                    topMatch.add(competitiveTopMatchResultDto);
+                } catch (Exception e) {
+
+                    log.error("Exception Msg", e);
+                    break;
+                }
+            }
+        }
+
+        return topMatch;
     }
 
 }
