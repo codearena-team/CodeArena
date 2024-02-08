@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import C_ExitModal from "../../modal/Competition/C_ExitModal";
 
-export default function TopInfo() {
+export default function TopInfo({ gameExitId }) {
   const [panelWidths, setPanelWidths] = useState({
     left: 60,
     right: 40,
@@ -48,7 +48,7 @@ export default function TopInfo() {
         >
           나가기
         </button>
-        {<C_ExitModal />}
+        {<C_ExitModal gameExitId={gameExitId}/>}
       </div>
     </div>
   );
