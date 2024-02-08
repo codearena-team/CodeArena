@@ -4,7 +4,7 @@
   border-top-left-radius: 0px;
 }
 
-tbody tr:hover{
+tr:hover{
   background-color: rgb(227, 230, 217);
 }
 

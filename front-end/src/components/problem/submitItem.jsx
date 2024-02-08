@@ -21,7 +21,7 @@ export default function SubmitItem(probs) {
       
       <div className="flex justify-center">
         <th className="p-1 font-light">{probs.submitItem.submitStatus}</th>
-        {probs.submitItem.testCase ? 
+        {/* {probs.submitItem.testCase ? 
         <div>
           <button className="btn btn-xs btn-neutral rounded-full  font-light" 
           onClick={()=>document.getElementById(`testCaseModal${probs.submitItem.submitNo}`).showModal()}>
@@ -29,12 +29,11 @@ export default function SubmitItem(probs) {
           <TestCaseModal 
           testcase={[probs.submitItem.testCase]}
           submitNo={probs.submitItem.submitNo}/>
-        </div> : <div></div>}
+        </div> : <div></div>} */}
       </div>
       
       <th className="p-1 font-light">{probs.submitItem.memory}</th>
       <th className="p-1 font-light">{probs.submitItem.timeComplexity}</th>
-      <th className="p-1 font-light">{probs.submitItem.submitLang}</th>
       <th className="p-1 font-light">
         <button className="btn btn-xs btn-neutral rounded-full"
           onClick={()=>document.getElementById(`codeModal${probs.submitItem.submitNo}`).showModal()}>
@@ -54,7 +53,10 @@ export default function SubmitItem(probs) {
                 </div>
               </form>
             </div>
-            <CodeMirror value={probs.submitItem.code || ''}  extensions={[java(),python(),cpp()]} editable={false}/>
+            <div style={{textAlign:'left'}}>
+            <CodeMirror value={probs.submitItem.code || ''}  extensions={[java(),python(),cpp()]}
+            editable={false}/>
+            </div>
           </div>
         </dialog>
       </th>

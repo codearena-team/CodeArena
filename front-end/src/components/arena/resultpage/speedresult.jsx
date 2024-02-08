@@ -13,7 +13,9 @@ export default function SpeedResult (){
         borderWidth: '10px', borderStyle: 'solid', borderColor: '#E3E6D9'}}>
           <div className='flex justify-between'>
             <img src={Tropy} alt="" className='tropy' />
-            <div className='text-5xl font-bold mt-5'>Winner</div>
+      
+              <div className='text-5xl font-bold mt-5'>Winner</div>
+  
             <img src={Tropy} alt="" className='tropy' />
           </div>
           <div className='flex justify-evenly p-32'>
