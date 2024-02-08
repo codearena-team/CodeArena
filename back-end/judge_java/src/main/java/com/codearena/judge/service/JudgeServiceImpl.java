@@ -110,11 +110,15 @@ public class JudgeServiceImpl implements JudgeService{
             judgeUtil.createCodeFile(userInput.getCode(), path);
             // 코드 검증하기
             result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
-            log.info("[validationCheck] judgeValidationResult : {}" , result);
 
-            mapper.updatePsSubmit(result);
+            log.info("[arena] judgeValidationResult : {}" , result);
+
+            result.setSubmitNo(userInput.getSubmitNo());
+
+            mapper.updateArenaSubmit(result);
 
         } catch (Exception e) {
+            log.debug("[arena] Exception : {}", e);
             judgeResultDto.setStatus("500");
             judgeResultDto.setMsg("서버 내부 에러");
         }
