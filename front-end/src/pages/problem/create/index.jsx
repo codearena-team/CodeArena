@@ -178,7 +178,24 @@ export default function ProblemCreate() {
     })
   }
 
+  const gongji = `테스트케이스는 메모장 기준으로 첨부파일을 첨부하시면 되며 input과 output 기준으로 하나의 테스트케이스당 공백(엔터)을 주어야 합니다.
+아래의 예시는 2개의 테스트케이스를 작성한 예시입니다.
+ex) input이 먼저 나오고 다음엔 output입니다.
 
+input.txt
+3 4
+0 0 0 0
+0 0 0 1
+1 0 0 1
+
+2 4
+0 0 0 0
+1 1 1 1
+
+output.txt
+2
+
+1`;
   return (
     <div className="p-20 pt-0">
       <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
@@ -232,8 +249,29 @@ export default function ProblemCreate() {
             </div>
             <div className='text-center'>
               <span>공지사항을 먼저 읽고 입출력을 작성해 주세요.</span><br />
-              <span className=' text-blue-700'>입출력 파일 공지사항</span>
+              <div className=' text-blue-700 btn btn-sm mt-2'
+              onClick={()=>document.getElementById('modal').showModal()}>입출력 파일 공지사항</div>
             </div>
+
+            <dialog id="modal" className="modal">
+              <div className="modal-box" style={{backgroundColor: "#F5F5EC",maxWidth:'900px'}}>
+                <div className='flex justify-end mb-2'>
+                  <textarea className="textarea textarea-bordered w-full resize-none font-bold text-md" rows="18"
+                    value={gongji}
+                    style={{outline:'none'}}
+                    readOnly
+                    >
+                  </textarea>
+                </div>
+                  <div className="modal-action ">   
+                    <form method="dialog">
+                      <button className="btn btn-sm btn-active drop-shadow text-md mt-0" 
+                      style={{backgroundColor:'#E2E2E2'}}
+                      >닫기</button>
+                    </form>
+                  </div>           
+              </div>
+            </dialog>
             {/* <div className='flex justify-end'>
               <label className="font-bold me-1"htmlFor="rating">문제 등급</label>
               <input value={rating} onChange={(e)=>{setRating(e.target.value)}} className="w-8/12 bg-white rounded-lg bor input input-sm input-bordered" id="rating" type="number" />

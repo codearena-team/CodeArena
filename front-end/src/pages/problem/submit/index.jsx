@@ -194,7 +194,6 @@ export default function Submit() {
                 <th className="p-1.5 font-light">메모리</th>
                 <th className="p-1.5 font-light">시간</th>
                 <th className="p-1.5 font-light">언어</th>
-                <th className="p-1.5 font-light">코드길이</th>
                 <th className="p-1.5 font-light">제출날짜</th>
               </tr>
             </thead>

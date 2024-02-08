@@ -18,7 +18,7 @@ export default function CommentListItem(props) {
 
   const commentDelete = () =>{
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/comment/delete?commentId=${commentNo}`,
+      url : `https://i10d211.p.ssafy.io/api/comment/delete?commentId=${commentNo}`,
       method : 'delete'
     })
     .then((res)=>{
@@ -36,7 +36,7 @@ export default function CommentListItem(props) {
   
   const updateComment = () =>{
     axios({
-      url : 'http://i10d211.p.ssafy.io:8081/api/comment/update',
+      url : 'https://i10d211.p.ssafy.io/api/comment/update',
       method : 'put',
       data : {
         commentId : commentNo,

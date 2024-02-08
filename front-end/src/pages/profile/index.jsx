@@ -28,6 +28,7 @@ export default function MyPage() {
   const profileNickname = params.nickname // 프로필 주인인사람
   const loginNickname = useSelector(state => (state.auth.userNickname)) // 로그인한 유저
   const loginId = useSelector(state => state.auth.userId)
+  const loginEmail = useSelector(state=>state.auth.userEmail)
   const [profileId,setProfileId] = useState('')
   const [profileUser,setProfileUser] = useState('')
   const [profileIntro,setProfileIntro] = useState('')
@@ -63,14 +64,9 @@ export default function MyPage() {
       setSolveList(res.data.data.solvedProblem)
       setUnsolveList(res.data.data.unsolvedProblem)
       setProfileId(res.data.data.userInfoDto.userId)
-      // setGraphData(res.data.data.ratioOfAlgo.map((obj)=> {
-      //   return {name:obj.tagName,value:parseInt(obj.count)}
-      // })) 
-      // })
       setGraphData(res.data.data.problemCateList.map((item)=>{
         return {name:item.problemCate,value:parseInt(item.problemCateCnt)}
       }))
-        
     })
     .catch((err)=>{
       console.log(err)
@@ -153,10 +149,10 @@ const goFollow = () =>{
     newLoginFollwinglist.length += 1
     setLoginFollowingList(newLoginFollwinglist)
     const newFollowerList = [...followerList]
-    newFollowerList.length += 1
+    newFollowerList.push({userId:loginId,userNickname:loginNickname,userEmail:loginEmail})
+    // newFollowerList.length += 1
     setFollowerList(newFollowerList)
     setIsFollow(1)
- 
   })
   .catch((err)=>{
     console.log(err)
@@ -221,12 +217,15 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
     })
     .then((res)=>{
       console.log(res)
+      console.log(res.data.data)
       setModalList(res.data.data)
     })
     .catch((err)=>{
       console.log(err)
     })
   }
+
+
 
 
   const handleKeyDown = (e) => {
@@ -236,7 +235,9 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
   };
 
   const inputClick = (e)=>{
-    setWord(e.target.value);
+    const value = e.target.value;
+    const newValue = value.replace('팔로우중','').trim();
+    setWord(newValue);
     setModalList([]);
   }  
 
@@ -249,14 +250,15 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
           value={word}
           onChange={searchInput}
           onKeyDown={handleKeyDown}/>
+          {/* 인풋밑에 자동생성창 */}
           {modalList.length > 0 &&  word.length > 0  &&(
           <div className="dropdown" >
           <ul className="dropdown-menu" style={{ display: 'block', position: 'absolute', zIndex: '1',right:'0px', top:'10px' }}>
             {modalList.map((item, index) => (
               <li key={index}>
                 <input type="text" className="input input-bordered w-xl h-8 max-w-xs" 
-                style={{outline:'none',cursor: 'text'}}
-                value={item.userNickname}
+                style={{outline:'none',cursor: 'text',color: item.isFollow === '1' ? 'blue' : 'black' }}
+                value={item.userNickname + (item.isFollow === '1' ? '               팔로우중' : '')}
                 onClick={inputClick}
                 />
               </li>
@@ -364,7 +366,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
        
           <div className='yellowbox drop-shadow p-5 mb-5 font-bold'>
             <div className='mb-2'>맞힌문제</div>
-            {solveList.map((solve,index)=>{
+            {solveList.slice(0,14).map((solve,index)=>{
               return(
                 <SolvedItem 
                 key={solve.solveNo}
@@ -375,7 +377,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
           </div>
           <div className='yellowbox  drop-shadow p-5 font-bold'>
             <div className='mb-2'>틀린문제</div>
-            {unsolveList.map((unsolve,index)=>{
+            {unsolveList.slice(0,14).map((unsolve,index)=>{
               return(
                 <UnsolvedItem 
                 key={unsolve.unsolveNo}
@@ -387,7 +389,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
         </div>
         <div className="col-span-4 ml-10">
           <div className='pinkbox drop-shadow mb-5'>
-            <ResponsiveContainer height={300} style={{fontSize:'14px'}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
+            <ResponsiveContainer height={300} style={{fontSize:'13px'}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
               {/* PieChart : 원형 차트 모양으로 변환 */}
               <PieChart>
                 {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}
@@ -395,8 +397,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                 {/* Pie : 실제 원형 차트 데이터 삽입 */}
                 <Pie
                   data={graphData} // 데이터 전달
-                  innerRadius={40} // 내부 반지름
-                  outerRadius={70} // 외부 반지름
+                  innerRadius={70} // 내부 반지름
+                  outerRadius={100} // 외부 반지름
                   paddingAngle={1} // 각 섹션 사이 간격
 
                   dataKey="value" // 데이터에서 값에 해당하는 키 지정

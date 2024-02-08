@@ -63,9 +63,7 @@ export default function Signup(){
       })
       .then((res)=>{
         console.log(res)
-        swal("회원가입되었습니다","success", {
-         
-        });
+        swal("회원가입되었습니다", "", "success")
         navigate('/')
       })
       .catch((err)=>{
