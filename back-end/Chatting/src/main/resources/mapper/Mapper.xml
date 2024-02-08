@@ -78,12 +78,15 @@
 
     <!-- roomType SET 동적쿼리 -->
     <sql id="room">
+    <if test='roomType != null and roomType != ""'>
         <if test='roomType == "0"'>
-            room_type = #{roomType}
+            AND room_type = #{roomType}
         </if>
         <if test='roomType == "1"'>
-            room_type = #{roomType}
+            AND room_type = #{roomType}
         </if>
+    </if>
+        
     </sql>
 
     <!-- 랜덤 문제번호 조회 -->
@@ -118,6 +121,7 @@
         <include refid="sort"/>
         LIMIT ${start}, ${listSize};
     </select>
+
     <!-- 페이지 개수 조회 -->
     <select id="getTotalGameCount" parameterType="map" resultType="int">
         select count(game_id)
