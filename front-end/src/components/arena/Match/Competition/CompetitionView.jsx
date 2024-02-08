@@ -53,7 +53,7 @@ export default function CompetitionView() {
       console.log("연결 끊었어요!!")
       stompClient.disconnect();
     }
-  }, [params.id]);
+  }, [params.id, chatList]);
 
   
   // 메세지 보내기 조작할 함수
