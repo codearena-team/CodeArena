@@ -56,7 +56,7 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "java " + path + "/Solution.java";
+            String cmd = "./" + path + "/Solution";
             log.info("CMD : {}", cmd);
 
             // 폴더 생성하기
@@ -102,7 +102,7 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "java " + path + "/Solution.java";
+            String cmd = "./" + path + "/Solution";
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
@@ -116,6 +116,7 @@ public class JudgeServiceImpl implements JudgeService{
             result.setSubmitNo(userInput.getSubmitNo());
 
             mapper.updateArenaSubmit(result);
+
 
         } catch (Exception e) {
             log.debug("[arena] Exception : {}", e);
@@ -153,12 +154,14 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "java " + path + "/Solution.java";
+            String cmd = "./" + path + "/Solution";
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
             // 코드 파일 생성하기 (solution.java)
             judgeUtil.createCodeFile(userInput.getCode(), path);
+
+
             // 코드 검증하기
             result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
             log.info("[normal] judgeValidationResult : {}" , result);
