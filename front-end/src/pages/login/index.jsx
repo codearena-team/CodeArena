@@ -1,8 +1,6 @@
 import '../css/login.css'
 import '../css/custom.css'
-import KaKao from '../../images/login/kakao.png'
-import Google from '../../images/login/google.png'
-import Naver from '../../images/login/naver.png'
+
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -58,6 +56,7 @@ export default function Login() {
           dispatch(setRecord(res.headers.authorization))
           // console.log(res.headers.authorization);
           navigate('/')
+          swal("로그인되었습니다", "", "success")
         }
       })
       .catch((err)=>{
@@ -108,16 +107,9 @@ export default function Login() {
           </div>
           <br />
           <button className="btn btn-neutral w-full rounded-full" onClick={handleLogin} onKeyDown={handleKeyDown}>로그인</button>
-          <br />
-          <br />    
-          <div className='flex justify-evenly'>
-            <Link to="/login/snssignup"><img  className='snsphoto' src={KaKao} alt="kakao" /></Link>
-            <Link to="/login/snssignup"><img  className='snsphoto' src={Naver} alt="naver" /></Link>
-            <Link to="/login/snssignup"><img  className='googlelogo' src={Google} alt="google" /></Link>
-          </div>
+             
         </div>
       </div>
     </div>
   );
 }
-  

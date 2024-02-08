@@ -36,8 +36,8 @@ import GroupResult from './components/arena/Match/Group/GroupResult';
 import SpeedResult from './components/arena/resultpage/speedresult';
 import SpeedDraw from './components/arena/resultpage/speeddraw';
 import EffiResult from './components/arena/resultpage/effiresult';
-
-
+import EffiDraw from './components/arena/resultpage/effidraw';
+import MiddleConfirm from './components/arena/resultpage/middleconfirm';
 
 
 
@@ -107,9 +107,13 @@ export default function Router () {
       <Route path="*" element={<NotFound/>} /> 
       
       
+      {/* 라우터수정필요구간 (효율전결과,스피드전결과,중간결과확인페이지) */}
       <Route path="/speedresult" element={<SpeedResult/>} />
       <Route path="/speeddraw" element={<SpeedDraw/>} />
       <Route path="/effiresult" element={<EffiResult/>} />
+      <Route path="/effidraw" element={<EffiDraw/>} />
+      <Route path="/middleconfirm" element={<MiddleConfirm/>} />
+
 
 
 
