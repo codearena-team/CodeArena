@@ -41,7 +41,7 @@ export default function WindowSubmitItem(probs) {
           코드보기
         </button>
         <dialog id={`codeModal${probs.submitItem.submitNo}`} className="modal">
-          <div className="modal-box p-0 scrollBar" style={{maxWidth:"1000px", width:"60%"}}>
+          <div className="modal-box p-0 scrollBar" style={{minWidth:"600px"}}>
             <div className='z-50 sticky p-2' style={{backgroundColor:"#F4ECE4", top:"0px"}}>
               <form method="dialog" className='flex justify-between' >
                 <div className='w-36'>
@@ -54,8 +54,10 @@ export default function WindowSubmitItem(probs) {
                 </div>
               </form>
             </div>
-            <CodeMirror value={probs.submitItem.code || ''}  extensions={[java(),python(),cpp()]} editable={false}/>
-          </div>
+            <div style={{textAlign:'left'}}>
+            <CodeMirror value={probs.submitItem.code || ''}  extensions={[java(),python(),cpp()]}
+            editable={false}/>
+            </div>          </div>
         </dialog>
       </th>
       <th className="p-1 font-light">

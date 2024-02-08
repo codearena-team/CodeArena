@@ -27,6 +27,7 @@ export default function Community() {
       url : `https://i10d211.p.ssafy.io/api/board/list?sortType=${sortType}&key=${key}&word=${word}&langType=${langType}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
+      console.log(res);
       setCommunityList(res.data.data.articles)
       setPageCount(res.data.data.totalPageCount)
     })

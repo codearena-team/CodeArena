@@ -24,13 +24,13 @@ export function useAuthCheck() {
       let value = await checkAccess()
       if (value.data.status === '302') {
         let value2 = await auseRefresh()
-        if (value2.data.status === '302') {
-          navigate('/login')
-          return false
+        if (value2.data.status === '200') {
+          dispatch(setAccessToken(value2.headers.authorization))
+          await checkAccess()
+          return true
         }
-        dispatch(setAccessToken(value2.headers.authorization))
-        await checkAccess()
-        return true
+        navigate('/login')
+        return false
       }
       return true
     } catch (err){

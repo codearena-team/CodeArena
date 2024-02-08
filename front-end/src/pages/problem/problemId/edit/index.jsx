@@ -9,7 +9,7 @@ export default function ProblemEdit() {
   const userId = useSelector(state => state.auth.userId)
   const navigate = useNavigate()
   const params = useParams()
-  
+  const accessToken = useSelector(state => state.access.accessToken)
   const [title, setTitle] = useState("");
   const [isValidCode, setIsValidCode] = useState("");
   const [content, setContent] = useState("");
@@ -156,7 +156,10 @@ export default function ProblemEdit() {
   const onDelete = () => {
     axios({
       url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
-      method : "delete"
+      method : "delete",
+      headers : {
+        Authorization : accessToken 
+      }
     })
     .then((res) => {
       console.log(res);
