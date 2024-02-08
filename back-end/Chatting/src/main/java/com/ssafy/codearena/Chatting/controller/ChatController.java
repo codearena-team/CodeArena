@@ -21,6 +21,7 @@ public class ChatController {
         log.info("메시지 수신");
         //관전 채팅방 참여
         if(message.getType() == ChatMessage.MessageType.ENTER) {
+            log.info(message.getSender() + "님이 " + message.getGameId() + "방에 참여했습니다.");
             chatService.plusParticipants(gameId);
         }
         //관전 채팅방 대화 Publishing
@@ -32,6 +33,7 @@ public class ChatController {
         }
         //관전 채팅방 퇴장
         else if(message.getType() == ChatMessage.MessageType.EXIT) {
+            log.info(message.getSender() + "님이 " + message.getGameId() + "방에서 퇴장했습니다.");
             chatService.minusParticipants(gameId);
         }
 

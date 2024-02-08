@@ -151,11 +151,13 @@ public class ChatServiceImpl implements ChatService{
     public void plusParticipants(String gameId) {
         CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
         competitiveManageDto.setParticipants(competitiveManageDto.getParticipants() + 1);
+        log.info("참여 이벤트 발생 : " + String.valueOf(gameManage.get(gameId).getParticipants()));
     }
     @Override
     public void minusParticipants(String gameId) {
         CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
         competitiveManageDto.setParticipants(competitiveManageDto.getParticipants() - 1);
+        log.info("퇴장 이벤트 발생 : " + String.valueOf(gameManage.get(gameId).getParticipants()));
     }
 
     @Override
