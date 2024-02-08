@@ -34,32 +34,8 @@ export default function SubmitItem(probs) {
       
       <th className="p-1 font-light">{probs.submitItem.memory}</th>
       <th className="p-1 font-light">{probs.submitItem.timeComplexity}</th>
-      <th className="p-1 font-light">
-        <button className="btn btn-xs btn-neutral rounded-full"
-          onClick={()=>document.getElementById(`codeModal${probs.submitItem.submitNo}`).showModal()}>
-          코드보기
-        </button>
-        <dialog id={`codeModal${probs.submitItem.submitNo}`} className="modal">
-          <div className="modal-box p-0 scrollBar" style={{maxWidth:"1000px", width:"60%"}}>
-            <div className='z-50 sticky p-2' style={{backgroundColor:"#F4ECE4", top:"0px"}}>
-              <form method="dialog" className='flex justify-between' >
-                <div className='w-36'>
-                </div>
-                <div>
-                  <h3 className="font-bold text-2xl">제출 코드</h3>
-                </div>
-                <div className='flex justify-end w-36'>
-                  <button className="btn btn-sm btn-circle btn-ghost text-2xl">✕</button>
-                </div>
-              </form>
-            </div>
-            <div style={{textAlign:'left'}}>
-            <CodeMirror value={probs.submitItem.code || ''}  extensions={[java(),python(),cpp()]}
-            editable={false}/>
-            </div>
-          </div>
-        </dialog>
-      </th>
+      <th className="p-1 font-light">{probs.submitItem.submitLang}</th>
+      <th className="p-1 font-light">{probs.submitItem.code?.length}</th>
       <th className="p-1 font-light">{probs.submitItem.submitDate}</th>
       {/* <th className="p-1">{probs.submitItem.problemRating}</th> */}
     </tr>
