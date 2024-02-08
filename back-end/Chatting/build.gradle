@@ -30,6 +30,7 @@ dependencies {
 	//Openvidu
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.29.0'
 	implementation 'com.google.code.gson:gson:2.10.1'	//gson
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.2.2'// webflux
 }
 
 tasks.named('test') {

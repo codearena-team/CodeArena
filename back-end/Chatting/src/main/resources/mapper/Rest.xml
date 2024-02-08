@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.codearena.Chatting.mapper.RestMapper">
+    <insert id="insertSubmit" parameterType="submitDto">
+        insert into
+            arena_submit_status
+        (user_id, game_id, problem_id, submit_lang, code, submit_status)
+        values(
+            '${userId}', '${gameId}', '${problemId}', '${submitLang}', #{code}, '${submitStatus}'
+        )
+        <selectKey keyProperty="submitNo" resultType="String" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+</mapper>
