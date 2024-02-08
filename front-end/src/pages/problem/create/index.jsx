@@ -14,26 +14,21 @@ export default function ProblemCreate() {
   const userId = useSelector(state => state.auth.userId)
   const userNickname = useSelector(state => state.auth.userNickname)
   const [title, setTitle] = useState("");
+  const [isValidCode, setIsValidCode] = useState(false);
   const [content, setContent] = useState("");
   const [inputDescription, setInputDescription] = useState("");
   const [outputDescription, setOutputDescription] = useState("");
   const [outputExam, setOutputExam] = useState("");
   const [inputExam, setInputExam] = useState("");
-  const [inputFileData, setInputFileData] = useState("");
-  const [outputFileData, setOutputFileData] = useState("");
-  const [lang, setLang] = useState("Java");
+  const [inputFileData, setInputFileData] = useState([]);
+  const [outputFileData, setOutputFileData] = useState([]);
+  const [lang, setLang] = useState("java");
   const [testCode, setTestCode] = useState("");
   const [time, setTime] = useState("1000");
   const [mem, setMem] = useState("256");
   const [rating, setRating] = useState(1)
   const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
-  const [authCheck] = useAuthCheck()
-
-  useEffect(()=> {
-    
-    console.log(authCheck())
-  },[authCheck])
   
   const onChangeInputFile = (event) => {
     if (event.target.files[0].type === "text/plain") {
@@ -88,24 +83,8 @@ export default function ProblemCreate() {
   const onChangeOutputExam = useCallback((code, viewUpdate) => {
     setOutputExam(code);
   }, []);
-  // const onChangeInputFile = (e) => {
-  //   if (e.target.files[0].type === "text/plain") {
-  //     console.log(e.target.files[0]);
-  //     setInputFile(e.target.files[0])
-  //   } else {
-  //     alert(".txt 파일만 업로드 가능합니다.")
-  //     e.target.value = null;
-  //   }
-  // }
-  // const onChangeOutputFile = (e) => {
-  //   if (e.target.files[0].type === "text/plain") {
-  //     console.log(e.target.files[0]);
-  //     setOutputFile(e.target.files[0])
-  //   } else {
-  //     alert(".txt 파일만 업로드 가능합니다.")
-  //     e.target.value = null;
-  //   }
-  // }
+
+
   const onClickCate = (e)=>{
     const arr = cateList
     const filtered = arr.filter((element) => element !== e.target.value);
@@ -123,6 +102,30 @@ export default function ProblemCreate() {
     tmp.push(text)
     setCateList(tmp)
   }
+
+  const onClickComfile = () => {
+    const data = {
+        problemValidationCode : testCode,
+        problemExInput : inputExam,
+        problemExOutput :outputExam,
+        problemTime : time,
+        testCase : inputFileData.map((el,index) => {
+          return {input : el, output: outputFileData[index]}
+        })
+    }
+    axios.post(`https://i10d211.p.ssafy.io/${lang}/judge/validation`,data)
+    .then(res=> {
+      if (res.data.data.msg === "맞았습니다.") {
+        alert('코드 검증 성공하였습니다.')
+        setIsValidCode(true)
+      } else {
+        alert('코드 검증 실패하였습니다.')
+        setIsValidCode(false)
+      }
+    })
+    .catch(err=>console.log(err))
+  }
+
 
   const onChangeTestCode = useCallback((code, viewUpdate) => {
     setTestCode(code);
@@ -290,13 +293,13 @@ export default function ProblemCreate() {
           <label className="font-bold me-1"htmlFor="inputEx">
             검증용 코드
             <div>
-            <button className='btn btn-sm btn-neutral'>컴파일</button>
+            <button className='btn btn-sm btn-neutral' onClick={onClickComfile}>컴파일</button>
             </div>
           </label>
           <CodeMirror extensions={[java(),python(),cpp()]} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
         </div>
         <div className='flex justify-center'>
-          <button className='btn btn-neutral w-60 text-2xl text-center rounded-full' onClick={onClick} >제 출</button>
+          <button className={isValidCode? 'btn btn-neutral w-60 text-2xl text-center rounded-full' : 'btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '제 출' : '컴파일 후 제출가능' }</button>
           <div></div>
         </div>
       </div>

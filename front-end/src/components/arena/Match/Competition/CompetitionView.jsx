@@ -17,9 +17,12 @@ export default function CompetitionView() {
   // const type = useRef();
   const sender = useRef(useSelector(state => state.auth.userNickname));
   // const message = useRef('');
-  // const gameId = useSelector(state => state.arena.gameId)
-  
+  // const gameId = useRef(useSelector(state => state.arena.gameId))
+  // const navigate = useNavigate();
   useEffect(() => {
+    // if (gameId.current === null) {
+    //   navigate('/notfound')
+    // }
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
     const stompClient = Stomp.over(socket);
     console.log("useEffect stompClient :", stompClient)
@@ -28,10 +31,15 @@ export default function CompetitionView() {
       // 연결
       console.log('채팅과 연결이 되었어요 !')
       // 구독하기
-      stompClient.subscribe(`/sub/chat/room/${params.id}`, (message) => {
+      stompClient.subscribe('/sub/chat/room/'+`${params.id}`, (message) => {
         // 받은 메시지에 대한 처리
-        console.log('채팅을 받았어요:', message.body);
-        setChatList((prevChatList) => [...prevChatList, message.body]);
+        console.log('채팅을 받았어요:', message);
+        const msg = JSON.parse(message.body)
+        const tmp = chatList
+        const obj = {sender:msg.sender, message:msg.message}
+        tmp.push(obj)
+        setChatList(tmp)
+        // setChatList((prevChatList) => [...prevChatList, message.body]);
         scrollToBottom();
       });
     }, error => {
@@ -45,7 +53,7 @@ export default function CompetitionView() {
       console.log("연결 끊었어요!!")
       stompClient.disconnect();
     }
-  }, [params.id]);
+  }, [params.id, chatList]);
 
   
   // 메세지 보내기 조작할 함수
@@ -55,18 +63,22 @@ export default function CompetitionView() {
     // console.log("여긴 inputMessage :", inputMessage.trim())
     if (currentStompClient && inputMessage.trim() !== '') {
       console.log("메시지 보냈어요")
+      console.log("게임 아이디 찍음 :", params.id)
       currentStompClient.send(`/pub/chat/message`, {}, JSON.stringify({
+        gameId: params.id,
         sender: sender.current,
         message: inputMessage,
         type: 'TALK',
       }));
-      const tmp = chatList
-      const obj = {
-        sender : sender.current,
-        message : inputMessage
-      } 
-      tmp.push(obj)
-      setChatList(tmp)
+      
+      // const tmp = chatList
+      // const obj = {
+      //   sender : sender.current,
+      //   message : inputMessage
+      // }
+      // console.log("여기 temp요!!",tmp)
+      // tmp.push(obj)
+      // setChatList(tmp)
       // console.log(inputMessage);
       setInputMessage('');
     }
@@ -133,11 +145,11 @@ export default function CompetitionView() {
                 <div
                   key={index}
                   ref={recentMessage}
-                  className={`chat ${message.sender === sender.current ? 'chat-end' : 'chat-start'}`}
+                  className="chat chat-start flex"
                 >
-                  {message.sender !== sender.current && <strong>{message.sender}</strong>}
                   <div className="chat-bubble">
-                    <span>{message.message}</span>
+                  <strong>{message.sender}님 : </strong>
+                  <span>{message.message}</span>
                   </div>
                 </div>
               ))}

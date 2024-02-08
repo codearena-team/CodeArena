@@ -9,7 +9,9 @@ export default function ProblemEdit() {
   const userId = useSelector(state => state.auth.userId)
   const navigate = useNavigate()
   const params = useParams()
+  
   const [title, setTitle] = useState("");
+  const [isValidCode, setIsValidCode] = useState("");
   const [content, setContent] = useState("");
   const [inputDescription, setInputDescription] = useState("");
   const [outputDescription, setOutputDescription] = useState("");
@@ -130,6 +132,27 @@ export default function ProblemEdit() {
     })
   }
 
+  const onClickComfile = () => {
+    const data = {
+        problemValidationCode : testCode,
+        problemExInput : inputExam,
+        problemExOutput :outputExam,
+        problemTime : time,
+        testCase : testcase
+    }
+    axios.post(`https://i10d211.p.ssafy.io/${lang}/judge/validation`,data)
+    .then(res=> {
+      if (res.data.data.msg === "맞았습니다.") {
+        alert('코드 검증 성공하였습니다.')
+        setIsValidCode(true)
+      } else {
+        alert('코드 검증 실패하였습니다.')
+        setIsValidCode(false)
+      }
+    })
+    .catch(err=>console.log(err))
+  }
+
   const onDelete = () => {
     axios({
       url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
@@ -240,7 +263,7 @@ export default function ProblemEdit() {
           <label className="font-bold me-1"htmlFor="inputEx">
             검증용 코드
             <div>
-            <button className='btn btn-sm btn-neutral'>컴파일</button>
+            <button className='btn btn-sm btn-neutral' onClick={onClickComfile}>컴파일</button>
             </div>
           </label>          <CodeMirror value={testCode} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
         </div>
@@ -252,7 +275,7 @@ export default function ProblemEdit() {
         </div>
         <div className='flex justify-between'>
           <div className=' w-40'></div>
-          <div><button className='btn btn-neutral w-60 text-2xl text-center rounded-full drop-shadow-lg' onClick={onClick} >수 정</button></div>
+          <div><button className={isValidCode? 'btn btn-neutral w-60 text-2xl text-center rounded-full' : 'btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '수 정' : '컴파일 후 수정가능' }</button></div>
           <div><button className='btn w-40 text-xl text-center rounded-full drop-shadow-lg' onClick={onDelete}>삭제</button></div>
         </div>
       </div>
