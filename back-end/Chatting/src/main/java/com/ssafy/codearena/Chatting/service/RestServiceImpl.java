@@ -1,16 +1,22 @@
 package com.ssafy.codearena.Chatting.service;
 
+import com.ssafy.codearena.Chatting.dto.GamePlayerDto;
 import com.ssafy.codearena.Chatting.dto.RestResultDto;
 import com.ssafy.codearena.Chatting.dto.SubmitDto;
+import com.ssafy.codearena.Chatting.dto.Top5RatingResultDto;
 import com.ssafy.codearena.Chatting.mapper.RestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -61,6 +67,32 @@ public class RestServiceImpl implements RestService {
         }finally{
             return resultDto;
         }
+    }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public RestResultDto getRanking() {
+        RestResultDto resultDto = new RestResultDto();
+        Top5RatingResultDto rank = new Top5RatingResultDto();
+        List<GamePlayerDto> effRanking = Collections.EMPTY_LIST;
+        List<GamePlayerDto> speedRanking = Collections.EMPTY_LIST;
+        resultDto.setStatus("200");
+        resultDto.setMsg("순위조회에 성공했습니다.");
+        try{
+            effRanking = mapper.getEffRankingbyRating();
+            speedRanking = mapper.getSpeedRankingByRating();
+            if(effRanking == null && speedRanking == null) throw new Exception("랭크 조회 에러");
+            if(effRanking == null) effRanking = Collections.EMPTY_LIST;
+            if(speedRanking == null) speedRanking = Collections.EMPTY_LIST;
+        }catch(Exception e){
+            log.debug("exception : {}", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("순위조회 도중 에러가 발생했습니다.");
+        }finally{
+            rank.setSpeedRank(speedRanking);
+            rank.setEffRank(effRanking);
+            resultDto.setData(rank);
+            return resultDto;
+        }
     }
 }

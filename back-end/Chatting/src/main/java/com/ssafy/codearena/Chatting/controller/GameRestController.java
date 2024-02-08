@@ -6,6 +6,7 @@ import com.ssafy.codearena.Chatting.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,12 @@ public class GameRestController {
     ResponseEntity<RestResultDto> submitEff(@RequestBody SubmitDto submitDto) {
         // roomType 0 : 경쟁, roomType : 1 사설
         RestResultDto resultDto = service.insertSubmit(submitDto);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/rank")
+    ResponseEntity<RestResultDto> getRanking(){
+        RestResultDto resultDto = service.getRanking();
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
