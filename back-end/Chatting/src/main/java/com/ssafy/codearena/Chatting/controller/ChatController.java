@@ -31,11 +31,11 @@ public class ChatController {
             log.info(String.valueOf(message));
             messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
         }
-        //관전 채팅방 퇴장
-        else if(message.getType() == ChatMessage.MessageType.EXIT) {
-            log.info(message.getSender() + "님이 " + message.getGameId() + "방에서 퇴장했습니다.");
-            chatService.minusParticipants(gameId);
-        }
+        //관전 채팅방 퇴장 REST API로 대체
+//        else if(message.getType() == ChatMessage.MessageType.EXIT) {
+//            log.info(message.getSender() + "님이 " + message.getGameId() + "방에서 퇴장했습니다.");
+//            chatService.minusParticipants(gameId);
+//        }
 
     }
 

@@ -38,6 +38,13 @@ public class ChatRoomController {
         log.info(map.get("key"));
         return new ResponseEntity<GameResultDto>(chatService.findAllRoom(map), HttpStatus.OK);
     }
+
+    @GetMapping("/exit")
+    public ResponseEntity<?> exit(@RequestParam String gameId) {
+
+        chatService.minusParticipants(gameId);
+        return new ResponseEntity<String>("퇴장", HttpStatus.OK);
+    }
     //관전 채팅방 생성
     //매칭 서버에서 요청받는 엔드포인트
     //받는 데이터로는 RandomUUID 두 유저의 ID값, 게임 타입, 사용 언어
