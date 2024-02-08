@@ -3,11 +3,13 @@ import com.ssafy.codearena.Chatting.dto.*;
 import com.ssafy.codearena.Chatting.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import java.util.Objects;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ChatController {
@@ -16,6 +18,7 @@ public class ChatController {
     @MessageMapping("chat/message")
     public void message(ChatMessage message) {
         String gameId = message.getGameId();
+        log.info("메시지 수신");
         //관전 채팅방 참여
         if(message.getType() == ChatMessage.MessageType.ENTER) {
             chatService.plusParticipants(gameId);
@@ -33,6 +36,7 @@ public class ChatController {
 
     @MessageMapping("chat/leave")
     public void leave(ChatLeaveMessage message) {
+        log.info("메시지 수신");
 
         SubmitResultMessage submitResultDto = new SubmitResultMessage();
         submitResultDto.setGameId(message.getGameId());
@@ -101,6 +105,7 @@ public class ChatController {
     @MessageMapping("chat/submit")
     public void submit(ChatSubmitMessage message) {
         String gameId = message.getGameId();
+        log.info("메시지 수신");
 
 
         //스피드전
