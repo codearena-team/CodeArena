@@ -51,6 +51,14 @@ public class JudgeUtil {
         log.info("code : {}", code);
         fw.write(code);
         fw.close();
+
+        String cmd = "g++ " + path + "/Solution.cpp -o " + path +"/solution";
+
+        // 런타임 생성하고 코드 컴파일하기
+        Runtime runtime = Runtime.getRuntime();
+
+        runtime.exec(cmd);
+
     }
 
     public boolean checkSystemCallInCode(String code) {
@@ -149,10 +157,11 @@ public class JudgeUtil {
                 wrongTC = testCase.get(tc).getTid();
 
                 msg = "컴파일 에러";
+
                 switch (frags[0]) {
-                    case "Exception":
+                    case "warning":
                         log.debug("error : {}", error);
-                        msg = "Exception : " + frags[4];
+                        msg = "런타임 에러";
                         break;
                     case "error:":
                         log.debug("error : {}", error);
@@ -196,7 +205,7 @@ public class JudgeUtil {
         result.setWrongTestCaseNo(wrongTC);
 
         File dirFile = new File(path);
-        File javaFile = new File(path, "Solution.java");
+        File cppFile = new File(path, "Solution.cpp");
 
         // 결과 반영 했으면 디렉토리 삭제하기
         // 내부 파일부터 삭제하고 디렉토리 삭제
