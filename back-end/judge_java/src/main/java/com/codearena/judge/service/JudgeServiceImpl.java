@@ -115,7 +115,8 @@ public class JudgeServiceImpl implements JudgeService{
 
             result.setSubmitNo(userInput.getSubmitNo());
 
-            mapper.updateArenaSubmit(result);
+            if("1".equals(userInput.getGameType()))
+                mapper.updateArenaSubmit(result);
 
         } catch (Exception e) {
             log.debug("[arena] Exception : {}", e);
