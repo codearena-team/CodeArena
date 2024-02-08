@@ -43,6 +43,7 @@ public class ChatServiceImpl implements ChatService{
         Map<String, Object> param = new HashMap<String, Object>();    //쿼리 매개변수
         param.put("word", map.get("word") == null ? "" : map.get("word"));  //검색 필터 값
         param.put("gameMode", map.get("gameMode") == null ? "" : map.get("gameMode"));  //게임 모드 필터
+        param.put("roomType", map.get("roomType") == null ? "0" : map.get("roomType"));  //방 타입 필터
         int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));    //특정 페이지 번호 요청이 없다면 1번
         int sizePerPage = Integer.parseInt(map.get("spp") == null ? "15" : map.get("spp"));
         int start = currentPage * sizePerPage - sizePerPage;    //쿼리로 불러올 인덱스 번호 지정
@@ -117,6 +118,7 @@ public class ChatServiceImpl implements ChatService{
             createCompetitiveResultDto.setGameId(gameCreateDto.getGameId());     //응답객체 값 저장
 
             gameCreateDto.setProblemId(Integer.toString(randomProblem));
+            gameCreateDto.setRoomType("0");
 
             gameMapper.createPrivateRoom(gameCreateDto);    //DB I/O
 
@@ -128,6 +130,7 @@ public class ChatServiceImpl implements ChatService{
             competitiveManageDto.setPlayer1_leave(false);
             competitiveManageDto.setPlayer2_leave(false);
             competitiveManageDto.setGamemode(gameCreateDto.getGameMode());
+            competitiveManageDto.setRoomType("0");
             log.info(String.valueOf(competitiveManageDto));
             gameManage.put(gameCreateDto.getGameId(), competitiveManageDto);
 

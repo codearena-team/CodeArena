@@ -11,6 +11,7 @@
         <result column="game_mode" property="gameMode"/>
         <result column="start_time" property="startTime"/>
         <result column="game_language" property="language"/>
+        <result column="room_type" property="roomType"/>
     </resultMap>
 
     <resultMap id="winnerInfo" type="WinnerInfoDto">
@@ -75,6 +76,15 @@
         </if>
     </sql>
 
+    <!-- roomType SET 동적쿼리 -->
+    <sql id="room">
+        <if test='roomType == "0"'>
+            room_type = #{roomType}
+        </if>
+        <if test='roomType == "1"'>
+            room_type = #{roomType}
+        </if>
+    </sql>
 
     <!-- 랜덤 문제번호 조회 -->
     <select id="findProblemById" resultType="int">
@@ -91,17 +101,19 @@
     </select>
     <!-- 게임방 생성 -->
     <insert id="createPrivateRoom" parameterType="gameCreateDto">
-        INSERT INTO competitive_game_list(game_id, game_title, player1, player2, problem_id, start_time, game_mode, game_language)
-        VALUES(#{gameId}, #{title}, #{userRed}, #{userBlue}, #{problemId}, now(), #{gameMode}, #{language});
+        INSERT INTO competitive_game_list(game_id, game_title, player1, player2, problem_id, start_time, game_mode, game_language, room_type)
+        VALUES(#{gameId}, #{title}, #{userRed}, #{userBlue}, #{problemId}, now(), #{gameMode}, #{language}, #{roomType});
     </insert>
+
     <!-- 게임방 목록 조회 -->
     <select id="findAllRoom" parameterType="map" resultMap="gameInfo">
-        SELECT game_id, game_title, (SELECT user_nickname FROM user WHERE user_id = player1) as player1,(SELECT user_nickname FROM user WHERE user_id = player2) as player2, problem_id, start_time, game_mode, game_language
+        SELECT game_id, game_title, (SELECT user_nickname FROM user WHERE user_id = player1) as player1,(SELECT user_nickname FROM user WHERE user_id = player2) as player2, problem_id, start_time, game_mode, game_language, room_type
         FROM competitive_game_list
         WHERE end_time IS NULL
         <where>
             <include refid="mode"/>
             <include refid="search"/>
+            <include refid="room"/>
         </where>
         <include refid="sort"/>
         LIMIT ${start}, ${listSize};
