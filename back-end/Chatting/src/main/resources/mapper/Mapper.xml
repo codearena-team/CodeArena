@@ -86,7 +86,7 @@
             AND room_type = #{roomType}
         </if>
     </if>
-        
+
     </sql>
 
     <!-- 랜덤 문제번호 조회 -->
