@@ -104,7 +104,7 @@ export default function ProblemEdit() {
       return {tagName : selected}
     })
     axios({
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/${problemId}`,
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
       method : "put",
       data : {
         userId:userId,
@@ -142,7 +142,7 @@ export default function ProblemEdit() {
     }
     axios.post(`https://i10d211.p.ssafy.io/${lang}/judge/validation`,data)
     .then(res=> {
-      if (res.data.data.msg === "맞았습니다.") {
+      if (res.data.data.solve) {
         alert('코드 검증 성공하였습니다.')
         setIsValidCode(true)
       } else {
