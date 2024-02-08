@@ -13,4 +13,5 @@ public class GameInfoDto {
     private int participants;    //채팅 참여자 수
     private String startTime;   //게임 시작 시간
     private String language;    //게임 사용 언어
+    private String roomType;    //게임 방 타입 2가지 (경쟁전, 사설)
 }

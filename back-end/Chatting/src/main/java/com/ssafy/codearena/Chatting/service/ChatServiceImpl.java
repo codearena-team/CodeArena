@@ -75,6 +75,7 @@ public class ChatServiceImpl implements ChatService{
             gameResultDto.setData(gameListDto);
         }
         catch (Exception e) {
+
             gameResultDto.setStatus("500");
             gameResultDto.setMsg("Server Internal Error");
             gameResultDto.setData(null);
