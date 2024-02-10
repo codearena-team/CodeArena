@@ -1,5 +1,5 @@
 FROM openjdk:17-jdk-alpine
-RUN apk update && apk add python
+RUN apk update && apk add python3
 
 # FROM : 이미지 레이어의 최상단, alpine리눅스에 jdk 17을 사용한단 의미
 
