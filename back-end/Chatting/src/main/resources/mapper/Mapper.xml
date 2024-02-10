@@ -19,6 +19,11 @@
         <result column="user_nickname" property="userNickname"/>
     </resultMap>
 
+    <resultMap id="userInfo" type="CompetitiveUserInfoDto">
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_rating" property="userRating"/>
+    </resultMap>
+
     <!-- 검색조건 동적쿼리 -->
     <sql id="search">
         <if test='word != null and word != ""'>
@@ -164,4 +169,15 @@
         <set><include refid="modeset"></include></set>
         WHERE user_id = #{userId};
     </update>
+
+    <select id="getUserInfo" parameterType="string" resultMap="userInfo">
+        <if test='gamemode == "0"'>
+            SELECT user_nickname, speed_rating as user_rating
+        </if>
+        <if test='gamemode == "1"'>
+            SELECT user_nickname, effi_rating as user_rating
+        </if>
+        FROM user
+        WHERE user_id = #{userId};
+    </select>
 </mapper>
