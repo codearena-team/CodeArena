@@ -79,7 +79,7 @@ export default function TagModal (props) {
         <div className="px-4 mt-4 grid grid-cols-3 gap-4" >
           {selectedList.map((selected)=>{
             return(
-              <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
+              <div className='btn m-2 bg-gray-200 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
             )
           })}
         </div>

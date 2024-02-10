@@ -1,4 +1,4 @@
-import { Link, useParams, useNavigate } from "react-router-dom"
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom"
 import { useSelector } from "react-redux";
 import CodeMirror from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
@@ -14,6 +14,7 @@ import axios from "axios";
 import "../../../css/problemdetail.css"
 
 export default function ProblemDetail() {
+  const location = useLocation()
   const [authCheck] = useAuthCheck()
   const navigate = useNavigate()
   const accessToken = useSelector(state => state.access.accessToken)
@@ -75,8 +76,13 @@ export default function ProblemDetail() {
         Authorization : accessToken 
       }
       axios.put(`https://i10d211.p.ssafy.io/api/problem/${problemId}/status`,{change:1},{headers})
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
+      .then(setTimeout((res) => {
+        console.log(res)
+        navigate(-1);
+      }, 100))
+      .catch(err => {
+        console.log(err)
+      })
     }, 100);
   }
 

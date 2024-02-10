@@ -194,8 +194,8 @@ export default function SubmitWindow() {
               <tr className="orderBy w-full">
                 <th className="p-1.5 font-light">닉네임</th>
                 <th className="p-1.5 font-light w-3/12">결과</th>
-                <th className="p-1.5 font-light">메모리</th>
-                <th className="p-1.5 font-light">시간</th>
+                <th className="p-1.5 font-light">메모리(MB)</th>
+                <th className="p-1.5 font-light">시간(ms)</th>
                 <th className="p-1.5 font-light">언어</th>
                 <th className="p-1.5 font-light">코드길이</th>
                 <th className="p-1.5 font-light">제출날짜</th>
