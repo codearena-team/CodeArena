@@ -27,7 +27,7 @@ export default function ProblemDetail() {
   const [window, setWindow] = useState(true)
   
   useEffect(()=> {
-    
+    authCheck()
     axios({
       method : 'get',
       url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
@@ -41,7 +41,7 @@ export default function ProblemDetail() {
       }
       setIsAuthor(userId === res.data.data.userId)
       setProblem(res.data.data)
-      console.log(res.data);
+      console.log(res);
     })
     .catch((err)=> {
       console.log(err);
@@ -70,12 +70,14 @@ export default function ProblemDetail() {
 
   const onClickApprove = () => {
     authCheck()
-    const headers = {
-      Authorization : accessToken 
-    }
-    axios.put(`https://i10d211.p.ssafy.io/api/problem/${problemId}/status`,{change:1},{headers})
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
+    setTimeout(() => {
+      const headers = {
+        Authorization : accessToken 
+      }
+      axios.put(`https://i10d211.p.ssafy.io/api/problem/${problemId}/status`,{change:1},{headers})
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+    }, 100);
   }
 
   const onClickWindow = () => {
@@ -95,7 +97,7 @@ export default function ProblemDetail() {
           { problem.problemVisibility === '1' ?
             <div className="flex">
               <Link to={`/community?word=${problem.problemId}&key=problem_id`} className="btn btn-sm bg-rose-200 me-2 rounded-xl drop-shadow-sm">질문게시판</Link>
-              <button onClick={onClickWindow} className="btn btn-sm bg-rose-200 rounded-xl drop-shadow-sm">{window ? '제출현황' :'문제내용'}</button>
+              <button onClick={onClickWindow} className={`btn btn-sm bg-rose-200 rounded-xl drop-shadow-sm ${problem.isSolve ? '' : 'hidden'}`}>{window ? '제출현황' :'문제내용'}</button>
               {isAuthor ?
                 <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-sm bg-rose-200 rounded-xl ms-2 py-1 px-2 drop-shadow-sm">문제 수정</Link>
               :

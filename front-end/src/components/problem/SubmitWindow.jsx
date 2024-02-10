@@ -107,7 +107,7 @@ export default function SubmitWindow() {
   
   return(
     <div className="mx-4 flex flex-col">
-      <div className="flex align-middle">
+      <div className="flex align-middle mb-8">
         {isvisible && statistics.avgByLang !==null ? (
         <div className="lg:flex gap-2">
           <div className="flex flex-col justify-center">
@@ -166,13 +166,13 @@ export default function SubmitWindow() {
         <div></div>
       </div>
       
-      <div className="flex items-end justify-between mt-2">
+      <div className="flex items-end justify-between ">
         <div className="flex items-end">
           <button onClick={()=>{changeParams('orderBy','submitDate')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='submitDate' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
           <button onClick={()=>{changeParams('orderBy','timeComplexity')}} className={searchParams.get('orderBy')==='timeComplexity' ? 'orderBy' : 'orderBy unchoice'} value='time'>시간복잡도순</button>
         </div>
         <div className="flex flex-col justify-center">
-        <div>
+        <div className="z-10">
           <div className="flex join align-middle">
             <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-28 join-item" >
               <option value={'전체'}>전체</option>
