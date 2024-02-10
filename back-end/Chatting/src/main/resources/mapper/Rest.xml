@@ -11,6 +11,20 @@
         <result property="speedRating" column="speed_rating"/>
     </resultMap>
 
+    <resultMap id="playerAllData" type="gamePlayerDto">
+        <result property="userId" column="user_id"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="effRating" column="effi_rating"/>
+        <result property="speedRating" column="speed_rating"/>
+        <association property="record" column="userId=user_id" javaType="userRecordDto" select="selectUserRecord"/>
+    </resultMap>
+
+    <resultMap id="playerRecord" type="userRecordDto">
+        <result property="defeatCount" column="defeat_count"/>
+        <result property="winCount" column="win_count"/>
+        <result property="drawCount" column="draw_count"/>
+    </resultMap>
+
     <insert id="insertSubmit" parameterType="submitDto">
         insert into
             arena_submit_status
@@ -29,5 +43,15 @@
 
     <select id="getSpeedRankingByRating" resultMap="playerData">
         select user_id, user_nickname, speed_rating from user where user_id != 1 order by speed_rating desc, user_id asc limit 0, 5;
+    </select>
+
+    <select id="getUserRecordByUserId" resultMap="playerAllData" parameterType="String">
+        select user_id, user_nickname, effi_rating, speed_rating from user where user_id=${userId}
+    </select>
+
+    <select id="selectUserRecord" resultMap="playerRecord">
+        SELECT (SELECT count(*) from arena_record where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and winner!=${userId} and end_time is not null) as defeat_count,
+            (SELECT count(*)FROM arena_record WHERE winner = ${userId} and end_time is not null) as win_count,
+        (SELECT count(*) from arena_record where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and winner IS NULL and end_time is not null) as draw_count FROM arena_record LIMIT 1;
     </select>
 </mapper>

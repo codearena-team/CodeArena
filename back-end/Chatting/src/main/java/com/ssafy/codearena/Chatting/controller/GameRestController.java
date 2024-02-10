@@ -3,6 +3,7 @@ package com.ssafy.codearena.Chatting.controller;
 import com.ssafy.codearena.Chatting.dto.RestResultDto;
 import com.ssafy.codearena.Chatting.dto.SubmitDto;
 import com.ssafy.codearena.Chatting.service.RestService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,4 +31,9 @@ public class GameRestController {
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
+    @GetMapping("/user/record")
+    ResponseEntity<RestResultDto> getUserRecord(HttpServletRequest request){
+        RestResultDto resultDto = service.getMyRecord(request);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }

@@ -9,4 +9,5 @@ public class GamePlayerDto {
     String userNickname;
     String effRating;
     String speedRating;
+    UserRecordDto record;
 }
