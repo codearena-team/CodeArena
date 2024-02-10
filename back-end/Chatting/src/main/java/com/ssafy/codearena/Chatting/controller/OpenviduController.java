@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 @Tag(name = "Openvidu 사용을 위한 컨트롤러", description = "Openvidu 세션 생성 및 연결요청 API")
+@Slf4j
 @RestController
 @RequestMapping("/vidu")
 public class OpenviduController {
@@ -38,6 +40,7 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
         SessionProperties properties = SessionProperties.fromJson(params).build();
 
+        log.info(String.valueOf(properties));
         try {
             Session session = openvidu.createSession(properties);
             return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
