@@ -50,6 +50,12 @@ public class ProblemServiceImpl implements ProblemService{
     @Value("${judge.java.url}")
     private String judgeJava;
 
+    @Value("judge.cpp.url")
+    private String judgecpp;
+
+    @Value("judge.python.url")
+    private String judgepython;
+
 
     @Override
     public ResultDto getProblemList(HashMap<String, String> map) {
@@ -274,8 +280,18 @@ public class ProblemServiceImpl implements ProblemService{
             return resultDto;
         }
     }
-    private WebClient getClient(String url){
-        return WebClient.create(url);
+    private WebClient getClient(String lang){
+        switch(lang){
+            case "java":
+                return WebClient.create(judgeJava);
+
+            case "cpp":
+                return WebClient.create(judgecpp);
+
+            default:
+                return WebClient.create(judgepython);
+
+        }
     }
     @Override
     public ResultDto insertSubmit(String problemId, SubmitDto submitDto) {
@@ -287,7 +303,7 @@ public class ProblemServiceImpl implements ProblemService{
         log.debug("params : {}", submitDto);
         try{
             mapper.insertSubmit(submitDto);
-            WebClient client = getClient(judgeJava);
+            WebClient client = getClient(submitDto.getSubmitLang());
             Integer submitNo = submitDto.getSubmitNo();
             HashMap<String, String> params = new HashMap<>();
             log.debug("url : {}", judgeJava);
