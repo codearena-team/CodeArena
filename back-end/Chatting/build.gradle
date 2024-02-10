@@ -31,6 +31,14 @@ dependencies {
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.29.0'
 	implementation 'com.google.code.gson:gson:2.10.1'	//gson
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.2.2'// webflux
+
+	// jaxb 는 jwt를 사용하기 위한 의존성
+	// com.sun.xml.bind
+	implementation 'com.sun.xml.bind:jaxb-impl:4.0.1'
+	implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
+	// javax.xml.bind
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
 
 tasks.named('test') {
