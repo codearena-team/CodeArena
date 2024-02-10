@@ -5,4 +5,5 @@ import com.ssafy.codearena.Chatting.dto.SubmitDto;
 
 public interface RestService {
     RestResultDto insertSubmit(SubmitDto submitDto);
+    RestResultDto getCompetitiveResult(String gameId);
 }
