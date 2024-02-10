@@ -46,6 +46,7 @@ public class OpenviduController {
             return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
         }
         catch (Exception e) {
+            log.error("Exception Msg", e);
             return new ResponseEntity<>("이미 존재하는 게임방 ID입니다.", HttpStatus.OK);
         }
 
@@ -65,12 +66,34 @@ public class OpenviduController {
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
                                                    @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        Session session = openvidu.getActiveSession(sessionId);
+        Session session = null;
+
+        try {
+
+            session = openvidu.getActiveSession(sessionId);
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+            return new ResponseEntity<>("입장코드를 통해 세션을 불러오는 과정에서 예기치 못한 오류가 발생했습니다.", HttpStatus.OK);
+        }
+
         if (session == null) {
             return new ResponseEntity<>("해당하는 방이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
+
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
-        Connection connection = session.createConnection(properties);
+
+        Connection connection = null;
+        try {
+
+            connection = session.createConnection(properties);
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+            return new ResponseEntity<>("스트리밍 세션에 접속하는 과정에서 예기치 못한 오류가 발생했습니다.", HttpStatus.OK);
+        }
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
 }
