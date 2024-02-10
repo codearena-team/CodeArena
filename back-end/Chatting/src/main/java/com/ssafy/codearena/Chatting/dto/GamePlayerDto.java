@@ -3,6 +3,8 @@ package com.ssafy.codearena.Chatting.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class GamePlayerDto {
     String userId;
@@ -10,4 +12,6 @@ public class GamePlayerDto {
     String effRating;
     String speedRating;
     UserRecordDto record;
+    List<ArenaProblemDto> recentProblems;
+    List<UserDto> recentUsers;
 }

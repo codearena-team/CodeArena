@@ -17,12 +17,24 @@
         <result property="effRating" column="effi_rating"/>
         <result property="speedRating" column="speed_rating"/>
         <association property="record" column="userId=user_id" javaType="userRecordDto" select="selectUserRecord"/>
+        <collection property="recentProblems" column="userId=user_id" ofType="ArenaProblemDto" select="selectUserRecentProblemNames"/>
+        <collection property="recentUsers" column="userId=user_id" ofType="UserDto" select="selectRecentMatchingUsers"/>
+    </resultMap>
+
+    <resultMap id="userData" type="userDto">
+        <result property="userId" column="user_id"/>
+        <result property="userNickname" column="user_nickname"/>
     </resultMap>
 
     <resultMap id="playerRecord" type="userRecordDto">
         <result property="defeatCount" column="defeat_count"/>
         <result property="winCount" column="win_count"/>
         <result property="drawCount" column="draw_count"/>
+    </resultMap>
+
+    <resultMap id="myArenaProblem" type="arenaProblemDto">
+        <result property="problemId" column="problem_id"/>
+        <result property="problemTitle" column="problem_title"/>
     </resultMap>
 
     <insert id="insertSubmit" parameterType="submitDto">
@@ -53,5 +65,44 @@
         SELECT (SELECT count(*) from arena_record where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and winner!=${userId} and end_time is not null) as defeat_count,
             (SELECT count(*)FROM arena_record WHERE winner = ${userId} and end_time is not null) as win_count,
         (SELECT count(*) from arena_record where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and winner IS NULL and end_time is not null) as draw_count FROM arena_record LIMIT 1;
+    </select>
+
+    <select id="selectUserRecentProblemNames" resultMap="myArenaProblem">
+        select a.problem_id, p.problem_title from arena_record a inner join ps_list p on a.problem_id=p.problem_id where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and end_time is not null order by a.start_time desc limit 0, 6;
+    </select>
+
+    <select id="selectRecentMatchingUsers" resultMap="userData">
+        select distinct temp.user_id, u.user_nickname from (
+           select * from(select player1 as user_id, start_time
+                         from arena_record
+                         where
+                             (player2 = ${userId} or player3 = ${userId} or player4 = ${userId}) and
+                             end_time is not null and player1 is not null
+                         order by start_time desc) temp1
+           UNION
+           select * from(select player2 as user_id, start_time
+                         from arena_record
+                         where
+                             (player1 = ${userId} or player3 = ${userId} or player4 = ${userId}) and
+                             end_time is not null and player2 is not null
+                         order by start_time desc
+                             limit 5) temp2
+           UNION
+           select * from(select player3 as user_id, start_time
+                         from arena_record
+                         where
+                             (player1 = ${userId} or player2 = ${userId} or player4 = ${userId}) and
+                             end_time is not null and player3 is not null
+                         order by start_time desc
+                             limit 5) temp3
+           UNION
+           select * from(select player4 as user_id, start_time
+                         from arena_record
+                         where
+                             (player1 = ${userId} or player2 = ${userId} or player3 = ${userId}) and
+                             end_time is not null and player4 is not null
+                         order by start_time desc
+                             limit 5) temp4
+           order by start_time desc) temp inner join user u on temp.user_id = u.user_id;
     </select>
 </mapper>
