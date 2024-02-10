@@ -14,7 +14,6 @@ public interface BoardService {
     public BoardResultDto boardDetail(String boardId);
     public BoardResultDto boardList(Map<String, String> map);
     public BoardResultDto boardWrite(BoardWriteDto boardWriteDto);
-    public BoardResultDto updateHit(String boardId);
     public BoardResultDto boardUpdate(BoardUpdateDto boardUpdateDto);
     public BoardResultDto boardDelete(String boardId);
 

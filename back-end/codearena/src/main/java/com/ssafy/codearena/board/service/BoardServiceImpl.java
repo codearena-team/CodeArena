@@ -125,11 +125,6 @@ public class BoardServiceImpl implements BoardService{
         return boardResultDto;
     }
 
-    @Override
-    public BoardResultDto updateHit(String boardId) {
-
-        return null;
-    }
 
     @Override
     public BoardResultDto boardUpdate(BoardUpdateDto boardUpdateDto) {
