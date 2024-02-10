@@ -50,10 +50,10 @@ public class ProblemServiceImpl implements ProblemService{
     @Value("${judge.java.url}")
     private String judgeJava;
 
-    @Value("judge.cpp.url")
+    @Value("${judge.cpp.url}")
     private String judgecpp;
 
-    @Value("judge.python.url")
+    @Value("${judge.python.url}")
     private String judgepython;
 
 
