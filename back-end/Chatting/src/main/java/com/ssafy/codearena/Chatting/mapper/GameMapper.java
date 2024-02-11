@@ -12,11 +12,13 @@ public interface GameMapper {
     public GameInfoDto findRoomById(String gameId) throws Exception;
     public List<GameInfoDto> findAllRoom(Map<String, Object> map) throws Exception;
     public int getTotalGameCount(Map<String, Object> map) throws Exception;
-    public void createPrivateRoom(GameCreateDto gameCreateDto) throws Exception;
+    public void createCompetitiveRoom(GameCreateDto gameCreateDto) throws Exception;
+    public void createPrivateRoom(PrivateGameCreateDto privateGameCreateDto) throws Exception;
     public void terminateGame(String gameId, String winner) throws Exception;
     public int passProblem(String gameId, String player1, String player2) throws Exception;
     public WinnerInfoDto winnerSearch(String gameId) throws Exception;
     public int isRating(Map<String, String> param) throws Exception;
     public void refreshRating(String userId, String rating, String gamemode) throws Exception;
     public CompetitiveUserInfoDto getUserInfo(String userId, String gamemode) throws Exception;
+    public void startPrivateGame(Map<String, String> param) throws Exception;
 }

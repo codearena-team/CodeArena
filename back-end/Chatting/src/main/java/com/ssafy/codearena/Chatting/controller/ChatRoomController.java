@@ -42,6 +42,12 @@ public class ChatRoomController {
         chatService.minusParticipants(gameId);
         return new ResponseEntity<String>("퇴장", HttpStatus.OK);
     }
+    @GetMapping("/exit/private")
+    public ResponseEntity<?> exitPrivate(@RequestParam String gameId, String userId) {
+
+        chatService.minusCandidates(gameId, userId);
+        return new ResponseEntity<String>("퇴장", HttpStatus.OK);
+    }
     //관전 채팅방 생성
     //매칭 서버에서 요청받는 엔드포인트
     //받는 데이터로는 RandomUUID 두 유저의 ID값, 게임 타입, 사용 언어
@@ -61,12 +67,35 @@ public class ChatRoomController {
         return chatService.createCompetitiveRoom(gameCreateDto);
     }
 
+    @Operation(summary = "사설 게임방 생성 API")
+    @Parameters(value = {
+            @Parameter(name = "gameId", description = "매칭 ID", example = "Random.UUID"),
+            @Parameter(name = "title", description = "게임방 제목", example = "알고리즘 고수들 모여라"),
+            @Parameter(name = "userId", description = "방장 ID"),
+            @Parameter(name = "gameMode", description = "게임 모드 2가지", example = "1 : 스피드전, 2 : 효율전"),
+            @Parameter(name = "language", description = "게임 사용 언어", example = "java"),
+    })
+    @ApiResponse(description = "두 유저에게 전달될 응답 값", content = @Content(schema = @Schema(implementation = CreateCompetitiveResultDto.class)))
+    @PostMapping("/gameroom/private")
+    public GameResultDto createPrivateGameRoom(@RequestBody PrivateGameCreateDto privateGameCreateDto) {
+        return chatService.createPrivateRoom(privateGameCreateDto);
+    }
+
     @GetMapping("/hotmatch")
     public List<CompetitiveTopMatchResultDto> getTopMatch() {
         List<CompetitiveTopMatchResultDto> list = chatService.getTopFiveMatch();
 
         return list;
 
+    }
+
+    @Operation(summary = "사설 게임방 입장 가능 여부 조회 API")
+    @Parameter(name = "gameId", description = "참여하려는 게임방의 ID")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = RestResultDto.class)))
+    @GetMapping("/enter/room")
+    public ResponseEntity<?> isEnter(@RequestParam String gameId) {
+
+        return new ResponseEntity<RestResultDto>(chatService.getCandidates(gameId), HttpStatus.OK);
     }
 
 

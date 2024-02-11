@@ -16,7 +16,10 @@ import java.util.*;
 @Slf4j
 @Service
 public class ChatServiceImpl implements ChatService{
-    private Map<String, CompetitiveManageDto> gameManage;  //Redis로 관리
+    private Map<String, CompetitiveManageDto> gameManage;  //경쟁방 (Redis로 관리)
+    private Map<String, PrivateManageDto> privateGameManage;    //사설방
+    private Map<String, Integer> privateGameParticipaints;  //사설방 참여자 수 관리 리소스
+
     private final GameMapper gameMapper;
     private final OpenviduController openviduController;
     private final int weight = 30;
@@ -30,6 +33,7 @@ public class ChatServiceImpl implements ChatService{
     @PostConstruct
     private void init() {
         gameManage = new LinkedHashMap<>();
+        privateGameParticipaints = new LinkedHashMap<>();
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
     /*
@@ -122,7 +126,7 @@ public class ChatServiceImpl implements ChatService{
             gameCreateDto.setProblemId(Integer.toString(randomProblem));
             gameCreateDto.setRoomType("0");
 
-            gameMapper.createPrivateRoom(gameCreateDto);    //DB I/O
+            gameMapper.createCompetitiveRoom(gameCreateDto);    //DB I/O
 
             //게임 매니저 객체 생성 및 내부 리소스 추가
             CompetitiveManageDto competitiveManageDto = new CompetitiveManageDto();
@@ -153,6 +157,52 @@ public class ChatServiceImpl implements ChatService{
         }
         return gameResultDto;
     }
+
+
+    @Override
+    public GameResultDto createPrivateRoom(PrivateGameCreateDto privateGameCreateDto) {
+        GameResultDto gameResultDto = new GameResultDto();
+        gameResultDto.setStatus("200");
+        gameResultDto.setMsg("성공적으로 사설 게임방이 생성되었습니다.");
+        gameResultDto.setData(null);
+        try {
+            UUID uuid = UUID.randomUUID();
+            log.info(String.valueOf(uuid));
+            privateGameCreateDto.setGameId(String.valueOf(uuid));
+            privateGameCreateDto.setRoomType("1");
+
+            gameMapper.createPrivateRoom(privateGameCreateDto);    //DB I/O
+
+            //생성되는 게임에 대한 정보 입력
+            PrivateManageDto privateManageDto = new PrivateManageDto();
+            privateManageDto.setGameId(privateGameCreateDto.getGameId());
+            privateManageDto.setPlayer1(privateGameCreateDto.getUserId());  //방장
+            privateManageDto.setRoomType(privateGameCreateDto.getRoomType());
+            privateManageDto.setGamemode(privateGameCreateDto.getGameMode());
+
+            privateGameManage.put(privateManageDto.getGameId(), privateManageDto);
+
+            //사설 게임방 참여자 수 관리 리소스 생성
+            privateGameParticipaints.put(String.valueOf(uuid), 1);
+
+            Map<String, String> map = new HashMap<>();
+            map.put("CustomId", String.valueOf(uuid));
+            SessionProperties properties = SessionProperties.fromJson(map).build();
+            Session session = openvidu.createSession(properties);
+
+            log.info(String.valueOf(session.getSessionId()));
+            gameResultDto.setData(uuid);    //방 번호
+
+        }
+        catch (Exception e) {
+            gameResultDto.setStatus("500");
+            gameResultDto.setMsg("Server Internal Error");
+            log.error("Exception Msg", e);
+        }
+
+        return gameResultDto;
+    }
+
     @Override
     public void plusParticipants(String gameId) {
         CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
@@ -163,6 +213,54 @@ public class ChatServiceImpl implements ChatService{
     public void minusParticipants(String gameId) {
         CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
         competitiveManageDto.setParticipants(competitiveManageDto.getParticipants() - 1);
+        log.info("퇴장 이벤트 발생 : " + String.valueOf(gameManage.get(gameId).getParticipants()));
+    }
+
+    @Override
+    public void plusCandidates(String gameId, String userId) {
+
+        //참여자 수 1증가
+        int cnt = privateGameParticipaints.get(gameId);
+        privateGameParticipaints.put(gameId, ++cnt);
+
+        //참여자 세팅
+        PrivateManageDto privateManageDto = privateGameManage.get(gameId);
+        if(privateManageDto.getPlayer2() == null || privateManageDto.getPlayer2().isEmpty()) {
+            privateManageDto.setPlayer2(userId);
+            return;
+        }
+        else if(privateManageDto.getPlayer3() == null || privateManageDto.getPlayer3().isEmpty()) {
+            privateManageDto.setPlayer3(userId);
+            return;
+        }
+        else if(privateManageDto.getPlayer4() == null || privateManageDto.getPlayer4().isEmpty()) {
+            privateManageDto.setPlayer4(userId);
+            return;
+        }
+        //
+        log.info("참여 이벤트 발생 : " + String.valueOf(privateGameManage.get(gameId).getParticipants()));
+    }
+
+    @Override
+    public void minusCandidates(String gameId, String userId) {
+        int cnt = privateGameParticipaints.get(gameId);
+        privateGameParticipaints.put(gameId, --cnt);
+
+        //참여자 세팅
+        PrivateManageDto privateManageDto = privateGameManage.get(gameId);
+        if(privateManageDto.getPlayer2().equals(userId)) {
+            privateManageDto.setPlayer2(null);
+            return;
+        }
+        else if(privateManageDto.getPlayer3().equals(userId)) {
+            privateManageDto.setPlayer3(null);
+            return;
+        }
+        else if(privateManageDto.getPlayer4().equals(userId)) {
+            privateManageDto.setPlayer4(null);
+            return;
+        }
+
         log.info("퇴장 이벤트 발생 : " + String.valueOf(gameManage.get(gameId).getParticipants()));
     }
 
@@ -180,6 +278,30 @@ public class ChatServiceImpl implements ChatService{
         if(competitiveManageDto.isPlayer1_leave() && competitiveManageDto.isPlayer2_leave()) {
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean PrivateplayerLeaveEvent(String gameId, String playerId) {
+
+        PrivateManageDto privateManageDto = privateGameManage.get(gameId);
+        if(privateManageDto.getPlayer1().equals(playerId)) {
+            privateManageDto.setPlayer1_leave(true);
+        }
+        else if(privateManageDto.getPlayer2().equals(playerId)){
+            privateManageDto.setPlayer2_leave(true);
+        }
+        else if(privateManageDto.getPlayer3().equals(playerId)){
+            privateManageDto.setPlayer3_leave(true);
+        }
+        else if(privateManageDto.getPlayer4().equals(playerId)){
+            privateManageDto.setPlayer4_leave(true);
+        }
+
+        if(privateManageDto.isPlayer1_leave() && privateManageDto.isPlayer2_leave() && privateManageDto.isPlayer3_leave() && privateManageDto.isPlayer4_leave()) {
+            return true;
+        }
+
         return false;
     }
 
@@ -382,5 +504,63 @@ public class ChatServiceImpl implements ChatService{
 
         return topMatch;
     }
+
+    @Override
+    public RestResultDto getCandidates(String gameId) {
+
+        RestResultDto resultDto = new RestResultDto();
+        resultDto.setData("200");
+        resultDto.setMsg("참여 가능한 게임방입니다.");
+        resultDto.setData(null);
+        try {
+            if (privateGameParticipaints.get(gameId) == 4) {
+
+                resultDto.setStatus("500");
+                resultDto.setMsg("대기열이 가득찼습니다.");
+            }
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+        }
+
+        return resultDto;
+    }
+
+    @Override
+    public GameResultDto startPrivateGame(String gameId) {
+
+        GameResultDto gameResultDto = new GameResultDto();
+        gameResultDto.setStatus("200");
+        gameResultDto.setMsg("게임 시작 성공");
+
+        PrivateManageDto privateManageDto = privateGameManage.get(gameId);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("gameId", gameId);
+        params.put("player2", privateManageDto.getPlayer2());
+        params.put("player3", privateManageDto.getPlayer3());
+        params.put("player4", privateManageDto.getPlayer4());
+
+        try {
+
+            //랜덤 문제 배정
+            int randomProblem = gameMapper.findProblemById();
+            params.put("problemId", String.valueOf(randomProblem));
+            gameResultDto.setData(randomProblem);
+
+            gameMapper.startPrivateGame(params);
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+            gameResultDto.setStatus("500");
+            gameResultDto.setMsg("Server Internal Error");
+            gameResultDto.setData(null);
+        }
+
+        return gameResultDto;
+    }
+
 
 }

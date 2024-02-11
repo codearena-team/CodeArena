@@ -1,17 +1,13 @@
 package com.ssafy.codearena.Chatting.dto;
 
-
 import lombok.Data;
 
 @Data
-public class ChatMessage {
-
+public class PlayerKickMessage {
     public enum MessageType {
-        ENTER, TALK, START, EXIT;
+        KICK;
     }
-
     private MessageType type;
     private String gameId;
-    private String sender;
-    private String message;
+    private String userId;
 }
