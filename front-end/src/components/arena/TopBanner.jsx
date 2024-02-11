@@ -35,6 +35,9 @@ export default function TopBanner() {
     { lang: 'cpp', label: 'C++' }
   ];
 
+  // 타이머 변수 관리
+  const timerInterval = useRef(null);
+
   const socket = useRef(null);
   const type = useRef();
   const matchId = useRef('');
@@ -161,6 +164,12 @@ export default function TopBanner() {
       matchingModal.close();
     }
 
+    // 이전에 실행 중인 타이머가 있으면 중지하고 초기화
+    if (timerInterval.current) {
+      clearInterval(timerInterval.current);
+      timerInterval.current = null;
+    }
+
     // 매칭 진행할 모달 활성화
     languageModal.close(); // 언어 선택 모달 닫기
     matchingModal.style.left = '50%';
@@ -180,21 +189,24 @@ export default function TopBanner() {
   };
 
   // 타이머 중지
-  let timerInterval
+  // let timerInterval///
   const closeMatchingModalHandler = () => {
     console.log('타이머 중지!!');
 
     // 선택된 언어 초기화
     setSelectedLanguage(null);
-    clearInterval(timerInterval)
 
+    // 이전에 실행 중인 타이머가 있으면 중지하고 초기화
+    if (timerInterval.current) {
+      clearInterval(timerInterval.current);
+      timerInterval.current = null;
+    }
 
+    // 언어 선택 모달 중복호출이 안되도록
     const languageModal = document.getElementById('language_modal');
     if (languageModal && languageModal.open) {
-      clearInterval(timerInterval)
       languageModal.close();
     }
-  
   };
 
   // 4. 매칭이 돌아가면 타이머 소환
@@ -202,7 +214,11 @@ export default function TopBanner() {
     let seconds = 0;
     const timerElement = document.getElementById('matching_timer');
     
-    clearInterval(timerInterval)// 이전에 실행 중인 타이머는 중지
+    // 이전에 실행 중인 타이머가 있으면 중지하고 초기화
+    if (timerInterval.current) {
+      clearInterval(timerInterval.current);
+      timerInterval.current = null;
+    }
 
     const updateTimer = () => {
       const minutes = Math.floor(seconds / 60); // 분단위 계산
@@ -214,14 +230,15 @@ export default function TopBanner() {
     };
   
     // 1초마다 타이머 업데이트
-    timerInterval = setInterval(updateTimer, 1000);
-  
+    const interval = setInterval(updateTimer, 1000);
+    timerInterval.current = interval;
     // 원하는 시간까지 진행 후 타이머 중지
     // const desiredTimeInSeconds = 10;
     
     console.log('Start Matching Timer type : ', type.current)
     if (type.current && type.current === "QUERY") {
-      clearInterval(timerInterval);
+      clearInterval(interval);
+      timerInterval.current = interval;
       handleMatchingComplete(); // 수락&취소 모달 함수 호출
     }
   };
@@ -238,7 +255,7 @@ export default function TopBanner() {
       timerElements.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
       
       if (type && type === 'CONTINUE') {
-        clearInterval(timerInterval); // 초기화
+        clearInterval(timerInterval.current); // 초기화
       }
 
       if (seconds === 0) {
@@ -266,7 +283,7 @@ export default function TopBanner() {
     };
     
     // 1초마다 타이머 업데이트
-    timerInterval = setInterval(updateTimer, 1000);
+    timerInterval.current = setInterval(updateTimer, 1000);
   }
 
   // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
@@ -322,7 +339,7 @@ export default function TopBanner() {
       JSON.stringify (send_obj)
     );
     
-    clearInterval(timerInterval)
+    clearInterval(timerInterval.current);
 
     // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
@@ -363,7 +380,9 @@ export default function TopBanner() {
     socket.current.send (
       JSON.stringify (send_obj)
     );
-    
+
+    clearInterval(timerInterval.current);
+
     // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
