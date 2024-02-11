@@ -426,7 +426,7 @@ export default function TopBanner() {
                 >취 소</button>
               </form>
               <h3 className="font-bold text-2xl mb-5">언어를 선택하세요 !</h3>
-              {/* 언어 선택 옵션 3가지 */}
+              {/* 언어 선택 옵션 3가지 -> 수정 */}
               <div>
                 {languageButtons.map(({ lang, label }) => (
                   <button
