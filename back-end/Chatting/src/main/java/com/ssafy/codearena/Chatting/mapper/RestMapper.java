@@ -2,6 +2,7 @@ package com.ssafy.codearena.Chatting.mapper;
 
 
 import com.ssafy.codearena.Chatting.dto.GamePlayerDto;
+import com.ssafy.codearena.Chatting.dto.GameRecordDto;
 import com.ssafy.codearena.Chatting.dto.SubmitDto;
 import com.ssafy.codearena.Chatting.dto.UserRecordDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,4 +18,5 @@ public interface RestMapper {
 
     GamePlayerDto getUserRecordByUserId(String userId) throws SQLException;
 
+    List<GameRecordDto> getRecordsByUserId(String userId) throws SQLException;
 }

@@ -1,9 +1,6 @@
 package com.ssafy.codearena.Chatting.service;
 
-import com.ssafy.codearena.Chatting.dto.GamePlayerDto;
-import com.ssafy.codearena.Chatting.dto.RestResultDto;
-import com.ssafy.codearena.Chatting.dto.SubmitDto;
-import com.ssafy.codearena.Chatting.dto.Top5RatingResultDto;
+import com.ssafy.codearena.Chatting.dto.*;
 import com.ssafy.codearena.Chatting.mapper.RestMapper;
 import com.ssafy.codearena.Chatting.util.JWTUtil;
 import io.jsonwebtoken.JwtException;
@@ -165,5 +162,22 @@ public class RestServiceImpl implements RestService {
             restResultDto.setData(playerData);
             return restResultDto;
         }
+    }
+
+    @Override
+    public RestResultDto getMyRecords(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        String userId = jwtUtil.getUserId(token);
+        RestResultDto resultDto = new RestResultDto();
+        resultDto.setMsg("성공적으로 데이터를 불러왔습니다.");
+        resultDto.setStatus("200");
+        try{
+            List<GameRecordDto> records = mapper.getRecordsByUserId(userId);
+            resultDto.setData(records);
+        }catch(Exception e){
+            log.debug("exception : {} ", e);
+        }
+
+        return resultDto;
     }
 }

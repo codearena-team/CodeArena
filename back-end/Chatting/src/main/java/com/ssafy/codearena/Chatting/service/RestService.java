@@ -8,4 +8,6 @@ public interface RestService {
     RestResultDto insertSubmit(SubmitDto submitDto);
     RestResultDto getRanking();
     RestResultDto getMyRecord(HttpServletRequest request);
+
+    RestResultDto getMyRecords(HttpServletRequest request);
 }

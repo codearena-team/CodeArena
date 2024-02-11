@@ -37,6 +37,18 @@
         <result property="problemTitle" column="problem_title"/>
     </resultMap>
 
+    <resultMap id="gameRecords" type="gameRecordDto">
+        <result property="gameId" column="game_id"/>
+        <result property="problemTitle" column="problem_title"/>
+        <result property="player1" column="player1"/>
+        <result property="player2" column="player2"/>
+        <result property="player3" column="player3"/>
+        <result property="player4" column="player4"/>
+        <result property="gameMode" column="game_mode"/>
+        <result property="winner" column="winner"/>
+        <result property="roomType" column="room_type"/>
+    </resultMap>
+
     <insert id="insertSubmit" parameterType="submitDto">
         insert into
             arena_submit_status
@@ -104,5 +116,16 @@
                          order by start_time desc
                              limit 5) temp4
            order by start_time desc) temp inner join user u on temp.user_id = u.user_id;
+    </select>
+
+    <select id="getRecordsByUserId" resultMap="gameRecords" parameterType="String">
+        select game_id, problem_title, (select user_nickname as player1 from user where player1=user_id) as player1,
+               (select user_nickname as player2 from user where player2=user_id) as player2,
+               (select user_nickname as player3 from user where player3=user_id) as player3,
+               (select user_nickname as player4 from user where player4=user_id) as player4,
+               game_mode,
+               (select user_nickname as winner from user where winner=user_id) as winner
+                , room_type from arena_record a inner join ps_list p on a.problem_id = p.problem_id
+        where (player1=${userId} or player2=${userId} or player3=${userId} or player4 =${userId}) and end_time is not null order by start_time desc limit 0, 5;
     </select>
 </mapper>

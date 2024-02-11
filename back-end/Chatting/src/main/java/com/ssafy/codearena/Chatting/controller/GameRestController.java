@@ -36,4 +36,10 @@ public class GameRestController {
         RestResultDto resultDto = service.getMyRecord(request);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
+
+    @GetMapping("/user/record/test")
+    ResponseEntity<RestResultDto> getRecords(HttpServletRequest request){
+        RestResultDto resultDto = service.getMyRecords(request);
+        return new ResponseEntity<>(resultDto, HttpStatus.OK);
+    }
 }
