@@ -37,6 +37,29 @@
         <result property="problemTitle" column="problem_title"/>
     </resultMap>
 
+    <resultMap id="gameInfo" type="CompetitiveResultDto">
+        <result column="problem_id" property="problemId"/>
+        <result column="game_title" property="gameTitle"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="game_mode" property="gameMode"/>
+        <result column="game_language" property="gameLang"/>
+        <result column="winner" property="winner"/>
+        <result column="room_type" property="roomType"/>
+        <result column="player1" property="player1Id"/>
+        <result column="player2" property="player2Id"/>
+    </resultMap>
+
+    <resultMap id="playerInfo" type="competitiveUserInfoDto">
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_rating" property="userRating"/>
+    </resultMap>
+
+    <!-- gameMode 동적쿼리 -->
+    <sql id="mode">
+
+    </sql>
+
     <insert id="insertSubmit" parameterType="submitDto">
         insert into
             arena_submit_status
@@ -105,4 +128,22 @@
                              limit 5) temp4
            order by start_time desc) temp inner join user u on temp.user_id = u.user_id;
     </select>
+
+    <select id="getGameInfo" parameterType="string" resultMap="gameInfo">
+        SELECT problem_id, game_title, player1, player2, start_time, end_time, game_mode, game_language, winner, room_type
+        FROM arena_record
+        WHERE game_id = #{gameId}
+    </select>
+
+    <select id="getPlayerInfo" parameterType="string" resultMap="playerInfo">
+        <if test='gameMode == "0"'>    <!-- 스피드전 -->
+            SELECT user_nickname, speed_rating as user_rating
+        </if>
+        <if test='gameMode == "1"'>    <!-- 효율전 -->
+            SELECT user_nickname, effi_rating as user_rating
+        </if>
+        FROM user
+        WHERE user_id = #{userId};
+    </select>
+    
 </mapper>

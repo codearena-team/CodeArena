@@ -2,6 +2,8 @@ package com.ssafy.codearena.Chatting.mapper;
 
 
 import com.ssafy.codearena.Chatting.dto.GamePlayerDto;
+import com.ssafy.codearena.Chatting.dto.CompetitiveResultDto;
+import com.ssafy.codearena.Chatting.dto.CompetitiveUserInfoDto;
 import com.ssafy.codearena.Chatting.dto.SubmitDto;
 import com.ssafy.codearena.Chatting.dto.UserRecordDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,4 +19,6 @@ public interface RestMapper {
 
     GamePlayerDto getUserRecordByUserId(String userId) throws SQLException;
 
+    CompetitiveResultDto getGameInfo(String gameId) throws Exception;
+    CompetitiveUserInfoDto getPlayerInfo(String userId, String gameMode) throws Exception;
 }

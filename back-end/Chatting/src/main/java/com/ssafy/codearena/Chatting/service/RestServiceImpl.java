@@ -1,6 +1,8 @@
 package com.ssafy.codearena.Chatting.service;
 
 import com.ssafy.codearena.Chatting.dto.GamePlayerDto;
+import com.ssafy.codearena.Chatting.dto.CompetitiveResultDto;
+import com.ssafy.codearena.Chatting.dto.CompetitiveUserInfoDto;
 import com.ssafy.codearena.Chatting.dto.RestResultDto;
 import com.ssafy.codearena.Chatting.dto.SubmitDto;
 import com.ssafy.codearena.Chatting.dto.Top5RatingResultDto;
@@ -165,5 +167,65 @@ public class RestServiceImpl implements RestService {
             restResultDto.setData(playerData);
             return restResultDto;
         }
+    }
+
+    @Override
+    public RestResultDto getCompetitiveResult(String gameId) {
+
+        RestResultDto resultDto = new RestResultDto();
+        resultDto.setStatus("200");
+        resultDto.setMsg(gameId + "게임에 대한 결과가 조회되었습니다.");
+
+        CompetitiveResultDto competitiveResultDto = new CompetitiveResultDto();
+        competitiveResultDto.setGameId(gameId);
+
+        //arena_record에서 gameId에 해당하는 방에 대한 정보 조회
+        try {
+            competitiveResultDto = mapper.getGameInfo(gameId);
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("게임방 정보 조회 시 에러가 발생했습니다.");
+            resultDto.setData(null);
+            return resultDto;
+        }
+
+        //user에서 각 유저에 대한 정보 조회
+        try {
+            //player1, DTO 재활용
+            CompetitiveUserInfoDto competitiveUserInfoDto = mapper.getPlayerInfo(competitiveResultDto.getPlayer1Id(), competitiveResultDto.getGameMode());
+            competitiveResultDto.setPlayer1Nickname(competitiveUserInfoDto.getUserNickname());
+            competitiveResultDto.setPlayer1Rating(competitiveUserInfoDto.getUserRating());
+            //player2, DTO 재활용
+            competitiveUserInfoDto = mapper.getPlayerInfo(competitiveResultDto.getPlayer2Id(), competitiveResultDto.getGameMode());
+            competitiveResultDto.setPlayer2Nickname(competitiveUserInfoDto.getUserNickname());
+            competitiveResultDto.setPlayer2Rating(competitiveUserInfoDto.getUserRating());
+
+            resultDto.setData(competitiveResultDto);
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("플레이어 정보 조회 시 에러가 발생했습니다.");
+            resultDto.setData(null);
+        }
+
+        //winner 닉네임으로 대체
+        if(competitiveResultDto.getPlayer1Id().equals(competitiveResultDto.getWinner())) {
+            competitiveResultDto.setWinner(competitiveResultDto.getPlayer1Nickname());
+        }
+        else if(competitiveResultDto.getPlayer2Id().equals(competitiveResultDto.getWinner())) {
+            competitiveResultDto.setWinner(competitiveResultDto.getPlayer2Nickname());
+        }
+        else {
+            //무승부
+            competitiveResultDto.setWinner("무승부");
+        }
+
+        return resultDto;
+
     }
 }
