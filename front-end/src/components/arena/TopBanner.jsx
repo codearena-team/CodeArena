@@ -342,7 +342,7 @@ export default function TopBanner() {
     }
   };
 
-  // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수
+  // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수..
   const handleAccept = () => {
     console.log("매칭을 수락했어요 !")
     const send_obj = {
