@@ -83,7 +83,13 @@ export default function Ps() {
   const pageNation = () => {
     const result = [];
     for (let i = 0; i < pageCount; i++) {
-      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i===0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
+      result.push(
+      <button 
+        onClick={()=>changeParams('pgno',i+1)} 
+        key={i} 
+        className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i===0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}
+        >{i+1}</button>
+      );
     }
     return result;
   };
@@ -150,14 +156,12 @@ export default function Ps() {
         ))}
 
       </div>
-      <div className="flex justify-between my-2">
-        <div className="w-40"></div>
+      <div className="flex justify-center my-2">
         <div className="join">
           <button onClick={()=>{changeParams('pgno','1')}} className="join-item btn btn-sm">{'<<'}</button>
           {pageNation()}
           <button onClick={()=>{changeParams('pgno', pageCount)}} className="join-item btn btn-sm">{'>>'}</button>
         </div>
-        <div className="w-40 flex justify-end"></div>
       </div>
     </div>
   )

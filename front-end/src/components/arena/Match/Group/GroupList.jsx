@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import '../../../css/shake.css';
 import CreateModal from '../../modal/Group/CreateModal';
 import GroupEnterModal from '../../modal/Group/GroupEnterModal';
@@ -12,28 +12,36 @@ export default function GroupList() {
   const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
   const [isModalOpen, setIsModalOpen] = useState(false); // 방생성 모달 열고 닫기
 
+  const [pageCount, setPageCount] = useState(1)
+  const [searchParams,setSearchParams] = useSearchParams()
+  const [key, setKey] = useState('userNickname')
+  const [word, setWord] = useState('')
+
+  const changeParams = (key, value) => {
+    searchParams.set(key,value)
+    setSearchParams(searchParams)
+  }
+  
+  const onClickHandler = () => {
+    if(word==='') {
+      searchParams.delete('word')
+      setSearchParams(searchParams)
+    } else {
+      changeParams('word',word)
+    }
+    if(key==='') {
+      searchParams.delete('key')
+      setSearchParams(searchParams)
+    } else {
+      changeParams('key',key)
+    }
+    setSearchParams(searchParams)
+  }
+
+
   // 가상의 단체전 방 데이터 (일단은 10개정도..)
   const [problemData, setProblemData] = useState([]);
 
-
-  // 검색어 입력 핸들러
-  const handleSearch = () => {
-      // 검색을 수행하거나 검색 결과를 업데이트
-      console.log('검색어:', searchText);
-      setSearchAnimation(true); // 무언가를 입력 후 Enter 누르면 애니메이트 작동
-
-      setTimeout(() => {
-          setSearchAnimation(false);
-      }, 1000); // 애니메이트 1초
-      setSearchText(''); // 검색 후 input창 초기화
-  };
-
-  // Enter 키 눌렀을 때 검색 함수 호출
-  const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
-          handleSearch();
-      }
-  };
 
   // 경쟁전, 단체전 버튼 클릭 핸들러
   const handleButtonClick = (btn) => {
@@ -47,9 +55,13 @@ export default function GroupList() {
 
   // 초기 렌더링 시 데이터 설정
   useEffect(() => {
+    const key = searchParams.get('key') || ''
+    const word = searchParams.get('word') || ''
+    const gameMode = searchParams.get('gameMode') || ''
+    const langType = searchParams.get('langType') || ''
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/game/chat/rooms?roomType=${1}`,
+      url : `https://i10d211.p.ssafy.io/game/chat/rooms?roomType=1&key=${key}&word=${word}&gameMode=${gameMode}&langType=${langType}`,
     })
     .then((res)=> {
       console.log(res);
@@ -58,7 +70,7 @@ export default function GroupList() {
     }) .catch(err=> {
       console.log(err);
     })
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="mt-5 mx-10">
@@ -82,24 +94,25 @@ export default function GroupList() {
           </button>
         </div>
         <div className="flex space-x-3 items-center">
-          <input
-              type="text"
-              placeholder="유저, 문제 번호 또는 제목 검색"
-              className="input-search hover:scale-110"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              onKeyDown={handleKeyDown} // Enter 키 감지
-              style={{ width: '300px', padding: '8px', marginRight: '5px' }}
-          />
-          {/* 검색 버튼 스타일링 -> Enter키 눌려졌을 때 반응 */}
-          <button 
-              className={`btn btn-search hover:scale-110 transition-transform duration-300 transform ${searchAnimation ? 'shake' : ''}`}
-              onClick={handleSearch}
-          >
-              검색
-          </button>
-          <button className="btn btn-filter hover:scale-110">필터</button>
-          {<CreateModal closeModal={closeModal} />}
+          <select value={searchParams.get('gameMode') || ''} onChange={(e)=>{changeParams('gameMode',e.target.value)}} className="select select-sm select-bordered join-item" >
+            <option value="">전체</option>
+            <option value="0">스피드전</option>
+            <option value="1">효율전</option>
+          </select>
+          <select value={searchParams.get('langType') || ''} onChange={(e)=>{changeParams('langType',e.target.value)}} className="select select-sm select-bordered join-item" >
+            <option value="">전체</option>
+            <option value="java">java</option>
+            <option value="python">python</option>
+            <option value="cpp">cpp</option>
+          </select>
+          <div className='flex join'>
+            <select value={key} onChange={(e)=>{setKey(e.target.value)}} className="select select-sm select-bordered join-item" >
+              <option value={'userNickname'}>유저 닉네임</option>
+              <option value={'game_title'}>방 제목</option>
+            </select>
+              <input onChange={(e)=>{setWord(e.target.value)}} type="text" placeholder="검색어를 입력하세요." className="input input-bordered w-full max-w-xs input-sm join-item" />
+              <button onClick={onClickHandler} className="btn btn-active btn-neutral btn-sm join-item">검색</button>
+          </div>
         </div>
       </div>
 

@@ -24,7 +24,8 @@ export default function CompetitionPlay() {
 
       {/* 해당 문제 불러오기 */}
       <div className="mt-10">
-        <CompPlayProblem problemId={problemId}/>
+        {/* <CompPlayProblem problemId={problemId}/> */}
+        <CompPlayProblem/>
       </div>
     </div>
   );
