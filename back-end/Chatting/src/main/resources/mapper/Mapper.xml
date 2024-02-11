@@ -24,14 +24,19 @@
         <result column="user_rating" property="userRating"/>
     </resultMap>
 
-    <!-- 검색조건 동적쿼리 -->
+    <!-- 검색조건 동적쿼리(닉네임, 문제번호, 방 제목 -->
     <sql id="search">
         <if test='word != null and word != ""'>
-            <if test="key != 'problem_id'">
-                AND ${key} = #{word}
-            </if>
-            <if test="key == 'userNickname'">
-                AND player1 IN(SELECT user_id FROM user WHERE user_id = #{word}) OR player2 IN(SELECT user_id FROM user WHERE user_id = #{word})
+            <if test='key != null and key != ""'>
+                <if test='key == "userNickname"'>
+                    AND (player1 IN (SELECT user_id FROM user WHERE user_nickname LIKE CONCAT('%', #{word}, '%')) or player2 IN (SELECT user_id FROM user WHERE user_nickname LIKE CONCAT('%', #{word}, '%')) or player3 IN (SELECT user_id FROM user WHERE user_nickname LIKE CONCAT('%', #{word}, '%')) or player4 IN (SELECT user_id FROM user WHERE user_nickname LIKE CONCAT('%', #{word}, '%')))
+                </if>
+                <if test='key == "problem_id"'>
+                    AND ${key} = #{word}
+                </if>
+                <if test='key == "game_title"'>
+                    AND ${key} LIKE CONCAT('%', #{word}, '%')
+                </if>
             </if>
         </if>
     </sql>
@@ -51,6 +56,13 @@
         </if>
         <if test="sortType == 'old'">
             ORDER BY start_time ASC
+        </if>
+    </sql>
+
+    <!-- 언어 동적쿼리 -->
+    <sql id="lang">
+        <if test='langType != null and langType != ""'>
+            AND game_language LIKE CONCAT('%', #{langType}, '%')
         </if>
     </sql>
 
@@ -84,12 +96,7 @@
     <!-- roomType SET 동적쿼리 -->
     <sql id="room">
     <if test='roomType != null and roomType != ""'>
-        <if test='roomType == "0"'>
-            AND room_type = ${roomType}
-        </if>
-        <if test='roomType == "1"'>
-            AND room_type = ${roomType}
-        </if>
+        AND room_type = #{roomType}
     </if>
 
     </sql>
@@ -126,6 +133,7 @@
         <where>
             end_time IS NULL
             <include refid="mode"/>
+            <include refid="lang"/>
             <include refid="search"/>
             <include refid="room"/>
         </where>
