@@ -159,7 +159,7 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = path + "/Solution.out";
+            String cmd = "/app/" + path + "/Solution.out";
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
