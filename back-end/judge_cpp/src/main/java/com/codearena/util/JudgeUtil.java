@@ -52,7 +52,9 @@ public class JudgeUtil {
         fw.write(code);
         fw.close();
 
-        String cmd = "g++ " + path + "/Solution.cpp -o " + path +"/solution";
+        String cmd = "g++ ./" + path + "/Solution.cpp -o ./" + path +"/Solution.out";
+
+        log.info("[compile] cmd : {}", cmd);
 
         // 런타임 생성하고 코드 컴파일하기
         Runtime runtime = Runtime.getRuntime();

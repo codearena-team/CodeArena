@@ -102,7 +102,7 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "./" + path + "/Solution";
+            String cmd = path + "/Solution.out";
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
@@ -133,6 +133,8 @@ public class JudgeServiceImpl implements JudgeService{
     @Override
     public JudgeResultDto judgeNormal(JudgeNormalDto userInput) {
 
+        log.debug("[normal] userInput : {}", userInput);
+
         JudgeResultDto judgeResultDto = new JudgeResultDto();
 
         judgeResultDto.setStatus("200");
@@ -140,6 +142,8 @@ public class JudgeServiceImpl implements JudgeService{
         judgeResultDto.setData(null);
 
         JudgeValidateResultDto result = null;
+
+
 
 //         시스템 콜 체크
         if(judgeUtil.checkSystemCallInCode(userInput.getCode())) {
@@ -155,7 +159,7 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "./" + path + "/Solution";
+            String cmd = path + "/Solution.out";
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
