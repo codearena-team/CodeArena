@@ -198,12 +198,12 @@ public class JudgeUtil {
         result.setWrongTestCaseNo(wrongTC);
 
         File dirFile = new File(path);
-        File cppFile = new File(path, "Solution.py");
+        File pythonFile = new File(path, "Solution.py");
 
         // 결과 반영 했으면 디렉토리 삭제하기
         // 내부 파일부터 삭제하고 디렉토리 삭제
-//        javaFile.delete();
-//        dirFile.delete();
+        pythonFile.delete();
+        dirFile.delete();
 
         return result;
     }
