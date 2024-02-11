@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // npm install styled-components 애니메이트 기능 구현 설치 라이브러리
 import styled, { keyframes } from 'styled-components';
-
+import axios from 'axios';
 import Oh from '../../images/arena/HotMatch/oh.png'
 import Gwi from '../../images/arena/HotMatch/gwi.png'
 import Hae from '../../images/arena/HotMatch/hae.png'
@@ -15,10 +15,15 @@ export default function HotMatch() {
   const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
   const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
 
-  const userData = [
-    { id: 1, profileImage: Oh, username: 'username1', profileImage2: Kim, username2: 'username2', rating: 1100, rating2: 1105 },
-    { id: 2, profileImage: Gwi, username: 'username2', profileImage2: Hae, username2: 'username2', rating: 1040, rating2: 1055 },
-  ]
+  const [hotMatchs, setHotMatchs] = useState([])
+
+  useEffect(()=> {
+    axios.get('https://i10d211.p.ssafy.io/game/chat/hotmatch')
+    .then((res)=> {
+      setHotMatchs(res.data)
+      console.log(res.data);
+    })
+  },[])
 
   return (
     <div className='flex flex-col mt-5 relative'>
@@ -31,9 +36,9 @@ export default function HotMatch() {
         <div className='flex justify-center mt-2'>
           <div className="carousel w-full p-4 space-x-0 rounded-box">
             {/* 아이템 요소 */}
-            {userData.map((user) => (
+            {hotMatchs.map((match) => (
               <div
-                key={user.id}
+                key={match.gameId}
                 className="carousel-item flex items-center justify-center"
                 style={{ width:'100%'}}
               >
@@ -42,13 +47,13 @@ export default function HotMatch() {
                   <div className="flex items-center justify-end">
                     <img src={Fighting} alt="지금 경쟁 중!" className='w-1/3 rounded-xl mr-10' />
                     <img src={View} alt="시청자 수" className="w-8 h-8 rounded-full" />
-                    <span className="ml-2">120 View</span>
+                    <span className="ml-2">{match.participants} View</span>
                   </div>
                   {/* 유저1 vs 유저2 사진 */}
                   <div className="mt-5 flex items-center justify-between">
-                    <img src={user.profileImage} alt={user.id} className="w-1/3 h-100 rounded-2xl shadow-xl" />
+                    <img src={match?.player1Ssumnail} alt={match.id} className="w-1/3 h-100 rounded-2xl shadow-xl" />
                     <img src={VS} alt="VS" className="w-1/4 h-100 rounded-lg" />
-                    <img src={user.profileImage2} alt={user.id} className="w-1/3 h-100 rounded-2xl shadow-xl" />
+                    <img src={match?.player2Ssumnail} alt={match.id} className="w-1/3 h-100 rounded-2xl shadow-xl" />
                   </div>
                   {/* 구분선 */}
                   <hr
@@ -58,12 +63,12 @@ export default function HotMatch() {
                   {/* 유저1 vs 유저2 정보 */}
                   <div className="mt-5 flex items-center justify-between">
                     <div className='text-center'>
-                      <div>{user.username}</div>
-                      <div>{user.rating}</div>
+                      <div>{match.player1Nickname}</div>
+                      <div>{match.player1Rating}</div>
                     </div>
                     <div className='text-center'>
-                      <div>{user.username2}</div>
-                      <div>{user.rating2}</div>
+                      <div>{match.player2Nickname}</div>
+                      <div>{match.player2Rating}</div>
                     </div>
                   </div>
                 </div>

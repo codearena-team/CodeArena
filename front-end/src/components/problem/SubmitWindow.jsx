@@ -10,7 +10,7 @@ import axios from "axios"
 
 
 
-export default function SubmitWindow() {
+export default function SubmitWindow(props) {
   const params = useParams()
   const accessToken = useSelector(state => state.access.accessToken)
   const [searchParams, setSearchParams] = useSearchParams();
@@ -197,7 +197,7 @@ export default function SubmitWindow() {
                 <th className="p-1.5 font-light">메모리(MB)</th>
                 <th className="p-1.5 font-light">시간(ms)</th>
                 <th className="p-1.5 font-light">언어</th>
-                <th className="p-1.5 font-light">코드길이</th>
+                <th className={`p-1.5 font-light ${props.isSolve ? '' : 'hidden'}`}>코드</th>
                 <th className="p-1.5 font-light">제출날짜</th>
               </tr>
             </thead>
@@ -208,6 +208,7 @@ export default function SubmitWindow() {
               key={submit.submitNo}
               submitItem={submit}
               index={index}
+              isSolve={props.isSolve}
              />
              )})}
             </tbody>

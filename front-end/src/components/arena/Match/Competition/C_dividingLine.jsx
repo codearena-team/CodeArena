@@ -77,7 +77,7 @@ export default function DividingLine({ onDividerMove }) {
     return (
         <div className="competition-view">
             <div
-                className={`vertical-dividingLine ${isHovered || isDragging ? 'hovered' : ''}`}
+                className={`z-50 vertical-dividingLine ${isHovered || isDragging ? 'hovered' : ''}`}
                 style={{ left: `${dividerPosition}%` }}
                 onMouseEnter={handleDividerMouseEnter}
                 onMouseLeave={handleDividerMouseLeave}

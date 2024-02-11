@@ -79,7 +79,7 @@ export default function NavBar() {
                         onMouseEnter={() => setShowDropdown(true)}
                         onMouseLeave={() => setShowDropdown(false)}
                         >
-                          <Link to="/problem/submit" className="text-xl block rounded-md px-3 py-3 font-medium hover:bg-gray-700 hover:text-white">Submit</Link>
+                          {/* <Link to="/problem/submit" className="text-xl block rounded-md px-3 py-3 font-medium hover:bg-gray-700 hover:text-white">Submit</Link> */}
                           <Link to="/problem/tagList" className="text-xl block rounded-md px-3 py-2 font-medium hover:bg-gray-700 hover:text-white">Category</Link>
                         </div>
                       )}

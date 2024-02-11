@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setAccessToken } from "./login/accessSlice";
+import { logout } from "./login/authSlice";
 import { useNavigate } from "react-router-dom";
 
 export function useAuthCheck() {
@@ -29,12 +30,14 @@ export function useAuthCheck() {
           await checkAccess()
           return true
         }
-        navigate('/login')
+        dispatch(logout())
+        navigate('/login', { replace: true })
         return false
       }
       return true
     } catch (err){
-      navigate('/login')
+      dispatch(logout())
+      navigate('/login', { replace: true })
       return false
     }
   }

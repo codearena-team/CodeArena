@@ -1,13 +1,15 @@
-import React from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 
 export default function StatsisticsPage() {
+  const access = useSelector(state => state.access.accessToken)
   // 전적 데이터 생성 (가상)
-  const data = [
-    { name: 'Win', value: 70 },
-    { name: 'Lose', value: 20 },
-    { name: 'Draw', value: 10 },
-  ];
+  const [data, setData] = useState([]);
+  const [record,setRecord] = useState([])
+  const [matchs, setMatchs] = useState([])
 
   // 승리, 패배, 무승부의 컬러
   const colors = ['#0074CC', '#FF4136', '#000000'];
@@ -53,15 +55,49 @@ export default function StatsisticsPage() {
     { id: 6, name: '세정1234' },
   ]
 
-  // 최근 문제 클릭 이벤트
-  const handleProblemClick = (problemId) => {
-    // 여기에 클릭한 문제로 이동하는 로직을 추가
-    console.log(`최근 겨루었던 문제로 이동 기능 : ${problemId}`);
-  };
+  useEffect(()=> {
+    const headers = {
+      Authorization : access
+    }
+    axios.get('https://i10d211.p.ssafy.io/game/rest/user/record', {headers})
+    .then((res)=> {
+      setRecord(res.data.data.record)
+      setData(Object.entries(res.data.data.record).map(([key,value])=>{
+        return {name:key.split('Count'), value:value}
+      }))
+      setMatchs(res.data.data.recentMatches)
+    })
+    .catch()
+  },[])
 
-  // 최근 상대 클릭 이벤트
-  const handleOpponentClick = (OpponentId) => {
-    console.log(`최근 겨루었던 상대 프로필로 이동 : ${OpponentId}`);
+  function Players ({match}) {
+    const [isPlayerVisible, setIsPlayerVisible] = useState(false)
+    const onClickMatch = () => {
+      if (isPlayerVisible) {
+        setIsPlayerVisible(false)
+      } else {
+        setIsPlayerVisible(true)
+      }
+    }
+    return (
+      <div className='h-full' onClick={onClickMatch}>
+        <div>
+          <p>{match.roomType ? '사설' : '경쟁'} - {match.gameMode ? '효율전' : '스피드전'}</p>
+          {
+            isPlayerVisible ?
+            <Link className='text-blue-600' to={`/problem/${match.problemId}/detail`}>{`#${match.problemId} ${match.problemTitle}`}</Link>
+            :
+            <p>{`#${match.problemId} ${match.problemTitle}`}</p>
+          }
+        </div>
+        <div className={isPlayerVisible ? '' : 'hidden'}>
+          <p>플레이어1 : {match.player1}</p>
+          <p>플레이어2 : {match.player2}</p>
+          {match.player3 && <p>플레이어3 : {match.player3}</p>}
+          {match.player4 && <p>플레이어4 : {match.player4}</p>}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -74,7 +110,7 @@ export default function StatsisticsPage() {
             YOUR <span style={powerStyle}>ARENA</span> GRAPH {/* 차트 제목 */}
           </h1>
           <div className="ml-5 text-center" style={subTitleStyle}>
-            20전 14승 2무 4패 {/* 소제목 */}
+          {record.winCount + record.drawCount + record.defeatCount}전 {record.winCount}승 {record.drawCount}무 {record.defeatCount}패 {/* 소제목 */}
           </div>
           <ResponsiveContainer width="100%" height={350}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
             {/* PieChart : 원형 차트 모양으로 변환 */}
@@ -104,8 +140,24 @@ export default function StatsisticsPage() {
 
         {/* 우측 */}
         <div className="flex-1 mr-5 w-2/3 max-h-full overflow-y-auto">
-          {/* 상단 */}
           <div className="mb-5 text-2xl font-bold">최근 겨루었던 문제</div>
+          <div className="flex flex-wrap items-start">
+            {matchs.map((match)=> {
+              return(
+              <div
+                key={match.gameId}
+                className="bg-gray-200 p-2 m-4  rounded-xl cursor-pointer hover:scale-110"
+              >
+                <Players match={match}/>
+              </div>
+              )}
+            )}
+          </div>
+
+
+          
+          
+          {/* <div className="mb-5 text-2xl font-bold">최근 겨루었던 문제</div>
           <div className="flex flex-wrap space-x-2">
             {recentlyData.map((problem) => (
               <div
@@ -113,12 +165,10 @@ export default function StatsisticsPage() {
                 className="bg-gray-200 p-2 m-3 rounded-xl cursor-pointer hover:scale-110"
                 onClick={() => handleProblemClick(problem.id)}
               >
-                {`#${problem.id} ${problem.name}`}
-              </div>
             ))}
           </div>
 
-          {/* 하단 */}
+          
           <div className="mt-5 mb-5 text-2xl font-bold">최근 겨루었던 상대</div>
           <div className="flex flex-wrap space-x-2">
             {recentlyOpponent.map((opponent) => (
@@ -130,7 +180,7 @@ export default function StatsisticsPage() {
                 {`${opponent.name}`}
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

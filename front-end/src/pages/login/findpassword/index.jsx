@@ -1,7 +1,7 @@
 import '../../css/custom.css'
 import { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { redirect, useNavigate } from 'react-router-dom'
 
 
 export default function FindPassword(){
@@ -18,7 +18,7 @@ export default function FindPassword(){
       alert('이메일이 형식에 맞지 않습니다')
     }else{
       axios({
-        url : 'http://i10d211.p.ssafy.io:8081/api/user/password/reissue',
+        url : 'https://i10d211.p.ssafy.io/api/user/password/reissue',
         method : 'post',
         data : {
           userEmail : email
@@ -30,6 +30,7 @@ export default function FindPassword(){
         navigate('/login')
       })
       .catch((err)=>{
+        alert('임시비밀번호발급 중 에러가 발생하였습니다.')
         console.log(err)
       })
     }

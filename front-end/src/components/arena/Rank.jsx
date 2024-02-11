@@ -1,23 +1,21 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 
 export default function RankPage() {
-  // 스피드모드 랭킹 데이터 (가상)
-  const speedModeRanking = [
-    { rank: 1, username: 'User1', rating: 1500 },
-    { rank: 2, username: 'User2', rating: 1450 },
-    { rank: 3, username: 'User3', rating: 1420 },
-    { rank: 4, username: 'User4', rating: 1370 },
-    { rank: 5, username: 'User5', rating: 1330 },
-  ];
 
-  // 효율모드 랭킹 데이터 (가상)
-  const efficiencyModeRanking = [
-    { rank: 1, username: 'UserA', rating: 1600 },
-    { rank: 2, username: 'UserB', rating: 1550 },
-    { rank: 3, username: 'UserC', rating: 1500 },
-    { rank: 4, username: 'UserD', rating: 1480 },
-    { rank: 5, username: 'UserE', rating: 1410 },
-  ];
+  const [speedRanks, setSpeedRanks] = useState([])
+  const [effRanks, setEffRanks] = useState([])
+
+  useEffect(()=> {
+    axios.get('https://i10d211.p.ssafy.io/game/rest/rank')
+    .then((res)=> {
+      setSpeedRanks(res.data.data.speedRank)
+      setEffRanks(res.data.data.effRank)
+    })
+  },[])
+
 
   // 각 모드별 전체 랭킹 리스트
   const renderRankingList = (mode, rankingList) => (
@@ -42,22 +40,40 @@ export default function RankPage() {
           <span className="font-bold">닉네임</span>
           <span className="font-bold mr-3">점수</span>
         </div>
-        {rankingList.map((user, index) => renderRankingItem(user, index))}
+        { mode === 'Speed' ?
+        rankingList.map((user, index) => renderRankingItem(user, index))
+        :
+        rankingList.map((user, index) => renderRankingItem2(user, index))
+        }
       </div>
     </div>
   );
 
   // 각 모드별 랭킹 리스트 아이템
   const renderRankingItem = (user, index) => (
-    <div
+    <Link
+      to={`/profile/${user.userNickname}`}
       key={index}
       className="flex justify-between hover:scale-125 items-center h-16 mb-5 rounded-lg shadow-lg bg-yellow-100"
       style={{ backgroundColor: '#F8E6D0' }}
     >
-      <span className='font-bold ml-4' style={{color:'#FE4582'}}>{user.rank}st</span>
-      <span className='font-bold ml-4'>{user.username}</span>
-      <span className='font-bold mr-4'>{user.rating}점</span>
-    </div>
+      <span className='font-bold ml-4' style={{color:'#FE4582'}}>{index + 1}st</span>
+      <span className='font-bold ml-4'>{user.userNickname}</span>
+      <span className='font-bold mr-4'>{user.speedRating}점</span>
+    </Link>
+  );
+
+  const renderRankingItem2 = (user, index) => (
+    <Link
+      to={`/profile/${user.userNickname}`}
+      key={index}
+      className="flex justify-between hover:scale-125 items-center h-16 mb-5 rounded-lg shadow-lg bg-yellow-100"
+      style={{ backgroundColor: '#F8E6D0' }}
+    >
+      <span className='font-bold ml-4' style={{color:'#FE4582'}}>{index + 1}st</span>
+      <span className='font-bold ml-4'>{user.userNickname}</span>
+      <span className='font-bold mr-4'>{user.effRating}점</span>
+    </Link>
   );
 
   return (
@@ -65,9 +81,9 @@ export default function RankPage() {
       <br />
       <h1 className='ml-5 font-bold'>실시간 랭킹</h1>
       <div className="flex justify-center mt-5 w-full shadow-xl relative" style={{backgroundColor:'#E3E6D9'}}>
-        {renderRankingList('Speed', speedModeRanking)}
+        {renderRankingList('Speed', speedRanks)}
         <div className="w-40"></div> {/* 사이에 여백 */}
-        {renderRankingList('Efficiency', efficiencyModeRanking)}
+        {renderRankingList('Efficiency', effRanks)}
       </div>
     </div>
   );
