@@ -251,24 +251,13 @@ public class ChatController {
         //효율전
         else if(message.getMode() == ChatSubmitMessage.MessageType.EFFI){
 
-            if(message.getResult().equals("맞았습니다")) {
-                SubmitResultMessage submitResultDto = new SubmitResultMessage();
-                submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
-                submitResultDto.setGameId(message.getGameId());
-                submitResultDto.setWinner(message.getSender());
-                submitResultDto.setResult(message.getSender() + "님의 제출 결과 : 맞았습니다.");
-                messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
-            }
-            //경기 속행 시 별다른 메시지는 보내지 않음.
-            else {
+            SubmitResultMessage submitResultDto = new SubmitResultMessage();
+            submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
+            submitResultDto.setGameId(message.getGameId());
+            submitResultDto.setWinner(message.getSender());
+            submitResultDto.setResult(message.getSender() + "님이 코드를 제출하였습니다.");
+            messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
 
-                SubmitResultMessage submitResultDto = new SubmitResultMessage();
-                submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
-                submitResultDto.setGameId(message.getGameId());
-                submitResultDto.setWinner(message.getSender());
-                submitResultDto.setResult(message.getSender() + "님의 제출 결과 : 틀렸습니다.");
-                messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
-            }
         }
 
     }
