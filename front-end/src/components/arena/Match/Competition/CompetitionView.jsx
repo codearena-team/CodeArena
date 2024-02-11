@@ -127,13 +127,13 @@ export default function CompetitionView() {
             {/* "유저1의 화면이 보이는 공간 vs 유저2의 화면이 보이는 공간" */}
             {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
 
-            <Webrtc 
+            {/* <Webrtc 
               userNickname={params.userNickname}
               customSessionId={'qawsed'}
               isPlayer={false}
               width={`${panelWidths.left}%`}
               height={`550px`}
-            />
+            /> */}
           </div>
         </div>
 
