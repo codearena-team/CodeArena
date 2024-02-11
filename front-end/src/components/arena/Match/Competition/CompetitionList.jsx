@@ -9,6 +9,8 @@ export default function CompetitionList() {
   const [selectedButton, setSelectedButton] = useState('competition'); // 선택된 버튼 타입-> 첫 렌더링되었을 때 "경쟁전" 화면부터 보이도록
   const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
 
+
+  
   // 가상의 단체전 방 데이터 (일단은 10개정도..)
   const [problemData, setProblemData] = useState([]);
     

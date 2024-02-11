@@ -10,6 +10,7 @@ import DetailWindow from "../../../../components/problem/DetailWindow";
 import SubmitWindow from "../../../../components/problem/SubmitWindow";
 import AlarmModal from "../../../../components/problem/AlramModal";
 import TagModal from "../../../../components/problem/TagModal";
+import Editor from '@monaco-editor/react'
 import axios from "axios";
 import "../../../css/problemdetail.css"
 
@@ -103,7 +104,7 @@ export default function ProblemDetail() {
           { problem.problemVisibility === '1' ?
             <div className="flex">
               <Link to={`/community?word=${problem.problemId}&key=problem_id`} className="btn btn-sm bg-rose-200 me-2 rounded-xl drop-shadow-sm">질문게시판</Link>
-              <button onClick={onClickWindow} className={`btn btn-sm bg-rose-200 rounded-xl drop-shadow-sm ${problem.isSolve ? '' : 'hidden'}`}>{window ? '제출현황' :'문제내용'}</button>
+              <button onClick={onClickWindow} className={`btn btn-sm bg-rose-200 rounded-xl drop-shadow-sm `}>{window ? '제출현황' :'문제내용'}</button>
               {isAuthor ?
                 <Link to={`/problem/${problem.problemId}/edit`} className="btn btn-sm bg-rose-200 rounded-xl ms-2 py-1 px-2 drop-shadow-sm">문제 수정</Link>
               :
@@ -120,7 +121,7 @@ export default function ProblemDetail() {
           }
         </div>
         <div className="leftDown drop-shadow p-5 ">
-          {window ? <DetailWindow problem={problem} /> : <SubmitWindow />}
+          {window ? <DetailWindow problem={problem} /> : <SubmitWindow isSolve={problem.isSolve}/>}
         </div>
       </div>
       <div className="right drop-shadow p-5 sticky">
@@ -134,7 +135,7 @@ export default function ProblemDetail() {
           
         </div>
         
-        <CodeMirror value={code} height="77vh" extensions={[java(),python(),cpp()]} onChange={onChangeCode} />
+        <Editor options={{'scrollBeyondLastLine':false}} value={code} height="77vh" language={lang} onChange={onChangeCode} />
         <div className="flex justify-end">
           <button onClick={()=>document.getElementById('TagModal').showModal()} className="mt-2 btn bg-rose-200 rounded-xl">제 출</button>
           <TagModal 

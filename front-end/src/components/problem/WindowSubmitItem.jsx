@@ -5,42 +5,42 @@ import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 
-export default function WindowSubmitItem(probs) {
+export default function WindowSubmitItem(props) {
   const userNickname = useSelector(state => state.auth.userNickname)
   let code = ''
-  if (probs.submitItem.code === null) {
+  if (props.submitItem.code === null) {
     code = ""
   } else {
-    code = probs.submitItem.code
+    code = props.submitItem.code
   }
   return(
     
     <tr className=" border-b-2" >
-      <th className="p-1 font-light">{probs.submitItem.userNickname}</th>
+      <th className="p-1 font-light">{props.submitItem.userNickname}</th>
       
       <th className="p-1 flex justify-center pt-4">
-        <span className=" font-light">{probs.submitItem.submitStatus}</span>
-        {probs.submitItem.testCase ? 
+        <span className=" font-light">{props.submitItem.submitStatus}</span>
+        {props.submitItem.testCase ? 
         <div>
-          <button className={`btn btn-xs btn-neutral rounded-full font-light ${userNickname===probs.submitItem.userNickname ? '' : 'hidden'}`}
-          onClick={()=>document.getElementById(`testCaseModal${probs.submitItem.submitNo}`).showModal()}
+          <button className={`btn btn-xs btn-neutral rounded-full font-light ${userNickname===props.submitItem.userNickname ? '' : 'hidden'}`}
+          onClick={()=>document.getElementById(`testCaseModal${props.submitItem.submitNo}`).showModal()}
           >
           테케보기</button>
           <TestCaseModal 
-          testcase={[probs.submitItem.testCase]}
-          submitNo={probs.submitItem.submitNo}/>
+          testcase={[props.submitItem.testCase]}
+          submitNo={props.submitItem.submitNo}/>
         </div> : <div></div>}
       </th>
       
-      <th className="p-1 font-light">{probs.submitItem.memory}</th>
-      <th className="p-1 font-light">{probs.submitItem.timeComplexity}</th>
-      <th className="p-1 font-light">{probs.submitItem.submitLang}</th>
-      <th className="p-1 font-light">
-        <button className="btn btn-xs btn-neutral rounded-full"
-          onClick={()=>document.getElementById(`codeModal${probs.submitItem.submitNo}`).showModal()}>
+      <th className="p-1 font-light">{props.submitItem.memory}</th>
+      <th className="p-1 font-light">{props.submitItem.timeComplexity}</th>
+      <th className="p-1 font-light">{props.submitItem.submitLang}</th>
+      <th className={`p-1 font-light ${props.isSolve ? '' : 'hidden'}`}>
+        <button className={`btn btn-xs btn-neutral rounded-full `}
+          onClick={()=>document.getElementById(`codeModal${props.submitItem.submitNo}`).showModal()}>
           코드보기
         </button>
-        <dialog id={`codeModal${probs.submitItem.submitNo}`} className="modal">
+        <dialog id={`codeModal${props.submitItem.submitNo}`} className="modal">
           <div className="modal-box p-0 scrollBar" style={{minWidth:"600px"}}>
             <div className='z-50 sticky p-2' style={{backgroundColor:"#F4ECE4", top:"0px"}}>
               <form method="dialog" className='flex justify-between' >
@@ -55,16 +55,16 @@ export default function WindowSubmitItem(probs) {
               </form>
             </div>
             <div style={{textAlign:'left'}}>
-            <CodeMirror value={probs.submitItem.code || ''}  extensions={[java(),python(),cpp()]}
+            <CodeMirror value={props.submitItem.code || ''}  extensions={[java(),python(),cpp()]}
             editable={false}/>
             </div>          </div>
         </dialog>
       </th>
       <th className="p-1 font-light">
-      {probs.submitItem.submitDate.split(' ')[0]}<br />
-      {probs.submitItem.submitDate.split(' ')[1]}
+      {props.submitItem.submitDate.split(' ')[0]}<br />
+      {props.submitItem.submitDate.split(' ')[1]}
       </th>
-      {/* <th className="p-1">{probs.submitItem.problemRating}</th> */}
+      {/* <th className="p-1">{props.submitItem.problemRating}</th> */}
     </tr>
   )
 }

@@ -13,6 +13,15 @@ video {
     font-weight: bold;
     border-bottom-right-radius: 4px;
 }
+.streamcomponent video {
+    width: inherit;
+    height: inherit;
+    object-fit: fill;
+}
+.streamcomponent {
+    width: inherit;
+    height: inherit;
+}
 p{
     margin: 0;
 }
