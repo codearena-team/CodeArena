@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useSearchParams } from 'react-router-dom';
 import '../../../css/shake.css';
 import EnterModal from '../../modal/Competition/CompEnterModal';
 import axios from 'axios';
@@ -9,30 +9,38 @@ export default function CompetitionList() {
   const [selectedButton, setSelectedButton] = useState('competition'); // 선택된 버튼 타입-> 첫 렌더링되었을 때 "경쟁전" 화면부터 보이도록
   const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
 
+  const [pageCount, setPageCount] = useState(1)
+  const [searchParams,setSearchParams] = useSearchParams()
+  const [key, setKey] = useState('userNickname')
+  const [word, setWord] = useState('')
 
+  const changeParams = (key, value) => {
+    searchParams.set(key,value)
+    setSearchParams(searchParams)
+  }
+  
+  const onClickHandler = () => {
+    if(word==='') {
+      searchParams.delete('word')
+      setSearchParams(searchParams)
+    } else {
+      changeParams('word',word)
+    }
+    if(key==='') {
+      searchParams.delete('key')
+      setSearchParams(searchParams)
+    } else {
+      changeParams('key',key)
+    }
+    setSearchParams(searchParams)
+  }
   
   // 가상의 단체전 방 데이터 (일단은 10개정도..)
   const [problemData, setProblemData] = useState([]);
     
 
   // 검색어 입력 핸들러
-  const handleSearch = () => {
-    // 검색을 수행하거나 검색 결과를 업데이트
-    console.log('검색어:', searchText);
-    setSearchAnimation(true); // 무언가를 입력 후 Enter 누르면 애니메이트 작동
 
-    setTimeout(() => {
-        setSearchAnimation(false);
-    }, 1000); // 애니메이트 1초
-    setSearchText(''); // 검색 후 input창 초기화
-  };
-
-  // Enter 키 눌렀을 때 검색 함수 호출
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-        handleSearch();
-    }
-  };
 
   // 경쟁전, 단체전 버튼 클릭 핸들러
   const handleButtonClick = (btn) => {
@@ -41,7 +49,14 @@ export default function CompetitionList() {
 
   // 초기 렌더링 시 데이터 설정
   useEffect(() => {
-    axios.get('https://i10d211.p.ssafy.io/game/chat/rooms')
+    const key = searchParams.get('key') || ''
+    const word = searchParams.get('word') || ''
+    const gameMode = searchParams.get('gameMode') || ''
+    const langType = searchParams.get('langType') || ''
+    axios({
+      method : 'get',
+      url : `https://i10d211.p.ssafy.io/game/chat/rooms?roomType=0&key=${key}&word=${word}&gameMode=${gameMode}&langType=${langType}`,
+    })
     .then((res)=> {
       console.log(res);
       setProblemData(res.data.data.gameRooms);
@@ -49,7 +64,7 @@ export default function CompetitionList() {
     }) .catch(err=> {
       console.log(err);
     })
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="mt-5 mx-10">
@@ -73,48 +88,52 @@ export default function CompetitionList() {
           </Link>
         </div>
         <div className="flex space-x-4 items-center">
-          <input
-            type="text"
-            placeholder="유저, 문제 번호 또는 제목 검색"
-            className="input-search hover:scale-110"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            onKeyDown={handleKeyDown} // Enter 키 감지
-            style={{ width: '300px', padding: '8px', marginRight: '5px' }}
-          />
-          {/* 검색 버튼 스타일링 -> Enter키 눌려졌을 때 반응 */}
-          <button 
-            className={`btn btn-search hover:scale-110 transition-transform duration-300 transform ${searchAnimation ? 'shake' : ''}`}
-            onClick={handleSearch}
-          >
-            검색
-          </button>
-          <button className="btn btn-filter hover:scale-110">필터</button>  
+          <select value={searchParams.get('gameMode') || ''} onChange={(e)=>{changeParams('gameMode',e.target.value)}} className="select select-sm select-bordered join-item" >
+            <option value="">전체</option>
+            <option value="0">스피드전</option>
+            <option value="1">효율전</option>
+          </select>
+          <select value={searchParams.get('langType') || ''} onChange={(e)=>{changeParams('langType',e.target.value)}} className="select select-sm select-bordered join-item" >
+            <option value="">전체</option>
+            <option value="java">java</option>
+            <option value="python">python</option>
+            <option value="cpp">cpp</option>
+          </select>
+          <div className='flex join'>
+            <select value={key} onChange={(e)=>{setKey(e.target.value)}} className="select select-sm select-bordered join-item" >
+              <option value={'userNickname'}>유저 닉네임</option>
+              <option value={'problem_id'}>문제 번호</option>
+            </select>
+              <input onChange={(e)=>{setWord(e.target.value)}} type="text" placeholder="검색어를 입력하세요." className="input input-bordered w-full max-w-xs input-sm join-item" />
+              <button onClick={onClickHandler} className="btn btn-active btn-neutral btn-sm join-item">검색</button>
+          </div>
         </div>
       </div>
 
       {/* 테이블 헤더 */}
       <div
-        className="grid grid-cols-7 bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
+        className="grid grid-cols-8 bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
         style={{ backgroundColor: '#E3E6D9' }}
       >
         <div className="text-center">문제번호</div>
-        <div className="text-center">문제제목</div>
+        <div className="text-center">방제목</div>
         <div className="text-center">플레이어1</div>
         <div className="text-center">플레이어2</div>
         <div className="text-center">모드</div>
+        <div className="text-center">언어</div>
         <div className="text-center">관전자</div>
         <div className="text-center">입장 여부</div>
       </div>
 
       {/* 데이터 리스트 */}
       {problemData.map((item, index) => (
-        <div key={index} className="grid w-full grid-cols-7 border-b py-2 items-center rounded-xl shadow-sm hover:bg-gray-300">
+        <div key={index} className="grid w-full grid-cols-8 border-b py-2 items-center rounded-xl shadow-sm hover:bg-gray-300">
           <div className="text-center">{item.problemId}</div>
           <div className="text-center">{item.title}</div>
           <div className="text-center">{item.userRed}</div>
           <div className="text-center">{item.userBlue} </div>
-          <div className="text-center">{item.gameMode ? '효율' : '스피드'}</div>
+          <div className="text-center">{item.gameMode==='0' ? '스피드전' : '효율전'}</div>
+          <div className="text-center">{item.language}</div>
           <div className="text-center">{item.participants}</div>
           <div className="text-center">
             {item.isFull ? (
