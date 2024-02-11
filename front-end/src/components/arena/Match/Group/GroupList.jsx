@@ -35,9 +35,23 @@ export default function GroupList() {
     } else {
       changeParams('key',key)
     }
+    searchParams.delete('pgno')
     setSearchParams(searchParams)
   }
 
+  const pageNation = () => {
+    const result = [];
+    for (let i = 0; i < pageCount; i++) {
+      result.push(
+      <button 
+        onClick={()=>changeParams('pgno',i+1)} 
+        key={i} 
+        className={(searchParams.get('pgno')===`${i+1}` || (searchParams.get('pgno')===null&&i===0)) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}
+        >{i+1}</button>
+      );
+    }
+    return result;
+  };
 
   // 가상의 단체전 방 데이터 (일단은 10개정도..)
   const [problemData, setProblemData] = useState([]);
@@ -55,25 +69,27 @@ export default function GroupList() {
 
   // 초기 렌더링 시 데이터 설정
   useEffect(() => {
+    const pgno = searchParams.get('pgno') || 1
     const key = searchParams.get('key') || ''
     const word = searchParams.get('word') || ''
     const gameMode = searchParams.get('gameMode') || ''
     const langType = searchParams.get('langType') || ''
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/game/chat/rooms?roomType=1&key=${key}&word=${word}&gameMode=${gameMode}&langType=${langType}`,
+      url : `https://i10d211.p.ssafy.io/game/chat/rooms?roomType=1&key=${key}&word=${word}&gameMode=${gameMode}&langType=${langType}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       console.log(res);
       setProblemData(res.data.data.gameRooms);
       console.log(res.data.data.gameRooms);
+      setPageCount(res.data.data.totalPageCount)
     }) .catch(err=> {
       console.log(err);
     })
   }, [searchParams]);
 
   return (
-    <div className="mt-5 mx-10">
+    <div className="mt-5 mx-20">
       {/* 상단 버튼, 검색바, 버튼 영역 */}
       <div className="flex justify-between items-center">
         <div className="flex relative z-0">
@@ -153,6 +169,14 @@ export default function GroupList() {
       ))}
 
       {/* 페이지네이션 */}
+      <div className="flex justify-center my-2">
+        <div className="join">
+          <button onClick={()=>{changeParams('pgno','1')}} className="join-item btn btn-sm">{'<<'}</button>
+          {pageNation()}
+          <button onClick={()=>{changeParams('pgno', pageCount)}} className="join-item btn btn-sm">{'>>'}</button>
+        </div>
+      </div>
+
     </div>
   );
 }
