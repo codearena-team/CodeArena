@@ -56,12 +56,12 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "./" + path + "/Solution";
+            String cmd = "";
             log.info("CMD : {}", cmd);
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
-            // 코드 파일 생성하기 (solution.java)
+            // 코드 파일 생성하기 (solution.cpp)
             judgeUtil.createCodeFile(userInput.getProblemValidationCode(), path);
             // 코드 검증하기
             result = judgeUtil.validate(cmd, testCase, timeLimit, path);
@@ -102,11 +102,11 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = path + "/Solution.out";
+            String cmd = "";
 
             // 폴더 생성하기
             judgeUtil.createFolder(path);
-            // 코드 파일 생성하기 (solution.java)
+            // 코드 파일 생성하기 (solution.cpp)
             judgeUtil.createCodeFile(userInput.getCode(), path);
             // 코드 검증하기
             result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
@@ -159,13 +159,14 @@ public class JudgeServiceImpl implements JudgeService{
 
             String path = UUID.randomUUID().toString();
 
-            String cmd = "/app/" + path + "/Solution.out";
+            // validate 안에서 실행하도록 만듦
+            String cmd = "";
 
+            log.debug("[normal] cmd : {}", cmd);
             // 폴더 생성하기
             judgeUtil.createFolder(path);
-            // 코드 파일 생성하기 (solution.java)
+            // 코드 파일 생성하기 (solution.out)
             judgeUtil.createCodeFile(userInput.getCode(), path);
-
 
             // 코드 검증하기
             result = judgeUtil.validate(cmd, problemInfo.getTestCaseList(), problemInfo.getProblemTime(), path);
