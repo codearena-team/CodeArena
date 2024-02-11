@@ -1,23 +1,34 @@
-import { useParams } from "react-router-dom"
+import { useParams, useLocation } from "react-router-dom"
 import CodeMirror from '@uiw/react-codemirror';
 import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 import axios from "axios";
 import "../../../css/CompetitionPlay.css";
 import C_playDividingLine from "./C_playDividingLine";
+import { useSelector } from "react-redux";
 
-export default function CompPlayProblem({ problemId }) {
-  console.log("problemId 넘어왔니? :", problemId)
+export default function CompPlayProblem({  }) {
+  const sender = useRef(useSelector(state => state.auth.userNickname));
+  const Location = useLocation();
+  // console.log("problemId 넘어왔니? :", problemId)
   // const params = useParams();
   // const problemId = params.problemId
   const [code, setCode] = useState('')
-  const [lang, setLang] = useState('java')
+  const [lang, setLang] = useState('')
   const [cateList, setCateList] = useState(["PD", "구현", "그리디", "매개변수 탐색", "문자열","수학", "시뮬레이션", "완전탐색", "이분탐색", "자료구조"])
   const [selectedList, setSelectedList] = useState([])
   const [cate, setCate] = useState('선택')
   const [problem, setProblem] = useState({})
+  const [gameMode, setGameMode] = useState("");
+  const [problemId, setProblemId] = useState(""); 
+  const [userId, setUserId] = useState("");
+  const [gameId, setGameId] = useState(""); 
+  const [currentLangPkg, setCurrentLangPkg] = useState(null);
+  const [stompClient, setStompClient] = useState(null);
   
   // 구분선에 따른 화면 비율 조정 -> 초기는 5:5 비율로 문제와 코드블럭 보기
   const [panelWidths, setPanelWidths] = useState({
@@ -39,10 +50,25 @@ export default function CompPlayProblem({ problemId }) {
   }, []);
   
   useEffect(()=> {
+    console.log(Location.state);
+    const { problemId, gameMode, lang, userId, gameId } = Location.state;
     console.log("여기서 진짜 넘어와야함 :", problemId)
+    // setGameMode
+    setGameMode(gameMode.current);
+    setProblemId(problemId.current);
+    setLang(lang.current);
+    setUserId(userId.current);
+    setGameId(gameId.current);
+    if(lang.current === 'java'){
+      setCurrentLangPkg(java());
+    }else if(lang.current === 'python'){
+      setCurrentLangPkg(python());
+    }else{
+      setCurrentLangPkg(cpp());
+    }
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId.current}`,
     })
     .then((res)=> {
       console.log(res);
@@ -51,7 +77,37 @@ export default function CompPlayProblem({ problemId }) {
     .catch((err)=> {
       console.log(err);
     })
-  },[problemId]);
+
+    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+    const stompClient = Stomp.over(socket);
+    console.log("useEffect stompClient :", stompClient)
+
+    stompClient.connect({}, () => {
+      // 연결
+      stompClient.subscribe('/sub/chat/room/'+`${gameId.current}`, (message) => {
+        // 받은 메시지에 대한 처리
+        console.log("메시지 받았나용");
+        console.log(message);
+        const data = JSON.parse(message.body);
+        console.log(data);
+        if(data.type === 'CONTINUE'){
+          if(data.winner !== sender.current){
+            alert(data.result);
+          }
+        }else if(data.type === 'END'){
+          // 결과페이지로 넘어가는 로직
+          alert(data.result);
+        }
+        
+      });
+      }, error => {
+      // 에러
+      console.error("채팅 연결 에러났음", error)
+      alert("연결에 문제가 있습니다. 다시 시도해주세요.")
+      // 필요한 경우 여기에서 재연결 로직을 구현
+    });
+    setStompClient(stompClient);
+  },[]);
 
   const onClickCate = (e)=>{
     const arr = cateList
@@ -74,6 +130,64 @@ export default function CompPlayProblem({ problemId }) {
   }
 
   const onClickHandler = (e) => {
+    let url =  '';
+    if(gameMode === 'speed'){
+      url = `https://i10d211.p.ssafy.io/${lang}/judge/arena`
+      fetch(url, {
+        method : "POST",
+        headers : {
+          "Content-type" : "application/json"
+        },
+        body : JSON.stringify({
+          problemId : problemId,
+          code : code,
+          gameType : 0
+        })
+      }).then(res => res.json())
+      .then(json => {
+        if(json.data.solve){
+          let msg = json.data.msg;
+          msg = msg.replace(".", "");
+          console.log("보내는 데이터 : ", {
+            gameId: gameId,
+            sender: sender.current,
+            result : msg,
+            mode: 'SPEED',
+          })
+          stompClient.send(`/pub/chat/submit`, {}, JSON.stringify({
+            gameId: gameId,
+            sender: sender.current,
+            result : msg,
+            mode: 'SPEED',
+          }))
+        }
+      })
+    }else{
+      url = `https://i10d211.p.ssafy.io/game/rest/submit`
+      console.log("여긴 효율전 전용이얌")
+      fetch(url, {
+        method : "POST",
+        headers : {
+          "Content-type" : "application/json"
+        },
+        body : JSON.stringify({
+          problemId : problemId,
+          code : code,
+          userId : userId,
+          gameId : gameId,
+          submitLang : lang,
+          gameType : 1
+        })
+      }).then(res => res.json)
+      .then(json => {
+        stompClient.send(`/pub/chat/submit`, {}, JSON.stringify({
+          gameId: gameId,
+          sender: sender.current,
+          type: 'EFFI',
+        }))
+      })
+    }
+    
     console.log(code);
   }
 
@@ -134,29 +248,11 @@ export default function CompPlayProblem({ problemId }) {
         <div className="flex ">
           <label className="font-bold mt-1">언어</label>
           <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className=" mb-2 select select-sm select-bordered" >
-            <option>java</option>
-            <option>python</option>
-            <option>cpp</option>
+            <option>{lang}</option>
           </select>
-          <label className="font-bold ms-4 mt-1">알고리즘</label>
-          <select value={cate} onChange={onClickCate} className="select select-sm select-bordered w-20" >
-            <option isabled="true">선택</option>
-            {cateList.map((cate)=>{
-              return(
-                <option key={cate} onClick={onClickCate}>{cate}</option>
-              )
-            })}
-          </select>
-          <div className="" >
-            {selectedList.map((selected)=>{
-              return(
-                <span className='mx-2' onClick={onClickSelected}>{selected}</span>
-              )
-            })}
-          </div>
         </div>
         
-        <CodeMirror value={code} height="75vh" extensions={[java(),python(),cpp()]} onChange={onChangeCode} />
+        <CodeMirror value={code} height="75vh" extensions={[currentLangPkg]} onChange={onChangeCode} />
         <div className="flex justify-end">
           <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full">제 출</button>
         </div>
