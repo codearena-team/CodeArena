@@ -99,7 +99,13 @@ export default function TopBanner() {
         // problemId를 props로 내려주기 -> navigate 활용
         navigate(
           {pathname: `/game-list/competition/play/${object.matchId}`},
-          {state: problemId},
+          {state: {
+            problemId : problemId,
+            gameMode : gameMode,
+            lang : lang,
+            gameId : gameId,
+            userId : userId,
+          }},
         )
       }
       
