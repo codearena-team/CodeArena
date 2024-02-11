@@ -49,6 +49,7 @@ public class ChatServiceImpl implements ChatService{
         param.put("word", map.get("word") == null ? "" : map.get("word"));  //검색 필터 값
         param.put("gameMode", map.get("gameMode") == null ? "" : map.get("gameMode"));  //게임 모드 필터
         param.put("roomType", map.get("roomType") == null ? "0" : map.get("roomType"));  //방 타입 필터
+        param.put("langType", map.get("langType") == null ? "" : map.get("langType"));  //언어 필터
         int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));    //특정 페이지 번호 요청이 없다면 1번
         int sizePerPage = Integer.parseInt(map.get("spp") == null ? "15" : map.get("spp"));
         int start = currentPage * sizePerPage - sizePerPage;    //쿼리로 불러올 인덱스 번호 지정

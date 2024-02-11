@@ -223,6 +223,7 @@ public class ChatController {
         String gameId = message.getGameId();
         log.info("메시지 수신");
 
+        log.info(String.valueOf(message));
 
         //스피드전
         if(message.getMode() == ChatSubmitMessage.MessageType.SPEED) {
