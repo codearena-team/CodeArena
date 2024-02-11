@@ -27,7 +27,7 @@
     <!-- 검색조건 동적쿼리 -->
     <sql id="search">
         <if test='word != null and word != ""'>
-            <if test="key == 'problem_id'">
+            <if test="key != 'problem_id'">
                 AND ${key} = #{word}
             </if>
             <if test="key == 'userNickname'">
