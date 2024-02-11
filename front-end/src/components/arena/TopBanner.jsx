@@ -29,6 +29,11 @@ export default function TopBanner() {
   
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const languageButtons = [
+    { lang: 'python', label: 'Python' },
+    { lang: 'java', label: 'Java' },
+    { lang: 'cpp', label: 'C++' }
+  ];
 
   const socket = useRef(null);
   const type = useRef();
@@ -115,8 +120,6 @@ export default function TopBanner() {
       }
     };
   }, []);
-
-
   
   ////////////////// 위에서 websocket 통신 연결 //////////////////////////
 
@@ -179,17 +182,50 @@ export default function TopBanner() {
   // 타이머 중지
   let timerInterval
   const closeMatchingModalHandler = () => {
-    clearInterval(timerInterval);
     console.log('타이머 중지!!');
-    
-    // 모든 모달 닫기
-    // document.getElementById('matching_modal').close();
-    // document.getElementById('language_modal').close();
 
     // 선택된 언어 초기화
     setSelectedLanguage(null);
-  };
+    clearInterval(timerInterval)
+
+
+    const languageModal = document.getElementById('language_modal');
+    if (languageModal && languageModal.open) {
+      clearInterval(timerInterval)
+      languageModal.close();
+    }
   
+  };
+
+  // 4. 매칭이 돌아가면 타이머 소환
+  const startMatchingTimer = () => {
+    let seconds = 0;
+    const timerElement = document.getElementById('matching_timer');
+    
+    clearInterval(timerInterval)// 이전에 실행 중인 타이머는 중지
+
+    const updateTimer = () => {
+      const minutes = Math.floor(seconds / 60); // 분단위 계산
+      const remainingSeconds = seconds % 60; // 초단위 계산
+  
+      // 타이머 초마다 상승하고 문자열로 표기
+      timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+      seconds += 1;
+    };
+  
+    // 1초마다 타이머 업데이트
+    timerInterval = setInterval(updateTimer, 1000);
+  
+    // 원하는 시간까지 진행 후 타이머 중지
+    // const desiredTimeInSeconds = 10;
+    
+    console.log('Start Matching Timer type : ', type.current)
+    if (type.current && type.current === "QUERY") {
+      clearInterval(timerInterval);
+      handleMatchingComplete(); // 수락&취소 모달 함수 호출
+    }
+  };
+
   const startQueryTimer = () => {
     let seconds = 60;
     const timerElements = document.getElementById('matching_timer');
@@ -232,35 +268,6 @@ export default function TopBanner() {
     // 1초마다 타이머 업데이트
     timerInterval = setInterval(updateTimer, 1000);
   }
-
-  // 4. 매칭이 돌아가면 타이머 소환
-  const startMatchingTimer = () => {
-    let seconds = 0;
-    const timerElement = document.getElementById('matching_timer');
-  
-    const updateTimer = () => {
-      const minutes = Math.floor(seconds / 60); // 분단위 계산
-      const remainingSeconds = seconds % 60; // 초단위 계산
-  
-      // 타이머 초마다 상승하고 문자열로 표기
-      timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-      seconds += 1;
-    };
-  
-    // 1초마다 타이머 업데이트
-    timerInterval = setInterval(updateTimer, 1000);
-  
-    // 원하는 시간까지 진행 후 타이머 중지
-    // const desiredTimeInSeconds = 10;
-    
-    console.log('Start Matching Timer type : ', type.current)
-    if (type.current && type.current === "QUERY") {
-      clearInterval(timerInterval);
-      handleMatchingComplete(); // 수락&취소 모달 함수 호출
-    }
-
-
-  };
 
   // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
   const handleMatchingComplete = () => {
@@ -317,6 +324,7 @@ export default function TopBanner() {
     
     clearInterval(timerInterval)
 
+    // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
@@ -355,7 +363,8 @@ export default function TopBanner() {
     socket.current.send (
       JSON.stringify (send_obj)
     );
-
+    
+    // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
@@ -418,27 +427,19 @@ export default function TopBanner() {
               </form>
               <h3 className="font-bold text-2xl mb-5">언어를 선택하세요 !</h3>
               {/* 언어 선택 옵션 3가지 */}
-              <button
-                className={`btn mr-5 ${selectedLanguage === 'Python' ? 'btn-selected' : ''}`}
-                style={{ backgroundColor: selectedLanguage === 'Python' ? '#F9C7C6' : '#E3E6D9' }}
-                onClick={() => handleLanguageSelection('python')}
-              >
-                Python
-              </button>
-              <button
-                className={`btn mr-5 ${selectedLanguage === 'Java' ? 'btn-selected' : ''}`}
-                style={{ backgroundColor: selectedLanguage === 'Java' ? '#F9C7C6' : '#E3E6D9' }}
-                onClick={() => handleLanguageSelection('java')}
-              >
-                Java
-              </button>
-              <button
-                className={`btn mb-5 ${selectedLanguage === 'C++' ? 'btn-selected' : ''}`}
-                style={{ backgroundColor: selectedLanguage === 'C++' ? '#F9C7C6' : '#E3E6D9' }}
-                onClick={() => handleLanguageSelection('cpp')}
-              >
-                C++
-              </button>
+              <div>
+                {languageButtons.map(({ lang, label }) => (
+                  <button
+                    key={lang}
+                    className={`btn mr-5 mb-5 ${selectedLanguage === lang ? 'btn-selected' : ''}`}
+                    style={{ backgroundColor: selectedLanguage === lang ? '#F9C7C6' : '#E3E6D9' }}
+                    onClick={() => handleLanguageSelection(lang)} // 선택한 언어 set
+                  >
+                    {/* 언어 선택하기 -> label */}
+                    {label}
+                  </button>
+                ))}
+              </div>
               {/* 언어 선택 후 모드 선택 */}
               {selectedLanguage && (
                 <div>
@@ -514,8 +515,9 @@ export default function TopBanner() {
                         userNickname: userNickname.current,
                       })
                     );
-                    document.getElementById('language_modal').close(); // 언어&모드 선택 모달 닫기
-                    setSelectedLanguage(null); // 닫을 때 선택된 언어 초기화
+                    // document.getElementById('language_modal').close(); // 언어&모드 선택 모달 닫기
+                    // setSelectedLanguage(null); // 닫을 때 선택된 언어 초기화
+                    closeMatchingModalHandler();
                   }}
                 >
                   취 소
