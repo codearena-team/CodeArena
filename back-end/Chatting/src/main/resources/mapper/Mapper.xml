@@ -146,6 +146,7 @@
         select count(game_id)
         from arena_record
         <where>
+            end_time IS NULL
             <include refid="mode"/>
             <include refid="lang"/>
             <include refid="search"/>
