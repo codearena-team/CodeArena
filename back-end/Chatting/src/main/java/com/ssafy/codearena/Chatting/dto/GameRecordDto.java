@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class GameRecordDto {
     String gameId;
+    String problemId;
     String problemTitle;
     String player1;
     String player2;

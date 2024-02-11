@@ -164,20 +164,4 @@ public class RestServiceImpl implements RestService {
         }
     }
 
-    @Override
-    public RestResultDto getMyRecords(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String userId = jwtUtil.getUserId(token);
-        RestResultDto resultDto = new RestResultDto();
-        resultDto.setMsg("성공적으로 데이터를 불러왔습니다.");
-        resultDto.setStatus("200");
-        try{
-            List<GameRecordDto> records = mapper.getRecordsByUserId(userId);
-            resultDto.setData(records);
-        }catch(Exception e){
-            log.debug("exception : {} ", e);
-        }
-
-        return resultDto;
-    }
 }

@@ -26,20 +26,14 @@ public class GameRestController {
     }
 
     @GetMapping("/rank")
-    ResponseEntity<RestResultDto> getRanking(){
+    ResponseEntity<RestResultDto> getRanking() {
         RestResultDto resultDto = service.getRanking();
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 
     @GetMapping("/user/record")
-    ResponseEntity<RestResultDto> getUserRecord(HttpServletRequest request){
-        RestResultDto resultDto = service.getMyRecord(request);
-        return new ResponseEntity<>(resultDto, HttpStatus.OK);
-    }
-
-    @GetMapping("/user/record/test")
     ResponseEntity<RestResultDto> getRecords(HttpServletRequest request){
-        RestResultDto resultDto = service.getMyRecords(request);
+        RestResultDto resultDto = service.getMyRecord(request);
         return new ResponseEntity<>(resultDto, HttpStatus.OK);
     }
 }

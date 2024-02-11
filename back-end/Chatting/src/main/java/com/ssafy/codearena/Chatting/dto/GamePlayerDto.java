@@ -12,6 +12,5 @@ public class GamePlayerDto {
     String effRating;
     String speedRating;
     UserRecordDto record;
-    List<ArenaProblemDto> recentProblems;
-    List<UserDto> recentUsers;
+    List<GameRecordDto> recentMatches;
 }
