@@ -1,11 +1,13 @@
 package com.ssafy.codearena.Chatting.service;
 
+
 import com.ssafy.codearena.Chatting.dto.GamePlayerDto;
 import com.ssafy.codearena.Chatting.dto.CompetitiveResultDto;
 import com.ssafy.codearena.Chatting.dto.CompetitiveUserInfoDto;
 import com.ssafy.codearena.Chatting.dto.RestResultDto;
 import com.ssafy.codearena.Chatting.dto.SubmitDto;
 import com.ssafy.codearena.Chatting.dto.Top5RatingResultDto;
+import com.ssafy.codearena.Chatting.dto.*;
 import com.ssafy.codearena.Chatting.mapper.RestMapper;
 import com.ssafy.codearena.Chatting.util.JWTUtil;
 import io.jsonwebtoken.JwtException;
@@ -168,7 +170,6 @@ public class RestServiceImpl implements RestService {
             return restResultDto;
         }
     }
-
     @Override
     public RestResultDto getCompetitiveResult(String gameId) {
 
