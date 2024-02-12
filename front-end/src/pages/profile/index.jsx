@@ -258,7 +258,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
               <li key={index}>
                 <input type="text" className="input input-bordered w-xl h-8 max-w-xs" 
                 style={{outline:'none',cursor: 'text',color: item.isFollow === '1' ? 'blue' : 'black' }}
-                value={item.userNickname + (item.isFollow === '1' ? '               팔로우중' : '')}
+                value={item.userNickname + (item.isFollow === '1' ? '        팔로우중' : '')}
                 onClick={inputClick}
                 />
               </li>
@@ -316,7 +316,9 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                   { followingList.length > 0 && (
                     <ul>
                     {followingList.map((user)=>{
-                      return <li key={user.userId}>{user.userNickname}</li>
+                      return <li key={user.userId}
+                      className="text-md mb-2" 
+                      style={{textDecoration: 'underline'}}>{user.userNickname}</li>
                     })}
                   </ul>
                   )}
@@ -337,9 +339,12 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     <h1>팔로워목록이 없습니다</h1>
                   )}
                   { followerList.length > 0 && (
-                    <ul>
+                  <ul>
                     {followerList.map((user)=>{
-                      return <li key={user.userId}>{user.userNickname}</li>
+                      return <li key={user.userId}
+                      className="text-md mb-2" 
+                      style={{textDecoration: 'underline'}}>{user.userNickname}</li>
+                      
                     })}
                   </ul>
                   )}

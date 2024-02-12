@@ -82,14 +82,16 @@ export default function CommentListItem(props) {
       )}
       { userId === commentId && (
         <div className='flex justify-end mb-4'>
-          <div className="btn btn-sm rounded-full  drop-shadow-xl btn-active mr-2"
-          style={{backgroundColor:'#E4E4DA',border:'1px solid black'}}
+          <div className="btn btn-sm btn-active drop-shadow text-md mr-2"
+          style={{backgroundColor:'#E4E4DA'}}
           onClick={updateComment}
           >수정</div>
-          <button className="btn btn-sm rounded-full  btn-active"
-          style={{backgroundColor:'#E4E4DA',border:'1px solid black'}}
+          <button className="btn btn-sm btn-active drop-shadow text-md"
+          style={{backgroundColor:'#E4E4DA'}}
           onClick={commentDelete}
           >삭제</button>
+          <div className='w-1/12'></div>
+
         </div>
       )}
     </div>
@@ -98,3 +100,4 @@ export default function CommentListItem(props) {
     
   )
 }
+
