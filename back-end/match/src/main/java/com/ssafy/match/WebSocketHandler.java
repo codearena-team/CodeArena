@@ -29,6 +29,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Value("${gameserver.url}")
     private String gameserverUrl;
 
+    @Value("${restserver.url}")
+    private String restUrl;
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.debug("connect : {}", session.getId());
@@ -103,6 +106,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         } else if (p2Session != null && p1Session != null) {
                             UUID uuid = UUID.randomUUID();
                             HashMap<String, MatchDto> match = getMatchDtoHashMap(uuid, player1, player2, key);
+                            WebClient client = getClient(restUrl);
+                            HashMap<String, String> player1Profile = (HashMap<String, String>)(client.get().uri("/profile/"+player1userId).retrieve().bodyToMono(HashMap.class).block().get("data"));
+                            HashMap<String, String> player2Profile =  (HashMap<String, String>)(client.get().uri("/profile/"+player2userId).retrieve().bodyToMono(HashMap.class).block().get("data"));
+
+                            String player1ImgSrc = player1Profile != null ? player1Profile.get("profileUrl") : null;
+                            String player2ImgSrc = player2Profile != null ? player2Profile.get("profileUrl") : null;
+
                             matchMap.put(uuid.toString(), match);
                             HashMap<String, String> serverMsg = new HashMap<>();
                             serverMsg.put("type", "QUERY");
@@ -110,17 +120,21 @@ public class WebSocketHandler extends TextWebSocketHandler {
                             serverMsg.put("matchId", uuid.toString());
                             serverMsg.put("userId", player1userId);
                             serverMsg.put("userNickname", player1userNickname);
+                            serverMsg.put("userImgSrc", player1ImgSrc);
                             serverMsg.put("lang", receive.getLang());
                             serverMsg.put("enemyId", player2userId);
                             serverMsg.put("enemyNickname", player2userNickname);
+                            serverMsg.put("enemyImgSrc", player2ImgSrc);
                             serverMsg.put("queueKey", key);
-                            log.debug("server to player send msg : {}", serverMsg);
+                            log.debug("[QUERY] server send to player send msg : {}", serverMsg);
                             p1Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
                             serverMsg.put("userId", player2userId);
                             serverMsg.put("userNickname", player2userNickname);
+                            serverMsg.put("userImgSrc", player2ImgSrc);
                             serverMsg.put("enemyId", player1userId);
                             serverMsg.put("enemyNickname", player1userNickname);
-                            log.debug("server to player send msg : {}", serverMsg);
+                            serverMsg.put("enemyImgSrc", player1ImgSrc);
+                            log.debug("[QUERY] server send to player send msg : {}", serverMsg);
                             p2Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
 //                            MessageDto message1 = makeMessage(MessageDto.MessageType.QUERY, receive.getGameMode(), uuid.toString(), player1userId, receive.getLang(), null, null, key, player1userNickname, null, null, null);
 //                            MessageDto message2 = makeMessage(MessageDto.MessageType.QUERY, receive.getGameMode(), uuid.toString(), player2userId, receive.getLang(), null, null, key, player2userNickname, null, null, null);
@@ -181,6 +195,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     params.put("gameMode", mode);
                     params.put("language", receive.getLang());
                     HashMap<String, HashMap<String, String>> result = client.post().uri("/chat/gameroom").contentType(MediaType.APPLICATION_JSON).bodyValue(params).retrieve().bodyToMono(HashMap.class).block();
+
                     // 로직 생성
                     log.debug("from gameserver data : {}", result);
                     String gameId = result.get("data").get("gameId");
@@ -199,22 +214,35 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     serverMsg.put("gameMode", receive.getGameMode());
                     serverMsg.put("lang", receive.getLang());
                     serverMsg.put("gameId", gameId);
+                    serverMsg.put("viduSession", viduSession);
                     Iterator<MatchDto> playerIterator = players.iterator();
                     MatchDto player1 = playerIterator.next();
                     MatchDto player2 = playerIterator.next();
+                    client = getClient(restUrl);
+                    HashMap<String, String> player1Profile = (HashMap<String, String>)(client.get().uri("/profile/"+player1.getUserId()).retrieve().bodyToMono(HashMap.class).block().get("data"));
+                    HashMap<String, String> player2Profile =  (HashMap<String, String>)(client.get().uri("/profile/"+player2.getUserId()).retrieve().bodyToMono(HashMap.class).block().get("data"));
+                    String player1ImgSrc = player1Profile != null ? player1Profile.get("profileUrl") : null;
+                    String player2ImgSrc = player2Profile != null ? player2Profile.get("profileUrl") : null;
+                    log.debug("player1ImgSrc : {}", player1ImgSrc);
+                    log.debug("player2ImgSrc : {}", player2ImgSrc);
+
                     WebSocketSession player1Session = CLIENTS.get(userWithSessionId.get(player1.getUserId() +" "+player1.getUserNickname()));
                     WebSocketSession player2Session = CLIENTS.get(userWithSessionId.get(player2.getUserId() +" "+player2.getUserNickname()));
                     serverMsg.put("userId", player1.getUserId());
                     serverMsg.put("userNickname", player1.getUserNickname());
+                    serverMsg.put("userImgSrc", player1ImgSrc);
                     serverMsg.put("enemyId", player2.getUserId());
                     serverMsg.put("enemyNickname", player2.getUserNickname());
-                    log.debug("server to player1 send message : {} ", serverMsg);
+                    serverMsg.put("enemyImgSrc", player2ImgSrc);
+                    log.debug("[INGAME] server send to player1 message : {} ", serverMsg);
                     player1Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
                     serverMsg.put("userId", player2.getUserId());
                     serverMsg.put("userNickname", player2.getUserNickname());
+                    serverMsg.put("userImgSrc", player2ImgSrc);
                     serverMsg.put("enemyId", player1.getUserId());
                     serverMsg.put("enemyNickname", player1.getUserNickname());
-                    log.debug("server to player2 send message : {} ", serverMsg);
+                    serverMsg.put("enemyImgSrc", player1ImgSrc);
+                    log.debug("[INGAME] server send to player2 message : {} ", serverMsg);
                     player2Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
 //                    for (MatchDto player : players) {
 //                        WebSocketSession playerSession = CLIENTS.get(userWithSessionId.get(player.getUserId() + " " + player.getUserNickname()));
@@ -229,6 +257,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     String mode = frags[0];
                     String lang = frags[1];
                     MessageDto send = makeMessage(MessageDto.MessageType.CONTINUE, mode, null, aliveUser.getUserId(), lang, null, aliveUser.getUserNickname() + "은 매칭큐에 지속됩니다.", aliveUser.getQueueKey(), aliveUser.getUserNickname(), null, null, null);
+                    log.debug("[CONTINUE] server send to player message : {}", send);
                     session.sendMessage(new TextMessage(objectMapper.writeValueAsString(send)));
                     redisTemplate.opsForZSet().add(aliveUser.getQueueKey(), aliveUser.getUserId() + " " + aliveUser.getUserNickname(), aliveUser.getEnqueueTime());
                 }
@@ -270,7 +299,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }else if(exception instanceof NullPointerException){
                 session.sendMessage(ExpressionException.TEXT_MESSAGE);
             }else{
-                session.sendMessage(new TextMessage("알수없는 오류가 발생했습니다."));
+                HashMap<String, String> message = new HashMap<>();
+                message.put("content", "알수없는 오류가 발생했습니다.");
+                session.sendMessage(new TextMessage(new ObjectMapper().writeValueAsString(message)));
             }
         }catch(IOException e){
             log.debug("exception : {} ", e);

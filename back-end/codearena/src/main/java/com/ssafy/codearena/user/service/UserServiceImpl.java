@@ -5,6 +5,7 @@ import com.ssafy.codearena.problem.dto.SolveAndUnsolveDto;
 import com.ssafy.codearena.problem.service.ProblemService;
 import com.ssafy.codearena.user.dto.*;
 import com.ssafy.codearena.user.mapper.UserMapper;
+import com.ssafy.codearena.util.EncryptUtil;
 import com.ssafy.codearena.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper mapper;
     private final JavaMailSender javaMailSender;
     private final JwtUtil jwtUtil;
+    private final EncryptUtil encryptUtil;
     private final String HEADER_AUTH = "Authorization";
 
     @Value("${defaultImg}")
@@ -60,7 +62,16 @@ public class UserServiceImpl implements UserService{
             String lowerEmail = userJoinDto.getUserEmail().toLowerCase();
             userJoinDto.setUserEmail(lowerEmail);
             userJoinDto.setUserThumbnail(defaultImg);
+
+            // 비밀번호 암호화
+            String encryptedPassword = encryptUtil.Encrypt(userJoinDto.getUserPassword());
+
+            userJoinDto.setUserPassword(encryptedPassword);
+
+            log.info("[encrypt] : {}", encryptedPassword);
+
             mapper.join(userJoinDto);
+
         } catch (Exception e) {
             userResultDto.setStatus("500");
             userResultDto.setMsg("회원가입 실패");
@@ -84,10 +95,12 @@ public class UserServiceImpl implements UserService{
             String lowerEmail = userLoginDto.getUserEmail().toLowerCase();
             userLoginDto.setUserEmail(lowerEmail);
             TokenDataDto tokenDataDto = mapper.login(userLoginDto);
+
             log.info("[UserLogin] : {}" , tokenDataDto);
 
             // 로그인 성공 시
-            if (tokenDataDto != null) {
+            // encrypt 에서 비밀번호 맞춰보고 성공시
+            if (encryptUtil.isMatch(userLoginDto.getUserPassword(), tokenDataDto.getUserPassword())) {
 
                 String accessToken = jwtUtil.createAccessToken(tokenDataDto);
                 String refreshToken = jwtUtil.createRefreshToken(tokenDataDto);
