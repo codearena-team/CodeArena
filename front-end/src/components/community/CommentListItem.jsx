@@ -1,4 +1,4 @@
-import CodeMirror from '@uiw/react-codemirror';
+import Editor from '@monaco-editor/react';
 import { useSelector } from 'react-redux'
 import axios from 'axios';
 import '../../pages/css/problemdetail.css';
@@ -70,14 +70,16 @@ export default function CommentListItem(props) {
         <div className='w-1/12'></div>
       </div>
       {code && (
-      <div className='flex mb-10'>
-        <div className='w-1/12'></div>
-        <CodeMirror className='w-full' height="200px" id="in0putEx"
-        value={userId === commentId? code : props.commentItem.code}
-        onChange = {onChangeCode}
-        editable={userId === commentId}
-        />
-        <div className='w-1/12'></div>
+      <div className='grid grid-cols-12 mb-10'>
+        <div className='col-span-1'></div>
+        <div className='col-span-10'>
+          <Editor height="200px" id="in0putEx"
+          value={userId === commentId? code : props.commentItem.code}
+          onChange = {onChangeCode}
+          options={{'scrollBeyondLastLine':false, 'readOnly':userId !== commentId,'minimap':{enabled:false}}}
+          />
+        </div>
+        <div className='col-span-1'></div>
       </div>
       )}
       { userId === commentId && (

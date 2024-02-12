@@ -1,9 +1,5 @@
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom"
 import { useSelector } from "react-redux";
-import CodeMirror from '@uiw/react-codemirror';
-import { java } from '@codemirror/lang-java';
-import { python } from '@codemirror/lang-python';
-import { cpp } from '@codemirror/lang-cpp';
 import { useState, useCallback, useEffect } from "react";
 import { useAuthCheck } from "../../../../features/useAuthCheck";
 import DetailWindow from "../../../../components/problem/DetailWindow";
@@ -23,7 +19,7 @@ export default function ProblemDetail() {
   const [isAuthor, setIsAuthor] = useState()
   const params = useParams();
   const problemId = params.problemId
-  const [code, setCode] = useState('public class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
+  const [code, setCode] = useState('import java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
   const [lang, setLang] = useState('java')
   const [problem, setProblem] = useState({})
   const [window, setWindow] = useState(true)
@@ -62,9 +58,9 @@ export default function ProblemDetail() {
   const onChangeLang = (e) => {
     setLang(e.target.value)
     if (e.target.value==='java') {
-      setCode('public class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
+      setCode('import java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}')
     } else if (e.target.value==='cpp') {
-      setCode('#include <iostream>\n\nint main() {\n    // 여기에 코드를 작성해주세요.\n    return 0;\n}')
+      setCode('#include <iostream>\nusing namespace std;\n\nint main() {\n    // 여기에 코드를 작성해주세요.\n    return 0;\n}')
     } else (
       setCode('')
     )
@@ -135,7 +131,9 @@ export default function ProblemDetail() {
           
         </div>
         
-        <Editor options={{'scrollBeyondLastLine': false}} value={code} height="77vh" language={lang} onChange={onChangeCode} />
+        <Editor options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false},}}
+        value={code} height="77vh" language={lang} onChange={onChangeCode} 
+        />
         <div className="flex justify-end">
           <button onClick={()=>document.getElementById('TagModal').showModal()} className="mt-2 btn bg-rose-200 rounded-xl">제 출</button>
           <TagModal 

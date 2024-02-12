@@ -1,5 +1,4 @@
-
-import CodeMirror from '@uiw/react-codemirror';
+import Editor from '@monaco-editor/react';
 
 export default function DetailWindow (props) {
   const problem = props.problem
@@ -53,14 +52,20 @@ export default function DetailWindow (props) {
             <p className="text-xl">입력예제 </p>
             <button className="btn btn-xs bg-rose-200 ms-2" onClick={inpustClipboard}>복사</button>
           </div>
-          <CodeMirror height="100%" value={problem?.problemExInput} editable={false} />
+          <Editor 
+          height={`${problem?.problemExInput?.split('\n').length * 19}px`} 
+          value={problem?.problemExInput} 
+          options={{'scrollBeyondLastLine':false, 'readOnly': true, 'minimap':{enabled:false},}}/>
         </div>
         <div>
           <div className="flex">
             <p className="text-xl">출력예제</p>
             <button className="btn btn-xs bg-rose-200 ms-2" onClick={outpustClipboard}>복사</button>
           </div>
-          <CodeMirror height="100%" value={problem?.problemExOutput} editable={false} />
+          <Editor 
+          height={`${problem?.problemExOutput?.split('\n').length * 19}px`} 
+          value={problem?.problemExOutput}  
+          options={{'scrollBeyondLastLine':false, 'readOnly': true, 'minimap':{enabled:false},}}/>
         </div>
       </div>
     </div>

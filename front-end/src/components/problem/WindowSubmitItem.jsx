@@ -1,9 +1,7 @@
 import { useSelector } from "react-redux";
 import TestCaseModal from "./TestcaseModal";
-import CodeMirror from '@uiw/react-codemirror';
-import { java } from '@codemirror/lang-java';
-import { python } from '@codemirror/lang-python';
-import { cpp } from '@codemirror/lang-cpp';
+import Editor from "@monaco-editor/react";
+import { useState } from "react";
 
 export default function WindowSubmitItem(props) {
   const userNickname = useSelector(state => state.auth.userNickname)
@@ -12,6 +10,16 @@ export default function WindowSubmitItem(props) {
     code = ""
   } else {
     code = props.submitItem.code
+  }
+  const [isvisibleCode, setIsvisibleCode] = useState(false)
+  const [isvisibleTestcase, setIsvisibleTestcase] = useState(false)
+  const onclick = ()=> {
+    document.getElementById(`codeModal${props.submitItem.submitNo}`).showModal()
+    setIsvisibleCode(true)
+  }
+  const onClickTestcase = () => {
+    document.getElementById(`testCaseModal${props.submitItem.submitNo}`).showModal()
+    setIsvisibleTestcase(true)
   }
   return(
     
@@ -23,12 +31,21 @@ export default function WindowSubmitItem(props) {
         {props.submitItem.testCase ? 
         <div>
           <button className={`btn btn-xs btn-neutral rounded-full font-light ${userNickname===props.submitItem.userNickname ? '' : 'hidden'}`}
-          onClick={()=>document.getElementById(`testCaseModal${props.submitItem.submitNo}`).showModal()}
+          onClick={onClickTestcase}
           >
           테케보기</button>
-          <TestCaseModal 
-          testcase={[props.submitItem.testCase]}
-          submitNo={props.submitItem.submitNo}/>
+          <div style={{textAlign:'left'}}>
+            
+            <dialog id={`testCaseModal${props.submitItem.submitNo || ''}`} className="modal">
+              { isvisibleTestcase ?
+              <TestCaseModal 
+              testcase={[props.submitItem.testCase]}
+              submitNo={props.submitItem.submitNo}/>
+              :
+              null
+              }
+            </dialog>
+          </div>
         </div> : <div></div>}
       </th>
       
@@ -37,10 +54,11 @@ export default function WindowSubmitItem(props) {
       <th className="p-1 font-light">{props.submitItem.submitLang}</th>
       <th className={`p-1 font-light ${props.isSolve ? '' : 'hidden'}`}>
         <button className={`btn btn-xs btn-neutral rounded-full `}
-          onClick={()=>document.getElementById(`codeModal${props.submitItem.submitNo}`).showModal()}>
+          onClick={onclick}>
           코드보기
         </button>
         <dialog id={`codeModal${props.submitItem.submitNo}`} className="modal">
+          { isvisibleCode ?
           <div className="modal-box p-0 scrollBar" style={{minWidth:"600px"}}>
             <div className='z-50 sticky p-2' style={{backgroundColor:"#F4ECE4", top:"0px"}}>
               <form method="dialog" className='flex justify-between' >
@@ -55,9 +73,16 @@ export default function WindowSubmitItem(props) {
               </form>
             </div>
             <div style={{textAlign:'left'}}>
-            <CodeMirror value={props.submitItem.code || ''}  extensions={[java(),python(),cpp()]}
-            editable={false}/>
-            </div>          </div>
+            <Editor 
+            value={props.submitItem.code || ''}  language={props.submitItem.submitLang}
+            options={{'scrollBeyondLastLine':false, 'readOnly': true,'minimap':{enabled:false},}}
+            height={`${props?.submitItem?.code?.split('\n').length * 19}px`} 
+            />
+            </div>
+          </div>
+          :
+          null
+          }
         </dialog>
       </th>
       <th className="p-1 font-light">

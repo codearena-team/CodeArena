@@ -1,7 +1,7 @@
-import CodeMirror from '@uiw/react-codemirror';
 import {useState, useCallback, useEffect} from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { UseSelector, useSelector } from 'react-redux';
+import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import TestCaseModal from '../../../../components/problem/TestcaseModal';
 
@@ -192,20 +192,30 @@ export default function ProblemEdit() {
           <textarea value={outputDescription} class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
-          <div className='flex justify-end'>
-            <label className="font-bold me-1"htmlFor="inputEx">입력 예제</label>
-            <CodeMirror value={inputExam} onChange={onChangeInputExam} className='w-10/12' height="100%" id="inputEx"/>
+        <div className="grid grid-cols-12 mb-4">
+            <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">입력 예제</label>
+            <div className='col-span-10'>
+              <Editor onChange={onChangeInputExam}id="inputEx" value={inputExam}
+                options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
+                height={`${inputExam.split('\n').length * 19}px`} 
+              />
+            </div>
           </div>
-          <div className='flex justify-end'>
-            <label className="font-bold me-1"htmlFor="inputEx">출력 예제</label>
-            <CodeMirror value={outputExam} onChange={onChangeOutputExam} className='w-10/12' height="100%" id="inputEx"/>
+          <div className='grid grid-cols-12 mb-4'>
+            <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">출력 예제</label>
+            <div className='col-span-10' >
+              <Editor onChange={onChangeOutputExam} id="inputEx" value={outputExam}
+                options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
+                height={`${outputExam.split('\n').length * 19}px`} 
+              />
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
           
           <div className='grid grid-cols-2 gap-5'>
             <div className='flex justify-end'>
-              <label className="font-bold me-1"htmlFor="rating">검증코드언어</label>
+              <label className="font-bold me-1"htmlFor="rating">언어</label>
               <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-8/12" >
                 <option>java</option>
                 <option>python</option>
@@ -262,19 +272,28 @@ export default function ProblemEdit() {
             </div>
           </div>
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="inputEx">
+        <div className='grid grid-cols-12 mb-4'>
+          <label className="font-bold me-1 col-span-1 text-end"htmlFor="inputEx">
             검증용 코드
             <div>
             <button className='btn btn-sm btn-neutral' onClick={onClickComfile}>컴파일</button>
             </div>
-          </label>          <CodeMirror value={testCode} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
+          </label>
+          <div className='col-span-11'>
+            <Editor value={testCode} onChange={onChangeTestCode} language={lang} height="400px" id="inputEx"
+            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false},}}
+            
+            />
+          </div>    
         </div>
         <div className='flex justify-center mb-4'>
           <div className="btn w-60 btn-sm text-lg text-center rounded-full drop-shadow" onClick={()=>document.getElementById('testCaseModal').showModal()}>테스트케이스 보기</div>
+          
+          <dialog id='testCaseModal' className="modal">
           <TestCaseModal 
           testcase={testcase}
           />
+          </dialog>
         </div>
         <div className='flex justify-between'>
           <div className=' w-40'></div>
