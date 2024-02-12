@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useState,useEffect,useCallback } from "react"
 import axios from "axios"
 import "../../css/problemdetail.css"
-import CodeMirror from '@uiw/react-codemirror';
+import Editor from "@monaco-editor/react"
 import { useSelector } from 'react-redux'
 import CommentListItem from '../../../components/community/CommentListItem'
 
@@ -171,8 +171,10 @@ export default function CommunityDetail(){
                   </textarea>
                 </div>
                 <div className='flex justify-end mb-4'>
-                  <CodeMirror className='w-full' height="200px" id="inputEx"
-                  onChange={onChangeCode}/>
+                  <div className='w-full'>
+                    <Editor height="200px" id="inputEx"
+                    onChange={onChangeCode}/>
+                  </div>
                 </div>
                 <div className="flex justify-between">   
                   <div className="modal-action ">
@@ -193,10 +195,14 @@ export default function CommunityDetail(){
           <div className="w-1/12"></div>
         </div>
         { showCodeMirror && (
-          <div className='flex mb-4'>
-            <div className="w-1/12"></div>
-            <CodeMirror className='w-11/12 ' height="400px" id="inputEx" value={board.code} readOnly/>
-            <div className="w-1/12"></div>
+          <div className='grid grid-cols-12 mb-4'>
+            <div className="col-span-1"></div>
+            <div className='col-span-10 '>
+              <Editor height="400px" id="inputEx" value={board.code}
+              options={{'scrollBeyondLastLine':false, 'readOnly': true,'minimap':{enabled:false}}}
+              />
+            </div>
+            <div className="col-span-1"></div>
           </div>
         )}
         { articleId === userId &&(

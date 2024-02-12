@@ -51,7 +51,7 @@ export default function SubmitWindow(props) {
     }
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=15&pgno=${pgno}&orderBy=${orderBy}`,
+      url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=10&pgno=${pgno}&orderBy=${orderBy}`,
       headers : {
         Authorization : accessToken
       }
@@ -100,7 +100,9 @@ export default function SubmitWindow(props) {
     return result;
   };
 
-  const colors = ['#0074CC', '#FF4136', '#000000','#FFFF00'];
+  
+const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
+'BC8F8F','#8FBC8F','#20B2AA','#A9A9A9','#EEE8AA'];
   const formatPercent = (value) => `${(value * 100).toFixed(0)}%`;
 
 

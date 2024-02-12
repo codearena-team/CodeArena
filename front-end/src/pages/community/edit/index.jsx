@@ -1,4 +1,4 @@
-import CodeMirror from '@uiw/react-codemirror';
+import { Editor } from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
 // import { useCallback } from 'react';
 import { useEffect,useState,useCallback} from 'react';
@@ -120,10 +120,14 @@ export default function CommunityEdit(){
           <label className="font-bold me-1"htmlFor="content">내용</label>
           <textarea className="textarea textarea-bordered w-11/12 resize-none" id="content" rows="10" value={content} onChange={(e)=>{setContent(e.target.value)}}></textarea>
         </div>    
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="inputEx">코드</label>
-          <CodeMirror className='w-11/12' height="400px" id="inputEx"
-          value={code} onChange={onChangeTestCode}/>
+        <div className='grid grid-cols-12 mb-4'>
+          <label className="font-bold me-1 col-span-1 text-end"htmlFor="inputEx">코드</label>
+          <div className=' col-span-11'>
+            <Editor height="400px" id="inputEx" language={lang}
+            value={code} onChange={onChangeTestCode}
+            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
+            />
+          </div>
         </div>
  
         <div className='flex justify-end mb-4'>

@@ -1,4 +1,4 @@
-import CodeMirror from '@uiw/react-codemirror';
+import Editor from "@monaco-editor/react";
 import { useState,useCallback } from "react";
 import axios from 'axios';
 import '../../css/community.css';
@@ -121,10 +121,14 @@ export default function CommunityCreate() {
           <div className='w-1/12'></div>
         </div>
         { showCodeMirror && (
-          <div className='flex justify-end mb-4'>
-            <label className="me-1"htmlFor="inputEx">검증용 코드</label>
-            <CodeMirror onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
-            <div className='w-1/12'></div>
+          <div className='grid grid-cols-12 mb-4'>
+            <label className="col-span-1 me-1"htmlFor="inputEx">검증용 코드</label>
+            <div className='col-span-10'>
+              <Editor onChange={onChangeTestCode} height="400px" id="inputEx" language={lang}
+              options={{'scrollBeyondLastLine':false,'minimap':{enabled:false}}}
+              />
+            </div>
+            <div className='col-span-1'></div>
           </div>
         )}
         <div className='flex justify-end mb-4'>

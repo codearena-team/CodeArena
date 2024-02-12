@@ -1,5 +1,4 @@
 import { useState } from "react"
-import CodeMirror from '@uiw/react-codemirror';
 
 export default function AlarmModal({alarmId}) {
   const [content, setContent] = useState()
