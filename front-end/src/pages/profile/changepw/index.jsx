@@ -4,6 +4,7 @@ import { useState } from 'react'
 import axios from 'axios';
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import swal from 'sweetalert';
 
 export default function ChangePassword(){
   const [password,setPassword] = useState('');
@@ -11,9 +12,25 @@ export default function ChangePassword(){
   const email = useSelector(state => state.auth.userEmail)
   const navigate = useNavigate()
 
-  // 변경할비밀번호와 비밀번호확인이 일치하는지확인하고
+  // 8~20자 영문자 조합 비밀번호 유효성검사(최소한개의 숫자와 최소한개의 영문자포함)
+  const checkPassword = () =>{ 
+    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/
+    return regExp.test(password)
+  }
+
+
+  // 변경할비밀번호 유효성검사하고 , 변경할비밀번호와 비밀번호확인이 일치하는지확인하고
   const handleChange = ()=>{
-    if (password === passwordconfirm) {
+    if (!checkPassword()){
+      swal("비밀번호가 형식에 맞지 않습니다","8~20자 영문자,숫자 각1개 포함필수","warning");
+      return
+    }
+    if (password !== passwordconfirm) {
+      swal("","비밀번호와 비밀번호확인이 일치하지 않습니다","warning")
+      return
+    }
+
+    if (checkPassword() && password === passwordconfirm) {
       axios({
         url : 'https://i10d211.p.ssafy.io/api/user/password',
         method : 'put',
@@ -24,15 +41,13 @@ export default function ChangePassword(){
       })
       .then((res)=>{
         console.log(res)
-        alert('비밀번호가 변경되었습니다')
+        swal("비밀번호가 변경되었습니다","","success")
         navigate('/')
       })
       .catch((err)=>{
         console.log(err)
-        alert('비밀번호가 변경실패')
+        swal("비밀번호가 변경실패","","error")
       })
-    }else{
-      alert('비밀번호가 일치하지 않습니다')
     }
   }
   

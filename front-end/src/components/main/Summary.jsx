@@ -5,6 +5,7 @@ import Rank from '../../images/main/Summary/Rank.png';
 import Hand from '../../images/main/Summary/hand.png';
 import Plus from '../../images/main/Summary/Plus.png';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // 스크롤 애니메이트 이벤트 1
 const frameInAnimation_text = keyframes`
@@ -51,15 +52,19 @@ const AnimateContainer_add = styled.div`
 `;
 
 export default function Summary() {
+  const navigate = useNavigate()
   const [animate_text, setAnimate_text] = useState(false);
   // const [animate_rank, setAnimate_rank] = useState(false);
   const [animate_que, setAnimate_que] = useState(false);
   const [animate_add, setAnimate_add] = useState(false);
+  const [problemNum,setProblemNum] = useState('')
 
   useEffect(() => {
     axios.get('https://i10d211.p.ssafy.io/api/problem?orderBy=date&cate=&word=&pgno=1&spp=6&tag=')
     .then((res)=> {
       console.log(res);
+      console.log(res.data.data.problemWithSearch)
+
       setaddProblemSolve(res.data.data.problemWithSearch)
     }).catch((err)=> {
       console.log(err);
@@ -97,6 +102,8 @@ export default function Summary() {
       className={`bg-gray-100 p-4 mb-4 rounded-md shadow-lg mr-5 w-64
         ${animate_que ? 'ease-out' : ''
       }`}
+      onClick={()=>{navigate(`/community/${question.articleNo}/detail`)
+      window.scrollTo({top:0,behavior:'smooth'})}}
       >
       <p className="text-lg font-semibold mb-2">{question.title}</p>
       <p className="text-gray-500 truncate ">{question.content}</p>
@@ -109,6 +116,7 @@ export default function Summary() {
       className={`bg-gray-100 p-4 mb-4 rounded-md shadow-lg mr-5 w-52
         ${animate_add ? 'ease-out' : ''
       }`}
+      onClick={()=>{navigate(`/problem/${problem.problemId}/detail`)}}
     >
         <p className="text-lg font-semibold mb-2">#{problem.problemId}</p>
       <p className="text-gray-500">{problem.problemTitle}</p>

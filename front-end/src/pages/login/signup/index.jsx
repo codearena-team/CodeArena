@@ -20,15 +20,15 @@ export default function Signup(){
     return regExp.test(email)
   }
 
-  // 8~10자 영문자 조합 비밀번호 유효성검사
-  // const checkPassword = () =>{ 
-  //   const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/
-  //   return regExp.test(password)
-  // }
+  // 8~20자 영문자 조합 비밀번호 유효성검사(최소한개의 숫자와 최소한개의 영문자포함)
+  const checkPassword = () =>{ 
+    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/
+    return regExp.test(password)
+  }
 
   // 닉네임 유효성검사
   const checkNickname = () =>{
-    return nickname.length > 0 && nickname.length <= 10
+    return nickname.length >= 2 && nickname.length <= 10
   }
 
   // 소개글 유효성검사
@@ -39,18 +39,26 @@ export default function Signup(){
   
   const handleSignup = ()=>{
     if (!checkEmail()) {
-      alert('이메일이 형식에 맞지 않습니다')
+      swal("이메일이 형식에 맞지 않습니다","","warning")
+      return
     }
     if (!checkNickname()) {
-      alert('닉네임이 형식에 맞지 않습니다')
+      swal("닉네임이 형식에 맞지 않습니다","2자이상 10자이내","warning")
+      return
+    }
+    if (!checkPassword()) {
+      swal("비밀번호가 형식에 맞지 않습니다","8~20자 영문자,숫자 각1개 포함필수","warning")
+      return
     }
     if (!checkIntroduce()) {
-      alert('소개글이 형식에 맞지 않습니다')
+      swal("소개글이 형식에 맞지 않습니다","","warning")
+      return
     }
     if (password !== passwordconfirm) {
-      alert('비밀번호와 비밀번호 확인이 일치하지 않습니다');
+      swal("비밀번호와 비밀번호확인이 일치하지 않습니다","","warning")
+      return
     }
-    if(checkEmail() && checkNickname() && checkIntroduce() && password === passwordconfirm) {
+    if(checkEmail() && checkPassword() && checkNickname() && checkIntroduce() && password === passwordconfirm) {
       axios({
         url:'https://i10d211.p.ssafy.io/api/user/join',
         method:'post',

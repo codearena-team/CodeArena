@@ -4,6 +4,8 @@ import axios from 'axios';
 import '../../css/community.css';
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
+import Editor from '@monaco-editor/react'
+import swal from 'sweetalert'
 
 export default function CommunityCreate() {
   const userId = useSelector(state => state.auth.userId)
@@ -47,6 +49,16 @@ export default function CommunityCreate() {
 
   // 게시글 작성
   const createArticle = ()=>{
+    const parsedProblemId = parseInt(problemId);
+    if (isNaN(parsedProblemId)) {
+        swal("문제번호는 숫자로 입력되어야 합니다", "", "warning");
+        return;
+    }
+    
+    if (!title || !content || !problemId) {
+      swal("제목,문제번호,내용은 필수입니다", "", "warning")
+      return;
+    }
     axios({
       url : 'https://i10d211.p.ssafy.io/api/board/write',
       method : 'post',

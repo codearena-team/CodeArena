@@ -46,6 +46,7 @@ export default function MyPage() {
   const [loginFollowinglist,setLoginFollowingList] = useState([])
   const [loginFollowerlist,setLoginFollwerList] = useState([])
   const [graphData, setGraphData] = useState([])
+  const [selectedFile, setSelectedFile] = useState(null);
 
 
   // 프로필화면시 그프로필 회원정보요청하는 axios
@@ -131,6 +132,24 @@ export default function MyPage() {
 const goEdit = () =>{
   navigate('/profile/edit')
 }
+
+
+// 유저의 프로필사진 불러오기
+useEffect(()=>{
+  axios({
+    url : `https://i10d211.p.ssafy.io/api/profile/${loginId}`,
+    method :'get'
+  })
+  .then((res)=>{
+    console.log(res)
+    setSelectedFile(res.data.data.profileUrl)
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
+},[])
+
+
 
 const goFollow = () =>{
   axios({
@@ -258,7 +277,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
               <li key={index}>
                 <input type="text" className="input input-bordered w-xl h-8 max-w-xs" 
                 style={{outline:'none',cursor: 'text',color: item.isFollow === '1' ? 'blue' : 'black' }}
-                value={item.userNickname + (item.isFollow === '1' ? '        팔로우중' : '')}
+                value={item.userNickname + (item.isFollow === '1' ? '  팔로우중' : '')}
                 onClick={inputClick}
                 />
               </li>
@@ -274,7 +293,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
       <div className="grid grid-cols-12 p-20 pb-0 pt-0">
         <div className="col-span-2 gap-4 mt-5">
           <div className='grid grid-cols-1 gap-4'>
-            <div className='flex justify-center mt-5'><img style={{width:130}} src={Profile} alt="" /></div>
+            <div className='flex justify-center mt-5'><img style={{width:130}} src={selectedFile} alt="" /></div>
             <h1 className='text-3xl text-center'>{profileUser}</h1>
             <h1 className='text-md text-center'>{profileIntro}</h1>
             {profileId !== loginId && (
@@ -310,6 +329,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <h3 className="font-bold text-lg">팔로잉 목록</h3>
                   </form>
+                
                   { followingList.length === 0  && (
                     <h1>팔로잉목록이 없습니다</h1>
                   )}
@@ -318,10 +338,12 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     {followingList.map((user)=>{
                       return <li key={user.userId}
                       className="text-md mb-2" 
-                      style={{textDecoration: 'underline'}}>{user.userNickname}</li>
+                      style={{textDecoration: 'underline'}}>
+                      {user.userNickname}</li>
                     })}
                   </ul>
                   )}
+           
                 </div>
               </dialog>
 
@@ -343,8 +365,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     {followerList.map((user)=>{
                       return <li key={user.userId}
                       className="text-md mb-2" 
-                      style={{textDecoration: 'underline'}}>{user.userNickname}</li>
-                      
+                      style={{textDecoration: 'underline'}}>
+                      {user.userNickname}</li>
                     })}
                   </ul>
                   )}
@@ -394,7 +416,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
         </div>
         <div className="col-span-4 ml-10">
           <div className='pinkbox drop-shadow mb-5'>
-            <ResponsiveContainer height={300} style={{fontSize:'13px'}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
+            <ResponsiveContainer height={300} style={{fontSize:'11px'}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
               {/* PieChart : 원형 차트 모양으로 변환 */}
               <PieChart>
                 {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}

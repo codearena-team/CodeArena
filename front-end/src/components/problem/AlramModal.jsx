@@ -1,8 +1,53 @@
 import { useState } from "react"
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import swal from "sweetalert";
 
 export default function AlarmModal({alarmId}) {
   const [content, setContent] = useState()
-  const [code, setCode] = useState()
+  const fromId = useSelector(state=>state.auth.userId)
+  const params = useParams();
+  const problemId = params.problemId
+  const [toId,setToId] = useState('')
+
+  useEffect(()=>{
+    axios({
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      method : 'get',
+    })
+    .then((res)=>{
+      console.log(res.data.data.userId)
+      setToId(res.data.data.userId)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  })
+  
+  // 문제수정요청보내기
+  const sendProblemEdit = ()=>{
+    axios({
+      url : `https://i10d211.p.ssafy.io/api/alarm/send`,
+      method : 'post',
+      data :{
+        alarmType : '2',
+        toId  : toId,
+        fromId : fromId,
+        alarmMsg : content,
+      }
+    })
+    .then((res)=>{
+      console.log(res)
+      swal("문제수정요청되었습니다","","success")
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+  }
+
   return (
     <dialog id={alarmId} className="modal">
       <div className="modal-box" style={{backgroundColor:'#F7F6E4'}}>
@@ -16,7 +61,10 @@ export default function AlarmModal({alarmId}) {
           <textarea value={content} class="textarea textarea-bordered w-11/12 resize-none" onChange={e=>setContent(e.target.value)} id="input" placeholder="입력 설명을 입력하세요" rows="5"></textarea>
         </div>
         <div className="flex justify-end">
-         <button class="btn btn-neutral btn-sm rounded-full mt-2">요청 보내기</button>
+        <form method="dialog">
+          <button class="btn btn-neutral btn-sm rounded-full mt-2"
+          onClick={sendProblemEdit}>요청 보내기</button>
+        </form>
         </div>
       </div>
     </dialog>
