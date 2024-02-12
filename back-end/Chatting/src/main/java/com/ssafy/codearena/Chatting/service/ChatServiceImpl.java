@@ -311,6 +311,10 @@ public class ChatServiceImpl implements ChatService{
     public String terminateGame(String gameId, String winner) {
 
         CompetitiveManageDto competitiveManageDto = gameManage.get(gameId);
+        if(competitiveManageDto == null) {
+            log.info("이미 종료된 게임방입니다.");
+            return "종료";
+        }
         log.info(String.valueOf(competitiveManageDto));
         String player1 = competitiveManageDto.getPlayer1();
         String player2 = competitiveManageDto.getPlayer2();
