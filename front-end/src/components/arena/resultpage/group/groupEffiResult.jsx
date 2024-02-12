@@ -1,6 +1,6 @@
-import Tropy from '../../../images/arena/Result/tropy.png'
-import Victory from '../../../images/arena/Result/victory.png'
-import '../../css/resultpage.css'
+import Tropy from '../../../../images/arena/Result/tropy.png'
+import Victory from '../../../../images/arena/Result/victory.png'
+import '../../../css/resultpage.css'
 import { Link } from 'react-router-dom'
 import { useSearchParams } from "react-router-dom"
 

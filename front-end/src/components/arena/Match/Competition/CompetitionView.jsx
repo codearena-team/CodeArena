@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 // import * as StompJs from '@stomp/stompjs';
 import C_DividingLine from "./C_dividingLine";
 import CompTopInfo from "./CompTopInfo";
@@ -10,6 +10,13 @@ import Webrtc from "../../../../pages/test/Webrtc";
 
 export default function CompetitionView() {
   const params = useParams()
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const startTimeRef = useRef(location.state?.startTime || 0);
+  const timerRef = useRef(null);
+
   const [chatList, setChatList] = useState([]);
   const [chatMessage, setChatMessage] =useState('')
   const [inputMessage, setInputMessage] = useState('');
@@ -18,6 +25,10 @@ export default function CompetitionView() {
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
   useEffect(() => {
+    // 경기 시작 시간 확인
+    const startTime = location.state?.startTime;
+    console.log("경기 시작 시간 확인 :", startTime)
+
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
     const stompClient = Stomp.over(socket);
     console.log("경쟁전 useEffect stompClient :", stompClient)
@@ -31,12 +42,33 @@ export default function CompetitionView() {
         // 받은 메시지에 대한 처리
         console.log('채팅을 받았습니다 :', message);
         const msg = JSON.parse(message.body)
-        const tmp = [...chatList]  //배열 메모리 주소 변경을 해야 useState 감지가 됨.
-        const obj = {sender:msg.sender, message:msg.message}
-        tmp.push(obj)
-        setChatList(tmp)
-        setChatMessage(msg.message)
-        scrollToBottom();
+        console.log("여기 타입이요", msg.type)
+        if (msg.type && msg.type === "TALK") {
+          const tmp = [...chatList]  //배열 메모리 주소 변경을 해야 useState 감지가 됨.
+          const obj = {sender:msg.sender, message:msg.message}
+          tmp.push(obj)
+          setChatList(tmp)
+          setChatMessage(msg.message)
+          scrollToBottom();
+        }
+        else if (msg.type && msg.type === "CONTINUE") { 
+          alert(msg.result)
+        }
+        else if (msg.type && msg.type === "END") {
+          alert("게임이 종료되었습니다.")
+          navigate(
+            `/game-list/competition/compSpeedResult/${params.id}`,
+            { state: { gameId: params.id }
+          });
+        }
+        else if (msg.type && msg.type === "TERMINATED") {
+          alert("경기가 종료되었습니다.")
+          navigate(
+            `/game-list/competition/compSpeedResult/${params.id}`,
+            { state: { gameId: params.id }
+          });
+        }
+
       });
     }, error => {
       // 에러
@@ -48,7 +80,28 @@ export default function CompetitionView() {
 
     setStompClient(stompClient)
 
+    // startTime 시간 - 진행된 시간 계산
+    const calculateElapsedTime = () => {
+      const currentTime = new Date().getTime();
+
+      console.log("스타트타임 :", startTimeRef.current)
+      const startTimeMillis = new Date(startTimeRef.current).getTime();
+      const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
+
+      // 초를 시/분/초 형식으로 변환
+      // const hours = Math.floor(elapsed / 3600);
+      const minutes = Math.floor((elapsed % 3600) / 60);
+      const seconds = elapsed % 60;
+
+      const formattedTime = `${minutes}분 ${seconds}초`;
+      
+      setElapsedTime(formattedTime);
+    };
+
+    timerRef.current = setInterval(calculateElapsedTime, 1000);
+
     return () => {
+      clearInterval(timerRef.current)
       console.log("채팅 연결을 종료합니다.")
       stompClient.disconnect();
     }
@@ -151,6 +204,9 @@ export default function CompetitionView() {
             className="user-screens mt-5 rounded-xl shadow-lg flex items-center justify-center"
             style={{ width: '100%', height: '90%', backgroundColor: '#F5EBDB' }}
           >
+            <div className="flex justify-center items-center mt-5">
+              <p className="text-lg font-bold">{`경과 시간: ${elapsedTime}`}</p>
+            </div>
             {/* "유저1의 화면이 보이는 공간 vs 유저2의 화면이 보이는 공간" */}
             {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
 

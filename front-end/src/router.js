@@ -31,16 +31,17 @@ import CompetitionPlay from './components/arena/Match/Competition/CompetitionPla
 import GroupPlay from './components/arena/Match/Group/GroupPlay';
 import NotFound from './pages/notfound/index'
 import Test from './pages/test/test'
-import CompResult from './components/arena/Match/Competition/CompResult';
-import GroupResult from './components/arena/Match/Group/GroupResult';
-import SpeedResult from './components/arena/resultpage/speedresult';
-import SpeedDraw from './components/arena/resultpage/speeddraw';
-import EffiResult from './components/arena/resultpage/effiresult';
-import EffiDraw from './components/arena/resultpage/effidraw';
-import MiddleConfirm from './components/arena/resultpage/middleconfirm';
+import CompSpeedResult from './components/arena/resultpage/competition/compSpeedResult';
+import CompSpeedDraw from './components/arena/resultpage/competition/compSpeedDraw';
+import CompEffiResult from './components/arena/resultpage/competition/compEffiResult';
+import CompEffiDraw from './components/arena/resultpage/competition/compEffiDraw';
+import CompMiddleConfirm from './components/arena/resultpage/competition/compMiddleConfirm';
 
-
-
+import GroupSpeedResult from './components/arena/resultpage/group/groupSpeedResult';
+import GroupSpeedDraw from './components/arena/resultpage/group/groupSpeedDraw';
+import GroupEffiResult from './components/arena/resultpage/group/groupEffiResult';
+import GroupEffiDraw from './components/arena/resultpage/group/groupEffiDraw';
+import GroupMiddleConfirm from './components/arena/resultpage/group/groupMiddleConfirm';
 
 const ProtectedRoute = ({ user, children }) => {
   const [authCheck] = useAuthCheck()
@@ -99,8 +100,19 @@ export default function Router () {
       
       <Route path="/game-list/competition/play/:id" element={<CompetitionPlay />} /> {/* 경쟁전 플레이 페이지 */}
       <Route path="/game-list/group/play/:id" element={<GroupPlay />} /> {/* 단체전 플레이 페이지 */}
-      <Route path="/game-list/competition/result/:id" element={<CompResult />} /> {/* 경쟁전 결과 페이지 */}
-      <Route path="/game-list/group/result/:id" element={<GroupResult />} /> {/* 단체전 결과 페이지 */}
+      
+      <Route path="/game-list/competition/compSpeedResult/:id" element={<CompSpeedResult />} /> {/* 경쟁전 스피드 결과 페이지 */}
+      <Route path="/game-list/competition/compSpeedDraw/:id" element={<CompSpeedDraw />} /> {/* 경쟁전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/competition/compEffiResult/:id" element={<CompEffiResult />} /> {/* 경쟁전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/competition/compEffiDraw/:id" element={<CompEffiDraw />} /> {/* 경쟁전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/competition/compMiddleConfirm/:id" element={<CompMiddleConfirm/>} /> {/* 경쟁전 효율전 중간채점 페이지 */}
+      {/* <Route path="/game-list/group/result/:id" element={<GroupResult />} /> */}
+
+      <Route path="/game-list/group/groupSpeedResult/:id" element={<GroupSpeedResult />} /> {/* 단체전 스피드 결과 페이지 */}
+      <Route path="/game-list/group/groupSpeedDraw/:id" element={<GroupSpeedDraw />} /> {/* 단체전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/group/groupEffiResult/:id" element={<GroupEffiResult />} /> {/* 단체전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/group/groupEffiDraw/:id" element={<GroupEffiDraw />} /> {/* 단체전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/group/groupMiddleConfirm/:id" element={<GroupMiddleConfirm/>} /> {/* 단체전 효율전 중간채점 페이지 */}
 
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />
@@ -109,11 +121,11 @@ export default function Router () {
       
       
       {/* 라우터수정필요구간 (효율전결과,스피드전결과,중간결과확인페이지) */}
-      <Route path="/speedresult" element={<SpeedResult/>} />
+      {/* <Route path="/speedresult" element={<SpeedResult/>} />
       <Route path="/speeddraw" element={<SpeedDraw/>} />
       <Route path="/effiresult" element={<EffiResult/>} />
       <Route path="/effidraw" element={<EffiDraw/>} />
-      <Route path="/middleconfirm" element={<MiddleConfirm/>} />
+      <Route path="/middleconfirm" element={<MiddleConfirm/>} /> */}
 
 
 

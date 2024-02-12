@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useState, useCallback, useEffect, useRef } from "react";
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -7,10 +7,12 @@ import "../../../css/CompetitionPlay.css";
 import C_playDividingLine from "./C_playDividingLine";
 import { useSelector } from "react-redux";
 import Editor from '@monaco-editor/react'
+import swal from "sweetalert";
 
 export default function CompPlayProblem({  }) {
-  const sender = useRef(useSelector(state => state.auth.userNickname));
   const Location = useLocation();
+  const navigate = useNavigate();
+  const sender = useRef(useSelector(state => state.auth.userNickname));
   // console.log("problemId 넘어왔니? :", problemId)
   // const params = useParams();
   // const problemId = params.problemId
@@ -49,7 +51,7 @@ export default function CompPlayProblem({  }) {
   useEffect(()=> {
     console.log(Location.state);
     const { problemId, gameMode, lang, userId, gameId } = Location.state;
-    console.log("여기서 진짜 넘어와야함 :", problemId)
+    console.log("문제 번호 확인 :", problemId)
     // setGameMode
     setGameMode(gameMode.current);
     setProblemId(problemId.current);
@@ -90,13 +92,24 @@ export default function CompPlayProblem({  }) {
         console.log(message);
         const data = JSON.parse(message.body);
         console.log(data);
-        if(data.type === 'CONTINUE'){
-          if(data.winner !== sender.current){
-            alert(data.result);
-          }
-        }else if(data.type === 'END'){
-          // 결과페이지로 넘어가는 로직
+        if(data.type === 'CONTINUE'){   
           alert(data.result);
+        } else if(data.type === 'END'){
+          alert(data.result);
+          // 결과페이지로 넘어가는 로직
+          // 같이 넘겨야하는게 gameId
+          if (!data.winner) {
+            navigate(
+              `/game-list/competition/compSpeedDraw/${gameId.current}`,
+              { state: { gameId: gameId.current }
+            });
+          }
+          else {
+            navigate(
+              `/game-list/competition/compSpeedResult/${gameId.current}`,
+              { state: { gameId: gameId.current }
+            });
+          }
         }
         
       });
@@ -132,6 +145,7 @@ export default function CompPlayProblem({  }) {
   const onClickHandler = (e) => {
     let url =  '';
     if(gameMode === 'speed'){
+      console.log("제출해버렷!")
       url = `https://i10d211.p.ssafy.io/${lang}/judge/arena`
       fetch(url, {
         method : "POST",
@@ -145,22 +159,21 @@ export default function CompPlayProblem({  }) {
         })
       }).then(res => res.json())
       .then(json => {
-        if(json.data.solve){
-          let msg = json.data.msg;
-          msg = msg.replace(".", "");
-          console.log("보내는 데이터 : ", {
-            gameId: gameId,
-            sender: sender.current,
-            result : msg,
-            mode: 'SPEED',
-          })
-          stompClient.send(`/pub/chat/submit`, {}, JSON.stringify({
-            gameId: gameId,
-            sender: sender.current,
-            result : msg,
-            mode: 'SPEED',
-          }))
-        }
+        console.log("여기 보여야 됨 :", json.data)
+        let msg = json.data.msg;
+        msg = msg.replace(".", "");
+        console.log("보내는 데이터 : ", {
+          gameId: gameId,
+          sender: sender.current,
+          result : msg,
+          mode: 'SPEED',
+        })
+        stompClient.send(`/pub/chat/submit`, {}, JSON.stringify({
+          gameId: gameId,
+          sender: sender.current,
+          result : msg,
+          mode: 'SPEED',
+        }))        
       })
     }else{
       url = `https://i10d211.p.ssafy.io/game/rest/submit`
@@ -264,7 +277,7 @@ export default function CompPlayProblem({  }) {
         
         <Editor options={{'scrollBeyondLastLine': false, 'minimap':{enabled:false}}} value={code} height="75vh" language={lang} onChange={onChangeCode} />
         <div className="flex justify-end">
-          <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full">제 출</button>
+          <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full z-10">제 출</button>
         </div>
       </div>
     </div>

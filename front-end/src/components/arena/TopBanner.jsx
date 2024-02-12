@@ -103,13 +103,16 @@ export default function TopBanner() {
       if (object.type && object.type === 'INGAME') {
         // problemId를 props로 내려주기 -> navigate 활용
         navigate(
-          {pathname: `/game-list/competition/play/${object.matchId}`},
+          {pathname: `/game-list/competition/play/${object.gameId}`},
           {state: {
             problemId : problemId,
             gameMode : gameMode,
             lang : lang,
             gameId : gameId,
             userId : userId,
+            userNickname: userNickname,
+            enemyId : enemyId,
+            enemyNickname : enemyNickname,
           }},
         )
       }
@@ -140,6 +143,7 @@ export default function TopBanner() {
   // 1. 언어 3가지 중 하나 선택하기
   const handleLanguageSelection = (lang) => {
     setSelectedLanguage(lang);
+    console.log("lang :", lang)
   };
 
 
@@ -387,6 +391,8 @@ export default function TopBanner() {
       viduSession: viduSession.current,
       type: 'YES',
     };
+
+    console.log("수락 :", send_obj)
 
     socket.current.send (
       JSON.stringify (send_obj)
