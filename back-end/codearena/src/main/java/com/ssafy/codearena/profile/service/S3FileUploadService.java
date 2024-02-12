@@ -6,4 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface S3FileUploadService {
     S3ResultDto upload(MultipartFile file, String userId);
     S3ResultDto defaultImg(String userId);
+    S3ResultDto getProfile(String userId);
 }

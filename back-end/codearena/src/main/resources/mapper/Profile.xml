@@ -4,10 +4,20 @@
 
 <mapper namespace="com.ssafy.codearena.profile.mapper.ProfileMapper">
 
+    <resultMap id="profileDto" type="profileDto">
+        <result column="user_thumbnail" property="profileUrl"/>
+    </resultMap>
+
     <update id="putProfile" parameterType="string">
         update user
         set user_thumbnail=#{url}
         where user_id=${userId};
     </update>
+
+    <select id="getProfile" parameterType="string" resultMap="profileDto">
+        select user_thumbnail
+        from user
+        where user_id=${userId};
+    </select>
 
 </mapper>

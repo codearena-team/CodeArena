@@ -18,6 +18,11 @@ public class ProfileController {
 
     private final S3FileUploadServiceImpl s3Servie;
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<S3ResultDto> getProfile(@PathVariable String userId) {
+        return new ResponseEntity(s3Servie.getProfile(userId), HttpStatus.OK);
+    }
+
     @PutMapping("/upload/{userId}")
     public ResponseEntity<S3ResultDto> upload(HttpServletRequest request, @PathVariable String userId, @RequestBody MultipartFile file) {
         return new ResponseEntity(s3Servie.upload(file, userId), HttpStatus.OK);
