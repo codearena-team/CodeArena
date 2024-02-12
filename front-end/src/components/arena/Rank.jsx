@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import styled, { keyframes } from 'styled-components';
 
 export default function RankPage() {
+  const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
+  const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
 
   const [speedRanks, setSpeedRanks] = useState([])
   const [effRanks, setEffRanks] = useState([])
@@ -79,7 +81,7 @@ export default function RankPage() {
   return (
     <div className="flex flex-col mt-5">
       <br />
-      <h1 className='ml-5 font-bold'>실시간 랭킹</h1>
+      <AnimatedHeader className='ml-5 font-bold'>실시간 랭킹</AnimatedHeader>
       <div className="flex justify-center mt-5 w-full shadow-xl relative" style={{backgroundColor:'#E3E6D9'}}>
         {renderRankingList('Speed', speedRanks)}
         <div className="w-40"></div> {/* 사이에 여백 */}

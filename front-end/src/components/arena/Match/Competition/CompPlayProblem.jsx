@@ -58,10 +58,13 @@ export default function CompPlayProblem({  }) {
     setGameId(gameId.current);
     if(lang.current === 'java'){
       setCurrentLangPkg(currentLangPkg);
+      setCode('import java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}');
     }else if(lang.current === 'python'){
       setCurrentLangPkg(currentLangPkg);
+      setCode('');
     }else{
       setCurrentLangPkg(currentLangPkg);
+      setCode('#include <iostream>\nusing namespace std;\n\nint main() {\n    // 여기에 코드를 작성해주세요.\n    return 0;\n}');
     }
     axios({
       method : 'get',
@@ -221,22 +224,19 @@ export default function CompPlayProblem({  }) {
             <div>
               <p className="text-xl">입력예제</p>
               <Editor
-                options={{'readOnly':true}}
-                language={lang}
-                height="100%"
+                options={{'readOnly':true, 'minimap':{enabled:false}}}
+                height={`${problem?.problemExInput?.split('\n').length * 19}px`}
                 value={problem.problemExInput}
                 onChange={onChangeCode}
-                editable={false} />
+              />
             </div>
             <div>
               <p className="text-xl">출력예제</p>
               <Editor
-                options={{'readOnly':true}}
-                language={lang}
-                height="100%"
+                options={{'readOnly':true, 'minimap':{enabled:false}}}
+                height={`${problem?.problemExInput?.split('\n').length * 19}px`}
                 value={problem.problemExOutput}
                 onChange={onChangeCode}
-                editable={false}
               />
             </div>
           </div>
@@ -262,7 +262,7 @@ export default function CompPlayProblem({  }) {
           </select>
         </div>
         
-        <Editor options={{'scrollBeyondLastLine': false}} value={code} height="75vh" language={lang} onChange={onChangeCode} />
+        <Editor options={{'scrollBeyondLastLine': false, 'minimap':{enabled:false}}} value={code} height="75vh" language={lang} onChange={onChangeCode} />
         <div className="flex justify-end">
           <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full">제 출</button>
         </div>

@@ -135,7 +135,7 @@ export default function ProblemDetail() {
           
         </div>
         
-        <Editor options={{'readOnly':true}} value={code} height="77vh" language={lang} onChange={onChangeCode} />
+        <Editor options={{'scrollBeyondLastLine': false}} value={code} height="77vh" language={lang} onChange={onChangeCode} />
         <div className="flex justify-end">
           <button onClick={()=>document.getElementById('TagModal').showModal()} className="mt-2 btn bg-rose-200 rounded-xl">제 출</button>
           <TagModal 
