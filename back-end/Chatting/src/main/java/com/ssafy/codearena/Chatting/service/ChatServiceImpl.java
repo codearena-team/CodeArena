@@ -313,7 +313,19 @@ public class ChatServiceImpl implements ChatService{
         log.info(String.valueOf(competitiveManageDto));
         String player1 = competitiveManageDto.getPlayer1();
         String player2 = competitiveManageDto.getPlayer2();
+        String player1Nickname = "";
+        String player2Nickname = "";
 
+        try {
+
+            //플레이어 닉네임 조회
+            player1Nickname = gameMapper.getUserNickname(player1);
+            player2Nickname = gameMapper.getUserNickname(player2);
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+        }
         int player1_rating = 0;
         int player2_rating = 0;
 
@@ -340,13 +352,13 @@ public class ChatServiceImpl implements ChatService{
         int player1_result = 0;
         int player2_result = 0;
         //player1이 이겼을 경우
-        if(winner.equals(player1)) {
+        if(winner.equals(player1Nickname)) {
             log.info("플레이어 1 우승");
             player1_result = CaluRating(player1_rating, player2_rating, "승리");
             player2_result = CaluRating(player2_rating, player1_rating, "패배");
         }
         //player2가 이겼을 경우
-        else if(winner.equals(player2)) {
+        else if(winner.equals(player2Nickname)) {
             log.info("플레이어 2 우승");
             player1_result = CaluRating(player1_rating, player2_rating, "패배");
             player2_result = CaluRating(player2_rating, player1_rating, "승리");

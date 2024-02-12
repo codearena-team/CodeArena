@@ -23,4 +23,5 @@ public interface GameMapper {
     public void startPrivateGame(Map<String, String> param) throws Exception;
     public CompetitiveWinnerInfoDto whoWinner(String gameId) throws Exception;
     public List<CompetitiveGameSubmitDto> getSubmitList(String gameId) throws Exception;
+    public String getUserNickname(String userId) throws Exception;
 }

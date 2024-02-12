@@ -229,4 +229,10 @@
         FROM code_arena.arena_submit_status
         WHERE game_id = #{gameId};
     </select>
+
+    <select id="getUserNickname" parameterType="string" resultType="string">
+        SELECT user_nickname
+        FROM user
+        WHERE user_id = #{userId};
+    </select>
 </mapper>
