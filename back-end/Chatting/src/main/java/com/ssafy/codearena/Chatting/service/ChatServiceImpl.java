@@ -579,7 +579,10 @@ public class ChatServiceImpl implements ChatService{
             competitiveWinnerInfoDto = gameMapper.whoWinner(gameId);
             if( competitiveWinnerInfoDto.getWinner() == null) competitiveWinnerInfoDto.setWinner("");
 
+            log.info("승자 : " + competitiveWinnerInfoDto.getWinner());
+
             if(competitiveWinnerInfoDto.getWinner().isEmpty()) {
+                log.info("DRAW");
                 //draw
                 //두 유저의 변동된 점수 조회
                 CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
@@ -591,6 +594,7 @@ public class ChatServiceImpl implements ChatService{
                 competitiveGameResultDto.setLoserRating(player.getUserRating());
             }
             else if(competitiveWinnerInfoDto.getWinner().equals(competitiveWinnerInfoDto.getPlayer1())) {
+                log.info("플레이어1 우승");
 
                 //두 유저의 변동된 점수 조회
                 CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
@@ -602,7 +606,7 @@ public class ChatServiceImpl implements ChatService{
                 competitiveGameResultDto.setLoserRating(player.getUserRating());
             }
             else if(competitiveWinnerInfoDto.getWinner().equals(competitiveWinnerInfoDto.getPlayer2())) {
-
+                log.info("플레이어2 우승");
                 //두 유저의 변동된 점수 조회
                 CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer2(), competitiveWinnerInfoDto.getGame_mode());
                 competitiveGameResultDto.setWinnerId(player.getUserNickname());

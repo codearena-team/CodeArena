@@ -82,7 +82,7 @@
     <!-- 승자 판단 동적쿼리-->
     <sql id="winner">
         <if test='winner != null and winner != ""'>
-            , winner = (SELECT user_id FROM user WHERE user_nickname = #{winner});
+            , winner = (SELECT user_id FROM user WHERE user_nickname = #{winner})
         </if>
     </sql>
 
