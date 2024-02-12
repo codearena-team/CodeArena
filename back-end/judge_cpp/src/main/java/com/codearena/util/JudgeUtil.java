@@ -51,15 +51,6 @@ public class JudgeUtil {
         log.info("code : {}", code);
         fw.write(code);
         fw.close();
-
-//        String cmd = "g++ ./" + path + "/Solution.cpp -o ./" + path +"/Solution.out";
-//
-//        log.info("[compile] cmd : {}", cmd);
-//
-//        // 런타임 생성하고 코드 컴파일하기
-//        Runtime runtime = Runtime.getRuntime();
-//        runtime.exec(cmd);
-//        runtime.exit(0);
     }
 
     public boolean checkSystemCallInCode(String code) {
@@ -115,12 +106,12 @@ public class JudgeUtil {
 
         String wrongTC = null;
 
-        cmd = "g++ -o ./" + path + "/Solution.exe ./" + path +"/Solution.cpp";
+        cmd = "g++ -o ./" + path + "/Solution.out ./" + path +"/Solution.cpp";
 
         Process process = runtime.exec(cmd);
         process.waitFor();
 
-        cmd = "./" + path +"/Solution.exe";
+        cmd = "./" + path +"/Solution.out";
 
         // TC 불러왔으면 검사하는 로직 수행하기
         for (int tc = 0; tc < testCase.size(); tc++) {
@@ -214,7 +205,7 @@ public class JudgeUtil {
 
         File dirFile = new File(path);
         File cppFile = new File(path, "Solution.cpp");
-        File exeFile = new File(path, "Solution.exe");
+        File exeFile = new File(path, "Solution.out");
 
         // 결과 반영 했으면 디렉토리 삭제하기
         // 내부 파일부터 삭제하고 디렉토리 삭제
