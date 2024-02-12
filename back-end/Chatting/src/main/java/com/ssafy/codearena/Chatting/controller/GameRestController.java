@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/rest")
 @RequiredArgsConstructor
@@ -54,5 +56,11 @@ public class GameRestController {
     ResponseEntity<?> getCompetitiveResult(@PathVariable String gameId) {
 
         return new ResponseEntity<RestResultDto>(service.getCompetitiveResult(gameId), HttpStatus.OK);
+    }
+
+    @GetMapping("/effi/list")
+    ResponseEntity<?> getEffiSubmitList(@RequestParam Map<String, String> map) {
+
+        return new ResponseEntity<GameResultDto>(service.getEffiSubmitList(map), HttpStatus.OK);
     }
 }

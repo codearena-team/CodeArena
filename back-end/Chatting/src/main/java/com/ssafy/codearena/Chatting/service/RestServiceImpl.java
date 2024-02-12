@@ -30,6 +30,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 @Service
@@ -228,5 +229,52 @@ public class RestServiceImpl implements RestService {
 
         return resultDto;
 
+    }
+
+    @Override
+    public GameResultDto getEffiSubmitList(Map<String, String> map) {
+
+        GameResultDto resultDto = new GameResultDto();
+
+        Map<String, Object> param = new HashMap<String, Object>();    //쿼리 매개변수
+
+        param.put("word", map.get("word") == null ? "" : map.get("word"));  //검색조건 있다면 put
+
+        int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));    //특정 페이지 번호 요청이 없다면 1번
+        int sizePerPage = Integer.parseInt(map.get("spp") == null ? "15" : map.get("spp"));
+
+        int start = currentPage * sizePerPage - sizePerPage;    //쿼리로 불러올 인덱스 번호 지정
+
+        param.put("start", start);
+        param.put("listSize", sizePerPage);
+
+
+        String key = map.get("key");
+        param.put("key", key == null ? "" : key);
+
+
+        try {
+            List<CompetitiveGameSubmitDto> list = mapper.getEffiSubmitList(param);
+            int totalSubmitCount = mapper.getTotalSubmitCount(param);
+            int totalPageCount = (totalSubmitCount - 1) / sizePerPage + 1;
+
+            EffiSubmitListDto effiSubmitListDto = new EffiSubmitListDto();
+            effiSubmitListDto.setCurrentPage(currentPage);
+            effiSubmitListDto.setTotalPageCount(totalPageCount);
+
+            resultDto.setStatus("200");
+            resultDto.setMsg("채점현황 불러오기 성공");
+            resultDto.setData(effiSubmitListDto);
+
+        }
+        catch (Exception e) {
+
+            log.error("Exception Msg", e);
+            resultDto.setStatus("500");
+            resultDto.setMsg("Server Internal Error");
+            resultDto.setData(null);
+        }
+
+        return resultDto;
     }
 }
