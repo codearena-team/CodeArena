@@ -53,6 +53,8 @@ export default function TopBanner() {
   const userNickname = useRef(useSelector(state => state.auth.userNickname));
   const gameId = useRef('');
   const viduSession = useRef('');
+  const enemyId = useRef('');
+  const enemyNickname = useRef('');
   // const [matchData, setmatchData] = useState({
   //   matchId: '',
   //   userId: '',
@@ -76,7 +78,8 @@ export default function TopBanner() {
       console.log("Message from server ", event.data);
   
       const object = JSON.parse(event.data)
-      
+      console.log("recive data :", object)
+    
       type.current = object.type;
       
       if (object.type) {
@@ -91,6 +94,8 @@ export default function TopBanner() {
         userNickname.current = object.userNickname;
         gameId.current = object.gameId;
         viduSession.current = object.viduSession;
+        enemyId.current = object.enemyId;
+        enemyNickname.current = object.enemyNickname;
         // console.log("new obj 데이타!! :", new_obj)
         // console.log("현재 타입 :", object.type)
       }
@@ -387,7 +392,7 @@ export default function TopBanner() {
       JSON.stringify (send_obj)
     );
 
-    clearInterval(timerInterval.current);
+    // clearInterval(timerInterval.current);
 
     // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
