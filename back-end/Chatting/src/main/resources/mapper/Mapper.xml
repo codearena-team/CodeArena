@@ -24,6 +24,19 @@
         <result column="user_rating" property="userRating"/>
     </resultMap>
 
+    <resultMap id="submit" type="CompetitiveGameSubmitDto">
+        <result column="submit_no" property="submitNo"/>
+        <result column="users" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="problem_id" property="problemId"/>
+        <result column="game_type" property="gameType"/>
+        <result column="submit_lang" property="submitLang"/>
+        <result column="submit_status" property="submitStatus"/>
+        <result column="time_complexity" property="timeComplexity"/>
+        <result column="memory" property="memory"/>
+        <result column="submit_date" property="submitDate"/>
+    </resultMap>
+
     <!-- 검색조건 동적쿼리(닉네임, 문제번호, 방 제목 -->
     <sql id="search">
         <if test='word != null and word != ""'>
@@ -204,4 +217,16 @@
         SET problem_id = #{problemId}, player2 = #{player2}, player3 = #{player3}, player4 = #{player4}, start_time = now()
         WHERE game_id = #{gameId};
     </update>
+
+    <select id="whoWinner" parameterType="string" resultType="competitiveWinnerInfoDto">
+        SELECT player1, player2, winner, game_mode
+        FROM arena_record
+        WHERE game_id = #{gameId};
+    </select>
+
+    <select id="getSubmitList" parameterType="string" resultMap="submit">
+        SELECT submit_no, user_id as users, (SELECT user_nickname FROM user WHERE user_id = users) as user_nickname, problem_id, game_type, submit_lang, submit_status, time_complexity, memory, submit_date
+        FROM code_arena.arena_submit_status
+        WHERE game_id = #{gameId};
+    </select>
 </mapper>

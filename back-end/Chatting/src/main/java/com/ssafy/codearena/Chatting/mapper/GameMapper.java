@@ -21,4 +21,6 @@ public interface GameMapper {
     public void refreshRating(String userId, String rating, String gamemode) throws Exception;
     public CompetitiveUserInfoDto getUserInfo(String userId, String gamemode) throws Exception;
     public void startPrivateGame(Map<String, String> param) throws Exception;
+    public CompetitiveWinnerInfoDto whoWinner(String gameId) throws Exception;
+    public List<CompetitiveGameSubmitDto> getSubmitList(String gameId) throws Exception;
 }

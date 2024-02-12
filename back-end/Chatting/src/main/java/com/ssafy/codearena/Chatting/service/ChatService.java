@@ -20,5 +20,6 @@ public interface ChatService {
     public List<CompetitiveTopMatchResultDto> getTopFiveMatch();
     public RestResultDto getCandidates(String gameId);
     public GameResultDto startPrivateGame(String gameId);
+    public GameResultDto whoWinner(String gameId);
 
 }
