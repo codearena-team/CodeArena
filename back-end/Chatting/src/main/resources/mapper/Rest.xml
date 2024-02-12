@@ -62,9 +62,26 @@
         <result column="user_rating" property="userRating"/>
     </resultMap>
 
-    <!-- gameMode 동적쿼리 -->
-    <sql id="mode">
+    <resultMap id="submit" type="CompetitiveGameSubmitDto">
+        <result column="submit_no" property="submitNo"/>
+        <result column="users" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="problem_id" property="problemId"/>
+        <result column="game_type" property="gameType"/>
+        <result column="submit_lang" property="submitLang"/>
+        <result column="submit_status" property="submitStatus"/>
+        <result column="time_complexity" property="timeComplexity"/>
+        <result column="memory" property="memory"/>
+        <result column="submit_date" property="submitDate"/>
+    </resultMap>
 
+    <!--> 검색조건에 관한 동적쿼리문 -->
+    <sql id="search">
+        <if test='word != null and word != ""'>
+            <if test='key != null and key != ""'>
+                AND ${key} = #{word}
+            </if>
+        </if>
     </sql>
 
     <insert id="insertSubmit" parameterType="submitDto">
@@ -124,5 +141,23 @@
         FROM user
         WHERE user_id = #{userId};
     </select>
-    
+
+    <select id="getEffiSubmitList" parameterType="map" resultMap="submit">
+        SELECT submit_no, user_id as users, (SELECT user_nickname FROM user WHERE user_id = users) as user_nickname, problem_id, game_type, submit_lang, submit_status, time_complexity, memory, submit_date
+        FROM code_arena.arena_submit_status
+        <where>
+            game_id = #{gameId}
+            <include refid="search"></include>
+        </where>
+        ORDER BY submit_date DESC
+        LIMIT ${start}, ${listSize}
+    </select>
+
+    <select id="getTotalSubmitCount" parameterType="map" resultType="int">
+        SELECT COUNT(submit_no)
+        FROM code_arena.arena_submit_status
+        <where>
+            <include refid="search"></include>
+        </where>
+    </select>
 </mapper>
