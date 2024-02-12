@@ -99,10 +99,10 @@
     <!-- gameMode SET 동적쿼리 -->
     <sql id="modeset">
         <if test='gamemode == "0"'>
-            AND speed_rating = #{rating}
+            speed_rating = #{rating}
         </if>
         <if test='gamemode == "1"'>
-            AND effi_rating = #{rating}
+            effi_rating = #{rating}
         </if>
     </sql>
 
