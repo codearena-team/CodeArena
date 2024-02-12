@@ -1,10 +1,4 @@
 
-import TestCaseModal from "./TestcaseModal";
-import CodeMirror from '@uiw/react-codemirror';
-import { java } from '@codemirror/lang-java';
-import { python } from '@codemirror/lang-python';
-import { cpp } from '@codemirror/lang-cpp';
-
 export default function SubmitItem(props) {
   let code = ''
   if (props.submitItem.code === null) {
@@ -21,15 +15,6 @@ export default function SubmitItem(props) {
       
       <div className="flex justify-center">
         <th className="p-1 font-light">{props.submitItem.submitStatus}</th>
-        {/* {props.submitItem.testCase ? 
-        <div>
-          <button className="btn btn-xs btn-neutral rounded-full  font-light" 
-          onClick={()=>document.getElementById(`testCaseModal${props.submitItem.submitNo}`).showModal()}>
-          테케보기</button>
-          <TestCaseModal 
-          testcase={[props.submitItem.testCase]}
-          submitNo={props.submitItem.submitNo}/>
-        </div> : <div></div>} */}
       </div>
       
       <th className="p-1 font-light">{props.submitItem.memory}</th>

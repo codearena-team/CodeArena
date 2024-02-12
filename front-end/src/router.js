@@ -105,7 +105,7 @@ export default function Router () {
       <Route path="/login/signup" element={<Signup/>} />
       <Route path="/login/findpassword" element={<FindPassword/>} />
       <Route path="/login/snssignup" element={<SnsSignup/>} /> 
-      <Route path="*" element={<NotFound/>} /> 
+      <Route path="*" element={<NotFound/>} replace={true} /> 
       
       
       {/* 라우터수정필요구간 (효율전결과,스피드전결과,중간결과확인페이지) */}

@@ -1,11 +1,7 @@
-import CodeMirror from '@uiw/react-codemirror';
 import {useState, useCallback, useEffect} from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useAuthCheck } from '../../../features/useAuthCheck';
-import { java } from '@codemirror/lang-java';
-import { python } from '@codemirror/lang-python';
-import { cpp } from '@codemirror/lang-cpp';
+import Editor from '@monaco-editor/react';
 import axios from 'axios';
 
 export default function ProblemCreate() {
@@ -199,49 +195,57 @@ input.txt                   output.txt
   return (
     <div className="p-20 pt-0">
       <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
-        <h1 className='font-bold text-3xl text-center mb-5'>문제 생성</h1>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1 py-3"htmlFor="title">제목</label>
-          <input type="text" placeholder="제목을 입력하세요" id="title" onChange={onChangeTitle} class="input input-bordered w-11/12" />
+        <h1 className='font-bold text-3xl text-center mb-5 '>문제 생성</h1>
+        <div className='grid grid-cols-12 mb-4'>
+          <label className=" text-end font-bold me-1 py-3 col-span-1"htmlFor="title">제목</label>
+          <input type="text" placeholder="제목을 입력하세요" id="title" onChange={onChangeTitle} className="input input-bordered col-span-11" />
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="content">내용</label>
-          <textarea class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeContent} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
+        <div className='grid grid-cols-12 mb-4'>
+          <label className="text-end font-bold me-1"htmlFor="content">내용</label>
+          <textarea class="textarea textarea-bordered col-span-11 resize-none" onChange={onChangeContent} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="input">입력 설명</label>
-          <textarea class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeInputDescription} id="input" placeholder="입력 설명을 입력하세요" rows="10"></textarea>
+        <div className='grid grid-cols-12 mb-4'>
+          <label className="text-end font-bold me-1"htmlFor="input">입력 설명</label>
+          <textarea class="textarea textarea-bordered col-span-11 resize-none" onChange={onChangeInputDescription} id="input" placeholder="입력 설명을 입력하세요" rows="10"></textarea>
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="output">출력 설명</label> <br />
-          <textarea class="textarea textarea-bordered w-11/12 resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
+        <div className='grid grid-cols-12 mb-4'>
+          <label className="text-end font-bold me-1"htmlFor="output">출력 설명</label>
+          <textarea class="textarea textarea-bordered col-span-11 resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
+        </div>
+        <div className='grid grid-cols-2'>
+          <div className="grid grid-cols-12 mb-4">
+            <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">입력 예제</label>
+            <div className='col-span-10'>
+              <Editor onChange={onChangeInputExam}id="inputEx"
+            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
+              height={`${inputExam.split('\n').length * 19}px`} />
+            </div>
+          </div>
+          <div className='grid grid-cols-12 mb-4'>
+            <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">출력 예제</label>
+            <div className='col-span-10' >
+              <Editor onChange={onChangeOutputExam} id="inputEx"
+            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
+              height={`${outputExam.split('\n').length * 19}px`} />
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
-          <div className='flex justify-end'>
-            <label className="font-bold me-1"htmlFor="inputEx">입력 예제</label>
-            <CodeMirror onChange={onChangeInputExam} className='w-10/12' height="100%" id="inputEx"/>
+          <div  className='grid grid-cols-12'>
+            <label className="text-end font-bold col-span-2 me-1"htmlFor="inputFile">입력 파일</label>
+            <input onClick={e=>e.target.value=null} onChange={onChangeInputFile} id="inputFile"  type="file" className="file-input file-input-bordered file-input-sm col-span-10" />
           </div>
-          <div className='flex justify-end'>
-            <label className="font-bold me-1"htmlFor="inputEx">출력 예제</label>
-            <CodeMirror onChange={onChangeOutputExam} className='w-10/12' height="100%" id="inputEx"/>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-5 mb-4">
-          <div  className='flex justify-end'>
-            <label abel className="font-bold me-1"htmlFor="inputFile">입력 파일</label>
-            <input onClick={e=>e.target.value=null} onChange={onChangeInputFile} id="inputFile"  type="file" className="file-input file-input-bordered file-input-sm w-10/12" />
-          </div>
-          <div className='flex justify-end'>
-            <label className="font-bold me-1"htmlFor="inputFile">출력 파일</label>
-            <input onClick={e=>e.target.value=null} onChange={onChangeOutputFile} id="outputFile"  type="file" className="file-input file-input-bordered file-input-sm w-10/12" />
+          <div className='grid grid-cols-12'>
+            <label className="text-end font-bold me-1 col-span-2"htmlFor="inputFile">출력 파일</label>
+            <input onClick={e=>e.target.value=null} onChange={onChangeOutputFile} id="outputFile"  type="file" className="file-input file-input-bordered file-input-sm col-span-10" />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
           
           <div className='grid grid-cols-2 gap-5'>
-            <div className='flex justify-end'>
-              <label className="font-bold me-1"htmlFor="rating">언어</label>
-              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-8/12" >
+            <div className='grid grid-cols-12'>
+              <label className="font-bold text-end col-span-4 me-1"htmlFor="rating">언어</label>
+              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered col-span-8" >
                 <option>java</option>
                 <option>python</option>
                 <option>cpp</option>
@@ -255,8 +259,8 @@ input.txt                   output.txt
 
             <dialog id="modal" className="modal">
               <div className="modal-box" style={{backgroundColor: "#F5F5EC",maxWidth:'900px'}}>
-                <div className='flex justify-end mb-2'>
-                  <textarea className="textarea textarea-bordered w-full resize-none font-bold text-lg" rows="15"
+                <div className='grid grid-cols-12 mb-2'>
+                  <textarea className="textarea textarea-bordered w-full resize-none font-bold text-md" rows="18"
                     value={gongji}
                     style={{outline:'none'}}
                     readOnly
@@ -272,14 +276,14 @@ input.txt                   output.txt
                   </div>           
               </div>
             </dialog>
-            {/* <div className='flex justify-end'>
+            {/* <div className='grid grid-cols-12'>
               <label className="font-bold me-1"htmlFor="rating">문제 등급</label>
-              <input value={rating} onChange={(e)=>{setRating(e.target.value)}} className="w-8/12 bg-white rounded-lg bor input input-sm input-bordered" id="rating" type="number" />
+              <input value={rating} onChange={(e)=>{setRating(e.target.value)}} className="col-span-8 bg-white rounded-lg bor input input-sm input-bordered" id="rating" type="number" />
             </div> */}
             
           </div>
-          <div className="grid grid-cols-3 gap-5">
-            <div className='flex justify-end'>
+          <div className="grid grid-cols-3">
+            <div>
               <button className="btn btn-sm btn-neutral" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
               <dialog id="TagModal" className="modal">
                 <div className="modal-box">
@@ -314,24 +318,27 @@ input.txt                   output.txt
               </dialog>
 
             </div>
-            <div className='flex justify-end'>
+            <div >
               <label className="font-bold me-1"htmlFor="time">시간제한</label>
               <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-5/12" />
             </div>
-            <div className='flex justify-end'>
+            <div>
               <label className="font-bold me-1"htmlFor="mem">메모리제한</label>
               <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-5/12" />
             </div>
           </div>
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="inputEx">
+        <div className='grid grid-cols-12 mb-4'>
+          <label className="font-bold me-1 col-span-1"htmlFor="inputEx">
             검증용 코드
             <div>
             <button className='btn btn-sm btn-neutral' onClick={onClickComfile}>컴파일</button>
             </div>
           </label>
-          <CodeMirror extensions={[java(),python(),cpp()]} onChange={onChangeTestCode} className='w-11/12' height="400px" id="inputEx"/>
+          <div className='col-span-11'>
+            <Editor className='col-span-11' language={lang} height="400px"
+            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}/>
+          </div>
         </div>
         <div className='flex justify-center'>
           <button className={isValidCode? 'btn btn-neutral w-60 text-2xl text-center rounded-full' : 'btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '제 출' : '컴파일 후 제출가능' }</button>

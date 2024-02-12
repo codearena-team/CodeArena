@@ -20,7 +20,7 @@ export default function Community() {
     const langType = searchParams.get('lang') || ''
     const key = searchParams.get('key') || ''
     const word = searchParams.get('word') || ''
-    const sortType = searchParams.get('sortType') || ''
+    const sortType = searchParams.get('sortType') || 'time'
    
     axios({
       method : 'get',
@@ -77,7 +77,7 @@ export default function Community() {
       )}
       <div className="flex justify-between align-middle">
         <div className="flex items-end">
-          <button onClick={()=>{changeParams('sortType','date')}} className={searchParams.get('sortType')===null||searchParams.get('sortType')==='date' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
+          <button onClick={()=>{changeParams('sortType','time')}} className={searchParams.get('sortType')===null||searchParams.get('sortType')==='time' ? 'orderBy' : 'orderBy unchoice'} value='time'>최신순</button>
           <button onClick={()=>{changeParams('sortType','hit')}} className={searchParams.get('sortType')==='hit' ? 'orderBy' : 'orderBy unchoice'} value='hit'>조회수순</button>
         </div>
         <div className="flex mb-4 gap-2">
