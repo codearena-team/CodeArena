@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class UserReissueDto {
     private String userEmail;
-    private String tempPassword;
+    private String tempCode;
 }

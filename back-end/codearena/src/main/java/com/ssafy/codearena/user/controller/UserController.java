@@ -39,9 +39,13 @@ public class UserController {
     public ResponseEntity<UserResultDto> logout(@RequestBody String userEmail) {
         return new ResponseEntity<UserResultDto>(userService.logout(userEmail), HttpStatus.OK);
     }
-    @GetMapping("/password/reissue")
-    public ResponseEntity<UserResultDto> reissue(@RequestBody UserReissueDto userReissueDto) {
-        return new ResponseEntity<UserResultDto>(userService.reissue(userReissueDto), HttpStatus.OK);
+    @PostMapping("/password/reissue")
+    public ResponseEntity<UserResultDto> issueVerificationCode(@RequestBody UserReissueDto userReissueDto) {
+        return new ResponseEntity<UserResultDto>(userService.issueVerificationCode(userReissueDto), HttpStatus.OK);
+    }
+    @PostMapping("/password/verification")
+    public ResponseEntity<UserResultDto> verifyCode(@RequestBody UserReissueDto userReissueDto) {
+        return new ResponseEntity<UserResultDto>(userService.checkVerificationCode(userReissueDto), HttpStatus.OK);
     }
     @GetMapping
     public ResponseEntity<UserResultDto> searchUser(@RequestParam(value="from") String fromUserNickname, @RequestParam(value="to") String toUserNickname) {
