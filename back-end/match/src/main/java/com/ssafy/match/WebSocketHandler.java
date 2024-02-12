@@ -110,6 +110,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                             serverMsg.put("matchId", uuid.toString());
                             serverMsg.put("userId", player1userId);
                             serverMsg.put("userNickname", player1userNickname);
+                            serverMsg.put("lang", receive.getLang());
                             serverMsg.put("enemyId", player2userId);
                             serverMsg.put("enemyNickname", player2userNickname);
                             serverMsg.put("queueKey", key);
