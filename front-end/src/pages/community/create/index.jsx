@@ -124,7 +124,7 @@ export default function CommunityCreate() {
         </div>
         { showCodeMirror && (
           <div className='grid grid-cols-12 mb-4'>
-            <label className="col-span-1 me-1"htmlFor="inputEx">검증용 코드</label>
+            <label className="col-span-1 me-1"htmlFor="inputEx"></label>
             <div className='col-span-10'>
               <Editor onChange={onChangeTestCode} height="400px" id="inputEx" language={lang}
               options={{'scrollBeyondLastLine':false,'minimap':{enabled:false}}}

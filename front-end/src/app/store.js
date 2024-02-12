@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import authReducer from '../features/login/authSlice.js';
 import accessReducer from '../features/login/accessSlice.js';
 import arenaReducer from '../features/arena/arenaSlice.js';
+import rtcReducer from '../features/arena/rtcSlice.js';
 
 const persistConfig = {
   key : 'root',
@@ -15,7 +16,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth : authReducer,
   access : accessReducer,
-  arena: arenaReducer
+  arena: arenaReducer,
+  rtc: rtcReducer
 })
 
 

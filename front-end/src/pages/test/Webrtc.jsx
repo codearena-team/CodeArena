@@ -1,7 +1,9 @@
 import { OpenVidu } from 'openvidu-browser';
 
 import axios from 'axios';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { setStreamManager } from '../../features/arena/rtcSlice';
 import UserVideoComponent from './UserVideoComponent';
 import registerServiceWorker from './../../registerServiceWorker';
 
@@ -11,7 +13,7 @@ const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'htt
 class Webrtc extends Component {
   constructor(props) {
     super(props);
-
+    
     // These properties are in the state's component in order to re-render the HTML whenever their values change
     this.state = {
       customSessionId: props.customSessionId,
@@ -36,6 +38,7 @@ class Webrtc extends Component {
         mainStreamManager: stream
       });
     }
+    this.props.action(stream)
   }
 
   componentDidMount() {
@@ -189,13 +192,14 @@ class Webrtc extends Component {
 
   render() {
     const customSessionId = this.state.customSessionId;
-    const myUserName = this.state.myUserName;
+    const myUserName = this.props.userNickname;
+    
 
     return (
       <div className='h-full'>
         {this.state.session === undefined ? (
           <form className="form-group" onSubmit={this.joinSession}>
-            <p>
+            {/* <p>
               <label>Participant: </label>
               <input
                 className="form-control"
@@ -216,9 +220,9 @@ class Webrtc extends Component {
                 onChange={this.handleChangeCustomSessionId}
                 required
               />
-            </p>
+            </p> */}
             <p className="text-center">
-              <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
+              <input className="btn btn-lg bg-rose-200" name="commit" type="submit" value="플레이어 화면보기" />
             </p>
           </form>
         ) : null}
@@ -238,20 +242,20 @@ class Webrtc extends Component {
 
             
             <div id="video-container" className='flex'>
-              {this.state.mainStreamManager !== undefined ? (
+              {/* {this.state.mainStreamManager !== undefined ? (
                 <div id="main-video" className="col-md-6">
                   <UserVideoComponent streamManager={this.state.mainStreamManager} />
 
                 </div>
-              ) : null}
+              ) : null} */}
               {this.state.subscribers.map((sub, i) => {
                 return(
-                <div key={sub.id} className="stream-container" onClick={() => this.handleMainVideoStream(sub)}>
+                <div key={sub.id} className="stream-container me-4" onClick={() => this.handleMainVideoStream(sub)}>
                   <span>{sub.id}</span>
                   <UserVideoComponent 
                   streamManager={sub}
-                  width={'200px'}
-                  height={'100px'}
+                  width={this.props.width}
+                  height={this.props.height}
                   />
                 </div>
                 )
@@ -264,6 +268,9 @@ class Webrtc extends Component {
   }
 
   async getToken() {
+    await axios.post(APPLICATION_SERVER_URL + 'game/vidu/sessions', {customSessionId:this.state.customSessionId}, {
+      headers: { 'Content-Type': 'application/json', },
+    });
     const response = await axios.post(APPLICATION_SERVER_URL + 'game/vidu/sessions/' + this.state.customSessionId + '/connections', {}, {
       headers: { 'Content-Type': 'application/json', },
     });
@@ -272,4 +279,10 @@ class Webrtc extends Component {
   }
 }
 
-export default Webrtc;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    action: (action) => dispatch(setStreamManager(action))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Webrtc);
