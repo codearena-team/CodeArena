@@ -45,7 +45,7 @@ export default function HotMatch() {
                 <div className="rounded-xl ml-2 w-1/3 shadow-xl p-5 mb-2" style={{ backgroundColor: '#F4F5F1' }}>
                   {/* 지금 경쟁 중! + 시청자 수 */}
                   <div className="flex items-center justify-end">
-                    <img src={Fighting} alt="지금 경쟁 중!" className='w-1/3 rounded-xl mr-10' />
+                    <img src={Fighting} alt="지금 경쟁 중!" className='w-1/3 rounded-xl mr-16' />
                     <img src={View} alt="시청자 수" className="w-8 h-8 rounded-full" />
                     <span className="ml-2">{match.participants} View</span>
                   </div>

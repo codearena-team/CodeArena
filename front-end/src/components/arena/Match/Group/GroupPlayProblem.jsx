@@ -104,7 +104,7 @@ export default function GroupPlay() {
             <div>
               <p className="text-xl">입력예제</p>
               <Editor
-                options={{'readOnly':true}}
+                options={{'readOnly':true, 'minimap':{enabled:false}}}
                 value={problem.problemExInput}
                 onChange={onChangeCode}
                 height={`${problem?.problemExInput?.split('\n').length * 19}px`}
@@ -113,7 +113,7 @@ export default function GroupPlay() {
             <div>
               <p className="text-xl">출력예제</p>
               <Editor
-                options={{'readOnly':true}}
+                options={{'readOnly':true, 'minimap':{enabled:false}}}
                 value={problem.problemExOutput}
                 onChange={onChangeCode}
                 height={`${problem?.problemExOutput?.split('\n').length * 19}px`}
@@ -157,7 +157,7 @@ export default function GroupPlay() {
           </div>
         </div>
         
-        <Editor options={{'scrollBeyondLastLine': false}} value={code} height="75vh" language={lang} onChange={onChangeCode} />
+        <Editor options={{'scrollBeyondLastLine': false, 'minimap':{enabled:false}}} value={code} height="75vh" language={lang} onChange={onChangeCode} />
         <div className="flex justify-end">
           <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full">제 출</button>
         </div>
