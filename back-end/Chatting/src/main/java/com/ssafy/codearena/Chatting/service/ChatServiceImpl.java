@@ -341,20 +341,25 @@ public class ChatServiceImpl implements ChatService{
         int player2_result = 0;
         //player1이 이겼을 경우
         if(winner.equals(player1)) {
+            log.info("플레이어 1 우승");
             player1_result = CaluRating(player1_rating, player2_rating, "승리");
             player2_result = CaluRating(player2_rating, player1_rating, "패배");
         }
         //player2가 이겼을 경우
         else if(winner.equals(player2)) {
+            log.info("플레이어 2 우승");
             player1_result = CaluRating(player1_rating, player2_rating, "패배");
             player2_result = CaluRating(player2_rating, player1_rating, "승리");
         }
         //무승부
         else if(winner.equals("")) {
+            log.info("무승부")
             player1_result = CaluRating(player1_rating, player2_rating, "무승부");
             player2_result = CaluRating(player2_rating, player1_rating, "무승부");
         }
 
+        log.info(String.valueOf(player1_result));
+        log.info(String.valueOf(player2_result));
 
 
         try {   //종료시간 및 승자 DB I/O
