@@ -9,6 +9,7 @@ import com.ssafy.codearena.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService{
     private final JavaMailSender javaMailSender;
     private final JwtUtil jwtUtil;
     private final String HEADER_AUTH = "Authorization";
+
+    @Value("${defaultImg}")
+    private String defaultImg;
 
     public void saveRefreshToken(String userEmail, String refreshToken) {
 
@@ -55,6 +59,7 @@ public class UserServiceImpl implements UserService{
         try {
             String lowerEmail = userJoinDto.getUserEmail().toLowerCase();
             userJoinDto.setUserEmail(lowerEmail);
+            userJoinDto.setUserThumbnail(defaultImg);
             mapper.join(userJoinDto);
         } catch (Exception e) {
             userResultDto.setStatus("500");

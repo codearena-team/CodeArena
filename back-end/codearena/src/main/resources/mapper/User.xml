@@ -11,6 +11,7 @@
         <result column="user_intro" property="userIntro"/>
         <result column="speed_rating" property="speedRating"/>
         <result column="effi_rating" property="effiRating"/>
+        <result column="user_thumbnail" property="userThumbnail"/>
     </resultMap>
 
     <resultMap id="tokenDataDto" type="TokenDataDto">
@@ -39,7 +40,7 @@
     </resultMap>
 
     <insert id="join" parameterType="userJoinDto">
-        insert into user(user_email, user_password, user_nickname, user_intro) values("${userEmail}" ,"${userPassword}" , "${userNickname}", "${userIntro}");
+        insert into user(user_email, user_password, user_nickname, user_intro, user_thumbnail) values("${userEmail}" ,"${userPassword}" , "${userNickname}", "${userIntro}", "${userThumbnail}");
     </insert>
     
     <select id="checkNickname" parameterType="string" resultType="int">
@@ -67,7 +68,7 @@
     </update>
 
     <select id="searchUser" parameterType="string" resultMap="userInfoDto">
-        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating
+        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating, user_thumbnail
         from user
         where user_nickname=#{userNickname};
     </select>
