@@ -6,10 +6,12 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 export default function ReceiveListItem(probs) {
+  const navigate = useNavigate()
   const cate = probs.receiveItem.alarmType
   const alarmId = probs.receiveItem.alarmId
   const [alarmStatus,setAlarmStatus] = useState(probs.receiveItem.alarmStatus.trim())
   let word = ""
+  const alarmMsg = probs.receiveItem.alarmMsg
 
   if (cate === 1){
     word = "문제생성요청";
