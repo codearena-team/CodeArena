@@ -11,6 +11,7 @@ public class ChatLeaveMessage {
     private MessageType type;
     private String gameId;
     private String mode;
+    private String userId;
     private String sender;
     private String message;
 }

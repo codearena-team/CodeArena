@@ -93,14 +93,17 @@ public class ChatController {
             //두 명의 유저의 게임진행유무를 판별하고
             //두 사람 모두 나갔다면 TERMINATED
             //한 사람만 나갔다면 경기 속행
-            boolean flag = chatService.playerLeaveEvent(message.getGameId(), message.getSender());
+            boolean flag = chatService.playerLeaveEvent(message.getGameId(), message.getUserId());
+
+            log.info(String.valueOf(flag));
 
             //두 사람 모두 탈주한 경우
             if(flag) {
-
+                log.info("두 사람 모두 탈주하였습니다!!");
                 //스피드전의 경우 무승부 처리
                 if(message.getMode().equals("0")) {
 
+                    log.info("무승부 처리");
                     submitResultDto.setType(SubmitResultMessage.resultType.END);
                     submitResultDto.setWinner("");
                     submitResultDto.setResult("무승부 처리 되었습니다.");
@@ -132,7 +135,7 @@ public class ChatController {
             }
 
             //한 사람만 탈주한 경우
-
+            log.info("한 사람만 탈주했습니다!!");
             submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
             submitResultDto.setWinner("");
             submitResultDto.setResult(message.getSender() + "님이 퇴장하였습니다.");
