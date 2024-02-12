@@ -181,6 +181,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     params.put("language", receive.getLang());
                     HashMap<String, HashMap<String, String>> result = client.post().uri("/chat/gameroom").contentType(MediaType.APPLICATION_JSON).bodyValue(params).retrieve().bodyToMono(HashMap.class).block();
                     // 로직 생성
+                    log.debug("from gameserver data : {}", result);
                     String gameId = result.get("data").get("gameId");
                     String viduSession = result.get("data").get("viduSession");
                     String problemId = result.get("data").get("problemId");
