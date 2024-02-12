@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 // import axios from 'axios';
 import CompAbstentionModal from '../../modal/Competition/CompabstentionModal';
 // import CompGoResultModal from "../../modal/Competition/CompGoResultModal";
 import VS from '../../../../images/arena/HotMatch/VS.png'
+import Webrtc from '../../../../pages/test/Webrtc'
 
 export default function UserInfo() {
+  const params = useParams()
   const Location = useLocation();
   const [timer, setTimer] = useState(60 * 60);
   const [timerDisplay, setTimerDisplay] = useState("1:00:00");
@@ -94,7 +97,13 @@ export default function UserInfo() {
         }}
       >
         {/* 상대 화면 보여줄 웹RTC 연결 공간 */}
-        <h1>"상대 화면" 웹RTC 공간</h1>
+        <Webrtc 
+          userNickname={userNickname}
+          customSessionId={params.id}
+          height= '30vh'
+          width='300px'
+          isPlayer={true}
+        />
       </div>
 
       {/* 우측 상단 버튼 영역 */}
