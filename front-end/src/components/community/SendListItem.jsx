@@ -1,10 +1,13 @@
 // 보낸 알림함 리스트
 import "../css/ProblemListItem.css"
 // import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 
 export default function SendListItem(probs) {
   const cate = probs.sendItem.alarmType
+  const navigate = useNavigate()
   let word = ""
+  const alarmMsg = probs.sendItem.alarmMsg
 
   if (cate === 1){
     word = "문제생성요청";
@@ -16,8 +19,15 @@ export default function SendListItem(probs) {
     word = "공지사항"
   }
 
+  const onClick = ()=>{
+    const match = alarmMsg.match(/\d+$/);
+    const problemNumber = match ? match[0] : null;
+    console.log(problemNumber); 
+    navigate(`/problem/${problemNumber}/detail`)
+  }
+
   return(
-    <tr className={((probs.isRead)===1) ? 'even ' : ''} >
+    <tr onClick={onClick} >
       <th className="p-1 font-thin">{probs.sendItem.alarmId}</th>
       <th className="p-1 font-thin">{word}</th>
       {/* 처리여부는 드롭다운박스 */}

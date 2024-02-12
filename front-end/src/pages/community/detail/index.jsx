@@ -137,14 +137,15 @@ export default function CommunityDetail(){
           <div className="flex">
             <div className="ml-1">
               <label className="me-1 py-3 ml-5" htmlFor="title">문제번호</label>
-              <input type="text" id="title" className="input input-bordered w-6/12 noc mr-6" value={board.problemId} />
+              <input type="text" id="title" className="input input-bordered w-5/12 noc mr-6" value={board.problemId} />
             </div>
-     
+            
               <label className="me-1 py-3" htmlFor="rating">언어</label>
               <input id="rating" className="input input-bordered w-2/12 noc mr-6" type="text" value={board.lang}/>
-          
-            <label className="me-1 py-3 ml-5" htmlFor="rating">카테고리</label>
-            <input id="rating" className="input input-bordered noc" type="text" value={cate}/>     
+            <div className="ml-10">
+              <label className="me-1 py-3 ml-5" htmlFor="rating">카테고리</label>
+              <input id="rating" className="input input-bordered noc" type="text" value={cate}/>     
+            </div>
           </div>
           <div className="w-1/12"></div>
         </div>

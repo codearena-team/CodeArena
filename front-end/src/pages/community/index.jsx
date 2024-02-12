@@ -89,11 +89,13 @@ export default function Community() {
           </select>
           
           <div className='flex join'>
-          <select value={key} onChange={(e)=>{setKey(e.target.value)}} className="select select-sm select-bordered join-item" >
-            <option value={'board_title'}>문제제목</option>
+          <select value={key} onChange={(e)=>{setKey(e.target.value)}} className="select select-sm select-bordered join-item">
+            <option value={'board_title'}>제목</option>
             <option value={'problem_id'}>문제번호</option>
           </select>
-            <input onChange={(e)=>{setWord(e.target.value)}} type="text" placeholder="검색어를 입력하세요." className="input input-bordered w-full max-w-xs input-sm join-item" />
+            <input onChange={(e)=>{setWord(e.target.value)}} type="text" 
+            style={{outline:'none'}} 
+            placeholder="검색어를 입력하세요." className="input input-bordered w-full max-w-xs input-sm join-item" />
             <button onClick={onClickHandler} className="btn btn-active btn-neutral btn-sm join-item">검색</button>
           </div>
         </div>

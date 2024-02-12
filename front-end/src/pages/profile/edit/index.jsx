@@ -1,13 +1,18 @@
 import Profile from '../../../images/common/profile.png';
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { setUserNickname } from '../../../features/login/authSlice';
 import axios from 'axios';
+import { useEffect } from 'react';
+import swal from 'sweetalert';
 
 
 export default function Edit(){
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [profileUrl,setProfileUrl] = useState('')
+  // const [croppedImage, setCroppedImage] = useState(null);
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [nickname, setNickname] = useState(useSelector(state => state.auth.userNickname))
@@ -15,6 +20,8 @@ export default function Edit(){
   const [intro, setIntro] = useState()
   const [nicknamemessage, setNicknamemessage] = useState()
   const userId = useSelector(state => state.auth.userId)
+
+
   const onNicknameChange = (e) =>{
     setNickname(e.target.value)
     // 닉네임 중복 검사 요청보내기
@@ -35,6 +42,7 @@ export default function Edit(){
     })
   }
 
+
   const onSumit = ()=> {
     axios({
       url:`https://i10d211.p.ssafy.io/api/user`,
@@ -54,14 +62,94 @@ export default function Edit(){
     })
   }
 
+  // 유저의 프로필사진 불러오기
+  useEffect(()=>{
+    axios({
+      url : `https://i10d211.p.ssafy.io/api/profile/${userId}`,
+      method :'get'
+    })
+    .then((res)=>{
+      console.log(res)
+      setSelectedFile(res.data.data.profileUrl)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[])
+
+
+  // 프로필사진변경 로직
+  const handleProfileEdit = (e) => {
+    e.preventDefault()
+    const input = document.createElement('input');
+    input.enctype = "multipart/form-data"
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      const imageUrl = URL.createObjectURL(file);
+      
+      const formData = new FormData();
+      formData.append("file", file);
+      axios({
+        url : `https://i10d211.p.ssafy.io/api/profile/upload/${userId}`,
+        data : formData,
+        method : 'put',
+        headers : {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then((res)=>{
+        console.log(res)
+        setSelectedFile(imageUrl)
+        swal("프로필사진 변경완료","","success")
+      })
+      .catch((err)=>{
+        console.log(err)
+        swal("파일용량을 확인해주세요","","warning")
+      })
+    };
+    input.click()
+  }
+
+
+
+
+  // 기본이미지로 변경하기로직
+  const goBasicProfile =  ()=>{
+    axios({
+      url : `https://i10d211.p.ssafy.io/api/profile/upload/${userId}/default`,
+      method : 'put'
+    })
+    .then((res)=>{
+      console.log(res)
+      setSelectedFile(Profile)
+      swal("기본이미지로 변경완료","","success")
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
+
+
   return(
     <div className="pt-8 px-60">
       <div className='flex justify-evenly editbox drop-shadow' style={{borderRadius: '4rem', borderWidth: '2px', borderColor: 'black'}}>
         <div>
-          <img src={Profile} alt="" style={{width:180}} className='mt-20 drop-shadow-xl'/>
-          <div className='flex justify-center p-10'><button className="btn btn-sm btn-active drop-shadow text-md" 
-              style={{backgroundColor:'#E2E2E2'}}
-              >수정</button></div>
+          <img src={selectedFile} alt="" style={{width:180}} className='mt-20 mb-10 drop-shadow-xl'/> 
+          <div className='flex justify-center'>
+            <button className="btn btn-sm btn-active drop-shadow text-md mb-2" 
+            style={{backgroundColor:'#E2E2E2'}}
+            onClick={handleProfileEdit}
+            >프로필사진 변경</button>
+          </div>
+          <div className='flex justify-center'>
+            <button className="btn btn-sm btn-active drop-shadow text-md" 
+            style={{backgroundColor:'#E2E2E2'}}
+            onClick={goBasicProfile}
+            >기본이미지로 변경</button>
+          </div>
         </div>
         <div className='p-10 space-y-6' style={{width:"50%"}}>
           <label className="form-control w-full">
@@ -99,6 +187,5 @@ export default function Edit(){
     </div>
   )
 }
-
 
 

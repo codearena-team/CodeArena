@@ -3,8 +3,11 @@ import "../css/ProblemListItem.css"
 import { useState } from "react"
 import axios from "axios"
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function ReceiveListItem(probs) {
+  const alarmMsg = probs.receiveItem.alarmMsg
+  const navigate = useNavigate()
   const cate = probs.receiveItem.alarmType
   const alarmId = probs.receiveItem.alarmId
   const [alarmStatus,setAlarmStatus] = useState(probs.receiveItem.alarmStatus.trim())
@@ -35,8 +38,15 @@ export default function ReceiveListItem(probs) {
     })
   }
 
+  const onClick = ()=>{
+    const match = alarmMsg.match(/\d+$/);
+    const problemNumber = match ? match[0] : null;
+    console.log(problemNumber); 
+    navigate(`/problem/${problemNumber}/detail`)
+  }
+
   return(
-    <tr className={((probs.isRead)===1) ? 'even' : ''} >
+    <tr onClick={onClick}>
       <th className="p-1 font-thin">{probs.receiveItem.alarmId}</th>
       <th className="p-1 font-thin">{word}</th>
       {/* 처리여부는 드롭다운박스 */}

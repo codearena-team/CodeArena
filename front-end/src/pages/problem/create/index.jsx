@@ -7,6 +7,7 @@ import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 export default function ProblemCreate() {
   const params = useParams()
@@ -133,6 +134,43 @@ export default function ProblemCreate() {
   }, []);
 
   const onClick = () => {
+    if (!title){
+      swal("제목은 필수입니다", "", "warning")
+      return;
+    }
+    if (!content){
+      swal("내용은 필수입니다", "", "warning")
+      return;
+    }
+    if (!inputDescription){
+      swal("입력설명은 필수입니다", "", "warning")
+      return;
+    }
+    if (!outputDescription){
+      swal("출력설명은 필수입니다", "", "warning")
+      return;
+    }
+    if (!inputExam){
+      swal("입력예제은 필수입니다", "", "warning")
+      return;
+    }
+    if (!outputExam){
+      swal("출력예제은 필수입니다", "", "warning")
+      return;
+    }
+    if (!inputFileData){
+      swal("입력파일은 선택해주세요", "", "warning")
+      return;
+    }
+    if (!outputFileData){
+      swal("출력파일은 선택해주세요", "", "warning")
+      return;
+    }
+    if (selectedList.length === 0) {
+      swal("알고리즘을 선택하세요", "", "warning");
+      return;
+    }
+
     const testCase = inputFileData.map((input,index) => {
       return {
         input : inputFileData[index],
