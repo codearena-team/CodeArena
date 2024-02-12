@@ -53,8 +53,8 @@ export default function Test () {
 
     <Webrtc 
     userNickname={userNickname}
-    customSessionId={'asdqwe123'}
-    isPlayer={false}
+    customSessionId={'qawsed'}
+    isPlayer={true}
     width={`500px`}
     height={`500px`}
     />

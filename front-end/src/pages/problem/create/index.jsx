@@ -160,18 +160,7 @@ export default function ProblemCreate() {
     .then((res) => {
       console.log(res);
       navigate(`/problem`)
-      axios.post('https://i10d211.p.ssafy.io/api/alarm/send',
-      {
-        alarmType : 1,
-        fromId : userId,
-        toId : 1,
-        alarmMsg : `${userNickname}님(userId:${userId})이 문제를 생성을 요청하였습니다.(prblemId:${params.problemId}) `,
-      }
-      )
-      .then(res=> {
-        console.log(res);
-        navigate('/problem')
-      })
+     
     })
     .catch((err) => {
       console.log(err);

@@ -18,19 +18,29 @@ class Webrtc extends Component {
       myUserName: props.userNickname,
       session: undefined,
       publisher: undefined,
+      mainStreamManager: undefined,
       subscribers: [],
     };
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.handleChangeCustomSessionId = this.handleChangeCustomSessionId.bind(this);
+    this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
   }
 
+  handleMainVideoStream(stream) {
+    if (this.state.mainStreamManager !== stream) {
+      this.setState({
+        mainStreamManager: stream
+      });
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('beforeunload', this.onbeforeunload);
-    this.joinSession()
+    // this.joinSession()
   }
 
   componentWillUnmount() {
@@ -228,20 +238,20 @@ class Webrtc extends Component {
 
             
             <div id="video-container" className='flex'>
-              {/* {this.state.publisher !== undefined ? (
-                <div className="stream-container" style={{width:this.props.width, height:this.props.height}}>
-                  <UserVideoComponent
-                    streamManager={this.state.publisher} />
+              {this.state.mainStreamManager !== undefined ? (
+                <div id="main-video" className="col-md-6">
+                  <UserVideoComponent streamManager={this.state.mainStreamManager} />
+
                 </div>
-              ) : null} */}
+              ) : null}
               {this.state.subscribers.map((sub, i) => {
                 return(
-                <div key={sub.id} className="stream-container" >
+                <div key={sub.id} className="stream-container" onClick={() => this.handleMainVideoStream(sub)}>
                   <span>{sub.id}</span>
                   <UserVideoComponent 
                   streamManager={sub}
-                  width={this.props.width}
-                  height={this.props.height}
+                  width={'200px'}
+                  height={'100px'}
                   />
                 </div>
                 )
