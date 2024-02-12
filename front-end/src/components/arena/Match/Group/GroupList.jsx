@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import '../../../css/shake.css';
-import CreateModal from '../../modal/Group/CreateModal';
+// import CreateModal from '../../modal/Group/CreateModal';
 import GroupEnterModal from '../../modal/Group/GroupEnterModal';
 import GroupLobbyModal from '../../modal/Group/GroupLobbyModal';
 import axios from 'axios';
 
 export default function GroupList() {
-  const [searchText, setSearchText] = useState(''); // 검색어 텍스트 입력
   const [selectedButton, setSelectedButton] = useState('group'); // 선택된 버튼 타입 -> 단체전
-  const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
+  // const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
   const [isModalOpen, setIsModalOpen] = useState(false); // 방생성 모달 열고 닫기
 
   const [pageCount, setPageCount] = useState(1)
@@ -158,10 +157,11 @@ export default function GroupList() {
               <button className="btn btn-disabled" disabled>입장불가</button>
             ) : (
               // 단체전 입장 또는 관전하기
-              <div className="flex">
-                <GroupEnterModal groupViewId={item.id}/> {/* 관전하기 */}
-                {/* <button className="btn" onClick={() => document.getElementById(`groupModal_${item.id}`).showModal()}>참여하기</button> */}
-                <GroupLobbyModal groupId={item.id}/> {/* 참여하기 */}
+              <div className="flex justify-center">
+                <GroupEnterModal groupViewId={item.gameId}/> {/* 관전하기 */}
+                <div className='ml-3'>
+                  <GroupLobbyModal groupId={item.gameId}/> {/* 참여하기 */}
+                </div>
               </div>
             )}
           </div>
