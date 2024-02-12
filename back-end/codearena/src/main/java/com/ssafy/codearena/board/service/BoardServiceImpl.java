@@ -2,6 +2,8 @@ package com.ssafy.codearena.board.service;
 
 import com.ssafy.codearena.board.dto.*;
 import com.ssafy.codearena.board.mapper.BoardMapper;
+import com.ssafy.codearena.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +19,32 @@ import java.util.Map;
 public class BoardServiceImpl implements BoardService{
 
     private final BoardMapper boardMapper;
-
+    private final JwtUtil jwtUtil;
 
     @Override
-    public BoardResultDto boardDetail(String boardId) {
+    public BoardResultDto boardDetail(String boardId, HttpServletRequest request) {
 
         BoardResultDto boardResultDto = new BoardResultDto();
 
         boardResultDto.setStatus("200");
         boardResultDto.setMsg("조회 성공");
 
+        String userId = jwtUtil.getUserId(request.getHeader("Authorization"));
 
         try {
 
             BoardDetailDto boardDetailDto = boardMapper.boardDetail(boardId);
+            boardDetailDto.setIsSolved("0");
+
             boardMapper.hitUpdate(boardId); //조회수 증가
+
+            int cnt = boardMapper.isSolved(userId, boardDetailDto.getProblemId());
+
+            if(cnt > 0) {
+                //풀이한 문제
+                boardDetailDto.setIsSolved("1");
+            }
+
             boardResultDto.setData(boardDetailDto);
 
         }

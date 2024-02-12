@@ -19,4 +19,5 @@ public interface BoardMapper {
     public List<BoardDetailDto> boardList(Map<String, Object> param) throws Exception;
     public int getTotalBoardCount(Map<String, Object> param) throws Exception;
     public void hitUpdate(String boardId) throws Exception;
+    public int isSolved(String userId, String problemId) throws Exception;
 }

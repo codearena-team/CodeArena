@@ -144,10 +144,8 @@ public class ChatController {
         //타임아웃
         else if(message.getType() == ChatLeaveMessage.MessageType.TERMINATED) {
 
-            if(message.getMode().equals("0")) {
-                terminateGame(message.getGameId(), "");
-                messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
-            }
+            terminateGame(message.getGameId(), "");
+            messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
         }
     }
 
@@ -211,10 +209,34 @@ public class ChatController {
         }
         //타임아웃
         else if(message.getType() == ChatLeaveMessage.MessageType.TERMINATED) {
-
+            log.info("타임아웃 메시지 도착");
             if(message.getMode().equals("0")) {
+                log.info("스피드전 타임아웃 메시지 도착");
+
                 terminateGame(message.getGameId(), "");
                 messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
+            }
+            //효율전의 경우 승패분기 탐색
+            else if(message.getMode().equals("1")) {
+                log.info("효율전 메시지 도착");
+
+                //winner 탐색
+                WinnerInfoDto winnerInfoDto = chatService.findWinner(message.getGameId());
+
+                if(Objects.isNull(winnerInfoDto)) {
+                    terminateGame(message.getGameId(), "");
+                    submitResultDto.setType(SubmitResultMessage.resultType.END);
+                    submitResultDto.setWinner(message.getSender());
+                    submitResultDto.setResult("무승부 처리 되었습니다.");
+                    messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
+                }
+                else {
+                    terminateGame(message.getGameId(), winnerInfoDto.getUserId());
+                    submitResultDto.setType(SubmitResultMessage.resultType.END);
+                    submitResultDto.setWinner(message.getSender());
+                    submitResultDto.setResult(winnerInfoDto.getUserNickname() + "님이 승리하였습니다.");
+                    messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
+                }
             }
         }
     }
