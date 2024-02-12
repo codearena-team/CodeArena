@@ -286,12 +286,18 @@
             </if>
         </if>
     </sql>
+    <sql id="onlySolve">
+        <if test='onlySolve!=null and !"".equals(onlySolve)'>
+            and submit_status like concat('%','맞았습니다.','%')
+        </if>
+    </sql>
     <select id="getSubmitCount" resultType="int" parameterType="hashmap">
         select count(submit_no)
         from ps_submit as s
         left join user as u
         on s.user_id=u.user_id
         where 1=1
+        <include refid="onlySolve"></include>
         <include refid="nickname"></include>
         <include refid="problemId"></include>
         <include refid="lang"></include>
@@ -302,6 +308,7 @@
         left join user as u
         on s.user_id=u.user_id
         where 1=1
+        <include refid="onlySolve"></include>
         <include refid="nickname"></include>
         <include refid="problemId"></include>
         <include refid="lang"></include>

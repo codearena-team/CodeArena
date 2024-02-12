@@ -331,12 +331,14 @@ public class ProblemServiceImpl implements ProblemService{
 
     @Override
     public ResultDto getSubmitList(HashMap<String, String> params) {
+        log.debug("from client parasm : {}", params);
         ResultDto resultDto = new ResultDto();
         SubmitListDto list = new SubmitListDto();
         List<SubmitDto> submitList = new ArrayList<>();
         list.setItemCount(0);
         list.setPageCount(BASIC_PGNO);
         resultDto.setStatus("202");
+
         try{
             int spp = BASIC_SPP;
             String problemId = "";
@@ -345,6 +347,7 @@ public class ProblemServiceImpl implements ProblemService{
             String orderBy= "";
             String pgnoParam = "";
             String sppParam = "";
+            boolean onlySolve = false;
             int pgno = BASIC_PGNO;
             if(params.containsKey("spp") && Integer.parseInt(params.get("spp")) > 0){
                 sppParam = params.get("spp");
@@ -360,6 +363,11 @@ public class ProblemServiceImpl implements ProblemService{
             }
             if(params.containsKey("orderBy")){
                 orderBy = params.get("orderBy");
+                log.debug("orderBy params : {}", orderBy);
+            }
+            if("timeComplexity".equals(orderBy)){
+                onlySolve = true;
+                log.debug("onlySolve : {}", params.get("onlySolve"));
             }
             if(params.containsKey("pgno")){
                 pgnoParam = params.get("pgno");
@@ -371,9 +379,11 @@ public class ProblemServiceImpl implements ProblemService{
                 spp = Integer.parseInt(sppParam);
             }
             params = new HashMap<>();
+            if(onlySolve) params.put("onlySolve", "1");
             params.put("problemId", problemId);
             params.put("userNickname", userNickname);
             params.put("lang", lang);
+            log.debug("count params : {}", params);
             int itemCount = mapper.getSubmitCount(params);
             int pageCount = BASIC_PGNO;
             if(itemCount > spp) pageCount = (itemCount%spp) == 0 ? itemCount/spp : itemCount/spp+1;
