@@ -13,6 +13,7 @@ import axios from "axios"
 export default function SubmitWindow(props) {
   const params = useParams()
   const accessToken = useSelector(state => state.access.accessToken)
+  const userId = useSelector(state => state.auth.userId)
   const [searchParams, setSearchParams] = useSearchParams();
   // 검색 카테고리   problemId : 문제번호, problemTitle : 문제제목 , userNickname : 작성자 
   const [lang, setLang] = useState('전체')  
@@ -34,7 +35,7 @@ export default function SubmitWindow(props) {
     if (problemId) {
       axios({
         method : 'get',
-        url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/submit/statistics?userId=6`,
+        url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/submit/statistics?userId=${userId}`,
       })
       .then((res)=> {
         console.log(res)
