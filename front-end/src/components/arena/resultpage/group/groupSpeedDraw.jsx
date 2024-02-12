@@ -1,7 +1,6 @@
-import Silvertropy from '../../../images/arena/Result/silvertropy.png'
-import Victory from '../../../images/arena/Result/victory.png'
-import Friend from '../../../images/arena/Result/friend.png'
-import '../../css/resultpage.css'
+import Silvertropy from '../../../../images/arena/Result/silvertropy.png'
+import Friend from '../../../../images/arena/Result/friend.png'
+import '../../../css/resultpage.css'
 import { Link } from 'react-router-dom'
 
 

@@ -1,11 +1,22 @@
 import React from "react";
-import { Link, } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setGameId } from "../../../../features/arena/arenaSlice";
 
-export default function EnterModal({ competitionId }) {
+export default function EnterModal({ competitionId, startTime }) {
   const dispatch = useDispatch()
-  const competitionPath = `/game-list/competition/view/${competitionId}`;
+  // const competitionPath = `/game-list/competition/view/${competitionId}`;
+  const navigate = useNavigate();
+
+  const handlerYes = (() => {
+    navigate(
+      {pathname: `/game-list/competition/view/${competitionId}`},
+      {state: {
+        startTime: startTime,
+      }},
+    )
+  })
+
   dispatch(setGameId(competitionId))
   return (
     <div>
@@ -14,9 +25,7 @@ export default function EnterModal({ competitionId }) {
         <div className="modal-box">
             <h3 className="font-bold text-lg mb-4 text-center">경쟁전을 관전하시겠습니까?</h3>
             <div className="modal-action flex justify-center">
-            <Link to={competitionPath} method="dialog">
-              <button className="btn">예</button>
-            </Link>
+              <button onClick={handlerYes} className="btn">예</button>
               <form method="dialog">
                 <button className="btn">아니오</button>
               </form>

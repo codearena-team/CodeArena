@@ -1,8 +1,5 @@
-import { useSearchParams } from "react-router-dom"
 import { Link } from 'react-router-dom'
-import SubmitListItem from './submitItemList'
-
-
+import SubmitListItem from './groupSubmitItemList'
 
 export default function MiddleConfirm(){
    // const pgno = searchParams.get('pgno') || 1
