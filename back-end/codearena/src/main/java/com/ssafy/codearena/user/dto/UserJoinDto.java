@@ -8,4 +8,5 @@ public class UserJoinDto {
     private String userPassword;
     private String userNickname;
     private String userIntro;
+    private String userThumbnail;
 }
