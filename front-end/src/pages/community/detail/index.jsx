@@ -123,7 +123,9 @@ export default function CommunityDetail(){
       <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
         <div className='flex justify-end mb-4'>
           <h1 className="mr-3">조회수 : {board.hit}</h1>
-          <h1>작성자 : {articleNickname}</h1>
+          <h1 onClick={()=>{navigate(`/profile/${articleNickname}`)}} 
+          style={{ textDecoration: 'underline'}}>작성자 : {articleNickname}
+          </h1>
           <div className="w-1/12"></div>
         </div>
         <div className='flex justify-end mb-4'>
@@ -133,12 +135,16 @@ export default function CommunityDetail(){
         </div>
         <div className='flex mb-4'>
           <div className="flex">
-            <label className="me-1 py-3 ml-5" htmlFor="title">문제번호</label>
-            <input type="text" id="title" className="input input-bordered w-1/12 noc mr-6" value={board.problemId} />
-            <label className="me-1 py-3 ml-10" htmlFor="rating">언어</label>
-            <input id="rating" className="input input-bordered w-3/12 noc mr-6" type="text" value={board.lang}/>
-            <label className="me-1 py-3 ml-20" htmlFor="rating">카테고리</label>
-            <input id="rating" className="input input-bordered w-3/12 noc" type="text" value={cate}/>     
+            <div className="ml-1">
+              <label className="me-1 py-3 ml-5" htmlFor="title">문제번호</label>
+              <input type="text" id="title" className="input input-bordered w-6/12 noc mr-6" value={board.problemId} />
+            </div>
+     
+              <label className="me-1 py-3" htmlFor="rating">언어</label>
+              <input id="rating" className="input input-bordered w-2/12 noc mr-6" type="text" value={board.lang}/>
+          
+            <label className="me-1 py-3 ml-5" htmlFor="rating">카테고리</label>
+            <input id="rating" className="input input-bordered noc" type="text" value={cate}/>     
           </div>
           <div className="w-1/12"></div>
         </div>
@@ -152,12 +158,12 @@ export default function CommunityDetail(){
         <div className='flex justify-between mb-4'>
           <div className="w-1/12"></div>
           <div className="w-10/12 flex justify-between">
-            <button className="btn btn-sm rounded-full drop-shadow-xl" 
-            style={{backgroundColor:bgcolor,border:'1px solid black'}}
+            <button className="btn btn-sm btn-active drop-shadow text-md" 
+            style={{backgroundColor:bgcolor}}
             onClick={colorChange}>코드보기
             </button>
-            <button className="btn btn-sm rounded-full drop-shadow-xl" 
-            style={{backgroundColor:'#F4F2CA',border:'1px solid black'}}
+            <button className="btn btn-sm btn-active drop-shadow text-md" 
+            style={{backgroundColor:'#F4F2CA'}}
             onClick={()=>document.getElementById('modal').showModal()}
             >댓글쓰기
             </button>
@@ -177,13 +183,14 @@ export default function CommunityDetail(){
                 <div className="flex justify-between">   
                   <div className="modal-action ">
                     <form method="dialog" className="mt-0">
-                      <div className=""><button className="btn btn-sm rounded-full" 
-                      style={{border:'1px solid black'}}
+                      <div className=""><button className="btn btn-sm btn-active drop-shadow text-md" 
+                      style={{backgroundColor:'#F4F2CA'}}
                       onClick={createComment}
                       >댓글작성</button></div>
                     </form>    
                     <form method="dialog">
-                      <button className="btn btn-sm rounded-full" style={{border:'1px solid black'}}>닫기</button>
+                      <button className="btn btn-sm btn-active drop-shadow text-md" 
+                      style={{backgroundColor:'#E4E4DA'}}>닫기</button>
                     </form>
                   </div>                  
                 </div>
@@ -201,11 +208,11 @@ export default function CommunityDetail(){
         )}
         { articleId === userId &&(
         <div className='flex justify-end mb-4'>
-          <button className="btn btn-sm rounded-full drop-shadow-xl btn-active mr-2"
-          style={{backgroundColor:'#E4E4DA',border:'1px solid black'}}
+          <button className="btn btn-sm btn-active drop-shadow text-md mr-2"
+          style={{backgroundColor:'#E4E4DA'}}
           onClick={goEdit}>수정</button>
-          <button className="btn btn-sm rounded-full drop-shadow-xl btn-active"
-          style={{backgroundColor:'#E4E4DA',border:'1px solid black'}}
+          <button className="btn btn-sm btn-active drop-shadow text-md"
+          style={{backgroundColor:'#E4E4DA'}}
           onClick={boardDelete}>삭제</button>
           <div className="w-1/12"></div>
         </div>

@@ -185,20 +185,16 @@ export default function ProblemCreate() {
 아래의 예시는 2개의 테스트케이스를 작성한 예시입니다.
 ex) input이 먼저 나오고 다음엔 output입니다.
 
-input.txt
-3 4
-0 0 0 0
-0 0 0 1
+input.txt                   output.txt
+
+3 4                            2
+0 0 0 0                   
+0 0 0 1                     1
 1 0 0 1
 
 2 4
 0 0 0 0
-1 1 1 1
-
-output.txt
-2
-
-1`;
+1 1 1 1`;
   return (
     <div className="p-20 pt-0">
       <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
@@ -259,7 +255,7 @@ output.txt
             <dialog id="modal" className="modal">
               <div className="modal-box" style={{backgroundColor: "#F5F5EC",maxWidth:'900px'}}>
                 <div className='flex justify-end mb-2'>
-                  <textarea className="textarea textarea-bordered w-full resize-none font-bold text-md" rows="18"
+                  <textarea className="textarea textarea-bordered w-full resize-none font-bold text-lg" rows="15"
                     value={gongji}
                     style={{outline:'none'}}
                     readOnly
