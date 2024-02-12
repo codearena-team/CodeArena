@@ -3,6 +3,7 @@ package com.ssafy.codearena.profile.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.ssafy.codearena.profile.dto.ProfileDto;
 import com.ssafy.codearena.profile.dto.S3ResultDto;
 import com.ssafy.codearena.profile.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,6 @@ public class S3FileUploadServiceImpl implements S3FileUploadService {
 
     private final AmazonS3 amazonS3Client;
     private final ProfileMapper mapper;
-
 
     public S3ResultDto upload(MultipartFile file, String userId){
 
@@ -80,6 +80,23 @@ public class S3FileUploadServiceImpl implements S3FileUploadService {
         try {
            mapper.putProfile(defaultImg, userId);
         } catch (Exception e ) {
+            resultDto.setStatus("404");
+            resultDto.setMsg("해당 사용자가 없습니다.");
+        }
+
+        return resultDto;
+    }
+
+    @Override
+    public S3ResultDto getProfile(String userId) {
+        S3ResultDto resultDto = new S3ResultDto();
+        resultDto.setStatus("200");
+        resultDto.setMsg("사용자 이미지 리턴 성공");
+
+        try {
+            ProfileDto profileDto = mapper.getProfile(userId);
+            resultDto.setData(profileDto);
+        } catch (Exception e) {
             resultDto.setStatus("404");
             resultDto.setMsg("해당 사용자가 없습니다.");
         }
