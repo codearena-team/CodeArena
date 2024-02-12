@@ -1,18 +1,14 @@
-import { useParams } from "react-router-dom"
-import CodeMirror from '@uiw/react-codemirror';
-import { java } from '@codemirror/lang-java';
-import { python } from '@codemirror/lang-python';
-import { cpp } from '@codemirror/lang-cpp';
 import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import "../../../css/GroupPlay.css";
 import G_playDividingLine from "./G_playDividingLine";
+import Editor from '@monaco-editor/react'
 
 export default function GroupPlay() {
   // const params = useParams();
   // const problemId = params.problemId
   const [code, setCode] = useState('')
-  const [lang, setLang] = useState('java')
+  const [lang, setLang] = useState('')
   const [cateList, setCateList] = useState(["PD", "구현", "그리디", "매개변수 탐색", "문자열","수학", "시뮬레이션", "완전탐색", "이분탐색", "자료구조"])
   const [selectedList, setSelectedList] = useState([])
   const [cate, setCate] = useState('선택')
@@ -107,14 +103,23 @@ export default function GroupPlay() {
           <div className="grid grid-cols-2 w-full gap-4">
             <div>
               <p className="text-xl">입력예제</p>
-              <CodeMirror height="100%" value={problem.problemExInput} onChange={onChangeCode} editable={false} />
+              <Editor
+                options={{'readOnly':true}}
+                value={problem.problemExInput}
+                onChange={onChangeCode}
+                height={`${problem?.problemExInput?.split('\n').length * 19}px`}
+              />
             </div>
             <div>
               <p className="text-xl">출력예제</p>
-              <CodeMirror height="100%" value={problem.problemExOutput} onChange={onChangeCode} editable={false} />
+              <Editor
+                options={{'readOnly':true}}
+                value={problem.problemExOutput}
+                onChange={onChangeCode}
+                height={`${problem?.problemExOutput?.split('\n').length * 19}px`}
+              />
             </div>
           </div>
-
         </div>
       </div>
 
@@ -132,9 +137,7 @@ export default function GroupPlay() {
         <div className="flex ">
           <label className="font-bold mt-1">언어</label>
           <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className=" mb-2 select select-sm select-bordered" >
-            <option>java</option>
-            <option>python</option>
-            <option>cpp</option>
+            <option>{lang}</option>
           </select>
           <label className="font-bold ms-4 mt-1">알고리즘</label>
           <select value={cate} onChange={onClickCate} className="select select-sm select-bordered w-20" >
@@ -154,7 +157,7 @@ export default function GroupPlay() {
           </div>
         </div>
         
-        <CodeMirror value={code} height="75vh" extensions={[java(),python(),cpp()]} onChange={onChangeCode} />
+        <Editor options={{'scrollBeyondLastLine': false}} value={code} height="75vh" language={lang} onChange={onChangeCode} />
         <div className="flex justify-end">
           <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full">제 출</button>
         </div>

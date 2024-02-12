@@ -1,8 +1,4 @@
-import { useParams, useLocation } from "react-router-dom"
-import CodeMirror from '@uiw/react-codemirror';
-import { java } from '@codemirror/lang-java';
-import { python } from '@codemirror/lang-python';
-import { cpp } from '@codemirror/lang-cpp';
+import { useLocation } from "react-router-dom"
 import { useState, useCallback, useEffect, useRef } from "react";
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -10,6 +6,7 @@ import axios from "axios";
 import "../../../css/CompetitionPlay.css";
 import C_playDividingLine from "./C_playDividingLine";
 import { useSelector } from "react-redux";
+import Editor from '@monaco-editor/react'
 
 export default function CompPlayProblem({  }) {
   const sender = useRef(useSelector(state => state.auth.userNickname));
@@ -60,11 +57,11 @@ export default function CompPlayProblem({  }) {
     setUserId(userId.current);
     setGameId(gameId.current);
     if(lang.current === 'java'){
-      setCurrentLangPkg(java());
+      setCurrentLangPkg(currentLangPkg);
     }else if(lang.current === 'python'){
-      setCurrentLangPkg(python());
+      setCurrentLangPkg(currentLangPkg);
     }else{
-      setCurrentLangPkg(cpp());
+      setCurrentLangPkg(currentLangPkg);
     }
     axios({
       method : 'get',
@@ -223,11 +220,24 @@ export default function CompPlayProblem({  }) {
           <div className="grid grid-cols-2 w-full gap-4">
             <div>
               <p className="text-xl">입력예제</p>
-              <CodeMirror height="100%" value={problem.problemExInput} onChange={onChangeCode} editable={false} />
+              <Editor
+                options={{'readOnly':true}}
+                language={lang}
+                height="100%"
+                value={problem.problemExInput}
+                onChange={onChangeCode}
+                editable={false} />
             </div>
             <div>
               <p className="text-xl">출력예제</p>
-              <CodeMirror height="100%" value={problem.problemExOutput} onChange={onChangeCode} editable={false} />
+              <Editor
+                options={{'readOnly':true}}
+                language={lang}
+                height="100%"
+                value={problem.problemExOutput}
+                onChange={onChangeCode}
+                editable={false}
+              />
             </div>
           </div>
 
@@ -252,7 +262,7 @@ export default function CompPlayProblem({  }) {
           </select>
         </div>
         
-        <CodeMirror value={code} height="75vh" extensions={[currentLangPkg]} onChange={onChangeCode} />
+        <Editor options={{'scrollBeyondLastLine': false}} value={code} height="75vh" language={lang} onChange={onChangeCode} />
         <div className="flex justify-end">
           <button onClick={onClickHandler} className="mt-1 btn btn-sm btn-neutral rounded-full">제 출</button>
         </div>

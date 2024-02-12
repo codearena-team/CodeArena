@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // import * as StompJs from '@stomp/stompjs';
 import C_DividingLine from "./C_dividingLine";
 import CompTopInfo from "./CompTopInfo";
@@ -12,29 +12,24 @@ export default function CompetitionView() {
   const params = useParams()
   const [chatList, setChatList] = useState([]);
   const [chatMessage, setChatMessage] =useState('')
-  // const [index, setIndex] = useState(0)
   const [inputMessage, setInputMessage] = useState('');
   const [currentStompClient, setStompClient] = useState(null);
   const recentMessage = useRef(null);
-
-  // const type = useRef();
   const sender = useRef(useSelector(state => state.auth.userNickname));
-  // const message = useRef('');
-  // const gameId = useRef(useSelector(state => state.arena.gameId))
-  useEffect(() => {
 
+  useEffect(() => {
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
     const stompClient = Stomp.over(socket);
-    console.log("useEffect stompClient :", stompClient)
+    console.log("경쟁전 useEffect stompClient :", stompClient)
 
     stompClient.connect({}, () => {
       // 연결
-      console.log('채팅과 연결이 되었어요 !')
+      console.log('경쟁전 채팅과 연결이 되었어요 !')
     
       // 구독하기 
       stompClient.subscribe('/sub/chat/room/'+`${params.id}`, (message) => {
         // 받은 메시지에 대한 처리
-        console.log('채팅을 받았어요:', message);
+        console.log('채팅을 받았습니다 :', message);
         const msg = JSON.parse(message.body)
         const tmp = [...chatList]  //배열 메모리 주소 변경을 해야 useState 감지가 됨.
         const obj = {sender:msg.sender, message:msg.message}
@@ -45,7 +40,7 @@ export default function CompetitionView() {
       });
     }, error => {
       // 에러
-      console.error("채팅 연결 에러났음", error)
+      console.error("경쟁전 채팅 연결에서 에러가 발생했어요.", error)
       alert("연결에 문제가 있습니다. 다시 시도해주세요.")
       // 필요한 경우 여기에서 재연결 로직을 구현
     });
@@ -54,19 +49,19 @@ export default function CompetitionView() {
     setStompClient(stompClient)
 
     return () => {
-      console.log("연결 끊었어요!!")
+      console.log("채팅 연결을 종료합니다.")
       stompClient.disconnect();
     }
   }, [chatList, params.id]);
 
   // 입장했을 때 1번만 알림 보내기
   const handleEnterMessage = () => {
-    console.log("입장함!!")
+    console.log("입장 메세지를 전달합니다.")
     if (currentStompClient && currentStompClient.connected ) {
       currentStompClient.send(`/pub/chat/message`, {}, JSON.stringify({
         gameId: params.id,
         sender: sender.current,
-        message: '누군가 입장했어요!',
+        message: '경쟁전에 누군가 입장했어요!',
         type: 'ENTER',
     }))
   } else {
@@ -76,16 +71,16 @@ export default function CompetitionView() {
 
     stompClient.connect({}, () => {
       // 연결
-      console.log("입장 메세지 보냄@@@@@@@@@@@@@@@@")
+      console.log("손님이 입장하여 stompClient 연결이 시도되었습니다.")
       stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
         gameId: params.id,
         sender: sender.current,
-        message: '누군가 입장했어요!',
+        message: '경쟁전에 누군가 입장했어요!',
         type: 'ENTER',
     }))
     }, error => {
-      console.error("gkdl", error)
-      
+      console.error("경쟁전 입장 연결 에러가 발생했어요.", error)
+      alert("입장에 문제가 있습니다. 다시 시도해주세요.")
     });
   }
 }
@@ -100,11 +95,9 @@ export default function CompetitionView() {
       event.preventDefault();
     } // 새로고침 방지
 
-    // console.log("여긴 stompClient", currentStompClient)
-    // console.log("여긴 inputMessage :", inputMessage.trim())
     if (currentStompClient && currentStompClient.connected && inputMessage.trim() !== '') {
-      console.log("메시지 보냈어요")
-      console.log("게임 아이디 찍음 :", params.id)
+      console.log("메시지 채팅 하나를 보냈어요.")
+      console.log("gameId를 확인합니다. :", params.id)
       currentStompClient.send(`/pub/chat/message`, {}, JSON.stringify({
         gameId: params.id,
         sender: sender.current,
@@ -115,7 +108,7 @@ export default function CompetitionView() {
       setInputMessage('');
     } else {
       alert("잠시 후에 시도해주세요. 채팅이 너무 빠릅니다.")
-      console.error('STOMP 클라이언트가 연결되지 않았습니다.'); // 5초 후에 다시 연결 시도
+      console.error('STOMP 클라이언트 연결이 원활하지 못합니다. 기다려주세요');
     }
   };
 
@@ -146,7 +139,7 @@ export default function CompetitionView() {
 
   useEffect(() => {
     scrollToBottom();
-  },[chatList.length])
+  }, [chatList.length])
 
   return (
     <div>
@@ -188,8 +181,10 @@ export default function CompetitionView() {
                   className={`chat ${message.sender === sender.current ? 'chat-end' : 'chat-start'}`}
                 >
                   <div className="chat-bubble">
-                  <strong>{message.sender} : </strong>
-                  <span>{message.message}</span>
+                    {message.sender !== sender.current && (
+                      <strong>{message.sender} : </strong>
+                    )}
+                    <span>{message.message}</span>
                   </div>
                 </div>
               ))}

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 // npm install styled-components 애니메이트 기능 구현 설치 라이브러리
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
-import Oh from '../../images/arena/HotMatch/oh.png'
-import Gwi from '../../images/arena/HotMatch/gwi.png'
-import Hae from '../../images/arena/HotMatch/hae.png'
-import Kim from '../../images/arena/HotMatch/kim.png'
+// import Oh from '../../images/arena/HotMatch/oh.png'
+// import Gwi from '../../images/arena/HotMatch/gwi.png'
+// import Hae from '../../images/arena/HotMatch/hae.png'
+// import Kim from '../../images/arena/HotMatch/kim.png'
 import View from '../../images/arena/HotMatch/View.png'
 import VS from '../../images/arena/HotMatch/VS.png'
 import Fighting from '../../images/arena/HotMatch/Fighting.gif'
