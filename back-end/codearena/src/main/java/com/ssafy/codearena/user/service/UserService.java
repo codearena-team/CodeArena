@@ -13,7 +13,7 @@ public interface UserService {
     UserResultDto checkDuplicatedNickname(String nickname);
     UserResultDto checkDuplicatedEmail(String email);
     UserResultDto issueVerificationCode(UserReissueDto userReissueDto);
-    UserResultDto checkVerificationCode(VerifyDto verifyDto);
+    UserResultDto checkVerificationCode(UserReissueDto userReissueDto);
     UserResultDto searchUser(UserSearchDto userSearchDto);
     UserResultDto searchUserList(UserSearchListDto userSearchListDto);
     UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto);

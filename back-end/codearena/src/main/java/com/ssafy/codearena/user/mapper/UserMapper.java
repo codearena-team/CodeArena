@@ -15,7 +15,7 @@ public interface UserMapper {
     TokenDataDto login(UserLoginDto userLoginDto) throws SQLException;
     int logout(String userEmail) throws SQLException;
     int issueVerificationCode(UserReissueDto userReissueDto) throws SQLException;
-    int checkVerificationCode(VerifyDto verifyDto) throws SQLException;
+    int checkVerificationCode(UserReissueDto userReissueDto) throws SQLException;
     UserInfoDto searchUser(String userNickname) throws SQLException;
     ArrayList<UserSearchResultListDto> searchUserList(UserSearchListDto userSearchListDto) throws SQLException;
     void saveRefreshToken(Map<String, String> map) throws SQLException;

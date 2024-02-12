@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResultDto checkVerificationCode(VerifyDto verifyDto) {
+    public UserResultDto checkVerificationCode(UserReissueDto userReissueDto) {
         UserResultDto userResultDto = new UserResultDto();
 
         userResultDto.setStatus("200");
@@ -253,10 +253,13 @@ public class UserServiceImpl implements UserService{
         userResultDto.setData(null);
 
         try {
-            int result = mapper.checkVerificationCode(verifyDto);
+            int result = mapper.checkVerificationCode(userReissueDto);
 
-            if (result != 1) {
-                log.info("[checkVerificationCode] verifyDto : {}", verifyDto);
+            if (result == 1) {
+                userReissueDto.setTempCode(null);
+                mapper.issueVerificationCode(userReissueDto);
+            } else {
+                log.info("[checkVerificationCode] userReissueDto : {}", userReissueDto);
                 userResultDto.setStatus("404");
                 userResultDto.setMsg("인증 코드 미일치");
             }

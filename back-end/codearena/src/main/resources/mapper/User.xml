@@ -68,10 +68,10 @@
         update user set verification_code="${tempCode}" where user_email="${userEmail}";
     </update>
 
-    <select id="checkVerificationCode" parameterType="verifyDto" resultType="int">
+    <select id="checkVerificationCode" parameterType="userReissueDto" resultType="int">
         select count(*)
         from user
-        where user_id="${userId}" and verification_code="${verifyCode}"
+        where user_email="${userEmail}" and verification_code="${tempCode}"
     </select>
 
     <select id="searchUser" parameterType="string" resultMap="userInfoDto">
