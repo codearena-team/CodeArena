@@ -563,5 +563,76 @@ public class ChatServiceImpl implements ChatService{
         return gameResultDto;
     }
 
+    @Override
+    public GameResultDto whoWinner(String gameId) {
+
+        GameResultDto gameResultDto = new GameResultDto();
+        gameResultDto.setStatus("200");
+        gameResultDto.setMsg("성공적으로 결과 조회했습니다.");
+
+        CompetitiveGameResultDto competitiveGameResultDto = new CompetitiveGameResultDto();
+
+        try {
+
+            //player1, player2, winner 조회
+            CompetitiveWinnerInfoDto competitiveWinnerInfoDto = new CompetitiveWinnerInfoDto();
+            competitiveWinnerInfoDto = gameMapper.whoWinner(gameId);
+            if( competitiveWinnerInfoDto.getWinner() == null) competitiveWinnerInfoDto.setWinner("");
+
+            if(competitiveWinnerInfoDto.getWinner().isEmpty()) {
+                //draw
+                //두 유저의 변동된 점수 조회
+                CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
+                competitiveGameResultDto.setWinnerId(player.getUserNickname());
+                competitiveGameResultDto.setWinnerRating(player.getUserRating());
+
+                player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer2(), competitiveWinnerInfoDto.getGame_mode());
+                competitiveGameResultDto.setLoserId(player.getUserNickname());
+                competitiveGameResultDto.setLoserRating(player.getUserRating());
+            }
+            else if(competitiveWinnerInfoDto.getWinner().equals(competitiveWinnerInfoDto.getPlayer1())) {
+
+                //두 유저의 변동된 점수 조회
+                CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
+                competitiveGameResultDto.setWinnerId(player.getUserNickname());
+                competitiveGameResultDto.setWinnerRating(player.getUserRating());
+
+                player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer2(), competitiveWinnerInfoDto.getGame_mode());
+                competitiveGameResultDto.setLoserId(player.getUserNickname());
+                competitiveGameResultDto.setLoserRating(player.getUserRating());
+            }
+            else if(competitiveWinnerInfoDto.getWinner().equals(competitiveWinnerInfoDto.getPlayer2())) {
+
+                //두 유저의 변동된 점수 조회
+                CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer2(), competitiveWinnerInfoDto.getGame_mode());
+                competitiveGameResultDto.setWinnerId(player.getUserNickname());
+                competitiveGameResultDto.setWinnerRating(player.getUserRating());
+
+                player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
+                competitiveGameResultDto.setLoserId(player.getUserNickname());
+                competitiveGameResultDto.setLoserRating(player.getUserRating());
+            }
+
+
+            //채점현황 리스트 조회
+
+            List<CompetitiveGameSubmitDto> list = new ArrayList<>();
+            list = gameMapper.getSubmitList(gameId);
+
+            competitiveGameResultDto.setList(list);
+
+            gameResultDto.setData(competitiveGameResultDto);
+        }
+        catch (Exception e) {
+
+            log.error("Exception e", e);
+            gameResultDto.setStatus("500");
+            gameResultDto.setMsg("Server Internal Error");
+            gameResultDto.setData(null);
+        }
+
+        return gameResultDto;
+    }
+
 
 }

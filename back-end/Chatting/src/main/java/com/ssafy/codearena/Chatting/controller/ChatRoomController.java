@@ -98,5 +98,13 @@ public class ChatRoomController {
         return new ResponseEntity<RestResultDto>(chatService.getCandidates(gameId), HttpStatus.OK);
     }
 
+    @Operation(summary = "경쟁 게임방 결과 조회 API")
+    @Parameter(name = "gameId")
+    @GetMapping("/result")
+    public ResponseEntity<?> whoWinner(@RequestParam String gameId) {
+
+        return new ResponseEntity<GameResultDto>(chatService.whoWinner(gameId), HttpStatus.OK);
+    }
+
 
 }
