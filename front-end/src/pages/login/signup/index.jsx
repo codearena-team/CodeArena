@@ -86,43 +86,47 @@ export default function Signup(){
     // console.log(email)
     // console.log(e.target.value)
     // 이메일 중복 검사 요청보내기
-    axios({
-      url:`https://i10d211.p.ssafy.io/api/user/email/duplicate?userEmail=${e.target.value}`,
-      method:'get',
-    })
-    .then((res)=>{
-      console.log(res.data.data.result)
-      console.log(res.data.data.result === false)
-      if (res.data.data.result === false){
-        setEmailmessage('중복된 이메일 입니다')
-      }else{
-        setEmailmessage('')
-      }
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
+    setTimeout(() => {
+      axios({
+        url:`https://i10d211.p.ssafy.io/api/user/email/duplicate?userEmail=${e.target.value}`,
+        method:'get',
+      })
+      .then((res)=>{
+        console.log(res.data.data.result)
+        console.log(res.data.data.result === false)
+        if (res.data.data.result === false){
+          setEmailmessage('중복된 이메일 입니다')
+        }else{
+          setEmailmessage('')
+        }
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }, 10);
   }
 
 
   const onNicknameChange = (e) =>{
     setNickname(e.target.value)
     // 닉네임 중복 검사 요청보내기
-    axios({
-      url:`https://i10d211.p.ssafy.io/api/user/nick/duplicate?userNickname=${e.target.value}`,
-      method:'get',
-    })
-    .then((res)=>{
-      console.log(res.data.data.result)
-      if (res.data.data.result === false){
-        setNicknamemessage('중복된 닉네임 입니다')
-      }else{
-        setNicknamemessage('')
-      }
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
+    setTimeout(() => {
+      axios({
+        url:`https://i10d211.p.ssafy.io/api/user/nick/duplicate?userNickname=${e.target.value}`,
+        method:'get',
+      })
+      .then((res)=>{
+        console.log(res.data.data.result)
+        if (res.data.data.result === false){
+          setNicknamemessage('중복된 닉네임 입니다')
+        }else{
+          setNicknamemessage('')
+        }
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }, 10);
   }
 
 

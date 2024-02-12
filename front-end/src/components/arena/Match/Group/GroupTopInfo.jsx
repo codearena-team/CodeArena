@@ -3,6 +3,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import G_ExitModal from "../../modal/Group/G_ExitModal";
+import Webrtc from "../../../../pages/test/Webrtc";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 import cat_one from '../../../../images/arena/GroupView/cat_one.png';
 import cat_two from '../../../../images/arena/GroupView/cat_two.png';
@@ -15,6 +18,8 @@ import cat_eight from '../../../../images/arena/GroupView/cat_eight.png';
 import cat_nine from '../../../../images/arena/GroupView/cat_nine.png';
 
 export default function UserInfo() {
+  const params = useParams()
+  const userNickname = useSelector(state=> state.auth.userNickname)
   const [panelWidths, setPanelWidths] = useState({
     left: 75,
     right: 20,
@@ -40,7 +45,7 @@ export default function UserInfo() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
     centerPadding: '0', 
@@ -51,23 +56,17 @@ export default function UserInfo() {
   return (
     <div className="flex">
       {/* Group 관전 상단에 유저 정보를 제공할 페이지 */}
-      <Slider {...settings} style={{ width: `${panelWidths.left}%` }}>
-        {userData.map((user, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-center ml-5 text-center"
-            style={{ width: 'auto', height: 'auto', backgroundColor: '#E3E6D9' }}
-          >
-            <div
-              className="mx-auto flex items-center justify-center rounded-xl shadow-lg mb-2"
-              style={{ width: "80%", height: '200px', backgroundColor: '#F5EBDB' }}
-            >
-              {/* User의 각 화면 띄울 곳 (지금은 고양이) */}
-              <img src={catImages[user.id - 1]} alt={`User ${user.id}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-          </div>
-        ))}
-      </Slider>
+      {/* <Slider {...settings} style={{ width: `${panelWidths.left}%` }}> */}
+        <div style={{ width: `${panelWidths.left}%`, height:'25vh'}}>
+          <Webrtc 
+            userNickname={userNickname}
+            customSessionId={params.id}
+            // width='300px'
+            height='200px'
+            isPlayer={false}
+          />
+        </div>
+      {/* </Slider> */}
 
       {/* 우측 상단 버튼 영역 */}
       <div

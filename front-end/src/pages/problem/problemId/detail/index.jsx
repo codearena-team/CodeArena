@@ -141,6 +141,7 @@ export default function ProblemDetail() {
           userId={userId}
           problemId={problem.problemId}
           lang={lang}
+          setWindow={setWindow}
           />
         </div>
       </div>

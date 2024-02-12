@@ -7,6 +7,7 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useSelector } from "react-redux";
 import Webrtc from "../../../../pages/test/Webrtc";
+import MainVideo from "../../../../pages/test/MainVideo";
 
 export default function CompetitionView() {
   const params = useParams()
@@ -22,6 +23,7 @@ export default function CompetitionView() {
   const [inputMessage, setInputMessage] = useState('');
   const [currentStompClient, setStompClient] = useState(null);
   const recentMessage = useRef(null);
+
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
   useEffect(() => {
@@ -201,7 +203,7 @@ export default function CompetitionView() {
         {/* 왼쪽(6)에 해당하는 부분 */}
         <div className="left-panel ml-3 mr-3 mt-1" style={{ width: `${panelWidths.left}%`}}>
           <div
-            className="user-screens mt-5 rounded-xl shadow-lg flex items-center justify-center"
+            className="p-4"
             style={{ width: '100%', height: '90%', backgroundColor: '#F5EBDB' }}
           >
             <div className="flex justify-center items-center mt-5">
@@ -209,14 +211,20 @@ export default function CompetitionView() {
             </div>
             {/* "유저1의 화면이 보이는 공간 vs 유저2의 화면이 보이는 공간" */}
             {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
-
-            {/* <Webrtc 
-              userNickname={params.userNickname}
-              customSessionId={'qawsed'}
-              isPlayer={false}
-              width={`${panelWidths.left}%`}
-              height={`550px`}
-            /> */}
+            <div>
+              <div className=" rounded-lg">
+                <Webrtc 
+                  userNickname={sender.current}
+                  customSessionId={params.id}
+                  isPlayer={false}
+                  width={`200px`}
+                  height={`100px`}
+                />
+              </div>
+              <div className=" rounded-lg mt-4" >
+                <MainVideo height={`500px`} width={`${panelWidths.left * 3.7}%`} />
+              </div>
+            </div>
           </div>
         </div>
 

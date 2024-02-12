@@ -48,6 +48,7 @@ export default function TagModal (props) {
     axios.post(`https://i10d211.p.ssafy.io/api/problem/${problemId}/submit`,{code:code, tagList:taglist, userId:userId, submitLang:lang})
     .then((res)=>{
       console.log(res)
+      props.setWindow(false)
       alert(res.data.msg)
     })
   
