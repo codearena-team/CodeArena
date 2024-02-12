@@ -276,10 +276,11 @@ public class ChatServiceImpl implements ChatService{
             competitiveManageDto.setPlayer2_leave(true);
         }
 
-        if(competitiveManageDto.isPlayer1_leave() && competitiveManageDto.isPlayer2_leave()) {
-            return true;
-        }
-        return false;
+        log.info("탈주 이벤트 발생! : ");
+        log.info(playerId);
+        log.info("player1 : " + competitiveManageDto.isPlayer1_leave());
+        log.info("player2 : " + competitiveManageDto.isPlayer2_leave());
+        return competitiveManageDto.isPlayer1_leave() && competitiveManageDto.isPlayer2_leave();
     }
 
     @Override
