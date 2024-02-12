@@ -268,9 +268,10 @@ class Webrtc extends Component {
   }
 
   async getToken() {
-    await axios.post(APPLICATION_SERVER_URL + 'game/vidu/sessions', {customSessionId:this.state.customSessionId}, {
+    const res = await axios.post(APPLICATION_SERVER_URL + 'game/vidu/sessions', {customSessionId:this.state.customSessionId}, {
       headers: { 'Content-Type': 'application/json', },
     });
+    console.log(res);
     const response = await axios.post(APPLICATION_SERVER_URL + 'game/vidu/sessions/' + this.state.customSessionId + '/connections', {}, {
       headers: { 'Content-Type': 'application/json', },
     });
