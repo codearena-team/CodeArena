@@ -9,6 +9,7 @@ import com.ssafy.codearena.board.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,9 @@ public class BoardController implements BoardControllerDocs{
 
     @Override
     @GetMapping("/detail/{boardId}")
-    public ResponseEntity<?> boardDetail(@PathVariable String boardId) {
+    public ResponseEntity<?> boardDetail(@PathVariable String boardId, HttpServletRequest request) {
 
-        return new ResponseEntity<BoardResultDto>(boardService.boardDetail(boardId), HttpStatus.OK);
+        return new ResponseEntity<BoardResultDto>(boardService.boardDetail(boardId, request), HttpStatus.OK);
     }
 
     @Override

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface BoardControllerDocs {
     @Operation(summary = "게시판 상세조회")
     @Parameter(name = "boardId", description = "상세보기 할 게시글의 번호", required = true)
     @ApiResponse(responseCode = "200", description = "게시글 상세 조회 성공", content = @Content(schema = @Schema(implementation = BoardDetailDto.class)))
-    public ResponseEntity<?> boardDetail(String boardId);
+    public ResponseEntity<?> boardDetail(String boardId, HttpServletRequest request);
 
 
     @Operation(summary = "게시판 글쓰기")

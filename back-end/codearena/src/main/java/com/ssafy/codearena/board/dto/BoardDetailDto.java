@@ -38,8 +38,11 @@ public class BoardDetailDto {
     @Schema(description = "조회수")
     private String hit;
 
-    @Schema(description = "스포방지 여부", example = "1 : 스포방지, 2 : 전체공개")
+    @Schema(description = "스포방지 여부", example = "0 : 전체공개, 1 : 스포방지")
     private int spoiler;
+
+    @Schema(description = "문제 풀이 여부", example = "0 : 미풀이, 1 : 풀이")
+    private String isSolved;
 
     @Schema(description = "게시 날짜")
     private String date;

@@ -110,4 +110,10 @@
         SET board_hit = board_hit + 1
         WHERE article_no = #{boardId}
     </update>
+
+    <select id="isSolved" parameterType="string" resultType="int">
+        SELECT COUNT(submit_no)
+        FROM ps_submit
+        WHERE user_id = #{userId} AND problem_id = #{problemId} AND submit_status = '맞았습니다.';
+    </select>
 </mapper>
