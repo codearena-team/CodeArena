@@ -406,11 +406,8 @@
     <select id="getUnsolveListByUserNickname" parameterType="String" resultMap="getProblemIdAndProblemTitle">
         select ps_submit.problem_id, problem_title from ps_submit
             inner join ps_list on ps_submit.problem_id = ps_list.problem_id
-            inner join user on ps_submit.user_id = user.user_id
-        where user_nickname = '${nickname}' and submit_status!='채점중'and ps_submit.problem_id not in (
-            select ps_submit.problem_id from ps_submit
-            where submit_status = '맞았습니다.' and user_nickname = '${nickName}' group by ps_submit.problem_id
-        ) group by problem_id;
+            inner join user on ps_submit.user_id = user.user_id where user_nickname = '${userNickname}' and submit_status!='채점중'
+        and ps_submit.problem_id not in ( select ps_submit.problem_id from ps_submit inner join user on ps_submit.user_id = user.user_id where submit_status like '%맞았습%' and user_nickname = '${userNickname}' group by ps_submit.problem_id ) group by problem_id;
     </select>
 
     <select id="getProblemCateByNickname" parameterType="String" resultMap="userProblemCate">
