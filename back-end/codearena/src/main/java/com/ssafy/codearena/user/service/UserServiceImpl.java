@@ -209,26 +209,25 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResultDto reissue(UserReissueDto userReissueDto) {
+    public UserResultDto issueVerificationCode(UserReissueDto userReissueDto) {
         UserResultDto userResultDto = new UserResultDto();
 
         userResultDto.setStatus("200");
-        userResultDto.setMsg("비밀번호 변경 후 이메일 전송 완료");
+        userResultDto.setMsg("인증코드 이메일 전송 완료");
         userResultDto.setData(null);
 
         try {
-            String tempPassword = getTempPassword();
-            userReissueDto.setTempPassword(tempPassword);
+            String tempCode = getTempCode();
+            userReissueDto.setTempCode(tempCode);
 
-            int result = mapper.reissue(userReissueDto);
+            int result = mapper.issueVerificationCode(userReissueDto);
 
             if (result == 1) {
-                // 이메일 전송 로직
-
+                // 인증 코드를 DB에 넣었으면 임시 코드 이메일 전송
                 MailDto mailDto = new MailDto();
                 mailDto.setAddress(userReissueDto.getUserEmail());
-                mailDto.setTitle("[Code Arena] 임시 비밀번호 발급");
-                mailDto.setMessage("Code Arena 임시 비밀번호 발급 안내 이메일입니다. " + "회원님의 임시 비밀번호는 " + tempPassword + " 입니다. " + "로그인 후에 비밀번호를 변경해주세요!");
+                mailDto.setTitle("[Code Arena] 비밀번호 변경 인증");
+                mailDto.setMessage("Code Arena 비밀번호 변경 인증 코드 발급 안내 이메일입니다. \n" + "인증 코드 [ " + tempCode + " ] 를 입력해주세요.");
 
                 mailSend(mailDto);
 
@@ -239,14 +238,41 @@ public class UserServiceImpl implements UserService{
 
         } catch (Exception e) {
             userResultDto.setStatus("500");
-            userResultDto.setMsg("수정, 이메일 전송 실패");
+            userResultDto.setMsg("이메일 전송 실패");
+        }
+
+        return userResultDto;
+    }
+
+    @Override
+    public UserResultDto checkVerificationCode(VerifyDto verifyDto) {
+        UserResultDto userResultDto = new UserResultDto();
+
+        userResultDto.setStatus("200");
+        userResultDto.setMsg("인증 성공");
+        userResultDto.setData(null);
+
+        try {
+            int result = mapper.checkVerificationCode(verifyDto);
+
+            if (result != 1) {
+                log.info("[checkVerificationCode] verifyDto : {}", verifyDto);
+                userResultDto.setStatus("404");
+                userResultDto.setMsg("인증 코드 미일치");
+            }
+
+
+        } catch (Exception e) {
+            log.debug("[checkVerificationCode] : ", e);
+            userResultDto.setStatus("500");
+            userResultDto.setMsg("서버 내부 에러");
         }
 
         return userResultDto;
     }
 
     // 비밀번호 랜덤 생성 로직
-    public static String getTempPassword(){
+    public static String getTempCode(){
         char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
                 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
@@ -382,6 +408,11 @@ public class UserServiceImpl implements UserService{
         try {
             String lowerEmail = userChangePasswordDto.getUserEmail().toLowerCase();
             userChangePasswordDto.setUserEmail(lowerEmail);
+
+            // 비밀번호 암호화 해서 넣기
+            String encryptedPassword = encryptUtil.Encrypt(userChangePasswordDto.getUserPassword());
+            userChangePasswordDto.setUserPassword(encryptedPassword);
+
             int result = mapper.changePassword(userChangePasswordDto);
 
             if (result != 1) {

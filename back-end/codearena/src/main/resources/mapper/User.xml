@@ -64,9 +64,15 @@
         where user_email=#{userEmail};
     </update>
 
-    <update id="reissue" parameterType="userReissueDto">
-        update user set user_password="${tempPassword}" where user_email="${userEmail}";
+    <update id="issueVerificationCode" parameterType="userReissueDto">
+        update user set verification_code="${tempCode}" where user_email="${userEmail}";
     </update>
+
+    <select id="checkVerificationCode" parameterType="verifyDto" resultType="int">
+        select count(*)
+        from user
+        where user_id="${userId}" and verification_code="${verifyCode}"
+    </select>
 
     <select id="searchUser" parameterType="string" resultMap="userInfoDto">
         select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating, user_thumbnail
@@ -76,7 +82,7 @@
 
     <update id="saveRefreshToken" parameterType="map">
         update user
-        set refresh_token = #{refreshToken}
+        set refresh_token=#{refreshToken}
         where user_email=#{userEmail};
     </update>
 

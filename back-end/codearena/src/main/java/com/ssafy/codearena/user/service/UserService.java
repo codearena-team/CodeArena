@@ -12,7 +12,8 @@ public interface UserService {
     UserResultDto logout(String userEmail);
     UserResultDto checkDuplicatedNickname(String nickname);
     UserResultDto checkDuplicatedEmail(String email);
-    UserResultDto reissue(UserReissueDto userReissueDto);
+    UserResultDto issueVerificationCode(UserReissueDto userReissueDto);
+    UserResultDto checkVerificationCode(VerifyDto verifyDto);
     UserResultDto searchUser(UserSearchDto userSearchDto);
     UserResultDto searchUserList(UserSearchListDto userSearchListDto);
     UserResultDto changePassword(UserChangePasswordDto userChangePasswordDto);
