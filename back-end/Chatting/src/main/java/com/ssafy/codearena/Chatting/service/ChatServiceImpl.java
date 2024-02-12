@@ -353,7 +353,7 @@ public class ChatServiceImpl implements ChatService{
         }
         //무승부
         else if(winner.equals("")) {
-            log.info("무승부")
+            log.info("무승부");
             player1_result = CaluRating(player1_rating, player2_rating, "무승부");
             player2_result = CaluRating(player2_rating, player1_rating, "무승부");
         }
