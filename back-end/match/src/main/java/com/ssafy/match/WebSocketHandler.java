@@ -104,10 +104,27 @@ public class WebSocketHandler extends TextWebSocketHandler {
                             UUID uuid = UUID.randomUUID();
                             HashMap<String, MatchDto> match = getMatchDtoHashMap(uuid, player1, player2, key);
                             matchMap.put(uuid.toString(), match);
-                            MessageDto message1 = makeMessage(MessageDto.MessageType.QUERY, receive.getGameMode(), uuid.toString(), player1userId, receive.getLang(), null, null, key, player1userNickname, null, null, null);
-                            MessageDto message2 = makeMessage(MessageDto.MessageType.QUERY, receive.getGameMode(), uuid.toString(), player2userId, receive.getLang(), null, null, key, player2userNickname, null, null, null);
-                            p1Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message1)));
-                            p2Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message2)));
+                            HashMap<String, String> serverMsg = new HashMap<>();
+                            serverMsg.put("type", "QUERY");
+                            serverMsg.put("gameMode", receive.getGameMode());
+                            serverMsg.put("matchId", uuid.toString());
+                            serverMsg.put("userId", player1userId);
+                            serverMsg.put("userNickname", player1userNickname);
+                            serverMsg.put("enemyId", player2userId);
+                            serverMsg.put("enemyNickname", player2userNickname);
+                            serverMsg.put("queueKey", key);
+                            log.debug("server to player send msg : {}", serverMsg);
+                            p1Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
+                            serverMsg.put("userId", player2userId);
+                            serverMsg.put("userNickname", player2userNickname);
+                            serverMsg.put("enemyId", player1userId);
+                            serverMsg.put("enemyNickname", player1userNickname);
+                            log.debug("server to player send msg : {}", serverMsg);
+                            p2Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
+//                            MessageDto message1 = makeMessage(MessageDto.MessageType.QUERY, receive.getGameMode(), uuid.toString(), player1userId, receive.getLang(), null, null, key, player1userNickname, null, null, null);
+//                            MessageDto message2 = makeMessage(MessageDto.MessageType.QUERY, receive.getGameMode(), uuid.toString(), player2userId, receive.getLang(), null, null, key, player2userNickname, null, null, null);
+//                            p1Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message1)));
+//                            p2Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message2)));
                         }
                     }
                 }
@@ -174,12 +191,35 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         log.debug("sessionId : {}  sessionObj : {}", entrySet.getKey(), entrySet.getValue());
                     }
                     log.debug("매치속 플레이어 수 : {}", players.size());
-                    for (MatchDto player : players) {
-                        WebSocketSession playerSession = CLIENTS.get(userWithSessionId.get(player.getUserId() + " " + player.getUserNickname()));
-                        MessageDto dto = makeMessage(MessageDto.MessageType.INGAME, receive.getGameMode(), recMatchId, player.getUserId(), receive.getLang(), null, "게임으로 이동됩니다.", player.getQueueKey(), player.getUserNickname(), gameId, viduSession, problemId);
-                        //session.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
-                        playerSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
-                    }
+                    HashMap<String, String> serverMsg = new HashMap<>();
+                    serverMsg.put("type", "INGAME");
+                    serverMsg.put("problemId", problemId);
+                    serverMsg.put("gameMode", receive.getGameMode());
+                    serverMsg.put("lang", receive.getLang());
+                    serverMsg.put("gameId", gameId);
+                    Iterator<MatchDto> playerIterator = players.iterator();
+                    MatchDto player1 = playerIterator.next();
+                    MatchDto player2 = playerIterator.next();
+                    WebSocketSession player1Session = CLIENTS.get(userWithSessionId.get(player1.getUserId() +" "+player1.getUserNickname()));
+                    WebSocketSession player2Session = CLIENTS.get(userWithSessionId.get(player2.getUserId() +" "+player2.getUserNickname()));
+                    serverMsg.put("userId", player1.getUserId());
+                    serverMsg.put("userNickname", player1.getUserNickname());
+                    serverMsg.put("enemyId", player2.getUserId());
+                    serverMsg.put("enemyNickname", player2.getUserNickname());
+                    log.debug("server to player1 send message : {} ", serverMsg);
+                    player1Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
+                    serverMsg.put("userId", player2.getUserId());
+                    serverMsg.put("userNickname", player2.getUserNickname());
+                    serverMsg.put("enemyId", player1.getUserId());
+                    serverMsg.put("enemyNickname", player1.getUserNickname());
+                    log.debug("server to player2 send message : {} ", serverMsg);
+                    player2Session.sendMessage(new TextMessage(objectMapper.writeValueAsString(serverMsg)));
+//                    for (MatchDto player : players) {
+//                        WebSocketSession playerSession = CLIENTS.get(userWithSessionId.get(player.getUserId() + " " + player.getUserNickname()));
+//                        MessageDto dto = makeMessage(MessageDto.MessageType.INGAME, receive.getGameMode(), recMatchId, player.getUserId(), receive.getLang(), null, "게임으로 이동됩니다.", player.getQueueKey(), player.getUserNickname(), gameId, viduSession, problemId);
+//                        //session.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
+//                        playerSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
+//                    }
                 } else if (OkCount == 1 && nullCount != 1) {
                     matchMap.remove(receive.getMatchId());
                     // MessageDto.MessageType msgType, String mode, String matchId, String userId, String lang, Integer rating, String content, String queueKey, String userNickname
