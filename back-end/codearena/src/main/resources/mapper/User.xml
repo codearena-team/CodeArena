@@ -20,6 +20,7 @@
         <result column="user_email" property="userEmail"/>
         <result column="speed_rating" property="speedRating"/>
         <result column="effi_rating" property="effiRating"/>
+        <result column="user_password" property="userPassword"/>
     </resultMap>
 
     <resultMap id="userFollowInfoDto" type="UserFollowInfoDto">
@@ -52,9 +53,9 @@
     </select>
 
     <select id="login" parameterType="userLoginDto" resultMap="tokenDataDto">
-        select user_id, user_nickname, user_email, speed_rating, effi_rating
+        select user_id, user_nickname, user_email, speed_rating, effi_rating, user_password
         from user
-        where user_email=#{userEmail} and user_password=#{userPassword};
+        where user_email=#{userEmail};
     </select>
 
     <update id="logout" parameterType="string">
