@@ -324,8 +324,37 @@ input.txt                                       output.txt
             </div> */}
 
             <div className="flex items-end">
-              <button className="btn btn-sm btn-neutral w-full" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 <br />선택</button>
-              <dialog id="TagModal" className="modal">
+              
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-6 col-span-5">
+            <div className='z-10'>
+              <p className="text-sm font-bold col-span-4 mb-2"htmlFor="rating">언어</p>
+              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-full" >
+                <option>java</option>
+                <option>python</option>
+                <option>cpp</option>
+              </select>
+            </div>
+            <div className='z-10'>
+              <p className="text-sm font-bold mb-2"htmlFor="time">시간제한(ms)</p>
+              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-full" />
+            </div>
+            <div className='z-10'>
+              <p className="text-sm font-bold mb-2"htmlFor="mem">메모리제한(MB)</p>
+              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-full" />
+            </div>
+          </div>
+        </div>
+        
+        <div className='grid grid-cols-12 mb-4'>
+          <div className="col-start-2 col-span-10">
+            <span className="font-bold mb-2 col-span-1"htmlFor="inputEx">
+              검증용 코드
+            </span>
+            <button className='btn btn-sm btn-neutral ms-4' onClick={onClickComfile}>컴파일</button>
+            <button className="btn btn-sm btn-neutral ms-4" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
+            <dialog id="TagModal" className="modal">
                 <div className="modal-box" style={{backgroundColor:'rgb(245, 245, 236)'}}>
                   <div className="modal-action flex justify-between mb-4 mt-0">
                     <div className="w-12"></div>
@@ -361,66 +390,8 @@ input.txt                                       output.txt
                   </div>
                 </div>
               </dialog>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-6 col-span-5">
-            <div className='z-10'>
-              <p className="text-sm font-bold col-span-4 mb-2"htmlFor="rating">언어</p>
-              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-full" >
-                <option>java</option>
-                <option>python</option>
-                <option>cpp</option>
-              </select>
-            </div>
-            <div className='z-10'>
-              <p className="text-sm font-bold mb-2"htmlFor="time">시간제한(ms)</p>
-              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-full" />
-            </div>
-            <div className='z-10'>
-              <p className="text-sm font-bold mb-2"htmlFor="mem">메모리제한(MB)</p>
-              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-full" />
-            </div>
-          </div>
-        </div>
-        
-        <div className='grid grid-cols-12 mb-4'>
-          <div className="col-start-2 col-span-10">
-            <span className="font-bold mb-2 col-span-1"htmlFor="inputEx">
-              검증용 코드
-            </span>
-            <button className='btn btn-sm btn-neutral ms-4' onClick={onClickComfile}>컴파일</button>
-            <button className="btn btn-sm btn-neutral ms-4" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
-            <dialog id="TagModal" className="modal">
-              <div className="modal-box">
-                <div className="modal-action flex justify-between mb-4 mt-0">
-                  <div className="w-12"></div>
-                  <h3 className="font-bold text-lg text-center ms-">문제의 알고리즘 유형을 선택하세요</h3>
-                  <form method="dialog">
-                    <button className="btn-sm btn rounded-full">X</button>
-                  </form>
-                </div>
-                <div className="text-center">
-                  <div>
-                    <p className="font-bold ms-4 mt-1 me-2">알고리즘</p>
-                    <select value={'선택'} onChange={onClickCate} className="select select-sm select-bordered w-20" >
-                      <option disabled='true'>선택</option>
-                      {cateList.map((cate)=>{
-                        return(
-                          <option key={cate} onClick={onClickCate}>{cate}</option>
-                        )
-                      })}
-                    </select>
-                  </div>
-                  <div className="px-4 mt-4 grid grid-cols-3 gap-4" >
-                    {selectedList.map((selected)=>{
-                      return(
-                        <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-            </dialog>
+
+
             <div className='w-full mt-2'>
               <Editor language={lang} height="400px"
               onChange={onChangeTestCode} 
