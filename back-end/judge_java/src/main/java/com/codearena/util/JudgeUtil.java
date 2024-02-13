@@ -120,7 +120,7 @@ public class JudgeUtil {
 
             double beforeTime = System.currentTimeMillis();
 
-            if (!process.waitFor(timeLimit + 4000 + 1000, TimeUnit.MILLISECONDS)) {
+            if (!process.waitFor(timeLimit + 4000 + 1600, TimeUnit.MILLISECONDS)) {
                 msg = "시간 초과";
                 wrongTC = testCase.get(tc).getTid();
                 isError = true;
