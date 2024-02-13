@@ -45,8 +45,12 @@ public class JudgeServiceImpl implements JudgeService{
         try {
             // problemExInput, Output 를 테스트케이스에 포함시킴
             List<TestCaseDto> testCase = userInput.getTestCase();
-            testCase.add(new TestCaseDto(userInput.getProblemExInput(), userInput.getProblemExOutput(), null));
+            testCase.add(new TestCaseDto(userInput.getProblemExInput().replaceAll("\r", ""), userInput.getProblemExOutput().replaceAll("\r", ""), null));
 
+            for (int i = 0 ; i < testCase.size() ; i ++) {
+                String str = testCase.get(i).getOutput().trim();
+                testCase.get(i).setOutput(str);
+            }
             // 테케 내용들 로그 출력
             for (int tc = 0; tc < testCase.size(); tc++) {
                 log.info("{}", testCase.get(tc));

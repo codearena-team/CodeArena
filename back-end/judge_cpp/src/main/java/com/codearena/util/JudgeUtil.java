@@ -137,7 +137,12 @@ public class JudgeUtil {
             double afterTime = System.currentTimeMillis();
 
             BufferedReader bf = new BufferedReader(new InputStreamReader(process.getInputStream(), "MS949"));
-            String str = bf.readLine();
+            StringBuilder sb = new StringBuilder();
+            String str = null;
+
+            while((str = bf.readLine()) != null) {
+                sb.append(str).append("\n");
+            }
 
             timeSum += (afterTime - beforeTime) / 1000;
 
@@ -169,8 +174,12 @@ public class JudgeUtil {
                 }
                 break;
             }
+            String tcTrim = testCase.get(tc).getOutput();
+            String sbTrim = sb.toString();
 
-            if (!testCase.get(tc).getOutput().equals(str)) {
+            log.info("비교 결과 : {}" , tcTrim.equals(sbTrim));
+
+            if (!tcTrim.equals(sbTrim)) {
                 msg = "틀렸습니다";
                 wrongTC = testCase.get(tc).getTid();
                 isError = true;
