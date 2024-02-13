@@ -5,11 +5,13 @@ import { useEffect,useState,useCallback} from 'react';
 import axios from 'axios';
 import { UseSelector, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 export default function CommunityEdit(){
   // const onChangeTestCode = useCallback((code, viewUpdate) => {
   //   ;
   // }, []);
+  const accessToken = useSelector(state => state.access.accessToken)
   const userId = useSelector(state => state.auth.userId)
   const params = useParams();
   const boardId = params.communityId
@@ -34,7 +36,10 @@ export default function CommunityEdit(){
   useEffect(()=>{
     axios({
       url : `https://i10d211.p.ssafy.io/api/board/detail/${boardId}`,
-      method : 'get'
+      method : 'get',
+      headers : {
+        Authorization : accessToken 
+      }
     })
     .then((res)=>{
       console.log(res.data.data)
@@ -63,7 +68,7 @@ export default function CommunityEdit(){
   //게시글 수정
   const updateArticle = ()=>{
     axios({
-      url : 'https//i10d211.p.ssafy.io/api/board/update',
+      url : 'https://i10d211.p.ssafy.io/api/board/update',
       method : 'patch',
       data : {
         articleNo : boardId,
@@ -78,6 +83,7 @@ export default function CommunityEdit(){
     })
     .then((res)=>{
       console.log(res)
+      swal("게시글수정완료","","success")
       navigate(`/community/${boardId}/detail`)
     })
     .catch((err)=>{
@@ -86,43 +92,54 @@ export default function CommunityEdit(){
   }
 
   return(
-    <div className="p-20 pt-0">
-      <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
+    <div className="ml-64 mr-64 mt-10">
+      <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
         <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1 py-3 light" htmlFor="title">제목</label>
-          <input type="text" id="title" className="input input-bordered w-11/12" value={title} onChange={(e)=>{setTitle(e.target.value)}} />
+          <label className="me-1 py-3" htmlFor="title">제목</label>
+          <input type="text" id="title" className="input input-bordered w-10/12" value={title} 
+          onChange={(e)=>{setTitle(e.target.value)}} />
+          <div className='w-1/12'></div>
         </div>
         <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1 py-3" htmlFor="title">문제번호</label>
-          <input type="text" id="title" className="input input-bordered w-11/12" value={problemId} onChange={(e)=>{setProblemId(e.target.value)}}/>
+          <label className="me-1 py-3" htmlFor="title">문제번호</label>
+          <input type="text" id="title" className="input input-bordered w-10/12" value={problemId}/>
+          <div className='w-1/12'></div>  
         </div>
+
+        <div className='flex justify-start mb-4'>
+          <div className='ml-6'>
+            <label className="me-1 py-3" htmlFor="rating">카테고리</label>
+            <input id="rating" value={cate} className="input input-bordered w-6/12" type="text" />     
+          </div>
+        </div>
+
+        <div className='flex justify-start mb-4'>
+          <div className='flex justify-center items-center ml-3'>
+            <label className="me-1 py-3 ml-10" htmlFor="rating">언어</label>
+              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered mr-6" >
+                <option>java</option>
+                <option>python</option>
+                <option>cpp</option>
+              </select>
+          </div>
+          <div className="flex mr-5">
+            <label className="cursor-pointer label me-1">스포방지여부</label>
+              <div className='flex items-center'><input type="checkbox" 
+              className="checkbox checkbox-warning" style={{borderColor:'black'}}
+              checked={spoiler === 1} onClick={onClickCheckbox}/></div>
+          </div>
+        </div>
+ 
         <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1" htmlFor="rating">언어</label>
-            <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-2/12" >
-              <option>java</option>
-              <option>python</option>
-              <option>cpp</option>
-            </select>
-            <div className='w-9/12'></div>
-        </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1" htmlFor="rating">카테고리</label>
-          <input id="rating" className="input input-bordered w-2/12" type="text" value={cate}/>     
-          <div className='w-9/12'></div>
-        </div>
-        <div className="flex mb-4">
-          <label className="cursor-pointer label font-bold me-1">스포방지여부</label>
-            <div className='flex items-center'><input type="checkbox" 
-            className="checkbox checkbox-warning" style={{borderColor:'black'}}
-            checked={spoiler === 1} onClick={onClickCheckbox}/></div>
-        </div>
-        <div className='flex justify-end mb-4'>
-          <label className="font-bold me-1"htmlFor="content">내용</label>
-          <textarea className="textarea textarea-bordered w-11/12 resize-none" id="content" rows="10" value={content} onChange={(e)=>{setContent(e.target.value)}}></textarea>
+          <label className=" me-1"htmlFor="content">내용</label>
+          <textarea className="textarea textarea-bordered w-10/12 resize-none" 
+          id="content" rows="10" value={content} 
+          onChange={(e)=>{setContent(e.target.value)}}></textarea>
+          <div className='w-1/12'></div>
         </div>    
         <div className='grid grid-cols-12 mb-4'>
-          <label className="font-bold me-1 col-span-1 text-end"htmlFor="inputEx">코드</label>
-          <div className=' col-span-11'>
+          <label className="me-1 col-span-1 text-end"htmlFor="inputEx">코드</label>
+          <div className=' col-span-10'>
             <Editor height="400px" id="inputEx" language={lang}
             value={code} onChange={onChangeTestCode}
             options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
@@ -131,11 +148,12 @@ export default function CommunityEdit(){
         </div>
  
         <div className='flex justify-end mb-4'>
-          <div className="btn btn-sm rounded-full drop-shadow-xl" 
-            style={{backgroundColor:'#F4F2CA',border:'1px solid black'}}
-            onClick={updateArticle}
-            >수정하기
+          <div className="btn btn-sm btn-active drop-shadow text-md" 
+          style={{backgroundColor:'#F4F2CA'}}
+          onClick={updateArticle}
+          >수정하기
           </div>
+          <div className='w-1/12'></div>  
         </div>
       </div>
     </div>

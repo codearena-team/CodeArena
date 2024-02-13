@@ -42,7 +42,7 @@ export default function Edit(){
     })
   }
 
-
+  // 저장버튼 클릭시
   const onSumit = ()=> {
     axios({
       url:`https://i10d211.p.ssafy.io/api/user`,
@@ -55,6 +55,7 @@ export default function Edit(){
     })
     .then((res)=>{
       dispatch(setUserNickname(nickname))
+      swal("회원정보수정완료","","success")
       navigate(`/profile/${nickname}`)
     })
     .catch((err)=>{

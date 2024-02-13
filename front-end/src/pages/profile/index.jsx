@@ -65,6 +65,7 @@ export default function MyPage() {
       setSolveList(res.data.data.solvedProblem)
       setUnsolveList(res.data.data.unsolvedProblem)
       setProfileId(res.data.data.userInfoDto.userId)
+      setSelectedFile(res.data.data.userInfoDto.userThumbnail)
       setGraphData(res.data.data.problemCateList.map((item)=>{
         return {name:item.problemCate,value:parseInt(item.problemCateCnt)}
       }))
@@ -132,23 +133,6 @@ export default function MyPage() {
 const goEdit = () =>{
   navigate('/profile/edit')
 }
-
-
-// 유저의 프로필사진 불러오기
-useEffect(()=>{
-  axios({
-    url : `https://i10d211.p.ssafy.io/api/profile/${loginId}`,
-    method :'get'
-  })
-  .then((res)=>{
-    console.log(res)
-    setSelectedFile(res.data.data.profileUrl)
-  })
-  .catch((err)=>{
-    console.log(err)
-  })
-},[])
-
 
 
 const goFollow = () =>{
@@ -222,6 +206,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
  
   // 닉네임 검색버튼클릭시
   const searchNickname = () =>{
+    console.log('dkdkdkdkdkd')
     navigate(`/profile/${word}`)
   }
   // 닉네임 검색 인풋창변화시

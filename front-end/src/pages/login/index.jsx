@@ -27,18 +27,20 @@ export default function Login() {
 
   // 8~10자 영문자 조합 비밀번호 유효성 검사
   const checkPassword = () =>{
-    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/
+    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/
     return regExp.test(password)
   }
 
   const handleLogin = ()=>{
     if (!checkEmail()) {
-      alert('이메일이 형식에 맞지 않습니다')
-    } 
-    // if (!checkPassword()) {
-    //   alert('비밀번호가 형식에 맞지 않습니다')
-    // }
-    if (checkEmail()) {
+      swal("이메일이 형식에 맞지 않습니다","","warning");
+      return
+    }
+    if (!checkPassword()) {
+      swal("비밀번호가 형식에 맞지 않습니다","8~20자 영문자,숫자 각1개 포함필수","warning")
+      return
+    }
+    if (checkEmail() && checkPassword()) {
       axios({
         url: 'https://i10d211.p.ssafy.io/api/user/login',
         method:'post',
@@ -49,7 +51,7 @@ export default function Login() {
       })
       .then((res)=>{
         if (res.data.status === "404"){
-          swal('로그인 실패', "이메일,비밀번호가 틀렸습니다", 'warning');
+          swal('로그인 실패', "이메일,비밀번호가 맞지않습니다", 'error');
         }else{
          
           dispatch(setRefreshToken(res.data.data))
@@ -62,6 +64,7 @@ export default function Login() {
       })
       .catch((err)=>{
         console.log(err)
+        swal("로그인실패","","error")
       })
       }
     }
