@@ -8,6 +8,7 @@ import CommentListItem from '../../../components/community/CommentListItem'
 
 
 export default function CommunityDetail(){
+  const accessToken = useSelector(state => state.access.accessToken)
   const [bgcolor,setBgcolor] = useState('#F4F2CA');
   const [showCodeMirror, setShowCodeMirror] = useState(false)
   const params = useParams();
@@ -38,7 +39,10 @@ export default function CommunityDetail(){
   useEffect(()=>{
     axios({
       url : `https://i10d211.p.ssafy.io/api/board/detail/${boardId}`,
-      method : 'get'
+      method : 'get',
+      headers : {
+        Authorization : accessToken 
+      }
     })
     .then((res)=>{
       console.log(res.data.data)
@@ -68,7 +72,7 @@ export default function CommunityDetail(){
     })
   }
 
-  //댓글작성
+  //댓글작성 (댓글작성 후 새로고침되야함)
   const createComment = () =>{
     axios({
       url : 'https://i10d211.p.ssafy.io/api/comment/write',
@@ -82,7 +86,7 @@ export default function CommunityDetail(){
     })
     .then((res)=>{
       console.log(res)
-      // navigate(`/community/${boardId}/detail`)
+      window.location.reload();
     })
     .catch((err)=>{
       console.log(err)

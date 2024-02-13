@@ -78,8 +78,8 @@ export default function Router () {
 
       <Route path="/community" element={<Community />} />
       <Route path="/community/create" element={<ProtectedRoute><CommunityCreate /></ProtectedRoute>} />
-      <Route path="/community/:communityId/detail" element={<CommunityDetail />} />
-      <Route path="/community/:communityId/edit" element={<CommunityEdit />} />
+      <Route path="/community/:communityId/detail" element={<ProtectedRoute><CommunityDetail /></ProtectedRoute>} />
+      <Route path="/community/:communityId/edit" element={<ProtectedRoute><CommunityEdit /></ProtectedRoute>} />
 
       <Route path="/problem" element={<Problem />} />
       <Route path="/problem/create" element={<ProtectedRoute><ProblemCreate /></ProtectedRoute>} />

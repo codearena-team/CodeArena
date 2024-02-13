@@ -98,8 +98,5 @@ export default function MiddleConfirm(){
       </div>
     </div>
   </div>
-
-
-
   )
 }
