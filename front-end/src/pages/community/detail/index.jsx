@@ -10,7 +10,7 @@ import CommentListItem from '../../../components/community/CommentListItem'
 export default function CommunityDetail(){
   const accessToken = useSelector(state => state.access.accessToken)
   const [bgcolor,setBgcolor] = useState('#F4F2CA');
-  const [showCodeMirror, setShowCodeMirror] = useState(false)
+  const [showCodeMirror, setShowCodeMirror] = useState(true)
   const params = useParams();
   const boardId = params.communityId
   const userId = useSelector(state => state.auth.userId)
@@ -46,6 +46,18 @@ export default function CommunityDetail(){
     })
     .then((res)=>{
       console.log(res.data.data)
+      console.log(res.data.data.spoiler)
+      console.log(res.data.data.isSolved)
+      
+      if (res.data.data.spoiler === 1) {
+        setShowCodeMirror(false)
+        if (res.data.data.isSolved === '1') {
+          setShowCodeMirror(true)
+        } else {
+          setShowCodeMirror(false)
+        }
+      }
+      
       setBoard(res.data.data)
       setCate(catedic[res.data.data.type])
       setArticleId(res.data.data.userId)
@@ -184,7 +196,9 @@ export default function CommunityDetail(){
                 <div className='flex justify-end mb-4'>
                   <div className='w-full'>
                     <Editor height="200px" id="inputEx"
-                    onChange={onChangeCode}/>
+                    onChange={onChangeCode}
+                    options={{'scrollBeyondLastLine':false,'minimap':{enabled:false}}}
+                    />
                   </div>
                 </div>
                 <div className="flex justify-between">   

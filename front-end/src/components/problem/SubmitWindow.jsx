@@ -138,14 +138,15 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
               </div>
             </div>
           </div>
-          <div style={{width:'400px', marginTop:'-80px', marginBottom:'-100px'}}>
+          <div style={{width:'420px', marginTop:'-80px', marginBottom:'-100px'}}>
             <ResponsiveContainer height={300} style={{}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
               {/* PieChart : 원형 차트 모양으로 변환 */}
-              <PieChart>
+              <PieChart className="z-10">
                 {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}
                 <Tooltip />
                 {/* Pie : 실제 원형 차트 데이터 삽입 */}
                 <Pie
+                  className="z-10"
                   data={graphData} // 데이터 전달
                   innerRadius={40} // 내부 반지름
                   outerRadius={55} // 외부 반지름
@@ -155,7 +156,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                 >
                   {graphData.map((entry, index) => (
                     // Cell : 각 섹션의 스타일을 설정하기 위함 -> key는 index값, fill은 컬러 채우기
-                    <Cell key={`cell-${index}`} fill={colors[index]} />
+                    <Cell className="z-10" key={`cell-${index}`} fill={colors[index]} />
                   ))}
                 </Pie>
               </PieChart>
@@ -175,7 +176,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
           <button onClick={()=>{changeParams('orderBy','timeComplexity')}} className={searchParams.get('orderBy')==='timeComplexity' ? 'orderBy' : 'orderBy unchoice'} value='time'>시간복잡도순</button>
         </div>
         <div className="flex flex-col justify-center">
-        <div className="z-10">
+        <div className="z-50">
           <div className="flex join align-middle">
             <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-28 join-item" >
               <option value={'전체'}>전체</option>

@@ -53,6 +53,7 @@ class Webrtc extends Component {
 
   onbeforeunload(event) {
     this.leaveSession();
+    this.props.action(undefined)
   }
 
   handleChangeCustomSessionId(e) {

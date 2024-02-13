@@ -206,13 +206,11 @@ export default function CompetitionView() {
             className="p-4"
             style={{ width: '100%', height: '90%', backgroundColor: '#F5EBDB' }}
           >
-            <div className="flex justify-center items-center mt-5">
-              <p className="text-lg font-bold">{`경과 시간: ${elapsedTime}`}</p>
-            </div>
+            
             {/* "유저1의 화면이 보이는 공간 vs 유저2의 화면이 보이는 공간" */}
             {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
             <div>
-              <div className=" rounded-lg">
+              <div className=" rounded-lg flex justify-between items-end">
                 <Webrtc 
                   userNickname={sender.current}
                   customSessionId={params.id}
@@ -220,9 +218,12 @@ export default function CompetitionView() {
                   width={`200px`}
                   height={`100px`}
                 />
+                <div className="flex justify-center items-center mt-5">
+                  <p className="text-lg font-bold">{`경과 시간: ${elapsedTime}`}</p>
+                </div>
               </div>
-              <div className=" rounded-lg mt-4" >
-                <MainVideo height={`500px`} width={`${panelWidths.left * 3.7}%`} />
+              <div className=" rounded-lg mt-4 w-full" >
+                <MainVideo height={`500px`} width={`${panelWidths.left * 3.75}%`} />
               </div>
             </div>
           </div>

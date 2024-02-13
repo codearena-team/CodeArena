@@ -101,7 +101,7 @@ export default function UserInfo() {
           userNickname={userNickname}
           customSessionId={params.id}
           height= '30vh'
-          width='300px'
+          width='100%'
           isPlayer={true}
         />
       </div>
