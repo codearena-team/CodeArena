@@ -114,7 +114,7 @@
     <select id="selectUserRecord" resultMap="playerRecord">
         SELECT (SELECT count(*) from arena_record where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and winner!=${userId} and end_time is not null) as defeat_count,
             (SELECT count(*)FROM arena_record WHERE winner = ${userId} and end_time is not null) as win_count,
-        (SELECT count(*) from arena_record where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and winner IS NULL and end_time is not null) as draw_count FROM arena_record LIMIT 1;
+        (SELECT count(*) from arena_record where (player1=${userId} or player2=${userId} or player3=${userId} or player4=${userId}) and winner IS NULL and end_time is not null) as draw_count LIMIT 1;
     </select>
 
     <select id="selectRecentMatchInfo" resultMap="gameRecords">
