@@ -5,6 +5,7 @@ import '../../pages/css/problemdetail.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
+import swal from 'sweetalert';
 
 export default function CommentListItem(props) {
   // 코드에 아무것도 없는 null은 객체라서 오류나니깐 ..
@@ -24,6 +25,7 @@ export default function CommentListItem(props) {
     .then((res)=>{
       console.log(res)
       props.onDelete(commentNo)
+      swal("댓글삭제완료","","success")
     })
     .catch((err)=>{
       console.log(err)
@@ -46,6 +48,7 @@ export default function CommentListItem(props) {
     })
     .then((res)=>{
       console.log(res)
+      swal("댓글수정완료","","success")
       navigate(`/community/${articleNo}/detail`)
     })
     .catch((err)=>{
@@ -61,7 +64,7 @@ export default function CommentListItem(props) {
         <div className='w-1/12'></div>
         <div className="mb-2">작성자 : {props.commentItem.writerNickname}</div>
       </div>
-      <div className='flex mb-2'>
+      <div className='flex mb-2 px-3'>
         <div className='w-1/12'></div>
         <textarea className="textarea textarea-bordered resize-none w-full" rows="4"
         value={userId === commentId ? comment : props.commentItem.comment }

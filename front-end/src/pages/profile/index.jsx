@@ -257,11 +257,11 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
           {/* 인풋밑에 자동생성창 */}
           {modalList.length > 0 &&  word.length > 0  &&(
           <div className="dropdown" >
-          <ul className="dropdown-menu" style={{ display: 'block', position: 'absolute', zIndex: '1',right:'0px', top:'10px' }}>
+          <ul className="dropdown-menu" style={{ display: 'block', position: 'absolute', zIndex: '1',right:'0px', top:'10px'}}>
             {modalList.map((item, index) => (
               <li key={index}>
                 <input type="text" className="input input-bordered w-xl h-8 max-w-xs" 
-                style={{outline:'none',cursor: 'text',color: item.isFollow === '1' ? 'blue' : 'black' }}
+                style={{outline:'none',cursor: 'pointer',color: item.isFollow === '1' ? 'blue' : 'black' }}
                 value={item.userNickname + (item.isFollow === '1' ? '  팔로우중' : '')}
                 onClick={inputClick}
                 />

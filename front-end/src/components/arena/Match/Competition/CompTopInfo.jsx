@@ -1,11 +1,32 @@
 import React, { useState } from "react";
 import C_ExitModal from "../../modal/Competition/C_ExitModal";
+import DetailWindow from '../../../problem/DetailWindow';
+import { useEffect } from "react";
+import axios from "axios";
 
-export default function TopInfo({ gameExitId }) {
+export default function TopInfo({ gameExitId,problemId}) {
   const [panelWidths, setPanelWidths] = useState({
     left: 60,
     right: 40,
   });
+  const [problem,setProblem] = useState([])
+  const [problemTitle,setProblemTitle] = useState('')
+
+  useEffect(()=> {
+    axios({
+      method : 'get',
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+    })
+    .then((res)=> {
+      console.log(res);
+      setProblem(res.data.data);
+      setProblemTitle(res.data.data.problemTitle);
+    })
+    .catch((err)=> {
+      console.log(err);
+    })
+  },[])
+
 
   return (
     <div className="flex">
@@ -33,12 +54,31 @@ export default function TopInfo({ gameExitId }) {
         <button
           className="rounded-lg shadow-lg px-4 py-2 focus:outline-none text-2xl font-bold hover:scale-105"
           style={{ width: '100%', height: '100%', backgroundColor: '#F5EBDB' }}
-          onClick={() => {
-            // 버튼 클릭 시 처리할 기능 필요함
-          }}
+          onClick={()=>document.getElementById('openProblem').showModal()}
         >
           문제보기
         </button>
+        {/* 문제모달창 */}
+        <dialog id="openProblem" className="modal">
+          <div className="modal-box w-11/12 max-w-5xl">
+            <div className="rounded-lg p-5 mb-5" style={{backgroundColor: '#F4ECE4'}}>
+              <div className="flex items-center">
+                <p className="mr-2">#{problemId}</p>
+                <h3 className="font-bold text-2xl">{problemTitle}</h3>
+              </div>
+            </div>
+            <div className="rounded-lg p-5 " style={{backgroundColor: '#F4ECE4'}}>
+              <DetailWindow problem={problem}/>
+            </div>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn btn-sm"
+                style={{backgroundColor:'#FECDD3'}}>닫기</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+
 
         {/* 나가기 버튼 */}
         <button

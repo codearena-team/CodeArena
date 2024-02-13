@@ -3,10 +3,6 @@ import { useState } from 'react'
 import axios from 'axios'
 import { redirect, useNavigate } from 'react-router-dom'
 import swal from 'sweetalert';
-import ChangePassword from '../../profile/changepw';
-
-
-
 
 export default function FindPassword(){
 

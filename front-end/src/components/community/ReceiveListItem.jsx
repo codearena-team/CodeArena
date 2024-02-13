@@ -38,6 +38,8 @@ export default function ReceiveListItem(probs) {
     })
   }
 
+  const [split ,split2] = probs.receiveItem.alarmMsg.split(".")
+
   const onClick = ()=>{
     const match = alarmMsg.match(/\d+$/);
     const problemNumber = match ? match[0] : null;
@@ -46,7 +48,7 @@ export default function ReceiveListItem(probs) {
   }
 
   return(
-    <tr onClick={onClick}>
+    <tr>
       <th className="p-1 font-thin">{probs.receiveItem.alarmId}</th>
       <th className="p-1 font-thin">{word}</th>
       {/* 처리여부는 드롭다운박스 */}
@@ -60,7 +62,8 @@ export default function ReceiveListItem(probs) {
           <option value="거절">거절</option>
         </select>
       </th>
-      <th className="p-1 font-thin">{probs.receiveItem.alarmMsg}</th>
+      <th className="p-1 font-thin" onClick={onClick}>{split}
+        <span style={{color: "blue", textDecoration: "underline" }}>{split2}</span></th>
       <th className="p-1 font-thin">{probs.receiveItem.fromNickname}</th>
       <th className="p-1 font-thin">{probs.receiveItem.alarmDate}</th>
     </tr>

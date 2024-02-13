@@ -326,7 +326,10 @@ input.txt                                       output.txt
           </div>
           <div className="grid grid-cols-3 z-10">
             <div>
-              <button className="btn btn-sm btn-neutral" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
+              <div>
+                <button className="btn btn-sm btn-neutral" onClick={()=>document.getElementById('TagModal').showModal()}
+                style={{cursor:"pointer"}}>알고리즘 선택</button>
+              </div>
               <dialog id="TagModal" className="modal">
                 <div className="modal-box">
                   <div className="modal-action flex justify-between mb-4 mt-0">
