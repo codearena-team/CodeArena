@@ -15,7 +15,7 @@
     </resultMap>
 
     <resultMap id="winnerInfo" type="WinnerInfoDto">
-        <result column="user_id" property="userId"/>
+        <result column="userId" property="userId"/>
         <result column="user_nickname" property="userNickname"/>
     </resultMap>
 
@@ -184,7 +184,7 @@
     </select>
 
     <select id="winnerSearch" parameterType="string" resultMap="winnerInfo">
-        SELECT user_id, user_nickname
+        SELECT user_id as userId, (SELECT user_nickname FROM user WHERE user_id = userId) as user_nickname
         FROM arena_submit_status
         WHERE game_id = #{gameId} AND submit_status = '맞았습니다.'
         ORDER BY time_complexity ASC , submit_date ASC LIMIT 1;
