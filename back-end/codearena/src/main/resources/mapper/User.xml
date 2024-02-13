@@ -12,6 +12,7 @@
         <result column="speed_rating" property="speedRating"/>
         <result column="effi_rating" property="effiRating"/>
         <result column="user_thumbnail" property="userThumbnail"/>
+        <result column="user_coin" property="userCoin"/>
     </resultMap>
 
     <resultMap id="tokenDataDto" type="TokenDataDto">
@@ -75,7 +76,7 @@
     </select>
 
     <select id="searchUser" parameterType="string" resultMap="userInfoDto">
-        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating, user_thumbnail
+        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating, user_thumbnail, user_coin
         from user
         where user_nickname=#{userNickname};
     </select>
