@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Webrtc from "../../../../pages/test/Webrtc";
 import MainVideo from "../../../../pages/test/MainVideo";
 import { setStompClients, clearStompClient } from "../../../../features/arena/stompClientSlice";
+import { disconectRtc } from "../../../../features/arena/rtcSlice";
 
 
 export default function CompetitionView() {
@@ -203,6 +204,9 @@ export default function CompetitionView() {
     scrollToBottom();
   }, [chatList.length])
 
+  const test = () => {
+    dispatch(disconectRtc())
+  }
   return (
     <div>
       <CompTopInfo gameExitId={params.id} problemId={problemId}/>
@@ -218,6 +222,7 @@ export default function CompetitionView() {
             {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
             <div>
               <div className=" rounded-lg flex justify-between items-end">
+                <button onClick={test}>버튼버튼버튼버튼버튼버튼버튼</button>
                 <Webrtc 
                   userNickname={sender.current}
                   customSessionId={params.id}

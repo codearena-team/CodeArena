@@ -246,7 +246,7 @@ input.txt                                       output.txt
         </div>
         <div className='grid grid-cols-12 mb-4'>
           <div className="col-start-2 col-span-10">
-            <p className=" font-bold mb-2 mb-2"htmlFor="content">내용</p>
+            <p className=" font-bold mb-2"htmlFor="content">내용</p>
             <textarea class="textarea textarea-bordered w-full resize-none" onChange={onChangeContent} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
           </div>
         </div>
@@ -293,7 +293,7 @@ input.txt                                       output.txt
         <div className="grid grid-cols-12 gap-12 mb-4">
           
           <div className='col-start-2 col-span-5 grid grid-cols-3'>
-            <div className='col-span-2 text-center z-10'>
+            <div className='col-span-3 text-center z-10'>
               <span>공지사항을 먼저 읽고 입출력을 작성해 주세요.</span><br />
               <div className=' text-blue-700 btn btn-sm mt-2'
               onClick={()=>document.getElementById('modal').showModal()}>입출력 파일 공지사항</div>
@@ -323,44 +323,11 @@ input.txt                                       output.txt
               <input value={rating} onChange={(e)=>{setRating(e.target.value)}} className="col-span-8 bg-white rounded-lg bor input input-sm input-bordered" id="rating" type="number" />
             </div> */}
 
-            <div className="flex items-end">
-              <button className="btn btn-sm btn-neutral w-full" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 <br />선택</button>
-              <dialog id="TagModal" className="modal">
-                <div className="modal-box">
-                  <div className="modal-action flex justify-between mb-4 mt-0">
-                    <div className="w-12"></div>
-                    <h3 className="font-bold text-lg text-center ms-">문제의 알고리즘 유형을 선택하세요</h3>
-                    <form method="dialog">
-                      <button className="btn-sm btn rounded-full">X</button>
-                    </form>
-                  </div>
-                  <div className="text-center">
-                    <div>
-                      <p className="font-bold ms-4 mt-1 me-2">알고리즘</p>
-                      <select value={'선택'} onChange={onClickCate} className="select select-sm select-bordered w-20" >
-                        <option disabled='true'>선택</option>
-                        {cateList.map((cate)=>{
-                          return(
-                            <option key={cate} onClick={onClickCate}>{cate}</option>
-                          )
-                        })}
-                      </select>
-                    </div>
-                    <div className="px-4 mt-4 grid grid-cols-3 gap-4" >
-                      {selectedList.map((selected)=>{
-                        return(
-                          <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </dialog>
-            </div>
+            
           </div>
           <div className="grid grid-cols-3 gap-6 col-span-5">
             <div className='z-10'>
-              <p className="font-bold col-span-4 mb-2"htmlFor="rating">언어</p>
+              <p className="text-sm font-bold col-span-4 mb-2"htmlFor="rating">언어</p>
               <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-full" >
                 <option>java</option>
                 <option>python</option>
@@ -368,27 +335,63 @@ input.txt                                       output.txt
               </select>
             </div>
             <div className='z-10'>
-              <p className="font-bold mb-2"htmlFor="time">시간제한(ms)</p>
+              <p className="text-sm font-bold mb-2"htmlFor="time">시간제한(ms)</p>
               <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-full" />
             </div>
             <div className='z-10'>
-              <p className="font-bold mb-2"htmlFor="mem">메모리제한(MB)</p>
+              <p className="text-sm font-bold mb-2"htmlFor="mem">메모리제한(MB)</p>
               <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-full" />
             </div>
           </div>
         </div>
+        
         <div className='grid grid-cols-12 mb-4'>
           <div className="col-start-2 col-span-10">
-            <span className=" font-bold mb-2 col-span-1"htmlFor="inputEx">
+            <span className="font-bold mb-2 col-span-1"htmlFor="inputEx">
               검증용 코드
             </span>
             <button className='btn btn-sm btn-neutral ms-4' onClick={onClickComfile}>컴파일</button>
+            <button className="btn btn-sm btn-neutral ms-4" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
+            <dialog id="TagModal" className="modal">
+              <div className="modal-box">
+                <div className="modal-action flex justify-between mb-4 mt-0">
+                  <div className="w-12"></div>
+                  <h3 className="font-bold text-lg text-center ms-">문제의 알고리즘 유형을 선택하세요</h3>
+                  <form method="dialog">
+                    <button className="btn-sm btn rounded-full">X</button>
+                  </form>
+                </div>
+                <div className="text-center">
+                  <div>
+                    <p className="font-bold ms-4 mt-1 me-2">알고리즘</p>
+                    <select value={'선택'} onChange={onClickCate} className="select select-sm select-bordered w-20" >
+                      <option disabled='true'>선택</option>
+                      {cateList.map((cate)=>{
+                        return(
+                          <option key={cate} onClick={onClickCate}>{cate}</option>
+                        )
+                      })}
+                    </select>
+                  </div>
+                  <div className="px-4 mt-4 grid grid-cols-3 gap-4" >
+                    {selectedList.map((selected)=>{
+                      return(
+                        <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </dialog>
             <div className='w-full mt-2'>
               <Editor language={lang} height="400px"
               onChange={onChangeTestCode} 
               options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}/>
             </div>
           </div>
+
+
+
         </div>
         <div className='flex justify-center z-10'>
           <div className={isValidCode? 'z-10 btn btn-neutral w-60 text-2xl text-center rounded-full' : 'z-10 btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '제 출' : '컴파일 후 제출가능' }</div>
