@@ -241,7 +241,7 @@ public class RestServiceImpl implements RestService {
         Map<String, Object> param = new HashMap<String, Object>();    //쿼리 매개변수
 
         param.put("word", map.get("word") == null ? "" : map.get("word"));  //검색조건 있다면 put
-
+        param.put("gameId", map.get("gameId"));
         int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));    //특정 페이지 번호 요청이 없다면 1번
         int sizePerPage = Integer.parseInt(map.get("spp") == null ? "15" : map.get("spp"));
 
@@ -263,6 +263,7 @@ public class RestServiceImpl implements RestService {
             EffiSubmitListDto effiSubmitListDto = new EffiSubmitListDto();
             effiSubmitListDto.setCurrentPage(currentPage);
             effiSubmitListDto.setTotalPageCount(totalPageCount);
+            effiSubmitListDto.setList(list);
 
             resultDto.setStatus("200");
             resultDto.setMsg("채점현황 불러오기 성공");
