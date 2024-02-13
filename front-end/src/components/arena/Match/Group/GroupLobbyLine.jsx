@@ -4,7 +4,7 @@ import '../../../css/GroupLobbyLine.css';
 export default function GroupLobbyLine({ onDividerMove }) {
     // 상태 관리를 통해 마우스 커서 상태 및 구분선 위치 관리
     const [isHovered, setIsHovered] = useState(false); // 구분선 위에 마우스 올렸을 때 보이기, 숨기기
-    const [dividerPosition, setDividerPosition] = useState(60); // 초기 위치를 60% : 40% 비율로 설정
+    const [dividerPosition, setDividerPosition] = useState(70); // 초기 위치를 60% : 40% 비율로 설정
     const [isDragging, setIsDragging] = useState(false); // 드래그 여부
     const [isMouseIn, setIsMouseIn] = useState(false); // 클릭을 유지하고 있는지 여부
 

@@ -28,8 +28,7 @@ export default function CreateModal({ closeModal, onRoomCreated }) {
       }
       axios.post('https://i10d211.p.ssafy.io/game/chat/gameroom/private', data)
         .then(response => {
-          console.log(response);
-          if (response.data.status === 200){
+          if (response.data.status === '200'){
             alert(`${response.data.name} 방 개설에 성공하였습니다.`);
             // onRoomCreated(response.data)
             // closeModal(); // 모달 닫기

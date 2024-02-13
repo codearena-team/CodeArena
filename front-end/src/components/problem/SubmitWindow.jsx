@@ -110,9 +110,9 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
   
   return(
     <div className="mx-4 flex flex-col">
-      <div className="flex align-middle mb-8">
+      <div className="flex align-middle  justify-between">
         {isvisible && statistics.avgByLang !==null ? (
-        <div className="lg:flex gap-2">
+        <div className="flex gap-2">
           <div className="flex flex-col justify-center">
             <div className="stats shadow ">
               <div className="stat p-3">
@@ -138,8 +138,9 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
               </div>
             </div>
           </div>
-          <div style={{width:'420px', marginTop:'-80px', marginBottom:'-100px'}}>
-            <ResponsiveContainer height={300} style={{}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
+          <div className="relative">
+            <span className="absolute font-bold left-4">알고리즘 유형 그래프</span>
+            <ResponsiveContainer height={150} width={150} style={{}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
               {/* PieChart : 원형 차트 모양으로 변환 */}
               <PieChart className="z-10">
                 {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}
@@ -222,7 +223,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
         <div></div>
         <div className="join">
           <button onClick={()=>{changeParams('pgno','1')}} className="join-item btn btn-sm">{'<<'}</button>
-          {pageNation()}
+          28
           <button onClick={()=>{changeParams('pgno', pageCount)}} className="join-item btn btn-sm">{'>>'}</button>
         </div>
         <div></div>

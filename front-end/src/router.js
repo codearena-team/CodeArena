@@ -55,7 +55,6 @@ const ProtectedRoute = ({ user, children }) => {
       } else {
         navigate('/login')
       }
-      console.log(location);
     })
   },[children])
 

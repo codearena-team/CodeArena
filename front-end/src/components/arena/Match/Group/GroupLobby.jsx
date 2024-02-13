@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 import GroupLobbyLine from "./GroupLobbyLine";
 import GroupLobbyExitModal from '../../modal/Group/GroupLobbyExitModal'
 import StartModal from "../../modal/Group/StartModal";
+import swal from "sweetalert";
 
 import cat_one from '../../../../images/arena/GroupView/cat_one.png';
 import cat_two from '../../../../images/arena/GroupView/cat_two.png';
@@ -9,13 +12,50 @@ import cat_three from '../../../../images/arena/GroupView/cat_three.png';
 import cat_four from '../../../../images/arena/GroupView/cat_four.png';
 import cat_five from '../../../../images/arena/GroupView/cat_five.png';
 import cat_six from '../../../../images/arena/GroupView/cat_six.png';
+import axios from "axios";
 
 export default function GroupLobby() {
+  const params = useParams()
+  const [followingList, setFollowingList] = useState([])
+  const userId = useSelector(state=>state.auth.userId)
+  const userNickname = useSelector(state=>state.auth.userNickname)
+  useEffect(()=> {
+    axios({
+      url :`https://i10d211.p.ssafy.io/api/user/follow/${userId} `, 
+      method : 'get'
+    })
+    .then((res)=>{
+      console.log(res)
+      setFollowingList(res.data.data || [])
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[])
 
-  // 왼쪽과 오른쪽 패널의 너비를 나타내는 상태 -> 처음 렌더링 되었을 때 6:4 비율 
+  const onClickInvite = (e) => {
+    axios({
+      url : `https://i10d211.p.ssafy.io/api/alarm/send`,
+      method : 'post',
+      data :{
+        alarmType : '3',
+        toId  : userId,
+        fromId : e.target.value,
+        alarmMsg : `${userNickname}님이 당신을 아레나에 초대하였습니다.${params.id}`,
+      }
+    })
+    .then((res)=>{
+      console.log(res)
+      swal("초대알림이 발송되었습니다.","","success")
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  } 
+  // 왼쪽과 오른쪽 패널의 너비를 나타내는 상태 -> 처음 렌더링 되었을 때 7:3 비율 
   const [panelWidths, setPanelWidths] = useState({
-    left: 60,
-    right: 40,
+    left: 70,
+    right: 30,
   });
 
   // 구분선 이동에 따른 왼쪽과 오른쪽 패널 비율 조정
@@ -111,7 +151,19 @@ export default function GroupLobby() {
             style={{ height: '50%', backgroundColor: '#F5EBDB' }}
           >
             {/* 팔로우 목록 컨텐츠 */}
-            <div className="user-follow-item">나의 팔로우 목록</div>
+            <div className="user-follow-item p-4">
+              <h1 className="font-bold text-2xl mb-3">팔로우 목록</h1>
+              {followingList.map((following)=> {
+                return (
+                  <div className="flex mb-2">
+                    <p className="text-lg">{following.userNickname}</p>
+                    <button onClick={onClickInvite} className="btn btn-xs ms-2"style={{ backgroundColor: '#FFB5A6' }} value={following.userId}>초대</button>
+                  </div>
+                )
+              })}
+
+
+            </div>
             {/* ... Add more user-follow-item as needed */}
           </div>
 

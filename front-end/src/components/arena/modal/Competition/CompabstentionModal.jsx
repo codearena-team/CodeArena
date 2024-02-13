@@ -55,6 +55,7 @@ export default function AbstentionModal() {
       type: 'PLAYER_EXIT',
     }))
     navigate('/arena')
+    window.location.reload()
   }
   return (
     <div>
