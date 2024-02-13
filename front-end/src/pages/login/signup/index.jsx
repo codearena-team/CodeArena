@@ -28,7 +28,7 @@ export default function Signup(){
 
   // 닉네임 유효성검사
   const checkNickname = () =>{
-    return nickname.length >= 2 && nickname.length <= 10
+    return nickname.length >= 2 && nickname.length <= 10 && nickname.split(' ').length < 2
   }
 
   // 소개글 유효성검사
@@ -43,15 +43,15 @@ export default function Signup(){
       return
     }
     if (!checkNickname()) {
-      swal("닉네임이 형식에 맞지 않습니다","2자이상 10자이내","warning")
-      return
-    }
-    if (!checkPassword()) {
-      swal("비밀번호가 형식에 맞지 않습니다","8~20자 영문자,숫자 각1개 포함필수","warning")
+      swal("닉네임이 형식에 맞지 않습니다","2자이상 10자이내, 공백입력불가 ","warning")
       return
     }
     if (!checkIntroduce()) {
       swal("소개글이 형식에 맞지 않습니다","","warning")
+      return
+    }
+    if (!checkPassword()) {
+      swal("비밀번호가 형식에 맞지 않습니다","8~20자 영문자,숫자 각1개 포함필수","warning")
       return
     }
     if (password !== passwordconfirm) {

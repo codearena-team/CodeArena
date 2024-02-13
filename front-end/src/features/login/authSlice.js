@@ -11,6 +11,9 @@ export const authSlice = createSlice({
     userNickname : null,
     speed : null,
     eff : null,
+    userThumbnail : null,
+    userCoin : null
+
   },
   reducers : {
     setUserNickname : (state,action) =>{
@@ -23,6 +26,8 @@ export const authSlice = createSlice({
       state.userId = jwtDecode(action.payload.refreshToken).userId
       state.userEmail = jwtDecode(action.payload.refreshToken).userEmail
       state.userNickname = jwtDecode(action.payload.refreshToken).userNickname
+      state.userThumbnail = jwtDecode(action.payload.refreshToken).userThumbnail
+      state.userCoin = jwtDecode(action.payload.refreshToken).userCoin
     },
     logout: (state) =>{
       state.refreshToken = null;

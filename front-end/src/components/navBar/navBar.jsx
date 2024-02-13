@@ -28,7 +28,8 @@ function classNames(...classes) {
 
 export default function NavBar() {
   const isLogin = useSelector(state => state.auth.isLogin);
-  const nickName = useSelector(state => state.auth.userNickname)
+  const nickName = useSelector(state => state.auth.userNickname);
+  const profileImg = useSelector(state => state.auth.userThumbnail)
   const dispatch = useDispatch();
   const navigate = useNavigate()
   
@@ -92,7 +93,7 @@ export default function NavBar() {
                         className="relative rounded-full p-1"
                         onClick={()=>{navigate('/profile/alarm')}}
                         >
-                        <BellIcon className="h-6 w-6 hover:scale-125" aria-hidden="true"  style={{ transition: 'transform 0.2s' }}/> 
+                        <BellIcon className="h-6 w-6 hover:scale-150" aria-hidden="true"  style={{ transition: 'transform 0.2s' }}/> 
                       </button>
                     )}
                   {/* 프로필 드롭다운위치 */}
@@ -103,7 +104,7 @@ export default function NavBar() {
                           hover:scale-110" style={{ transition: 'transform 0.2s' }}>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src={Profile}
+                            src={profileImg}
                             alt=""
                           />
                           </Menu.Button>
