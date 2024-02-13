@@ -61,13 +61,13 @@ export default function TopInfo({ gameExitId,problemId}) {
         {/* 문제모달창 */}
         <dialog id="openProblem" className="modal">
           <div className="modal-box w-11/12 max-w-5xl">
-            <div className="rounded-lg p-5 mb-5" style={{backgroundColor: '#F4ECE4'}}>
+            <div className="rounded-lg p-5 mb-3" style={{backgroundColor: '#F4ECE4'}}>
               <div className="flex items-center">
                 <p className="mr-2">#{problemId}</p>
                 <h3 className="font-bold text-2xl">{problemTitle}</h3>
               </div>
             </div>
-            <div className="rounded-lg p-5 " style={{backgroundColor: '#F4ECE4'}}>
+            <div className="rounded-lg p-4 " style={{backgroundColor: '#F4ECE4'}}>
               <DetailWindow problem={problem}/>
             </div>
             <div className="modal-action">

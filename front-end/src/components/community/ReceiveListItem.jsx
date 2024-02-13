@@ -1,5 +1,4 @@
 //받은 알림함 리스트
-import "../css/ProblemListItem.css"
 import { useState } from "react"
 import axios from "axios"
 import { useEffect } from "react"

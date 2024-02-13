@@ -1,6 +1,6 @@
 import Profile from '../../images/common/profile.png'
 import Finger from '../../images/common/finger.png'
-import Message from '../../images/common/message.png'
+import Bell from '../../images/common/bell.png'
 import Rank from '../../images/common/rank.png'
 import Speed from '../../images/common/speed.png'
 import Effi from '../../images/common/effi.png'
@@ -365,7 +365,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                 onClick={goEdit}>회원정보수정</button>             
                 <Link to="/profile/alarm">
                 <button className="btn btn-active w-full rounded-xl text-md pinkbutton drop-shadow">
-                  <img className="w-8" src={Message} alt="" />
+                  <img className="w-8" src={Bell} alt="" />
                   <h1>알림함</h1>
                 </button>
               </Link>
@@ -400,7 +400,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
           </div>
         </div>
         <div className="col-span-4 ml-10">
-          <div className='pinkbox drop-shadow mb-5'>
+          <div className='pinkbox drop-shadow mb-5 relative'>
+            <div className='font-bold absolute top-3 left-1/2 transform -translate-x-1/2'><p>알고리즘 유형 그래프</p></div>
             <ResponsiveContainer height={300} style={{fontSize:'11px'}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
               {/* PieChart : 원형 차트 모양으로 변환 */}
               <PieChart>

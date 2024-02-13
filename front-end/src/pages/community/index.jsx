@@ -77,8 +77,8 @@ export default function Community() {
       )}
       <div className="flex justify-between align-middle">
         <div className="flex items-end">
-          <button onClick={()=>{changeParams('sortType','time')}} className={searchParams.get('sortType')===null||searchParams.get('sortType')==='time' ? 'orderBy' : 'orderBy unchoice'} value='time'>최신순</button>
-          <button onClick={()=>{changeParams('sortType','hit')}} className={searchParams.get('sortType')==='hit' ? 'orderBy' : 'orderBy unchoice'} value='hit'>조회수순</button>
+          <button onClick={()=>{changeParams('sortType','time')}} className={searchParams.get('sortType')===null||searchParams.get('sortType')==='time' ? 'orderBy font-bold' : 'orderBy unchoice'} value='time'>최신순</button>
+          <button onClick={()=>{changeParams('sortType','hit')}} className={searchParams.get('sortType')==='hit' ? 'orderBy font-bold' : 'orderBy unchoice'} value='hit'>조회수순</button>
         </div>
         <div className="flex mb-4 gap-2">
           <select value={searchParams.get('lang') || ''} onChange={(e)=>{changeParams('lang',e.target.value)}} className="select select-sm select-bordered join-item" >
@@ -107,16 +107,16 @@ export default function Community() {
           <table className=" w-full" style={{backgroundColor:'rgb(227, 230, 217)'}}>
             <thead>
               <tr>
-                <th className="p-1.5 font-thin">게시글번호</th>
-                <th className="p-1.5 font-thin">문제번호</th>
-                <th className="p-1.5 w-2/5 font-thin">제목</th>
-                <th className="p-1.5 font-thin">언어</th>
-                <th className="p-1.5 font-thin">작성자</th>
-                <th className="p-1.5 font-thin">조회수</th>
-                <th className="p-1.5 font-thin">제출일</th>
+                <th className="p-1.5">게시글번호</th>
+                <th className="p-1.5">문제번호</th>
+                <th className="p-1.5 w-2/5 ">제목</th>
+                <th className="p-1.5 ">언어</th>
+                <th className="p-1.5 ">작성자</th>
+                <th className="p-1.5 ">조회수</th>
+                <th className="p-1.5 ">제출일</th>
               </tr>
             </thead>
-            <tbody className="problemTable font-normal">
+            <tbody className="problemTable">
              {communityList.map((community,index)=>{
               return(
              <CommunityListItem 

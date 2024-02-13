@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import "../css/ProblemListItem.css"
 
 export default function ProblemListItem(probs) {
   const navigate = useNavigate();

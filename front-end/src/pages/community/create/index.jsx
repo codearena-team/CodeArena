@@ -86,21 +86,27 @@ export default function CommunityCreate() {
   return(
     <div className="ml-64 mr-64 mt-10">
       <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
-        <div className='flex justify-end mb-4'>
+        <div className="flex">
+          <div className="w-1/12"></div>
           <label className="me-1 py-3" htmlFor="title">제목</label>
+        </div>
+        <div className='flex justify-end'>
           <input type="text" placeholder="제목을 입력하세요" id="title" onChange={(e)=>{setTitle(e.target.value)}} className="input input-bordered w-10/12" />
           <div className='w-1/12'></div>        
         </div>
-        <div className='flex justify-end mb-4'>
+        <div className="flex">
+          <div className="w-1/12"></div>
           <label className="me-1 py-3" htmlFor="title">문제번호</label>
+        </div>
+        <div className='flex justify-end mb-4'> 
           <input type="text" placeholder="문제번호를 입력하세요" id="title" onChange={(e)=>{setProblemId(e.target.value)}} className="input input-bordered w-10/12" />
           <div className='w-1/12'></div>  
         </div>
         <div className='flex justify-start mb-4'>
-         
-          <div className='ml-6'>
+          <div className="w-1/12"></div>
+          <div className='flex justify-center items-center'>
           <label className="me-1 py-3" htmlFor="rating">카테고리</label>
-            <select value={type} onChange={(e)=>{setType(e.target.value)}} className="select select-sm select-bordered " >
+            <select value={type} onChange={(e)=>{setType(e.target.value)}} className="select select-sm select-bordered mr-6" >
               <option value={1}>질문</option>
               <option value={2}>시간복잡도</option>
               <option value={3}>공간복잡도</option>
@@ -108,22 +114,24 @@ export default function CommunityCreate() {
               <option value={5}>반례</option>
             </select>
           </div>
-          <div className=''>
-          <label className="me-1 py-3 ml-10" htmlFor="rating">언어</label>
+          <div className="flex justify-center items-center">
+          <label className="me-1 py-3" htmlFor="rating">언어</label>
             <select value={lang} onChange={(e)=>{setLang(e.target.value)}}  className="select select-sm select-bordered mr-6" >
               <option>java</option>
               <option>python</option>
               <option>cpp</option>
             </select>
           </div>
-          <div className='flex'>  
+          <div className='flex justify-center items-center'>  
             <label className="cursor-pointer label me-1">스포방지여부</label>
             <div className='flex items-center'><input type="checkbox" className="checkbox checkbox-warning" style={{borderColor:'black'}} onClick={onClickCheckbox}/></div>
           </div>
-          
         </div>        
-        <div className='flex justify-end mb-4'>
+        <div className="flex mb-3">
+          <div className="w-1/12"></div>
           <label className="me-1"htmlFor="content">내용</label>
+        </div>
+        <div className='flex justify-end mb-4'>
           <textarea className="textarea textarea-bordered w-10/12 resize-none" onChange={(e)=>{setContent(e.target.value)}} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
           <div className='w-1/12'></div>
         </div>

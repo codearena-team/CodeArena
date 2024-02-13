@@ -6,14 +6,17 @@ import GroupTopInfo from './GroupTopInfo';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import MainVideo from "../../../../pages/test/MainVideo";
+import { useLocation } from "react-router-dom";
 
 export default function GroupView() {
   const params = useParams()
+  const location = useLocation();
   const [chatList, setChatList] = useState([]);
   const [chatMessage, setChatMessage] =useState('')
   const [inputMessage, setInputMessage] = useState('');
   const [currentStompClient, setStompClient] = useState(null);
   const recentMessage = useRef(null);
+  const problemId = location.state?.problemId;
 
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
@@ -140,7 +143,7 @@ export default function GroupView() {
   return (
     <div>
       {/* 단체전 관전실 */}
-      <GroupTopInfo />
+      <GroupTopInfo problemId={problemId}/>
       {/* 아래 채팅 */}
       <div className="competition-view mt-3" style={{ height: '90vh' }}>
         {/* 왼쪽(6)에 해당하는 부분 */}
