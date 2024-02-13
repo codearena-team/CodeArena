@@ -201,6 +201,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     String gameId = result.get("data").get("gameId");
                     String viduSession = result.get("data").get("viduSession");
                     String problemId = result.get("data").get("problemId");
+                    String startTime = result.get("data").get("startTime");
                     for (Map.Entry<String, String> entrySet : userWithSessionId.entrySet()) {
                         log.debug("key : {}  sessionId : {}", entrySet.getKey(), entrySet.getValue());
                     }
@@ -215,6 +216,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     serverMsg.put("lang", receive.getLang());
                     serverMsg.put("gameId", gameId);
                     serverMsg.put("viduSession", viduSession);
+                    serverMsg.put("startTime", startTime);
                     Iterator<MatchDto> playerIterator = players.iterator();
                     MatchDto player1 = playerIterator.next();
                     MatchDto player2 = playerIterator.next();
