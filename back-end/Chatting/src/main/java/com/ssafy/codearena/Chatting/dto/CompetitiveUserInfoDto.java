@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class CompetitiveUserInfoDto {
     private String userNickname;
+    private String userSsumnail;
     private String userRating;
 }

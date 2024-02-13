@@ -21,6 +21,7 @@
 
     <resultMap id="userInfo" type="CompetitiveUserInfoDto">
         <result column="user_nickname" property="userNickname"/>
+        <result column="user_thumnail" property="userSsumnail"/>
         <result column="user_rating" property="userRating"/>
     </resultMap>
 

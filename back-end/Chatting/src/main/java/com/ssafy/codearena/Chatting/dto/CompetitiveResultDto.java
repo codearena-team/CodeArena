@@ -28,14 +28,15 @@ public class CompetitiveResultDto {
     private String player1Id;
     @Schema(description = "플레이어 2 ID값(int)")
     private String player2Id;
-    @Deprecated
+    @Schema(description = "플레이어 1 썸네일")
     private String player1Ssumnail;
-    @Deprecated
+    @Schema(description = "플레이어 2 썸네일")
     private String player2Ssumnail;
     @Schema(description = "플레이어 1 닉네임")
     private String player1Nickname;
     @Schema(description = "플레이어 2 닉네임")
     private String player2Nickname;
+
     @Schema(description = "플레이어 1 레이팅 (게임 모드에 따른 레이팅값")
     private String player1Rating;
     @Schema(description = "플레이어 2 레이팅 (게임 모드에 따른 레이팅값")

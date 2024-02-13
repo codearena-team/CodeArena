@@ -47,6 +47,8 @@
     <resultMap id="gameInfo" type="CompetitiveResultDto">
         <result column="problem_id" property="problemId"/>
         <result column="game_title" property="gameTitle"/>
+        <result column="player1Ssumnail" property="player1Ssumnail"/>
+        <result column="player2Ssumnail" property="player2Ssumnail"/>
         <result column="start_time" property="startTime"/>
         <result column="end_time" property="endTime"/>
         <result column="game_mode" property="gameMode"/>
@@ -126,7 +128,7 @@
     </select>
 
     <select id="getGameInfo" parameterType="string" resultMap="gameInfo">
-        SELECT problem_id, game_title, player1, player2, start_time, end_time, game_mode, game_language, winner, room_type
+        SELECT problem_id, game_title, player1, player2, (SELECT user_thumbnail FROM user WHERE user_id = player1) as player1Ssumnail, (SELECT user_thumbnail FROM user WHERE user_id = player2) as player2Ssumnail, start_time, end_time, game_mode, game_language, winner, room_type
         FROM arena_record
         WHERE game_id = #{gameId}
     </select>

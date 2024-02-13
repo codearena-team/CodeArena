@@ -483,8 +483,10 @@ public class ChatServiceImpl implements ChatService{
 
                     competitiveTopMatchResultDto.setPlayer1Nickname(player1Info.getUserNickname());
                     competitiveTopMatchResultDto.setPlayer1Rating(player1Info.getUserRating());
+                    competitiveTopMatchResultDto.setPlayer1Ssumnail(player1Info.getUserSsumnail());
                     competitiveTopMatchResultDto.setPlayer2Nickname(player2Info.getUserNickname());
                     competitiveTopMatchResultDto.setPlayer2Rating(player2Info.getUserRating());
+                    competitiveTopMatchResultDto.setPlayer2Ssumnail(player2Info.getUserSsumnail());
                     competitiveTopMatchResultDto.setGameId(competitiveManageDto.getGameId());
                     competitiveTopMatchResultDto.setParticipants(competitiveManageDto.getParticipants());
 
