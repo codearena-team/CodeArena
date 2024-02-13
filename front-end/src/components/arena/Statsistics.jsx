@@ -61,13 +61,15 @@ export default function StatsisticsPage() {
     }
     axios.get('https://i10d211.p.ssafy.io/game/rest/user/record', {headers})
     .then((res)=> {
-      setRecord(res.data.data.record)
+      setRecord(res)
       setData(Object.entries(res.data.data.record).map(([key,value])=>{
         return {name:key.split('Count'), value:value}
       }))
       setMatchs(res.data.data.recentMatches)
     })
-    .catch()
+    .catch(err => {
+      console.log(err)
+    })
   },[])
 
   function Players ({match}) {
@@ -110,7 +112,7 @@ export default function StatsisticsPage() {
             YOUR <span style={powerStyle}>ARENA</span> GRAPH {/* 차트 제목 */}
           </h1>
           <div className="ml-5 text-center" style={subTitleStyle}>
-          {record.winCount}승 {record.drawCount}무 {record.defeatCount}패 {/* 소제목 */}
+          {record.winCount + record.drawCount + record.defeatCount}전 {record.winCount}승 {record.drawCount}무 {record.defeatCount}패 {/* 소제목 */}
           </div>
           <ResponsiveContainer width="100%" height={350}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
             {/* PieChart : 원형 차트 모양으로 변환 */}
