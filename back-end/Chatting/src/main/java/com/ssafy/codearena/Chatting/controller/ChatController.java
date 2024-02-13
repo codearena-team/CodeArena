@@ -119,14 +119,14 @@ public class ChatController {
                     if(Objects.isNull(winnerInfoDto)) {
                         terminateGame(message.getGameId(), "");
                         submitResultDto.setType(SubmitResultMessage.resultType.END);
-                        submitResultDto.setWinner(message.getSender());
+                        submitResultDto.setWinner("");
                         submitResultDto.setResult("무승부 처리 되었습니다.");
                         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
                     }
                     else {
                         terminateGame(message.getGameId(), winnerInfoDto.getUserId());
                         submitResultDto.setType(SubmitResultMessage.resultType.END);
-                        submitResultDto.setWinner(message.getSender());
+                        submitResultDto.setWinner(winnerInfoDto.getUserNickname());
                         submitResultDto.setResult(winnerInfoDto.getUserNickname() + "님이 승리하였습니다.");
                         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
                     }
