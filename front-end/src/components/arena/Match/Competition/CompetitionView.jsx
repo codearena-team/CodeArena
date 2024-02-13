@@ -9,10 +9,12 @@ import { useSelector } from "react-redux";
 import Webrtc from "../../../../pages/test/Webrtc";
 import MainVideo from "../../../../pages/test/MainVideo";
 
+
 export default function CompetitionView() {
   const params = useParams()
   const navigate = useNavigate();
   const location = useLocation();
+  const problemId = location.state?.problemId;
 
   const [elapsedTime, setElapsedTime] = useState(0);
   const startTimeRef = useRef(location.state?.startTime || 0);
@@ -27,6 +29,7 @@ export default function CompetitionView() {
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
   useEffect(() => {
+    console.log(`이거확인이거확인 ${problemId}`)
     // 경기 시작 시간 확인
     const startTime = location.state?.startTime;
     console.log("경기 시작 시간 확인 :", startTime)
@@ -198,7 +201,7 @@ export default function CompetitionView() {
 
   return (
     <div>
-      <CompTopInfo gameExitId={params.id}/>
+      <CompTopInfo gameExitId={params.id} problemId={problemId}/>
       <div className="competition-view">
         {/* 왼쪽(6)에 해당하는 부분 */}
         <div className="left-panel ml-3 mr-3 mt-1" style={{ width: `${panelWidths.left}%`}}>

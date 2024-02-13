@@ -89,11 +89,10 @@ export default function NavBar() {
                     { isLogin && (
                       <button
                         type="button"
-                        className="relative rounded-full p-1
-                        hover:text-white"
+                        className="relative rounded-full p-1"
                         onClick={()=>{navigate('/profile/alarm')}}
                         >
-                        <BellIcon className="h-6 w-6" aria-hidden="true" /> 
+                        <BellIcon className="h-6 w-6 hover:scale-150" aria-hidden="true"  style={{ transition: 'transform 0.2s' }}/> 
                       </button>
                     )}
                   {/* 프로필 드롭다운위치 */}

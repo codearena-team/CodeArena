@@ -159,7 +159,8 @@ export default function CompetitionList() {
             <button className="btn btn-disabled" disabled>입장불가</button>
             ) : (
               // 경쟁전 관전 페이지로 입장하기
-              <EnterModal competitionId={item.gameId} startTime={item.startTime}/>
+              <EnterModal competitionId={item.gameId} startTime={item.startTime}
+              problemId={item.problemId}/>
             )}
           </div>
         </div>

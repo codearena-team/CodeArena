@@ -3,7 +3,7 @@ import { Link, useNavigate, } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setGameId } from "../../../../features/arena/arenaSlice";
 
-export default function EnterModal({ competitionId, startTime }) {
+export default function EnterModal({ competitionId, startTime, problemId }) {
   const dispatch = useDispatch()
   // const competitionPath = `/game-list/competition/view/${competitionId}`;
   const navigate = useNavigate();
@@ -13,6 +13,7 @@ export default function EnterModal({ competitionId, startTime }) {
       {pathname: `/game-list/competition/view/${competitionId}`},
       {state: {
         startTime: startTime,
+        problemId
       }},
     )
   })
