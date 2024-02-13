@@ -48,7 +48,7 @@ export default function TopInfo({ gameExitId }) {
         >
           나가기
         </button>
-        {<C_ExitModal gameExitId={gameExitId}/>}
+        <C_ExitModal gameExitId={gameExitId}/>
       </div>
     </div>
   );

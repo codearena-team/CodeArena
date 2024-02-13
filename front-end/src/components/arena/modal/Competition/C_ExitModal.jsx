@@ -1,23 +1,31 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { clearStompClient } from "../../../../features/arena/stompClientSlice";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 
 export default function CompetitionExitModal({ gameExitId }) {
   const navigate = useNavigate();
-  console.log("게임ExitId 여깄어요 :", gameExitId)
   const gameId = gameExitId
-  // 퇴장했을 때 1번 알림 알리기
-  const params = new URLSearchParams();
-  params.append("gameId", gameId);
+  const dispatch = useDispatch();
+  const stompClient = useSelector(state => state.stompClient.stompClient)
   
+  // 퇴장했을 때 1번 알림 알리기
   const handleExitMessage = () => {
-    axios.get('https://i10d211.p.ssafy.io/game/chat/exit', params)
-      .then(
-        navigate('/arena'),
-        console.log("params 보냈음")
-      ).catch (
-        console.log('못보냈음')
-      )
+    if (stompClient) {
+      stompClient.unsubscribe('/sub/chat/room/'+`${gameId}`);
+      stompClient.disconnect();
+    }
+    dispatch(clearStompClient());
+    navigate('/arena')
+
+    axios.get('https://i10d211.p.ssafy.io/game/chat/exit?gameId=' + `${gameId}`)
+      .then((res)=> {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (

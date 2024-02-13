@@ -103,15 +103,15 @@ export default function Router () {
       
       <Route path="/game-list/competition/compSpeedResult/:id" element={<CompSpeedResult />} /> {/* 경쟁전 스피드 결과 페이지 */}
       <Route path="/game-list/competition/compSpeedDraw/:id" element={<CompSpeedDraw />} /> {/* 경쟁전 스피드 무승부결과 페이지 */}
-      <Route path="/game-list/competition/compEffiResult/:id" element={<CompEffiResult />} /> {/* 경쟁전 스피드 무승부결과 페이지 */}
-      <Route path="/game-list/competition/compEffiDraw/:id" element={<CompEffiDraw />} /> {/* 경쟁전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/competition/compEffiResult/:id" element={<CompEffiResult />} /> {/* 경쟁전 효율 결과 페이지 */}
+      <Route path="/game-list/competition/compEffiDraw/:id" element={<CompEffiDraw />} /> {/* 경쟁전 효율 무승부결과 페이지 */}
       <Route path="/game-list/competition/compMiddleConfirm/:id" element={<CompMiddleConfirm/>} /> {/* 경쟁전 효율전 중간채점 페이지 */}
       {/* <Route path="/game-list/group/result/:id" element={<GroupResult />} /> */}
 
       <Route path="/game-list/group/groupSpeedResult/:id" element={<GroupSpeedResult />} /> {/* 단체전 스피드 결과 페이지 */}
       <Route path="/game-list/group/groupSpeedDraw/:id" element={<GroupSpeedDraw />} /> {/* 단체전 스피드 무승부결과 페이지 */}
-      <Route path="/game-list/group/groupEffiResult/:id" element={<GroupEffiResult />} /> {/* 단체전 스피드 무승부결과 페이지 */}
-      <Route path="/game-list/group/groupEffiDraw/:id" element={<GroupEffiDraw />} /> {/* 단체전 스피드 무승부결과 페이지 */}
+      <Route path="/game-list/group/groupEffiResult/:id" element={<GroupEffiResult />} /> {/* 단체전 효율 결과 페이지 */}
+      <Route path="/game-list/group/groupEffiDraw/:id" element={<GroupEffiDraw />} /> {/* 단체전 효율 무승부결과 페이지 */}
       <Route path="/game-list/group/groupMiddleConfirm/:id" element={<GroupMiddleConfirm/>} /> {/* 단체전 효율전 중간채점 페이지 */}
 
       <Route path="/login/signup" element={<Signup/>} />

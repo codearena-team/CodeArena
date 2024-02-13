@@ -10,8 +10,6 @@ import Webrtc from '../../../../pages/test/Webrtc'
 export default function UserInfo() {
   const params = useParams()
   const Location = useLocation();
-  const [timer, setTimer] = useState(60 * 60);
-  const [timerDisplay, setTimerDisplay] = useState("1:00:00");
 
   const [panelWidths, setPanelWidths] = useState({
     left: 50,
@@ -35,35 +33,7 @@ export default function UserInfo() {
     setEnemyNickname(enemyNickname.current);
   }, [])
 
-  // 제한시간 1시간 타이머 useEffect
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // 매 초마다 타이머 업데이트
-      setTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          clearInterval(intervalId);
-          // 타이머 만료 시 처리 (필요한 경우)
-        }
-        return prevTimer - 1;
-      });
-    }, 1000);
 
-    // 컴포넌트가 언마운트되면 간격 정리
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    // 타이머 값을 HH:MM:SS 형식으로 포맷
-    const hours = Math.floor(timer / 3600);
-    const minutes = Math.floor((timer % 3600) / 60);
-    const seconds = timer % 60;
-
-    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
-      minutes
-    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-    setTimerDisplay(formattedTime);
-  }, [timer]);
 
   return (
     <div className="flex">
@@ -107,6 +77,7 @@ export default function UserInfo() {
       </div>
 
       {/* 우측 상단 버튼 영역 */}
+      
       <div
         className="justify-center items-center ml-6"
         style={{ width: `${panelWidths.right}%`, height: 'auto' }}
@@ -121,8 +92,6 @@ export default function UserInfo() {
         </button>
         {<CompAbstentionModal />}
 
-        {/* 제한시간 1시간 타이머 띄우기 */}
-        <div className="mt-5 text-2xl text-center font-bold">{timerDisplay}</div>
       </div>
     </div>
   );

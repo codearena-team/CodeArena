@@ -5,14 +5,18 @@ import C_DividingLine from "./C_dividingLine";
 import CompTopInfo from "./CompTopInfo";
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Webrtc from "../../../../pages/test/Webrtc";
 import MainVideo from "../../../../pages/test/MainVideo";
+import { setStompClients, clearStompClient } from "../../../../features/arena/stompClientSlice";
 
 export default function CompetitionView() {
   const params = useParams()
   const navigate = useNavigate();
   const location = useLocation();
+
+  const dispatch = useDispatch();
+  const stompClient = useSelector(state => state.stompClient.stompClient);
 
   const [elapsedTime, setElapsedTime] = useState(0);
   const startTimeRef = useRef(location.state?.startTime || 0);
@@ -21,7 +25,6 @@ export default function CompetitionView() {
   const [chatList, setChatList] = useState([]);
   const [chatMessage, setChatMessage] =useState('')
   const [inputMessage, setInputMessage] = useState('');
-  const [currentStompClient, setStompClient] = useState(null);
   const recentMessage = useRef(null);
 
   const sender = useRef(useSelector(state => state.auth.userNickname));
@@ -30,9 +33,11 @@ export default function CompetitionView() {
     // 경기 시작 시간 확인
     const startTime = location.state?.startTime;
     console.log("경기 시작 시간 확인 :", startTime)
-
+      
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
-    const stompClient = Stomp.over(socket);
+
+    const stompClient = Stomp.over(socket)
+    dispatch(setStompClients(stompClient));
     console.log("경쟁전 useEffect stompClient :", stompClient)
 
     stompClient.connect({}, () => {
@@ -80,13 +85,11 @@ export default function CompetitionView() {
     });
 
 
-    setStompClient(stompClient)
+    dispatch(setStompClients(stompClient));
 
     // startTime 시간 - 진행된 시간 계산
     const calculateElapsedTime = () => {
       const currentTime = new Date().getTime();
-
-      console.log("스타트타임 :", startTimeRef.current)
       const startTimeMillis = new Date(startTimeRef.current).getTime();
       const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
 
@@ -106,14 +109,15 @@ export default function CompetitionView() {
       clearInterval(timerRef.current)
       console.log("채팅 연결을 종료합니다.")
       stompClient.disconnect();
+      dispatch(clearStompClient());
     }
   }, [chatList, params.id]);
 
   // 입장했을 때 1번만 알림 보내기
   const handleEnterMessage = () => {
     console.log("입장 메세지를 전달합니다.")
-    if (currentStompClient && currentStompClient.connected ) {
-      currentStompClient.send(`/pub/chat/message`, {}, JSON.stringify({
+    if (stompClient && stompClient.connected ) {
+      stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
         gameId: params.id,
         sender: sender.current,
         message: '경쟁전에 누군가 입장했어요!',
@@ -150,10 +154,10 @@ export default function CompetitionView() {
       event.preventDefault();
     } // 새로고침 방지
 
-    if (currentStompClient && currentStompClient.connected && inputMessage.trim() !== '') {
+    if (stompClient && stompClient.connected && inputMessage.trim() !== '') {
       console.log("메시지 채팅 하나를 보냈어요.")
       console.log("gameId를 확인합니다. :", params.id)
-      currentStompClient.send(`/pub/chat/message`, {}, JSON.stringify({
+      stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
         gameId: params.id,
         sender: sender.current,
         message: inputMessage,
