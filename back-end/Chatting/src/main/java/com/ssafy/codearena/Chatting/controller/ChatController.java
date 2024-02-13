@@ -124,7 +124,7 @@ public class ChatController {
                         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), submitResultDto);
                     }
                     else {
-                        terminateGame(message.getGameId(), winnerInfoDto.getUserId());
+                        terminateGame(message.getGameId(), winnerInfoDto.getUserNickname());
                         submitResultDto.setType(SubmitResultMessage.resultType.END);
                         submitResultDto.setWinner(winnerInfoDto.getUserNickname());
                         submitResultDto.setResult(winnerInfoDto.getUserNickname() + "님이 승리하였습니다.");
