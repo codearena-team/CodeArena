@@ -130,6 +130,11 @@ public class ChatServiceImpl implements ChatService{
 
             gameMapper.createCompetitiveRoom(gameCreateDto);    //DB I/O
 
+            String startTime = gameMapper.getStartTime(gameCreateDto.getGameId()); //시작시간 I/O
+
+            if(startTime != null && !startTime.isEmpty()) {
+                createCompetitiveResultDto.setStartTime(startTime);
+            }
             //게임 매니저 객체 생성 및 내부 리소스 추가
             CompetitiveManageDto competitiveManageDto = new CompetitiveManageDto();
             competitiveManageDto.setGameId(gameCreateDto.getGameId());

@@ -24,4 +24,5 @@ public interface GameMapper {
     public CompetitiveWinnerInfoDto whoWinner(String gameId) throws Exception;
     public List<CompetitiveGameSubmitDto> getSubmitList(String gameId) throws Exception;
     public String getUserNickname(String userId) throws Exception;
+    public String getStartTime(String gameId) throws Exception;
 }
