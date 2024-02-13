@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -69,6 +70,7 @@ public class JudgeUtil {
         try {
             judgeProblemInfoDto = mapper.getProblemInfo(problemId);
             testCaseList = mapper.getTestCase(problemId);
+
             judgeProblemInfoDto.setTestCaseList(testCaseList);
         } catch (Exception e) {
             log.debug("Exception : {} ", e);
@@ -90,6 +92,7 @@ public class JudgeUtil {
                                            List<TestCaseDto> testCase,
                                            Long timeLimit,
                                            String path) throws Exception {
+
 
         // 런타임 생성하기
         Runtime runtime = Runtime.getRuntime();
@@ -128,9 +131,13 @@ public class JudgeUtil {
             }
 
             double afterTime = System.currentTimeMillis();
-
             BufferedReader bf = new BufferedReader(new InputStreamReader(process.getInputStream(), "MS949"));
-            String str = bf.readLine();
+            StringBuilder sb = new StringBuilder();
+            String str = null;
+
+            while((str = bf.readLine()) != null) {
+                sb.append(str).append("\n");
+            }
 
             timeSum += (afterTime - beforeTime) / 1000;
 
@@ -162,7 +169,12 @@ public class JudgeUtil {
                 break;
             }
 
-            if (!testCase.get(tc).getOutput().equals(str)) {
+            String tcTrim = testCase.get(tc).getOutput();
+            String sbTrim = sb.toString();
+
+            log.info("비교 결과 : {}" , tcTrim.equals(sbTrim));
+
+            if (!tcTrim.equals(sbTrim)) {
                 msg = "틀렸습니다";
                 wrongTC = testCase.get(tc).getTid();
                 isError = true;
@@ -172,8 +184,6 @@ public class JudgeUtil {
             log.info("errorReader.readLine() : {}", errorReader.readLine());
             log.info("ProcessExitValue : {}", process.exitValue());
 
-            // 결과 값 출력 & 저장
-            log.info("str : {}", str);
         }
 
         String timeResult;
