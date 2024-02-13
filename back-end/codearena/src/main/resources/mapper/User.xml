@@ -22,6 +22,8 @@
         <result column="speed_rating" property="speedRating"/>
         <result column="effi_rating" property="effiRating"/>
         <result column="user_password" property="userPassword"/>
+        <result column="user_thumbnail" property="userThumbnail"/>
+        <result column="user_coin" property="userCoin"/>
     </resultMap>
 
     <resultMap id="userFollowInfoDto" type="UserFollowInfoDto">
@@ -54,7 +56,7 @@
     </select>
 
     <select id="login" parameterType="userLoginDto" resultMap="tokenDataDto">
-        select user_id, user_nickname, user_email, speed_rating, effi_rating, user_password
+        select user_id, user_nickname, user_email, speed_rating, effi_rating, user_password, user_thumbnail, user_coin
         from user
         where user_email=#{userEmail};
     </select>

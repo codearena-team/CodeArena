@@ -11,4 +11,6 @@ public class TokenDataDto {
     private String speedRating;
     private String effiRating;
     private String userPassword;
+    private String userThumbnail;
+    private String userCoin;
 }
