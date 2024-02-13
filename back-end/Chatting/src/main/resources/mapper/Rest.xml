@@ -61,6 +61,7 @@
 
     <resultMap id="playerInfo" type="competitiveUserInfoDto">
         <result column="user_nickname" property="userNickname"/>
+        <result column="user_thumbnail" property="userSsumnail"/>
         <result column="user_rating" property="userRating"/>
     </resultMap>
 
@@ -135,10 +136,10 @@
 
     <select id="getPlayerInfo" parameterType="string" resultMap="playerInfo">
         <if test='gameMode == "0"'>    <!-- 스피드전 -->
-            SELECT user_nickname, speed_rating as user_rating
+            SELECT user_nickname, speed_rating as user_rating, user_thumbnail
         </if>
         <if test='gameMode == "1"'>    <!-- 효율전 -->
-            SELECT user_nickname, effi_rating as user_rating
+            SELECT user_nickname, effi_rating as user_rating, user_thumbnail
         </if>
         FROM user
         WHERE user_id = #{userId};

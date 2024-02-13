@@ -200,10 +200,12 @@ public class RestServiceImpl implements RestService {
             CompetitiveUserInfoDto competitiveUserInfoDto = mapper.getPlayerInfo(competitiveResultDto.getPlayer1Id(), competitiveResultDto.getGameMode());
             competitiveResultDto.setPlayer1Nickname(competitiveUserInfoDto.getUserNickname());
             competitiveResultDto.setPlayer1Rating(competitiveUserInfoDto.getUserRating());
+            competitiveResultDto.setPlayer1Ssumnail(competitiveUserInfoDto.getUserSsumnail());
             //player2, DTO 재활용
             competitiveUserInfoDto = mapper.getPlayerInfo(competitiveResultDto.getPlayer2Id(), competitiveResultDto.getGameMode());
             competitiveResultDto.setPlayer2Nickname(competitiveUserInfoDto.getUserNickname());
             competitiveResultDto.setPlayer2Rating(competitiveUserInfoDto.getUserRating());
+            competitiveResultDto.setPlayer2Ssumnail(competitiveUserInfoDto.getUserSsumnail());
 
             resultDto.setData(competitiveResultDto);
         }
