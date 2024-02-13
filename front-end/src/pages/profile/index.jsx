@@ -1,4 +1,5 @@
 import Profile from '../../images/common/profile.png'
+import Money from '../../images/common/money.png'
 import Finger from '../../images/common/finger.png'
 import Bell from '../../images/common/bell.png'
 import Rank from '../../images/common/rank.png'
@@ -47,6 +48,7 @@ export default function MyPage() {
   const [loginFollowerlist,setLoginFollwerList] = useState([])
   const [graphData, setGraphData] = useState([])
   const [selectedFile, setSelectedFile] = useState(null);
+  const [money,setMoney] = useState('')
 
 
   // 프로필화면시 그프로필 회원정보요청하는 axios
@@ -66,6 +68,7 @@ export default function MyPage() {
       setUnsolveList(res.data.data.unsolvedProblem)
       setProfileId(res.data.data.userInfoDto.userId)
       setSelectedFile(res.data.data.userInfoDto.userThumbnail)
+      setMoney(res.data.data.userInfoDto.userCoin)
       setGraphData(res.data.data.problemCateList.map((item)=>{
         return {name:item.problemCate,value:parseInt(item.problemCateCnt)}
       }))
@@ -245,6 +248,28 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
     setModalList([]);
   }  
 
+  const closeFollowingModal = () => {
+    document.getElementById('my_modal_3').close();
+  };
+
+  const closeFollowerModal = () => {
+    document.getElementById('my_modal_4').close();
+  };
+
+
+  const goFollowingProfile = (userNickname) =>{
+    closeFollowingModal();
+    navigate(`/profile/${userNickname}`)
+  }
+
+
+  const goFollowerProfile = (userNickname) =>{
+    closeFollowerModal();
+    navigate(`/profile/${userNickname}`)
+  }
+
+
+
   return (
     <div className='container mx-auto'>
       <div className='flex p-40 pt-0 pb-0 justify-end mr-3 mb-5'>
@@ -276,7 +301,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
       </div>
     
       <div className="grid grid-cols-12 p-20 pb-0 pt-0">
-        <div className="col-span-2 gap-4 mt-5">
+        <div className="col-span-2 gap-4 ">
           <div className='grid grid-cols-1 gap-4'>
             <div className='flex justify-center mt-5'><img style={{width:130}} src={selectedFile} alt="" /></div>
             <h1 className='text-3xl text-center'>{profileUser}</h1>
@@ -314,7 +339,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     <h3 className="font-bold text-lg">팔로잉 목록</h3>
                   </form>
-                
+
                   { followingList.length === 0  && (
                     <h1>팔로잉목록이 없습니다</h1>
                   )}
@@ -323,7 +348,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     {followingList.map((user)=>{
                       return <li key={user.userId}
                       className="text-md mb-2" 
-                      style={{textDecoration: 'underline'}}>
+                      style={{textDecoration: 'underline',cursor:'pointer'}}
+                      onClick={()=>{goFollowingProfile(user.userNickname)}}>
                       {user.userNickname}</li>
                     })}
                   </ul>
@@ -350,7 +376,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     {followerList.map((user)=>{
                       return <li key={user.userId}
                       className="text-md mb-2" 
-                      style={{textDecoration: 'underline'}}>
+                      style={{textDecoration: 'underline',cursor:'pointer'}}
+                      onClick={()=>{goFollowerProfile(user.userNickname)}}>
                       {user.userNickname}</li>
                     })}
                   </ul>
@@ -358,10 +385,25 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                 </div>
               </dialog>
             </div>
-
+          
+     
+        
+            <button className="btn btn-active w-full rounded-xl py-1 text-md pinkbutton drop-shadow"
+            style={{backgroundColor:'#E2E2E2'}}
+            >
+            <div className='flex justify-center items-center'>
+              <div className='flex justify-center items-center mr-4 mb-2'>
+                <img src={Money} alt="" style={{width:'40px'}} className='me-2'/>
+                <p>포인트</p>
+              </div>
+              <p className='mb-2'>{money}</p>
+            </div>
+            </button>             
+     
+            
             { profileUser === loginNickname &&  (
               <div>
-                <button className="btn btn-active w-full rounded-xl text-md pinkbutton drop-shadow mb-5"
+                <button className="btn btn-active w-full rounded-xl text-md pinkbutton drop-shadow mb-3"
                 onClick={goEdit}>회원정보수정</button>             
                 <Link to="/profile/alarm">
                 <button className="btn btn-active w-full rounded-xl text-md pinkbutton drop-shadow">
