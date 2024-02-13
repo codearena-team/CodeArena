@@ -27,11 +27,11 @@ export default function SendListItem(probs) {
   }
 
   return(
-    <tr onClick={onClick} >
+    <tr >
       <th className="p-1 font-thin">{probs.sendItem.alarmId}</th>
       <th className="p-1 font-thin">{word}</th>
       {/* 처리여부는 드롭다운박스 */}
-      <th className="p-1 font-thin">{probs.sendItem.alarmStatus}</th>
+      <th className="p-1 font-thin" onClick={onClick}>{probs.sendItem.alarmStatus}</th>
       <th className="p-1 font-thin">{probs.sendItem.alarmMsg}</th>
       <th className="p-1 font-thin">{probs.sendItem.toNickname}</th>
       <th className="p-1 font-thin">{probs.sendItem.alarmDate}</th>
