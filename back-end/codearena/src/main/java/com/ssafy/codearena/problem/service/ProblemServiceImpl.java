@@ -306,7 +306,6 @@ public class ProblemServiceImpl implements ProblemService{
             WebClient client = getClient(submitDto.getSubmitLang());
             Integer submitNo = submitDto.getSubmitNo();
             HashMap<String, String> params = new HashMap<>();
-            log.debug("url : {}", judgeJava);
             params.put("submitNo", String.valueOf(submitNo));
             params.put("userId", null);
             params.put("problemId", submitDto.getProblemId());
