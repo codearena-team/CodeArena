@@ -23,10 +23,10 @@ export default function AbstentionModal() {
     const { problemId, gameMode, lang, userId, gameId } = Location.state;
     console.log("여기서 진짜 넘어와야함 :", problemId)
     // setGameMode
-    setGameMode(gameMode.current);
-    setProblemId(problemId.current);
-    setUserId(userId.current);
-    setGameId(gameId.current);
+    setGameMode(gameMode);
+    setProblemId(problemId);
+    setUserId(userId);
+    setGameId(gameId);
     stompClient.connect({}, () => {
       // 연결
       console.log('채팅과 연결이 되었어요 !')

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, } from 'react';
-// import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import BannerCreateModal from './modal/Main/BannerCreateModal';
@@ -35,6 +34,13 @@ export default function TopBanner() {
     { lang: 'cpp', label: 'C++' }
   ];
 
+  const [matchingState, setMatchingState] = useState({
+    userImgSrc: '',
+    enemyImgSrc: '',
+    userNickname: '',
+    enemyNickname: ''
+  });
+
   // 타이머 변수 관리
   const timerInterval = useRef(null);
 
@@ -55,19 +61,10 @@ export default function TopBanner() {
   const viduSession = useRef('');
   const enemyId = useRef('');
   const enemyNickname = useRef('');
-  // const [matchData, setmatchData] = useState({
-  //   matchId: '',
-  //   userId: '',
-  //   rating: '',
-  //   gameMode: '',
-  //   lang: '',
-  //   content: '',
-  //   problemId: '',
-  //   queueKey: '',
-  //   userNickname: '',
-  // });
+  const userImgSrc = useRef('');
+  const enemyImgSrc = useRef('');
 
-  useEffect(() => {
+  const handleStartMatching = () => {
     socket.current = new WebSocket('wss://i10d211.p.ssafy.io/matching');
 
     socket.current.addEventListener("open", function (event) {
@@ -96,6 +93,8 @@ export default function TopBanner() {
         viduSession.current = object.viduSession;
         enemyId.current = object.enemyId;
         enemyNickname.current = object.enemyNickname;
+        userImgSrc.current = object.userImgSrc;
+        enemyImgSrc.current = object.enemyImgSrc;
         // console.log("new obj 데이타!! :", new_obj)
         // console.log("현재 타입 :", object.type)
       }
@@ -105,14 +104,16 @@ export default function TopBanner() {
         navigate(
           {pathname: `/game-list/competition/play/${object.gameId}`},
           {state: {
-            problemId : problemId,
-            gameMode : gameMode,
-            lang : lang,
-            gameId : gameId,
-            userId : userId,
-            userNickname: userNickname,
-            enemyId : enemyId,
-            enemyNickname : enemyNickname,
+            problemId : problemId.current,
+            gameMode : gameMode.current,
+            lang : lang.current,
+            gameId : gameId.current,
+            userId : userId.current,
+            userNickname: userNickname.current,
+            enemyId : enemyId.current,
+            enemyNickname : enemyNickname.current,
+            userImgSrc: userImgSrc.current,
+            enemyImgSrc: enemyImgSrc.current,
           }},
         )
       }
@@ -136,7 +137,7 @@ export default function TopBanner() {
         socket.current.close();
       }
     };
-  }, []);
+  };
   
   ////////////////// 위에서 websocket 통신 연결 //////////////////////////
 
@@ -303,6 +304,13 @@ export default function TopBanner() {
 
   // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
   const handleMatchingComplete = () => {
+    setMatchingState({
+      userImgSrc: userImgSrc.current,
+      enemyImgSrc: enemyImgSrc.current,
+      userNickname: userNickname.current,
+      enemyNickname: enemyNickname.current
+    });
+    
     setIsMatchingComplete(true);
 
     // 1.5초 뒤에 MatchingCompleteModal 띄우기
@@ -448,6 +456,7 @@ export default function TopBanner() {
             src={isFindMatchHovered ? FindMatch : FindMatchAsset} // 경쟁 매칭 Hover
             alt="경쟁매칭 이미지"
             className="mr-2 rounded-xl"
+            onClick={handleStartMatching}
             style={{ width: '100%', height: 'auto' }}
           />
 
@@ -570,6 +579,7 @@ export default function TopBanner() {
           <dialog id="matching_complete_modal" className="modal">
             <div className="modal-box flex-row justify-center">
               <MatchingCompleteModal
+                matchingState={matchingState}
                 // 수락
                 onAccept={handleAccept}
                 // 거절

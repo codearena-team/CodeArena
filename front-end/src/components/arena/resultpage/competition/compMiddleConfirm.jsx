@@ -1,7 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import SubmitListItem from './compSubmitItemList'
+import { useState, useEffect } from 'react';
 
 export default function MiddleConfirm(){
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [gameId, setGameId] = useState();
+  const [problemId, setProblemId] = useState("");
+
+  useEffect(() => {
+    const { gameId, problemId } = location.state;
+    console.log("gameId 로케이션 확인 :", location.state)
+    // const { gameId, problemId } = location.state;
+    setGameId(gameId);
+    setProblemId(problemId)
+  }, [])
+
    // const pgno = searchParams.get('pgno') || 1
   // const [pageCount, setPageCount] = useState(1)
   // const [searchParams, setSearchParams] = useSearchParams();
@@ -50,14 +64,24 @@ export default function MiddleConfirm(){
     "tagList": []
 },]
 
+  const returnGoPlayhandler = () => {
+    console.log("다시 문제 풀러 GOGO")
+    navigate(
+      `/game-list/competition/play/${gameId}`,
+      { state : { gameId : gameId, problemId: problemId }},
+    )
+  }
+
   return(
     <div>
       <div className='flex justify-end mr-20'>
-        <Link to='/arena'>
-          <button className="btn btn-sm btn-active drop-shadow text-md" 
-          style={{backgroundColor:'#E2E2E2'}}
-          >아레나로 돌아가기</button>
-        </Link>
+          <button
+            className="btn btn-sm btn-active drop-shadow text-md" 
+            style={{backgroundColor:'#E2E2E2'}}
+            onClick={returnGoPlayhandler}
+          >
+            되돌아가기
+          </button>
       </div>
       <div className="overflow-x-auto p-20 pt-5">
         <table className="problemTable w-full">
@@ -76,8 +100,8 @@ export default function MiddleConfirm(){
             {submitListItem.map((submit,index)=>{
             return(
             <SubmitListItem 
-            key={submit.submitNo}
-            submit={submit}
+            key={index}
+            submitItem={submit}
             index={index}
             />
             )})}

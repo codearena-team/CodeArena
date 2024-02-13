@@ -67,8 +67,8 @@ export default function StatsisticsPage() {
       }))
       setMatchs(res.data.data.recentMatches)
     })
-    .catch(err => {
-      console.log(err)
+    .catch((err) => {
+      console.log("에러!!! :", err)
     })
   },[])
 
