@@ -1,29 +1,49 @@
 import Tropy from '../../../../images/arena/Result/tropy.png'
 import Victory from '../../../../images/arena/Result/victory.png'
 import '../../../css/resultpage.css'
-import { Link } from 'react-router-dom'
-import { useSearchParams } from "react-router-dom"
-
-
+import { Link, useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import SubmitItem from './compSubmitItemList'
 
 export default function EffiResult (){
-  // const pgno = searchParams.get('pgno') || 1
-  // const [pageCount, setPageCount] = useState(1)
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
-  // const pageNation = () => {
-  //   const result = [];
-  //   for (let i = 0; i < pageCount; i++) {
-  //     result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}`) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
-  //   }
-  //   return result;
-  // };
+  const [userGameData, setUserGameData] = useState('');
+  const [winnerNickname, setWinnerNickname] = useState('');
+  const [winnerRating, setWinnerRating] = useState('');
+  const [loserNickname, setLoserNickname] = useState('');
+  const [loserRating, setLoserRating] = useState('');
+  const [winnerSsumnail, setWinnerSsumnail] = useState('');
+  const [loserSsumnail, setLoserSsumnail] = useState('');
+  const [submitList, setSubmitList] = useState([]);
 
+  useEffect(() => {
+    const { gameId } = location.state;
+    setUserGameData(gameId.current)
 
-  // const changeParams = (key, value) => {
-  //   searchParams.set(key,value)
-  //   setSearchParams(searchParams)
-  // }
+    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${gameId}`)
+      .then(res => {
+        console.log('여기 json 받았어요', res.data);
+        setWinnerNickname(res.data.data.winnerId);
+        setWinnerRating(res.data.data.winnerRating);
+        setLoserNickname(res.data.data.loserId);
+        setLoserRating(res.data.data.loserRating);
+        setWinnerSsumnail(res.data.data.winnerSsumnail);
+        setLoserSsumnail(res.data.data.loserSsumnail);
+      })
+      .catch(error => {
+        console.error('에러 발생:', error);
+      });
+
+    axios.get('https://i10d211.p.ssafy.io/game/rest/effi/list?gameId='+`${gameId}`)
+      .then(res => {
+        console.log('여기 제출 리스트 받았어요', res.data)
+        const newArray = [...res.data.data.list]
+        setSubmitList(newArray)
+        console.log("서브밋 리스트 확인:", newArray)
+      })
+  }, []);
 
   return(
     <div className='flex flex-col mt-10 '>
@@ -43,12 +63,19 @@ export default function EffiResult (){
             <div className='text-3xl font-bold mt-5'>Winner</div>
             <img src={Tropy} alt="" className='tropy2' />
           </div>
-          <div className='flex justify-evenly p-10'>
-            <div>  
-              <h1 className='text-xl'>nickname나오는곳</h1>
-              <h1>축하합니다!</h1>
+          <div className='flex justify-center items-center mt-10'>
+            <div style={{ width: "125px", height: "125px"}} >
+              <img
+                src={winnerSsumnail}
+                alt="본인 이미지"
+                className="rounded-full shadow-lg"
+                style={{width: "100%", height: "100%"}}
+              />
             </div>
-            <div className='flex justify-end'><img src={Victory} alt="" style={{width:'70px',height:'70px'}}/></div>
+            <div className="ml-10">
+              <h1 className='text-center text-xl'>{winnerNickname}</h1>
+              <h1 className='text-center mt-5'>축하합니다! 당신이 효율전의 우승자입니다 !</h1>
+            </div>
           </div>
         </div>
       </div>
@@ -64,18 +91,19 @@ export default function EffiResult (){
                 <th className="p-1.5 font-light">메모리</th>
                 <th className="p-1.5 font-light">시간</th>
                 <th className="p-1.5 font-light">언어</th>
-                <th className="p-1.5 font-light rounded-tr-2xl">제출날짜</th>
+                <th className="p-1.5 font-light rounded-tr-2xl">제출시각</th>
               </tr>
             </thead>
             <tbody className="font-normal">
-             {/* {submitList.map((submit,index)=>{
-              return(
-             <SubmitItem 
-              key={submit.submitNo}
-              submitItem={submit}
-              index={index}
+             {submitList.map((submit, index)=>{
+              console.log(submit)
+              return (
+             <SubmitItem
+                key={index}
+                submitItem={submit}
+                index={index}
              />
-             )})} */}
+             )})}
             </tbody>
           </table>
         </div>

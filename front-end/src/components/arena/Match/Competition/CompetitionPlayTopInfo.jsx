@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 // import axios from 'axios';
 import CompAbstentionModal from '../../modal/Competition/CompabstentionModal';
@@ -9,6 +9,7 @@ import Webrtc from '../../../../pages/test/Webrtc'
 
 export default function UserInfo() {
   const params = useParams()
+  const navigate = useNavigate();
   const Location = useLocation();
 
   const [panelWidths, setPanelWidths] = useState({
@@ -19,21 +20,35 @@ export default function UserInfo() {
 
   // const [userData, setUserData] = useState([]);
   const [userNickname, setUserNickName] = useState("");
+  const [gameId, setGameId] = useState(null);
   const [userId, setUserId] = useState("");
   const [enemyId, setEnemyId] = useState("");
   const [enemyNickname, setEnemyNickname] = useState("");
+  const [userImgSrc, setUserImgSrc] = useState("");
+  const [enemyImgSrc, setEnemyImgSrc] = useState("");
+  const [problemId, setProblemId] = useState("");
   // const [userThumnail, setUserThumnail] = useState([]);
 
   useEffect(() => {
     console.log("props 받은 로케이션 :", Location.state);
-    const { userId, userNickname, enemyId, enemyNickname } = Location.state;
-    setUserNickName(userNickname.current);
-    setUserId(userId.current);
-    setEnemyId(enemyId.current);
-    setEnemyNickname(enemyNickname.current);
+    const { gameId, userId, userNickname, enemyId, enemyNickname, userImgSrc, enemyImgSrc, problemId } = Location.state;
+    setUserNickName(userNickname);
+    setGameId(gameId)
+    setUserId(userId);
+    setEnemyId(enemyId);
+    setEnemyNickname(enemyNickname);
+    setUserImgSrc(userImgSrc);
+    setEnemyImgSrc(enemyImgSrc);
+    setProblemId(problemId);
   }, [])
 
-
+  const checkSubmithandler = () => {
+    console.log("중간 채점 현황 페이지로 이동")
+    navigate(
+      `/game-list/competition/compMiddleConfirm/${gameId}`,
+      { state : { gameId : gameId, problemId: problemId }},
+    )
+  }
 
   return (
     <div className="flex">
@@ -48,13 +63,33 @@ export default function UserInfo() {
       >
         {/* [사진]유저1 vs 유저2 [사진] 필요 */}
         {/* 사진 및 유저 정보 추가 필요 */}
-        <div className="flex justify-center items-center">
-          <span className="mr-20 text-2xl">{userNickname}</span>
+        <div className="flex justify-center items-center w-full">
+          <div className="flex flex-col mr-20">
+            <div style={{ width: "125px", height: "125px"}} >
+              <img
+                src={userImgSrc}
+                alt="본인 이미지"
+                className="rounded-full shadow-lg"
+                style={{width: "100%", height: "100%"}}
+              />
+            </div>
+            <span className="text-center mt-3 text-2xl">{userNickname}</span>
+          </div>
           <img
             src={VS} alt="vs" 
             style={{width: "10%", padding: "1%"}}
           />
-          <span className="ml-20 text-2xl">{enemyNickname}</span>
+          <div className="flex flex-col ml-20">
+            <div style={{ width: "125px", height: "125px"}} >
+              <img
+                src={enemyImgSrc}
+                alt="상대 이미지"
+                className="rounded-full shadow-lg"
+                style={{width: "100%", height: "100%"}}
+              />
+            </div>
+            <span className="text-center mt-3 text-2xl">{enemyNickname}</span>
+          </div>
         </div>
       </div>
 
@@ -91,6 +126,15 @@ export default function UserInfo() {
           나가기
         </button>
         {<CompAbstentionModal />}
+
+        {/* 중간채점 페이지 이동 */}
+        <button
+          className="rounded-lg mt-3 shadow-lg px-4 focus:outline-none text-2xl font-bold hover:scale-105"
+          style={{ width: '100%', height:'30%', backgroundColor: '#F5EBDB' }}
+          onClick={checkSubmithandler}
+        >
+          채점 현황
+        </button>
 
       </div>
     </div>

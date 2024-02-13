@@ -67,7 +67,9 @@ export default function StatsisticsPage() {
       }))
       setMatchs(res.data.data.recentMatches)
     })
-    .catch()
+    .catch((err) => {
+      console.log("에러!!! :", err)
+    })
   },[])
 
   function Players ({match}) {

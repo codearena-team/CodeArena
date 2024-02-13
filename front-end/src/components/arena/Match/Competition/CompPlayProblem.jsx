@@ -56,15 +56,15 @@ export default function CompPlayProblem({  }) {
     const { problemId, gameMode, lang, userId, gameId } = Location.state;
     console.log("문제 번호 확인 :", problemId)
     // setGameMode
-    setGameMode(gameMode.current);
-    setProblemId(problemId.current);
-    setLang(lang.current);
-    setUserId(userId.current);
-    setGameId(gameId.current);
-    if(lang.current === 'java'){
+    setGameMode(gameMode);
+    setProblemId(problemId);
+    setLang(lang);
+    setUserId(userId);
+    setGameId(gameId);
+    if(lang === 'java'){
       setCurrentLangPkg(currentLangPkg);
       setCode('import java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}');
-    }else if(lang.current === 'python'){
+    }else if(lang === 'python'){
       setCurrentLangPkg(currentLangPkg);
       setCode('');
     }else{
@@ -73,7 +73,7 @@ export default function CompPlayProblem({  }) {
     }
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId.current}`,
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
     })
     .then((res)=> {
       console.log(res);
@@ -89,7 +89,7 @@ export default function CompPlayProblem({  }) {
 
     stompClient.connect({}, () => {
       // 연결
-      stompClient.subscribe('/sub/chat/room/'+`${gameId.current}`, (message) => {
+      stompClient.subscribe('/sub/chat/room/'+`${gameId}`, (message) => {
         // 받은 메시지에 대한 처리
         console.log("메시지 받았나용");
         console.log(message);
@@ -101,34 +101,49 @@ export default function CompPlayProblem({  }) {
           alert(data.result);
           // 결과페이지로 넘어가는 로직
           // 같이 넘겨야하는게 gameId
-          if (!data.winner) {
-            navigate(
-              `/game-list/competition/compSpeedDraw/${gameId.current}`,
-              { state: { gameId: gameId.current }
-            });
+          if (gameMode == 'speed') {
+            if (!data.winner) {
+              navigate(
+                `/game-list/competition/compSpeedDraw/${gameId}`,
+                { state: { gameId: gameId }
+              });
+            }
+            else {
+              navigate(
+                `/game-list/competition/compSpeedResult/${gameId}`,
+                { state: { gameId: gameId }
+              });
+            }
+          } else {
+            if (!data.winner) {
+              navigate(
+                `/game-list/competition/compEffiDraw/${gameId}`,
+                { state: { gameId: gameId }
+              });
+            }
+            else {
+              navigate(
+                `/game-list/competition/compEffiResult/${gameId}`,
+                { state: { gameId: gameId }
+              });
+            }
           }
-          else {
+        } else if (data.type === 'TERMINATED') {
+          if (gameMode == 'speed') {
             navigate(
-              `/game-list/competition/compSpeedResult/${gameId.current}`,
-              { state: { gameId: gameId.current }
-            });
-          }
-        } else if(data.type === 'TERMINATED'){
-          if (data.mode === '0') {
-            navigate(
-              `/game-list/competition/compSpeedDraw/${gameId.current}`,
-              { state: { gameId: gameId.current }
+              `/game-list/competition/compSpeedDraw/${gameId}`,
+              { state: { gameId: gameId }
             });
           } else {
             if (!data.winner) {
               navigate(
-                `/game-list/competition/compEffiDraw/${gameId.current}`,
-                { state: { gameId: gameId.current }
+                `/game-list/competition/compEffiDraw/${gameId}`,
+                { state: { gameId: gameId }
               });
             } else {
               navigate(
-                `/game-list/group/groupEffiResult/${gameId.current}`,
-                { state: { gameId: gameId.current }
+                `/game-list/competition/compEffiResult/${gameId}`,
+                { state: { gameId: gameId }
               });
             }
           }
