@@ -182,8 +182,8 @@ useEffect(()=>{ axios({
 
     const testCase = inputFileData.map((input,index) => {
       return {
-        input : inputFileData[index],
-        output : outputFileData[index]
+        input : inputFileData[index].trim(),
+        output : outputFileData[index].trim()
       }
     })
     const tagList = selectedList.map((selected)=>{
@@ -199,8 +199,8 @@ useEffect(()=>{ axios({
         problemContent:content,
         problemInputDesc:inputDescription,
         problemOutputDesc:outputDescription,
-        problemExInput:inputExam,
-        problemExOutput:outputExam,
+        problemExInput:inputExam.trim(),
+        problemExOutput:outputExam.trim(),
         testCase:testCase,
         problemTime:time,
         problemMem:mem,
@@ -239,61 +239,61 @@ input.txt                                       output.txt
       <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
         <h1 className='font-bold text-3xl text-center mb-5 '>문제 생성</h1>
         <div className='grid grid-cols-12 mb-4'>
-          <label className=" text-end font-bold me-1 py-3 col-span-1"htmlFor="title">제목</label>
-          <input type="text" placeholder="제목을 입력하세요" id="title" onChange={onChangeTitle} className="input input-bordered col-span-11" />
+          <div className="col-start-2 col-span-10">
+            <p className="font-bold col-span-1 mb-2"htmlFor="title">제목</p>
+            <input type="text" placeholder="제목을 입력하세요" id="title" onChange={onChangeTitle} className="input input-bordered w-full" />
+          </div>
         </div>
         <div className='grid grid-cols-12 mb-4'>
-          <label className="text-end font-bold me-1"htmlFor="content">내용</label>
-          <textarea class="textarea textarea-bordered col-span-11 resize-none" onChange={onChangeContent} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
+          <div className="col-start-2 col-span-10">
+            <p className=" font-bold mb-2 mb-2"htmlFor="content">내용</p>
+            <textarea class="textarea textarea-bordered w-full resize-none" onChange={onChangeContent} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
+          </div>
         </div>
         <div className='grid grid-cols-12 mb-4'>
-          <label className="text-end font-bold me-1"htmlFor="input">입력 설명</label>
-          <textarea class="textarea textarea-bordered col-span-11 resize-none" onChange={onChangeInputDescription} id="input" placeholder="입력 설명을 입력하세요" rows="10"></textarea>
+          <div className="col-start-2 col-span-10">
+            <p className=" font-bold mb-2"htmlFor="input">입력 설명</p>
+            <textarea class="textarea textarea-bordered w-full resize-none" onChange={onChangeInputDescription} id="input" placeholder="입력 설명을 입력하세요" rows="10"></textarea>
+          </div>
         </div>
         <div className='grid grid-cols-12 mb-4'>
-          <label className="text-end font-bold me-1"htmlFor="output">출력 설명</label>
-          <textarea class="textarea textarea-bordered col-span-11 resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
+          <div className="col-start-2 col-span-10">
+            <p className=" font-bold mb-2"htmlFor="output">출력 설명</p>
+            <textarea class="textarea textarea-bordered w-full resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
+          </div>
         </div>
-        <div className='grid grid-cols-2'>
-          <div className="grid grid-cols-12 mb-4 z-10">
-            <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">입력 예제</label>
+        <div className='grid grid-cols-12 gap-12'>
+          <div className="col-start-2 col-span-5 mb-4 z-10">
+            <p className=" col-span-2 font-bold mb-2"htmlFor="inputEx">입력 예제</p>
             <div className='col-span-10'>
               <Editor onChange={onChangeInputExam}id="inputEx"
             options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
               height={`${inputExam.split('\n').length * 19}px`} />
             </div>
           </div>
-          <div className='grid grid-cols-12 mb-4 z-10'>
-            <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">출력 예제</label>
+          <div className='col-start-7 col-span-5 mb-4 z-10'>
+            <p className=" col-span-2 font-bold mb-2"htmlFor="inputEx">출력 예제</p>
             <div className='col-span-10' >
               <Editor onChange={onChangeOutputExam} id="inputEx"
-            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
+              options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}
               height={`${outputExam.split('\n').length * 19}px`} />
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-5 mb-4">
-          <div  className='grid grid-cols-12 z-10'>
-            <label className="text-end font-bold col-span-2 me-1"htmlFor="inputFile">입력 파일</label>
-            <input onClick={e=>e.target.value=null} onChange={onChangeInputFile} id="inputFile"  type="file" className="file-input file-input-bordered file-input-sm col-span-10" />
+        <div className="grid grid-cols-12 mb-4 gap-12">
+          <div className='col-start-2 col-span-5 z-10'>
+            <p className=" font-bold col-span-2 mb-2"htmlFor="inputFile">입력 파일</p>
+            <input onClick={e=>e.target.value=null} onChange={onChangeInputFile} id="inputFile"  type="file" className="file-input file-input-bordered file-input-sm w-full" />
           </div>
-          <div className='grid grid-cols-12 z-10'>
-            <label className="text-end font-bold me-1 col-span-2"htmlFor="inputFile">출력 파일</label>
-            <input onClick={e=>e.target.value=null} onChange={onChangeOutputFile} id="outputFile"  type="file" className="file-input file-input-bordered file-input-sm col-span-10" />
+          <div className='col-start-7 col-span-5 z-10'>
+            <p className=" font-bold mb-2 col-span-2"htmlFor="inputFile">출력 파일</p>
+            <input onClick={e=>e.target.value=null} onChange={onChangeOutputFile} id="outputFile"  type="file" className="file-input file-input-bordered file-input-sm w-full" />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-5 mb-4">
+        <div className="grid grid-cols-12 gap-12 mb-4">
           
-          <div className='grid grid-cols-2 gap-5'>
-            <div className='grid grid-cols-12 z-10'>
-              <label className="font-bold text-end col-span-4 me-1"htmlFor="rating">언어</label>
-              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered col-span-8" >
-                <option>java</option>
-                <option>python</option>
-                <option>cpp</option>
-              </select>
-            </div>
-            <div className='text-center z-10'>
+          <div className='col-start-2 col-span-5 grid grid-cols-3'>
+            <div className='col-span-2 text-center z-10'>
               <span>공지사항을 먼저 읽고 입출력을 작성해 주세요.</span><br />
               <div className=' text-blue-700 btn btn-sm mt-2'
               onClick={()=>document.getElementById('modal').showModal()}>입출력 파일 공지사항</div>
@@ -319,17 +319,12 @@ input.txt                                       output.txt
               </div>
             </dialog>
             {/* <div className='grid grid-cols-12'>
-              <label className="font-bold me-1"htmlFor="rating">문제 등급</label>
+              <label className="font-bold mb-2"htmlFor="rating">문제 등급</label>
               <input value={rating} onChange={(e)=>{setRating(e.target.value)}} className="col-span-8 bg-white rounded-lg bor input input-sm input-bordered" id="rating" type="number" />
             </div> */}
-            
-          </div>
-          <div className="grid grid-cols-3 z-10">
-            <div>
-              <div>
-                <button className="btn btn-sm btn-neutral" onClick={()=>document.getElementById('TagModal').showModal()}
-                style={{cursor:"pointer"}}>알고리즘 선택</button>
-              </div>
+
+            <div className="flex items-end">
+              <button className="btn btn-sm btn-neutral w-full" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 <br />선택</button>
               <dialog id="TagModal" className="modal">
                 <div className="modal-box">
                   <div className="modal-action flex justify-between mb-4 mt-0">
@@ -341,7 +336,7 @@ input.txt                                       output.txt
                   </div>
                   <div className="text-center">
                     <div>
-                      <label className="font-bold ms-4 mt-1 me-2">알고리즘</label>
+                      <p className="font-bold ms-4 mt-1 me-2">알고리즘</p>
                       <select value={'선택'} onChange={onClickCate} className="select select-sm select-bordered w-20" >
                         <option disabled='true'>선택</option>
                         {cateList.map((cate)=>{
@@ -361,33 +356,42 @@ input.txt                                       output.txt
                   </div>
                 </div>
               </dialog>
-
             </div>
-            <div >
-              <label className="font-bold me-1"htmlFor="time">시간제한(ms)</label>
-              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-5/12" />
+          </div>
+          <div className="grid grid-cols-3 gap-6 col-span-5">
+            <div className='z-10'>
+              <p className="font-bold col-span-4 mb-2"htmlFor="rating">언어</p>
+              <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered w-full" >
+                <option>java</option>
+                <option>python</option>
+                <option>cpp</option>
+              </select>
             </div>
-            <div>
-              <label className="font-bold me-1"htmlFor="mem">메모리제한(MB)</label>
-              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-5/12" />
+            <div className='z-10'>
+              <p className="font-bold mb-2"htmlFor="time">시간제한(ms)</p>
+              <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-full" />
+            </div>
+            <div className='z-10'>
+              <p className="font-bold mb-2"htmlFor="mem">메모리제한(MB)</p>
+              <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-full" />
             </div>
           </div>
         </div>
         <div className='grid grid-cols-12 mb-4'>
-          <label className="font-bold me-1 col-span-1"htmlFor="inputEx">
-            검증용 코드
-            <div>
-            <button className='btn btn-sm btn-neutral' onClick={onClickComfile}>컴파일</button>
+          <div className="col-start-2 col-span-10">
+            <span className=" font-bold mb-2 col-span-1"htmlFor="inputEx">
+              검증용 코드
+            </span>
+            <button className='btn btn-sm btn-neutral ms-4' onClick={onClickComfile}>컴파일</button>
+            <div className='w-full mt-2'>
+              <Editor language={lang} height="400px"
+              onChange={onChangeTestCode} 
+              options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}/>
             </div>
-          </label>
-          <div className='col-span-11'>
-            <Editor className='col-span-11' language={lang} height="400px"
-            onChange={onChangeTestCode} 
-            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}/>
           </div>
         </div>
         <div className='flex justify-center z-10'>
-          <button className={isValidCode? 'btn btn-neutral w-60 text-2xl text-center rounded-full' : 'btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '제 출' : '컴파일 후 제출가능' }</button>
+          <div className={isValidCode? 'z-10 btn btn-neutral w-60 text-2xl text-center rounded-full' : 'z-10 btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '제 출' : '컴파일 후 제출가능' }</div>
           <div></div>
         </div>
       </div>

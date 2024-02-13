@@ -152,7 +152,6 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                   outerRadius={55} // 외부 반지름
                   paddingAngle={5} // 각 섹션 사이 간격
                   dataKey="value" // 데이터에서 값에 해당하는 키 지정
-                  label={({ name, percent }) => `${name} ${formatPercent(percent)}`} // 데이터에서의 이름과 퍼센트
                 >
                   {graphData.map((entry, index) => (
                     // Cell : 각 섹션의 스타일을 설정하기 위함 -> key는 index값, fill은 컬러 채우기

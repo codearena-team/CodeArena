@@ -95,7 +95,7 @@ export default function ProblemDetail() {
       <div>
         <div className="leftUp drop-shadow p-5">
           <div className="flex">
-            <h1 className="text-3xl mb-2 ">{problem.problemTitle}</h1>
+            <h1 className="text-3xl mb-2 "><span className="text-lg">#{problem.problemId}  </span>{problem.problemTitle}</h1>
           </div>
           { problem.problemVisibility === '1' ?
             <div className="flex">
