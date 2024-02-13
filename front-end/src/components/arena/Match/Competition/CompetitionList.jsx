@@ -106,7 +106,7 @@ export default function CompetitionList() {
             단체전 {/* 단체전 방 리스트로 변경 */}
           </Link>
         </div>
-        <div className="flex space-x-4 items-center">
+        <div className="flex space-x-3 items-center">
           <select value={searchParams.get('gameMode') || ''} onChange={(e)=>{changeParams('gameMode',e.target.value)}} className="select select-sm select-bordered join-item" >
             <option value="">전체</option>
             <option value="0">스피드전</option>

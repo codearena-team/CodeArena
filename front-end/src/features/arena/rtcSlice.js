@@ -4,11 +4,14 @@ export const rtcSlice = createSlice({
   name : 'rtc',
   initialState : {
     streamManager : null,
+    mySession : null,
   },
   reducers : {
     setStreamManager : (state,action) =>{
-      const tmp = action.payload
-      state.streamManager = tmp
+      state.streamManager = action.payload
+    },
+    setMySesssion : (state,action) =>{
+      state.mySession = action.payload
     }
   }
 })

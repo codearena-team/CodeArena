@@ -61,13 +61,15 @@ export default function StatsisticsPage() {
     }
     axios.get('https://i10d211.p.ssafy.io/game/rest/user/record', {headers})
     .then((res)=> {
-      setRecord(res.data.data.record)
+      setRecord(res)
       setData(Object.entries(res.data.data.record).map(([key,value])=>{
         return {name:key.split('Count'), value:value}
       }))
       setMatchs(res.data.data.recentMatches)
     })
-    .catch()
+    .catch(err => {
+      console.log(err)
+    })
   },[])
 
   function Players ({match}) {

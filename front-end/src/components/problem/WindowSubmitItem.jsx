@@ -59,7 +59,7 @@ export default function WindowSubmitItem(props) {
         </button>
         <dialog id={`codeModal${props.submitItem.submitNo}`} className="modal">
           { isvisibleCode ?
-          <div className="modal-box p-0 scrollBar" style={{minWidth:"600px"}}>
+          <div className="modal-box p-0 scrollBar" style={{minWidth:"800px"}}>
             <div className='z-50 sticky p-2' style={{backgroundColor:"#F4ECE4", top:"0px"}}>
               <form method="dialog" className='flex justify-between' >
                 <div className='w-36'>
@@ -76,7 +76,8 @@ export default function WindowSubmitItem(props) {
             <Editor 
             value={props.submitItem.code || ''}  language={props.submitItem.submitLang}
             options={{'scrollBeyondLastLine':false, 'readOnly': true,'minimap':{enabled:false},}}
-            height={`${props?.submitItem?.code?.split('\n').length * 19}px`} 
+            height={`600px`} 
+            width='full'
             />
             </div>
           </div>
