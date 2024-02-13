@@ -613,10 +613,12 @@ public class ChatServiceImpl implements ChatService{
                 CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
                 competitiveGameResultDto.setWinnerId(player.getUserNickname());
                 competitiveGameResultDto.setWinnerRating(player.getUserRating());
+                competitiveGameResultDto.setWinnerSsumnail(player.getUserSsumnail());
 
                 player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer2(), competitiveWinnerInfoDto.getGame_mode());
                 competitiveGameResultDto.setLoserId(player.getUserNickname());
                 competitiveGameResultDto.setLoserRating(player.getUserRating());
+                competitiveGameResultDto.setLoserSsumnail(player.getUserSsumnail());
             }
             else if(competitiveWinnerInfoDto.getWinner().equals(competitiveWinnerInfoDto.getPlayer1())) {
                 log.info("플레이어1 우승");
@@ -625,10 +627,14 @@ public class ChatServiceImpl implements ChatService{
                 CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
                 competitiveGameResultDto.setWinnerId(player.getUserNickname());
                 competitiveGameResultDto.setWinnerRating(player.getUserRating());
+                competitiveGameResultDto.setWinnerSsumnail(player.getUserSsumnail());
+
 
                 player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer2(), competitiveWinnerInfoDto.getGame_mode());
                 competitiveGameResultDto.setLoserId(player.getUserNickname());
                 competitiveGameResultDto.setLoserRating(player.getUserRating());
+                competitiveGameResultDto.setLoserSsumnail(player.getUserSsumnail());
+
             }
             else if(competitiveWinnerInfoDto.getWinner().equals(competitiveWinnerInfoDto.getPlayer2())) {
                 log.info("플레이어2 우승");
@@ -636,10 +642,14 @@ public class ChatServiceImpl implements ChatService{
                 CompetitiveUserInfoDto player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer2(), competitiveWinnerInfoDto.getGame_mode());
                 competitiveGameResultDto.setWinnerId(player.getUserNickname());
                 competitiveGameResultDto.setWinnerRating(player.getUserRating());
+                competitiveGameResultDto.setWinnerSsumnail(player.getUserSsumnail());
+
 
                 player = gameMapper.getUserInfo(competitiveWinnerInfoDto.getPlayer1(), competitiveWinnerInfoDto.getGame_mode());
                 competitiveGameResultDto.setLoserId(player.getUserNickname());
                 competitiveGameResultDto.setLoserRating(player.getUserRating());
+                competitiveGameResultDto.setLoserSsumnail(player.getUserSsumnail());
+
             }
 
 

@@ -8,7 +8,9 @@ import java.util.List;
 public class CompetitiveGameResultDto {
     private String winnerId;
     private String winnerRating;
+    private String winnerSsumnail;
     private String loserId;
     private String loserRating;
+    private String loserSsumnail;
     private List<CompetitiveGameSubmitDto> list;
 }

@@ -204,10 +204,10 @@
 
     <select id="getUserInfo" parameterType="string" resultMap="userInfo">
         <if test='gamemode == "0"'>
-            SELECT user_nickname, speed_rating as user_rating
+            SELECT user_nickname, speed_rating as user_rating, user_thumbnail
         </if>
         <if test='gamemode == "1"'>
-            SELECT user_nickname, effi_rating as user_rating
+            SELECT user_nickname, effi_rating as user_rating, user_thumbnail
         </if>
         FROM user
         WHERE user_id = #{userId};
