@@ -33,6 +33,7 @@ public class ChatServiceImpl implements ChatService{
     @PostConstruct
     private void init() {
         gameManage = new LinkedHashMap<>();
+        privateGameManage = new LinkedHashMap<>();
         privateGameParticipaints = new LinkedHashMap<>();
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
