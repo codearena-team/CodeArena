@@ -24,8 +24,21 @@ export default function ProblemCreate() {
   const [time, setTime] = useState("1000");
   const [mem, setMem] = useState("256");
   const [rating, setRating] = useState(1)
-  const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
+  const [cateList, setCateList] = useState(["DP","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
   const [selectedList, setSelectedList] = useState([])
+  
+useEffect(()=>{ axios({
+  method : 'get',
+  url : `https://i10d211.p.ssafy.io/api/problem/category`,
+})
+.then((res)=> {
+  console.log(res);
+  setCateList(res.data.data.map((el)=>el.tagName))
+})
+.catch((err)=> {
+  console.log(err);
+})
+},[])
   
   const onChangeInputFile = (event) => {
     if (event.target.files[0].type === "text/plain") {
@@ -176,6 +189,7 @@ export default function ProblemCreate() {
     const tagList = selectedList.map((selected)=>{
       return {tagName : selected}
     })
+    
     axios({
       url : `https://i10d211.p.ssafy.io/api/problem`,
       method : "post",
@@ -203,18 +217,19 @@ export default function ProblemCreate() {
     .catch((err) => {
       console.log(err);
     })
+    
   }
 
   const gongji = `테스트케이스는 메모장 기준으로 첨부파일을 첨부하시면 되며 input과 output 기준으로 하나의 테스트케이스당 공백(엔터)을 주어야 합니다.
 아래의 예시는 2개의 테스트케이스를 작성한 예시입니다.
 ex) input이 먼저 나오고 다음엔 output입니다.
 
-input.txt                   output.txt
-
-3 4                            2
-0 0 0 0                   
-0 0 0 1                     1
-1 0 0 1
+input.txt                                       output.txt
+          
+3 4                                                2
+0 0 0 0                             
+0 0 0 1                                         1
+1 0 0 1          
 
 2 4
 0 0 0 0
@@ -240,7 +255,7 @@ input.txt                   output.txt
           <textarea class="textarea textarea-bordered col-span-11 resize-none" onChange={onChangeOutputDescription} id="output" placeholder="출력 설명을 입력하세요" rows="10"></textarea>
         </div>
         <div className='grid grid-cols-2'>
-          <div className="grid grid-cols-12 mb-4">
+          <div className="grid grid-cols-12 mb-4 z-10">
             <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">입력 예제</label>
             <div className='col-span-10'>
               <Editor onChange={onChangeInputExam}id="inputEx"
@@ -248,7 +263,7 @@ input.txt                   output.txt
               height={`${inputExam.split('\n').length * 19}px`} />
             </div>
           </div>
-          <div className='grid grid-cols-12 mb-4'>
+          <div className='grid grid-cols-12 mb-4 z-10'>
             <label className="text-end col-span-2 font-bold me-1"htmlFor="inputEx">출력 예제</label>
             <div className='col-span-10' >
               <Editor onChange={onChangeOutputExam} id="inputEx"
@@ -258,11 +273,11 @@ input.txt                   output.txt
           </div>
         </div>
         <div className="grid grid-cols-2 gap-5 mb-4">
-          <div  className='grid grid-cols-12'>
+          <div  className='grid grid-cols-12 z-10'>
             <label className="text-end font-bold col-span-2 me-1"htmlFor="inputFile">입력 파일</label>
             <input onClick={e=>e.target.value=null} onChange={onChangeInputFile} id="inputFile"  type="file" className="file-input file-input-bordered file-input-sm col-span-10" />
           </div>
-          <div className='grid grid-cols-12'>
+          <div className='grid grid-cols-12 z-10'>
             <label className="text-end font-bold me-1 col-span-2"htmlFor="inputFile">출력 파일</label>
             <input onClick={e=>e.target.value=null} onChange={onChangeOutputFile} id="outputFile"  type="file" className="file-input file-input-bordered file-input-sm col-span-10" />
           </div>
@@ -270,7 +285,7 @@ input.txt                   output.txt
         <div className="grid grid-cols-2 gap-5 mb-4">
           
           <div className='grid grid-cols-2 gap-5'>
-            <div className='grid grid-cols-12'>
+            <div className='grid grid-cols-12 z-10'>
               <label className="font-bold text-end col-span-4 me-1"htmlFor="rating">언어</label>
               <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered col-span-8" >
                 <option>java</option>
@@ -278,7 +293,7 @@ input.txt                   output.txt
                 <option>cpp</option>
               </select>
             </div>
-            <div className='text-center'>
+            <div className='text-center z-10'>
               <span>공지사항을 먼저 읽고 입출력을 작성해 주세요.</span><br />
               <div className=' text-blue-700 btn btn-sm mt-2'
               onClick={()=>document.getElementById('modal').showModal()}>입출력 파일 공지사항</div>
@@ -286,7 +301,7 @@ input.txt                   output.txt
 
             <dialog id="modal" className="modal">
               <div className="modal-box" style={{backgroundColor: "#F5F5EC",maxWidth:'900px'}}>
-                <div className='grid grid-cols-12 mb-2'>
+                <div className='grid mb-2'>
                   <textarea className="textarea textarea-bordered w-full resize-none font-bold text-md" rows="18"
                     value={gongji}
                     style={{outline:'none'}}
@@ -309,7 +324,7 @@ input.txt                   output.txt
             </div> */}
             
           </div>
-          <div className="grid grid-cols-3">
+          <div className="grid grid-cols-3 z-10">
             <div>
               <button className="btn btn-sm btn-neutral" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
               <dialog id="TagModal" className="modal">
@@ -346,11 +361,11 @@ input.txt                   output.txt
 
             </div>
             <div >
-              <label className="font-bold me-1"htmlFor="time">시간제한</label>
+              <label className="font-bold me-1"htmlFor="time">시간제한(ms)</label>
               <input onChange={(e)=>{setTime(e.target.value)}} value={time} type="text" id="time" placeholder="시간제한(ms)" className="input input-sm input-bordered w-5/12" />
             </div>
             <div>
-              <label className="font-bold me-1"htmlFor="mem">메모리제한</label>
+              <label className="font-bold me-1"htmlFor="mem">메모리제한(MB)</label>
               <input onChange={(e)=>{setMem(e.target.value)}} value={mem} type="text" id="mem" placeholder="메로리제한(MB)" className="input input-sm input-bordered w-5/12" />
             </div>
           </div>
@@ -364,10 +379,11 @@ input.txt                   output.txt
           </label>
           <div className='col-span-11'>
             <Editor className='col-span-11' language={lang} height="400px"
+            onChange={onChangeTestCode} 
             options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}/>
           </div>
         </div>
-        <div className='flex justify-center'>
+        <div className='flex justify-center z-10'>
           <button className={isValidCode? 'btn btn-neutral w-60 text-2xl text-center rounded-full' : 'btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '제 출' : '컴파일 후 제출가능' }</button>
           <div></div>
         </div>

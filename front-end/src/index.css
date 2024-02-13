@@ -31,3 +31,7 @@ body {
   font-family : "suitesemi";
   src : url('./fonts/SUITE-SemiBold.ttf');
 } */
+
+p {
+  white-space: pre-wrap;
+}

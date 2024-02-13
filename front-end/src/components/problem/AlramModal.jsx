@@ -35,7 +35,7 @@ export default function AlarmModal({alarmId}) {
         alarmType : '2',
         toId  : toId,
         fromId : fromId,
-        alarmMsg : content,
+        alarmMsg : content + ` 문제번호 : ${problemId}`,
       }
     })
     .then((res)=>{

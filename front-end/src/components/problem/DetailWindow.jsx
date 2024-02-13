@@ -37,19 +37,19 @@ export default function DetailWindow (props) {
           </div>
         </div>
       </div>
-      <p className="text-xl">내용</p>
-      <p>{problem?.problemContent}</p>
+      <p className=" font-bold mb-2 text-xl">내용</p>
+      <p style={{'white-space': 'pre-wrap'}}>{problem?.problemContent}</p>
       <hr className="my-2" />
-      <p className="text-xl">입력</p>
+      <p className="font-bold mb-2 text-xl">입력</p>
       <p>{problem?.problemInputDesc}</p>
       <hr className="my-2"  />
-      <p className="text-xl">출력</p>
+      <p className="font-bold mb-2 text-xl">출력</p>
       <p>{problem?.problemOutputDesc}</p>
       <hr className="my-2"  />
       <div className="grid grid-cols-2 w-full gap-4">
         <div>
           <div className="flex">
-            <p className="text-xl">입력예제 </p>
+            <p className="font-bold mb-2 text-xl">입력예제 </p>
             <button className="btn btn-xs bg-rose-200 ms-2" onClick={inpustClipboard}>복사</button>
           </div>
           <Editor 
@@ -59,7 +59,7 @@ export default function DetailWindow (props) {
         </div>
         <div>
           <div className="flex">
-            <p className="text-xl">출력예제</p>
+            <p className="font-bold mb-2 text-xl">출력예제</p>
             <button className="btn btn-xs bg-rose-200 ms-2" onClick={outpustClipboard}>복사</button>
           </div>
           <Editor 
