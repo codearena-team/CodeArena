@@ -1,5 +1,4 @@
 // 보낸 알림함 리스트
-import "../css/ProblemListItem.css"
 // import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 

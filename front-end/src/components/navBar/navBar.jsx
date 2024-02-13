@@ -92,14 +92,15 @@ export default function NavBar() {
                         className="relative rounded-full p-1"
                         onClick={()=>{navigate('/profile/alarm')}}
                         >
-                        <BellIcon className="h-6 w-6 hover:scale-150" aria-hidden="true"  style={{ transition: 'transform 0.2s' }}/> 
+                        <BellIcon className="h-6 w-6 hover:scale-125" aria-hidden="true"  style={{ transition: 'transform 0.2s' }}/> 
                       </button>
                     )}
                   {/* 프로필 드롭다운위치 */}
                     {isLogin && (
                       <Menu as="div" className="relative ml flex">
                         <div className="my-auto">
-                          <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2">
+                          <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2
+                          hover:scale-110" style={{ transition: 'transform 0.2s' }}>
                           <img
                             className="h-8 w-8 rounded-full"
                             src={Profile}

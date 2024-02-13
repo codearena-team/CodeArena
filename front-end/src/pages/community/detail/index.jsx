@@ -137,42 +137,51 @@ export default function CommunityDetail(){
   return (
     <div className="ml-64 mr-64 mt-10"> 
       <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
-        <div className='flex justify-end mb-4'>
+        <div className='flex justify-end mb-3'>
           <h1 className="mr-3">조회수 : {board.hit}</h1>
           <h1 onClick={()=>{navigate(`/profile/${articleNickname}`)}} 
           style={{ textDecoration: 'underline'}}>작성자 : {articleNickname}
           </h1>
           <div className="w-1/12"></div>
         </div>
+        <div className="flex">
+          <div className="w-1/12"></div>
+          <label className="py-1" htmlFor="title">제목</label>
+        </div>
         <div className='flex justify-end mb-4'>
-          <label className="me-1 py-3" htmlFor="title">제목</label>
           <input type="text" id="title" className="input input-bordered noc w-10/12" value={board.title} />
           <div className="w-1/12"></div>
         </div>
-        <div className='flex mb-4'>
+        <div className='flex mb-3'>
+          <div className="w-1/12"></div>
           <div className="flex">
-            <div className="ml-1">
-              <label className="me-1 py-3 ml-5" htmlFor="title">문제번호</label>
-              <input type="text" id="title" className="input input-bordered w-5/12 noc mr-6" value={board.problemId} />
+            <div className="">
+              <label className="me-1" htmlFor="title">문제번호</label>
+              <input type="text" id="title" className="input input-bordered noc" value={board.problemId} />
             </div>
-            
-              <label className="me-1 py-3" htmlFor="rating">언어</label>
-              <input id="rating" className="input input-bordered w-2/12 noc mr-6" type="text" value={board.lang}/>
-            <div className="ml-10">
-              <label className="me-1 py-3 ml-5" htmlFor="rating">카테고리</label>
+            <div className="ml-6">
+              <label className="me-1" htmlFor="rating">언어</label>
+              <input id="rating" className="input input-bordered  noc " type="text" value={board.lang}/>
+            </div>
+            <div className="ml-6">
+              <label className="me-1" htmlFor="rating">카테고리</label>
               <input id="rating" className="input input-bordered noc" type="text" value={cate}/>     
             </div>
           </div>
-          <div className="w-1/12"></div>
         </div>
-          <div className='flex justify-end mb-4'>
-          <label className="me-1"htmlFor="content">내용</label>
+        <div className="flex">
+          <div className="w-1/12"></div>
+          <label className="me-1 py-1" htmlFor="content">내용</label>
+        </div>
+
+          <div className='flex justify-end'>
+
           <textarea className="textarea textarea-bordered w-10/12 resize-none noc" rows="10" 
           value={board.content}>
           </textarea>
           <div className="w-1/12"></div>
         </div>
-        <div className='flex justify-between mb-4'>
+        <div className='flex justify-between mb-4 mt-3'>
           <div className="w-1/12"></div>
           <div className="w-10/12 flex justify-between">
             <button className="btn btn-sm btn-active drop-shadow text-md" 
@@ -255,7 +264,8 @@ export default function CommunityDetail(){
           )})
       )}
       {commentlist.length === 0 && (
-        <div className="p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
+        <div className="flex p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
+          <div className="w-1/12"></div>
           <h1>댓글이 없습니다</h1>
         </div>
       )}

@@ -168,11 +168,11 @@ useEffect(()=>{ axios({
       return;
     }
     if (!inputFileData){
-      swal("입력파일은 선택해주세요", "", "warning")
+      swal("입력파일을 선택해주세요", "", "warning")
       return;
     }
     if (!outputFileData){
-      swal("출력파일은 선택해주세요", "", "warning")
+      swal("출력파일을 선택해주세요", "", "warning")
       return;
     }
     if (selectedList.length === 0) {
@@ -326,7 +326,7 @@ input.txt                                       output.txt
             <div className="flex items-end">
               <button className="btn btn-sm btn-neutral w-full" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 <br />선택</button>
               <dialog id="TagModal" className="modal">
-                <div className="modal-box">
+                <div className="modal-box" style={{backgroundColor:'rgb(245, 245, 236)'}}>
                   <div className="modal-action flex justify-between mb-4 mt-0">
                     <div className="w-12"></div>
                     <h3 className="font-bold text-lg text-center ms-">문제의 알고리즘 유형을 선택하세요</h3>
@@ -352,6 +352,11 @@ input.txt                                       output.txt
                           <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
                         )
                       })}
+                    </div>
+                    <div className="flex justify-end px-4">
+                      <form method="dialog">
+                        <button className="btn-sm btn rounded-lg mt-5">확인</button>
+                      </form>
                     </div>
                   </div>
                 </div>

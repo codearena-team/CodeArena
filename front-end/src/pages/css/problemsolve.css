@@ -8,6 +8,10 @@ tr:hover{
   background-color: rgb(227, 230, 217);
 }
 
+.change:hover{
+  background-color: rgb(227, 230, 217);
+}
+
 .orderBy{
   padding-top: 5px;
   margin-right: 2px;

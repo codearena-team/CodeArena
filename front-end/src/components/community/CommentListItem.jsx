@@ -1,7 +1,6 @@
 import Editor from '@monaco-editor/react';
 import { useSelector } from 'react-redux'
 import axios from 'axios';
-import '../../pages/css/problemdetail.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';

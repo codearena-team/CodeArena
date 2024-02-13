@@ -5,6 +5,7 @@ import '../../../css/shake.css';
 import GroupEnterModal from '../../modal/Group/GroupEnterModal';
 import GroupLobbyModal from '../../modal/Group/GroupLobbyModal';
 import axios from 'axios';
+import '../../../../pages/css/problemsolve.css'
 
 export default function GroupList() {
   const [selectedButton, setSelectedButton] = useState('group'); // 선택된 버튼 타입 -> 단체전
@@ -133,7 +134,7 @@ export default function GroupList() {
 
       {/* 테이블 헤더 */}
       <div
-          className="grid grid-cols-6 bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
+          className="grid grid-cols-6 bg-gray-200 text-gray-700 py-2 rounded-tr-md relative z-10"
           style={{ backgroundColor: '#E3E6D9' }}
       >
           <div className="text-center">방장</div>
@@ -146,7 +147,7 @@ export default function GroupList() {
 
       {/* 데이터 리스트 */}
       {problemData.map((item, index) => (
-        <div key={index} className="grid w-full grid-cols-6 border-b py-2 items-center rounded-xl shadow-sm hover:bg-gray-300">
+        <div key={index} className="grid w-full grid-cols-6 border-b py-2 items-center shadow-sm change ">
           <div className="text-center">{item.userRed}</div>
           <div className="text-center">{item.title}</div>
           <div className="text-center">{item.language}</div>
@@ -158,7 +159,7 @@ export default function GroupList() {
             ) : (
               // 단체전 입장 또는 관전하기
               <div className="flex justify-center">
-                <GroupEnterModal groupViewId={item.gameId}/> {/* 관전하기 */}
+                <GroupEnterModal groupViewId={item.gameId} problemId={item.problemId}/> {/* 관전하기 */}
                 <div className='ml-3'>
                   <GroupLobbyModal groupId={item.gameId}/> {/* 참여하기 */}
                 </div>

@@ -3,8 +3,10 @@ import { Link, useSearchParams } from "react-router-dom"
 import ProblemListItem from "../../components/problem/ProblemListItem"
 import "../css/problemsolve.css"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 export default function Ps() {
+  const navigate = useNavigate()
   const [problemList, setProblemList] = useState([])
   const [searchParams, setSearchParams] = useSearchParams();
   // 검색 카테고리   problemId : 문제번호, problemTitle : 문제제목 , userNickname : 작성자 
@@ -95,6 +97,8 @@ export default function Ps() {
   };
 
 
+
+
   return(
     <div className="mx-20 flex flex-col">
       <div className="flex justify-end">
@@ -102,12 +106,11 @@ export default function Ps() {
       </div>
       <div className="flex justify-between align-middle">
         <div className="flex items-end">
-          <button onClick={()=>{changeParams('orderBy','date')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='date' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
-          <button onClick={()=>{changeParams('orderBy','submit')}} className={searchParams.get('orderBy')==='submit' ? 'orderBy' : 'orderBy unchoice'} value='submit'>제출자순</button>
-          <button onClick={()=>{changeParams('orderBy','accept')}} className={searchParams.get('orderBy')==='accept' ? 'orderBy' : 'orderBy unchoice'} value='accept'>정답자순</button>
-          <button onClick={()=>{changeParams('orderBy','percent')}} className={searchParams.get('orderBy')==='percent' ? 'orderBy' : 'orderBy unchoice'} value='percent'>정답률순</button>
+          <button onClick={()=>{changeParams('orderBy','date')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='date' ? 'orderBy font-bold' : 'orderBy unchoice'} value='date'>최신순</button>
+          <button onClick={()=>{changeParams('orderBy','submit')}} className={searchParams.get('orderBy')==='submit' ? 'orderBy font-bold' : 'orderBy unchoice'} value='submit'>제출자순</button>
+          {/* <button onClick={()=>{changeParams('orderBy','accept')}} className={searchParams.get('orderBy')==='accept' ? 'orderBy' : 'orderBy unchoice'} value='accept'>정답자순</button> */}
+          <button onClick={()=>{changeParams('orderBy','percent')}} className={searchParams.get('orderBy')==='percent' ? 'orderBy font-bold' : 'orderBy unchoice'} value='percent'>정답률순</button>
         </div>
-        
         <div className="flex">
           <div className="flex mb-4 join">
             <select onChange={(e)=> {setTag(e.target.value)}} className="select select-sm select-bordered join-item">
@@ -129,31 +132,35 @@ export default function Ps() {
       </div>
       <div>
         {/* 테이블 헤더 */}
-        <div
-          className="grid grid-cols-12 bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
-          style={{ backgroundColor: '#E3E6D9' }}
-        >
-          <div className="text-center">문제번호</div>
-          <div className="text-center col-span-6">제목</div>
-          <div className="text-center col-span-2">출제자</div>
-          <div className="text-center">정답자수</div>
-          <div className="text-center">제출자수</div>
-          <div className="text-center">정답률</div>
-        </div>
+      <div className="overflow-x-auto">
+        <table className=" w-full" style={{backgroundColor:'rgb(227, 230, 217)'}}>
+          <thead>
+            <tr>
+              <th className="p-1.5">문제번호</th>
+              <th className="p-1.5 ">제목</th>
+              <th className="p-1.5">출제자</th>
+              <th className="p-1.5">정답자수</th>
+              <th className="p-1.5">제출자수</th>
+              <th className="p-1.5">정답률</th>
+            </tr>
+          </thead>
         
-        {/* 데이터 리스트 */}
-        {problemList.map((item, index) => (
-          <Link to={`${item.problemId}/detail`}>
-            <div key={index} className="grid w-full grid-cols-12 border-b py-4 items-center rounded-xl shadow-sm hover:bg-gray-300 font-sulight">
-              <div className="text-center">{item.problemId}</div>
-              <div className="text-center col-span-6">{item.problemTitle}</div>
-              <div className="text-center col-span-2">{item.userNickname}</div>
-              <div className="text-center">{item.acceptCount}</div>
-              <div className="text-center">{item.submitCount}</div>
-              <div className="text-center">{item.percentage}</div>
-            </div>
-          </Link>
-        ))}
+          <tbody className="problemTable">  
+            {problemList.map((item, index) => (
+              <tr key={index} className="cell-height2 border-b-2 border-gray"
+                style={{cursor:"pointer"}}
+                onClick={()=>{navigate(`${item.problemId}/detail`)}}>
+                <th className="p-1 font-thin">{item.problemId}</th>
+                <th className="p-1 font-thin">{item.problemTitle}</th>
+                <th className="p-1 font-thin">{item.userNickname}</th>
+                <th className="p-1 font-thin">{item.acceptCount}</th>
+                <th className="p-1 font-thin">{item.submitCount}</th>
+                <th className="p-1 font-thin">{item.percentage}</th>
+              </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
       </div>
       <div className="flex justify-center my-2">

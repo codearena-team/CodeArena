@@ -6,6 +6,9 @@ import G_ExitModal from "../../modal/Group/G_ExitModal";
 import Webrtc from "../../../../pages/test/Webrtc";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import DetailWindow from '../../../problem/DetailWindow';
+import axios from "axios";
+import { useEffect } from "react";
 
 import cat_one from '../../../../images/arena/GroupView/cat_one.png';
 import cat_two from '../../../../images/arena/GroupView/cat_two.png';
@@ -17,7 +20,9 @@ import cat_seven from '../../../../images/arena/GroupView/cat_seven.png';
 import cat_eight from '../../../../images/arena/GroupView/cat_eight.png';
 import cat_nine from '../../../../images/arena/GroupView/cat_nine.png';
 
-export default function UserInfo() {
+export default function UserInfo({problemId}) {
+  const [problem,setProblem] = useState([])
+  const [problemTitle,setProblemTitle] = useState('')
   const params = useParams()
   const userNickname = useSelector(state=> state.auth.userNickname)
   const [panelWidths, setPanelWidths] = useState({
@@ -53,6 +58,26 @@ export default function UserInfo() {
     nextArrow: false,
   };
 
+
+  
+  useEffect(()=> {
+    console.log(`여기여기여기여기여기 ${problemId}`)
+    axios({
+      method : 'get',
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+    })
+    .then((res)=> {
+      console.log(res);
+      setProblem(res.data.data);
+      setProblemTitle(res.data.data.problemTitle);
+    })
+    .catch((err)=> {
+      console.log(err);
+    })
+  },[])
+
+
+
   return (
     <div className="flex">
       {/* Group 관전 상단에 유저 정보를 제공할 페이지 */}
@@ -77,12 +102,30 @@ export default function UserInfo() {
         <button
           className="rounded-lg shadow-lg px-4 py-2 focus:outline-none text-2xl font-bold hover:scale-105"
           style={{ width: '100%', height:'100%', backgroundColor: '#F5EBDB' }}
-          onClick={() => {
-            // 버튼 클릭 시 처리할 기능 필요함
-          }}
+          onClick={()=>document.getElementById('openProblem').showModal()}
         >
           문제보기
         </button>
+         {/* 문제모달창 */}
+         <dialog id="openProblem" className="modal">
+          <div className="modal-box w-11/12 max-w-5xl">
+            <div className="rounded-lg p-5 mb-5" style={{backgroundColor: '#F4ECE4'}}>
+              <div className="flex items-center">
+                <p className="mr-2">#{problemId}</p>
+                <h3 className="font-bold text-2xl">{problemTitle}</h3>
+              </div>
+            </div>
+            <div className="rounded-lg p-5 " style={{backgroundColor: '#F4ECE4'}}>
+              <DetailWindow problem={problem}/>
+            </div>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn btn-sm"
+                style={{backgroundColor:'#FECDD3'}}>닫기</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
 
         {/* 나가기 버튼 */}
         <button
