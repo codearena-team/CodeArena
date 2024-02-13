@@ -7,11 +7,12 @@ import accessReducer from '../features/login/accessSlice.js';
 import arenaReducer from '../features/arena/arenaSlice.js';
 import rtcReducer from '../features/arena/rtcSlice.js';
 import stompClientReducer from '../features/arena/stompClientSlice.js';
+import gameReducer from '../features/arena/gameSlice.js';
 
 const persistConfig = {
   key : 'root',
   storage,
-  whitelist : ['auth']
+  whitelist : ['auth', 'game']
 };
 
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   arena: arenaReducer,
   rtc: rtcReducer,
   stompClient: stompClientReducer,
+  game: gameReducer, 
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

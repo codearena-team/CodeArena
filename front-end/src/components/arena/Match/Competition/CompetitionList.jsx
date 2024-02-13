@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link,useNavigate,useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import '../../../css/shake.css';
 import EnterModal from '../../modal/Competition/CompEnterModal';
 import axios from 'axios';
 
 export default function CompetitionList() {
-  const navigate = useNavigate();
-  const [searchText, setSearchText] = useState(''); // 검색어 텍스트 입력
+  // const navigate = useNavigate();
+  // const [searchText, setSearchText] = useState(''); // 검색어 텍스트 입력
   const [selectedButton, setSelectedButton] = useState('competition'); // 선택된 버튼 타입-> 첫 렌더링되었을 때 "경쟁전" 화면부터 보이도록
-  const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
+  // const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
 
   const [pageCount, setPageCount] = useState(1)
   const [searchParams,setSearchParams] = useSearchParams()

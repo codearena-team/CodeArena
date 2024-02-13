@@ -1,74 +1,54 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useState } from 'react';
 import SubmitListItem from './compSubmitItemList'
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 export default function MiddleConfirm(){
-  const location = useLocation();
   const navigate = useNavigate();
-  const [gameId, setGameId] = useState();
-  const [problemId, setProblemId] = useState("");
+  const problemId = useSelector(state => state.game.problemId);
+  const gameId = useSelector(state => state.game.gameId);
+  const startTime = useSelector(state => state.game.startTime)
+  const [pgno, setPgno] = useState();
+  const [pageCount, setPageCount] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [submitList, setSubmitList] = useState([]);
 
+  const changeParams = (key, value) => {
+    searchParams.set(key,value)
+    setSearchParams(searchParams)
+  }
+  
   useEffect(() => {
-    const { gameId, problemId } = location.state;
-    console.log("gameId 로케이션 확인 :", location.state)
-    // const { gameId, problemId } = location.state;
-    setGameId(gameId);
-    setProblemId(problemId)
+    const pgno = searchParams.get('pgno') || 1
+    const spp = searchParams.get('spp') || 15
+    console.log("gameId 확인 :", gameId)
+    console.log("problemId 확인 :", problemId)
+    console.log("startTime 확인 :", startTime)
+    axios.get('https://i10d211.p.ssafy.io/game/rest/effi/list?gameId='+`${gameId}&pgno=${pgno}&spp=${spp}`)
+      .then(res => {
+        console.log(res.data)
+        const { currentPage, list, totalPageCount } = res.data.data
+        setPageCount(parseInt(totalPageCount));
+        changeParams('pgno', parseInt(currentPage));
+        setSubmitList(list);
+      })
+
   }, [])
 
-   // const pgno = searchParams.get('pgno') || 1
-  // const [pageCount, setPageCount] = useState(1)
-  // const [searchParams, setSearchParams] = useSearchParams();
-
-  // const pageNation = () => {
-  //   const result = [];
-  //   for (let i = 0; i < pageCount; i++) {
-  //     result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(searchParams.get('pgno')===`${i+1}`) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
-  //   }
-  //   return result;
-  // };
-
-
-  // const changeParams = (key, value) => {
-  //   searchParams.set(key,value)
-  //   setSearchParams(searchParams)
-  // }
-  const submitListItem = [{
-    "submitNo": 22,
-    "tid": null,
-    "userId": null,
-    "userNickname": "오싸피",
-    "problemId": "12",
-    "submitLang": "cpp",
-    "code": null,
-    "submitStatus": "틀렸습니다.",
-    "timeComplexity": null,
-    "memory": null,
-    "submitDate": "2024-02-05 05:00:46",
-    "testCase": null,
-    "tagList": []
-},
-{
-    "submitNo": 21,
-    "tid": null,
-    "userId": null,
-    "userNickname": "오싸피",
-    "problemId": "29",
-    "submitLang": "cpp",
-    "code": null,
-    "submitStatus": "틀렸습니다.",
-    "timeComplexity": null,
-    "memory": null,
-    "submitDate": "2024-02-05 04:59:03",
-    "testCase": null,
-    "tagList": []
-},]
+  const pageNation = () => {
+    const result = [];
+    for (let i = 0; i < pageCount; i++) {
+      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(pgno ==`${i+1}`) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
+    }
+    return result;
+  }
 
   const returnGoPlayhandler = () => {
     console.log("다시 문제 풀러 GOGO")
     navigate(
       `/game-list/competition/play/${gameId}`,
-      { state : { gameId : gameId, problemId: problemId }},
     )
   }
 
@@ -97,7 +77,7 @@ export default function MiddleConfirm(){
             </tr>
           </thead>
           <tbody className="font-normal">
-            {submitListItem.map((submit,index)=>{
+            {submitList.map((submit,index)=>{
             return(
             <SubmitListItem 
             key={index}
@@ -112,7 +92,7 @@ export default function MiddleConfirm(){
         <div></div>
         <div className="join">
           <button className="join-item btn btn-sm">{'<<'}</button>
-          {/* {pageNation()} */}
+          {pageNation()}
         <button className="join-item btn btn-sm">{'>>'}</button>
         </div>
         <div></div>

@@ -4,7 +4,7 @@ import DetailWindow from '../../../problem/DetailWindow';
 import { useEffect } from "react";
 import axios from "axios";
 
-export default function TopInfo({ gameExitId,problemId}) {
+export default function TopInfo({ gameExitId, problemId}) {
   const [panelWidths, setPanelWidths] = useState({
     left: 60,
     right: 40,
