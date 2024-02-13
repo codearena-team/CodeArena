@@ -27,7 +27,7 @@ export default function CompPlayProblem({  }) {
   const [stompClient, setStompClient] = useState();
 
   // 제한시간 1시간 타이머
-  const [timer, setTimer] = useState(100);
+  const [timer, setTimer] = useState(3600);
   const [timerDisplay, setTimerDisplay] = useState("1:00:00");
   // 제한시간 종료 관리 state
   const [timerExpired, setTimerExpired] = useState(false);

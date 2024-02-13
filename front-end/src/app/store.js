@@ -6,6 +6,7 @@ import authReducer from '../features/login/authSlice.js';
 import accessReducer from '../features/login/accessSlice.js';
 import arenaReducer from '../features/arena/arenaSlice.js';
 import rtcReducer from '../features/arena/rtcSlice.js';
+import stompClientReducer from '../features/arena/stompClientSlice.js';
 
 const persistConfig = {
   key : 'root',
@@ -17,13 +18,11 @@ const rootReducer = combineReducers({
   auth : authReducer,
   access : accessReducer,
   arena: arenaReducer,
-  rtc: rtcReducer
+  rtc: rtcReducer,
+  stompClient: stompClientReducer,
 })
 
-
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 
 export const store = configureStore({
   reducer: persistedReducer,
