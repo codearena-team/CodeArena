@@ -1,16 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-// import axios from 'axios';
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
 import CompAbstentionModal from '../../modal/Competition/CompabstentionModal';
-// import CompGoResultModal from "../../modal/Competition/CompGoResultModal";
 import VS from '../../../../images/arena/HotMatch/VS.png'
 import Webrtc from '../../../../pages/test/Webrtc'
+
 
 export default function UserInfo() {
   const params = useParams()
   const navigate = useNavigate();
-  const Location = useLocation();
+  const sender = useRef(useSelector(state => state.auth.userNickname));
+  const [timer, setTimer] = useState(3600);
+  const [timerDisplay, setTimerDisplay] = useState("1:00:00");
+  const [timerExpired, setTimerExpired] = useState(false);
+  
+  const {
+    gameId,
+    gameMode,
+    userNickname,
+    enemyNickname,
+    userImgSrc,
+    enemyImgSrc,
+    problemId,
+    startTime,
+  } = useSelector(state => state.game);
+  const stompClient = useSelector(state => state.stompClient.stompClient);
 
   const [panelWidths, setPanelWidths] = useState({
     left: 50,
@@ -18,35 +32,61 @@ export default function UserInfo() {
     right: 10,
   });
 
-  // const [userData, setUserData] = useState([]);
-  const [userNickname, setUserNickName] = useState("");
-  const [gameId, setGameId] = useState(null);
-  const [userId, setUserId] = useState("");
-  const [enemyId, setEnemyId] = useState("");
-  const [enemyNickname, setEnemyNickname] = useState("");
-  const [userImgSrc, setUserImgSrc] = useState("");
-  const [enemyImgSrc, setEnemyImgSrc] = useState("");
-  const [problemId, setProblemId] = useState("");
-  // const [userThumnail, setUserThumnail] = useState([]);
+  useEffect(() => {
+    const currentTime = new Date().getTime();
+    const startTimeMillis = new Date(startTime).getTime()
+    const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
+    console.log("남은시간 확인 :", 3600 - elapsed)
+    setTimer(3600 - elapsed)
+  }, [])
+
+  // 제한시간 1시간 타이머 useEffect
+  useEffect(() => {
+    console.log("startTime 확인:", startTime)
+
+    const intervalId = setInterval(() => {
+      // 매 초마다 타이머 업데이트
+      setTimer((prevTimer) => {
+        if (prevTimer === 0) {
+          clearInterval(intervalId); // 0초가 되면 타이머 중지
+          // 타이머 만료 시 처리하는 useState
+          setTimerExpired(true);
+          stompClient.send(`/pub/chat/leave`, {}, JSON.stringify({
+            gameId: gameId,
+            userId: '',
+            mode: gameMode == 'speed' ? '0' : '1',
+            message: '시간 초과',
+            sender: sender.current,
+            type: 'TERMINATED',
+          }));
+
+          return 0;
+        }
+        return prevTimer -1;
+      });
+    }, 1000);
+
+    // 컴포넌트가 언마운트되면 간격 정리
+    return () => clearInterval(intervalId);
+  }, [stompClient, gameMode]);
 
   useEffect(() => {
-    console.log("props 받은 로케이션 :", Location.state);
-    const { gameId, userId, userNickname, enemyId, enemyNickname, userImgSrc, enemyImgSrc, problemId } = Location.state;
-    setUserNickName(userNickname);
-    setGameId(gameId)
-    setUserId(userId);
-    setEnemyId(enemyId);
-    setEnemyNickname(enemyNickname);
-    setUserImgSrc(userImgSrc);
-    setEnemyImgSrc(enemyImgSrc);
-    setProblemId(problemId);
-  }, [])
+    // 타이머 값을 HH:MM:SS 형식으로 포맷
+    const hours = Math.floor(timer / 3600);
+    const minutes = Math.floor((timer % 3600) / 60);
+    const seconds = timer % 60;
+
+    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
+      minutes
+    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+    setTimerDisplay(formattedTime);
+  }, [timer]);
 
   const checkSubmithandler = () => {
     console.log("중간 채점 현황 페이지로 이동")
     navigate(
-      `/game-list/competition/compMiddleConfirm/${gameId}`,
-      { state : { gameId : gameId, problemId: problemId }},
+      `/game-list/competition/compMiddleConfirm/${gameId}?pgno=1&spp=15`
     )
   }
 
@@ -135,6 +175,14 @@ export default function UserInfo() {
         >
           채점 현황
         </button>
+
+        {/* 남은 시간 보여주는 div */}
+        <div
+          className="mt-5 px-4 focus:outline-none text-2xl font-bold hover:scale-105"
+        >
+          <div className="text-2xl mr-2 mb-1 text-center font-bold">{timerDisplay}</div>
+        </div>
+
 
       </div>
     </div>

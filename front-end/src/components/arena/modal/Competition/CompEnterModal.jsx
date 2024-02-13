@@ -10,13 +10,10 @@ export default function EnterModal({ competitionId, startTime, problemId }) {
 
   const handlerYes = (() => {
     navigate(
-      {pathname: `/game-list/competition/view/${competitionId}`},
-      {state: {
-        startTime: startTime,
-        problemId
-      }},
-    )
-  })
+      `/game-list/competition/view/${competitionId}`,
+      { state : { startTime: startTime, problemId: problemId}}
+    );
+  });
 
   dispatch(setGameId(competitionId))
   return (

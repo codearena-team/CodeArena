@@ -1,36 +1,23 @@
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useState, useCallback, useEffect, useRef } from "react";
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import axios from "axios";
 import "../../../css/CompetitionPlay.css";
 import C_playDividingLine from "./C_playDividingLine";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import Editor from '@monaco-editor/react'
+import { setStompClients } from "../../../../features/arena/stompClientSlice";
 
 export default function CompPlayProblem({  }) {
-  const Location = useLocation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const sender = useRef(useSelector(state => state.auth.userNickname));
-
+  const stompClient = useSelector(state => state.stompClient.stompClient);
   const [code, setCode] = useState('')
-  const [lang, setLang] = useState('')
-  const [cateList, setCateList] = useState(["PD", "구현", "그리디", "매개변수 탐색", "문자열","수학", "시뮬레이션", "완전탐색", "이분탐색", "자료구조"])
-  const [selectedList, setSelectedList] = useState([])
-  const [cate, setCate] = useState('선택')
-  const [problem, setProblem] = useState({})
-  const [gameMode, setGameMode] = useState("");
-  const [problemId, setProblemId] = useState(""); 
-  const [userId, setUserId] = useState("");
-  const [gameId, setGameId] = useState(""); 
   const [currentLangPkg, setCurrentLangPkg] = useState(null);
-  const [stompClient, setStompClient] = useState();
-
-  // 제한시간 1시간 타이머
-  const [timer, setTimer] = useState(3600);
-  const [timerDisplay, setTimerDisplay] = useState("1:00:00");
-  // 제한시간 종료 관리 state
-  const [timerExpired, setTimerExpired] = useState(false);
+  const { gameMode, gameId, lang, problemId, userId } = useSelector(state => state.game);
+  const [problem, setProblem] = useState({})
   
   // 구분선에 따른 화면 비율 조정 -> 초기는 5:5 비율로 문제와 코드블럭 보기
   const [panelWidths, setPanelWidths] = useState({
@@ -48,19 +35,13 @@ export default function CompPlayProblem({  }) {
   };
 
   const onChangeCode = useCallback((code) => {
+    console.log("setCode 발동!!", code)
     setCode(code);
   }, []);
   
   useEffect(()=> {
-    console.log(Location.state);
-    const { problemId, gameMode, lang, userId, gameId } = Location.state;
     console.log("문제 번호 확인 :", problemId)
     // setGameMode
-    setGameMode(gameMode);
-    setProblemId(problemId);
-    setLang(lang);
-    setUserId(userId);
-    setGameId(gameId);
     if(lang === 'java'){
       setCurrentLangPkg(currentLangPkg);
       setCode('import java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // 여기에 코드를 작성해주세요.\n    }\n}');
@@ -83,101 +64,77 @@ export default function CompPlayProblem({  }) {
       console.log(err);
     })
 
-    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
-    const stompClient = Stomp.over(socket);
-    console.log("useEffect stompClient :", stompClient)
-
-    stompClient.connect({}, () => {
-      // 연결
-      stompClient.subscribe('/sub/chat/room/'+`${gameId}`, (message) => {
-        // 받은 메시지에 대한 처리
-        console.log("메시지 받았나용");
-        console.log(message);
-        const data = JSON.parse(message.body);
-        console.log(data);
-        if(data.type === 'CONTINUE'){   
-          alert(data.result);
-        } else if(data.type === 'END'){
-          alert(data.result);
-          // 결과페이지로 넘어가는 로직
-          // 같이 넘겨야하는게 gameId
-          if (gameMode == 'speed') {
-            if (!data.winner) {
+    if (stompClient == null) {
+      const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+      const stompClient = Stomp.over(socket);
+      dispatch(setStompClients(stompClient));
+      console.log("useEffect stompClient :", stompClient)
+  
+      stompClient.connect({}, () => {
+        // 연결
+        stompClient.subscribe('/sub/chat/room/'+`${gameId}`, (message) => {
+          // 받은 메시지에 대한 처리
+          console.log("메시지 받았나용");
+          console.log(message);
+          const data = JSON.parse(message.body);
+          console.log(data);
+          if(data.type === 'CONTINUE'){   
+            alert(data.result);
+          } else if(data.type === 'END'){
+            alert(data.result);
+            // 결과페이지로 넘어가는 로직
+            // 같이 넘겨야하는게 gameId
+            if (gameMode == 'speed') {
+              if (!data.winner) {
+                navigate(
+                  `/game-list/competition/compSpeedDraw/${gameId}`,
+                );
+              }
+              else {
+                navigate(
+                  `/game-list/competition/compSpeedResult/${gameId}`,
+                );
+              }
+            } else {
+              if (!data.winner) {
+                navigate(
+                  `/game-list/competition/compEffiDraw/${gameId}`,
+                );
+              }
+              else {
+                navigate(
+                  `/game-list/competition/compEffiResult/${gameId}`,
+                );
+              }
+            }
+          } else if (data.type === 'TERMINATED') {
+            if (gameMode == 'speed') {
               navigate(
                 `/game-list/competition/compSpeedDraw/${gameId}`,
-                { state: { gameId: gameId }
-              });
-            }
-            else {
-              navigate(
-                `/game-list/competition/compSpeedResult/${gameId}`,
-                { state: { gameId: gameId }
-              });
-            }
-          } else {
-            if (!data.winner) {
-              navigate(
-                `/game-list/competition/compEffiDraw/${gameId}`,
-                { state: { gameId: gameId }
-              });
-            }
-            else {
-              navigate(
-                `/game-list/competition/compEffiResult/${gameId}`,
-                { state: { gameId: gameId }
-              });
-            }
-          }
-        } else if (data.type === 'TERMINATED') {
-          if (gameMode == 'speed') {
-            navigate(
-              `/game-list/competition/compSpeedDraw/${gameId}`,
-              { state: { gameId: gameId }
-            });
-          } else {
-            if (!data.winner) {
-              navigate(
-                `/game-list/competition/compEffiDraw/${gameId}`,
-                { state: { gameId: gameId }
-              });
+              );
             } else {
-              navigate(
-                `/game-list/competition/compEffiResult/${gameId}`,
-                { state: { gameId: gameId }
-              });
+              if (!data.winner) {
+                navigate(
+                  `/game-list/competition/compEffiDraw/${gameId}`,
+                );
+              } else {
+                navigate(
+                  `/game-list/competition/compEffiResult/${gameId}`,
+                );
+              }
             }
           }
-        }
-        
+          
+        });
+        }, error => {
+        // 에러
+        console.error("채팅 연결 에러났음", error)
+        alert("연결에 문제가 있습니다. 다시 시도해주세요.")
+        // 필요한 경우 여기에서 재연결 로직을 구현
       });
-      }, error => {
-      // 에러
-      console.error("채팅 연결 에러났음", error)
-      alert("연결에 문제가 있습니다. 다시 시도해주세요.")
-      // 필요한 경우 여기에서 재연결 로직을 구현
-    });
-    setStompClient(stompClient);
-  },[]);
-
-  const onClickCate = (e)=>{
-    const arr = cateList
-    const filtered = arr.filter((element) => element !== e.target.value);
-    setCateList(filtered)
-    const tmp = selectedList
-    tmp.push(e.target.value)
-    setSelectedList(tmp)
-    setCate('선택')
-  }
-  
-  const onClickSelected = (e)=>{
-    const text = e.target.innerText.split("(")[0]
-    const arr = selectedList
-    const filtered = arr.filter((element) => element !== text);
-    setSelectedList(filtered)
-    const tmp = cateList
-    tmp.push(text)
-    setCateList(tmp)
-  }
+    }
+    // dispatch(setStompClients(stompClient));
+  }, []);
 
   const onClickHandler = (e) => {
     let url =  '';
@@ -231,7 +188,6 @@ export default function CompPlayProblem({  }) {
         })
       }).then(res => res.json)
       .then(json => {
-        setTimerExpired(true);
         console.log("날라왔어여", gameId)
         stompClient.send(`/pub/chat/submit`, {}, JSON.stringify({
           gameId: gameId,
@@ -243,49 +199,6 @@ export default function CompPlayProblem({  }) {
     
     console.log(code);
   }
-
-  // 제한시간 1시간 타이머 useEffect
-  useEffect(() => {
-    console.log("게임모드 :", gameMode)
-    console.log("게임아이디 :", gameId)
-    const intervalId = setInterval(() => {
-      // 매 초마다 타이머 업데이트
-      setTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          clearInterval(intervalId);
-          // 타이머 만료 시 처리 (필요한 경우)
-          setTimerExpired(true);
-          stompClient.send(`/pub/chat/leave`, {}, JSON.stringify({
-            gameId: gameId,
-            userId: '',
-            mode: gameMode == 'speed' ? '0' : '1',
-            message: '시간 초과',
-            sender: sender.current,
-            type: 'TERMINATED',
-          }));
-
-          return 0;
-        }
-        return prevTimer -1;
-      });
-    }, 1000);
-
-    // 컴포넌트가 언마운트되면 간격 정리
-    return () => clearInterval(intervalId);
-  }, [stompClient, gameMode]);
-
-  useEffect(() => {
-    // 타이머 값을 HH:MM:SS 형식으로 포맷
-    const hours = Math.floor(timer / 3600);
-    const minutes = Math.floor((timer % 3600) / 60);
-    const seconds = timer % 60;
-
-    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
-      minutes
-    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-    setTimerDisplay(formattedTime);
-  }, [timer]);
 
   // useEffect(() => {
   //   if (timerExpired && stompClient) {
@@ -306,7 +219,7 @@ export default function CompPlayProblem({  }) {
         {/* 좌측 비율 */}
         <div className="leftUp drop-shadow-xl p-5">
           {/* 문제 제목 */}
-          <h1 className="text-3xl mb-2 ">{problem.problemTitle}</h1>
+          <h1 className="text-3xl text-start font-bold">{problem.problemTitle}</h1>
         </div>
         {/* 해당 문제 내용들 */}
         <div className="leftDown drop-shadow-xl p-5 ">
@@ -336,7 +249,6 @@ export default function CompPlayProblem({  }) {
                 options={{'readOnly':true, 'minimap':{enabled:false}}}
                 height={`${problem?.problemExInput?.split('\n').length * 19}px`}
                 value={problem.problemExInput}
-                onChange={onChangeCode}
               />
             </div>
             <div>
@@ -345,7 +257,6 @@ export default function CompPlayProblem({  }) {
                 options={{'readOnly':true, 'minimap':{enabled:false}}}
                 height={`${problem?.problemExInput?.split('\n').length * 19}px`}
                 value={problem.problemExOutput}
-                onChange={onChangeCode}
               />
             </div>
           </div>
@@ -365,14 +276,11 @@ export default function CompPlayProblem({  }) {
         style={{ width: `${panelWidths.right}%` }}
       >
         <div className="flex justify-between">
-          <div>
-            <label className="font-bold mt-1 mr-2">언어</label>
-            <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className=" mb-2 select select-sm select-bordered" >
-              <option>{lang}</option>
-            </select>
+          <div className="mb-2">
+            <span className="font-bold text-xl mr-3">언어</span>
+            <span className="font-bold text-2xl">{lang}</span>
           </div>
           {/* 제한시간 1시간 타이머 띄우기 */}
-          <div className="text-2xl text-center font-bold">{timerDisplay}</div>
         </div>
         
         <Editor options={{'scrollBeyondLastLine': false, 'minimap':{enabled:false}}} value={code} height="75vh" language={lang} onChange={onChangeCode} />

@@ -11,31 +11,34 @@ import MainVideo from "../../../../pages/test/MainVideo";
 import { setStompClients, clearStompClient } from "../../../../features/arena/stompClientSlice";
 import { disconectRtc } from "../../../../features/arena/rtcSlice";
 
-
 export default function CompetitionView() {
   const params = useParams()
   const navigate = useNavigate();
   const location = useLocation();
-  const problemId = location.state?.problemId;
 
   const dispatch = useDispatch();
   const stompClient = useSelector(state => state.stompClient.stompClient);
 
   const [elapsedTime, setElapsedTime] = useState(0);
-  const startTimeRef = useRef(location.state?.startTime || 0);
+  // const startTimeRef = useRef(startTime || 0);
   const timerRef = useRef(null);
 
   const [chatList, setChatList] = useState([]);
-  const [chatMessage, setChatMessage] =useState('')
+  const [chatMessage, setChatMessage] = useState('')
   const [inputMessage, setInputMessage] = useState('');
   const recentMessage = useRef(null);
+
+  const [startTime, setStartTime] = useState();
+  const [problemId, setProblemId] = useState();
 
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
   useEffect(() => {
+    const { startTime, problemId } = location.state;
+    setStartTime(startTime);
+    setProblemId(problemId);
     console.log(`이거확인이거확인 ${problemId}`)
     // 경기 시작 시간 확인
-    const startTime = location.state?.startTime;
     console.log("경기 시작 시간 확인 :", startTime)
       
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
@@ -69,15 +72,13 @@ export default function CompetitionView() {
           alert("게임이 종료되었습니다.")
           navigate(
             `/game-list/competition/compSpeedResult/${params.id}`,
-            { state: { gameId: params.id }
-          });
+          );
         }
         else if (msg.type && msg.type === "TERMINATED") {
           alert("경기가 종료되었습니다.")
           navigate(
             `/game-list/competition/compSpeedResult/${params.id}`,
-            { state: { gameId: params.id }
-          });
+          );
         }
 
       });
@@ -94,7 +95,7 @@ export default function CompetitionView() {
     // startTime 시간 - 진행된 시간 계산
     const calculateElapsedTime = () => {
       const currentTime = new Date().getTime();
-      const startTimeMillis = new Date(startTimeRef.current).getTime();
+      const startTimeMillis = new Date(startTime).getTime();
       const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
 
       // 초를 시/분/초 형식으로 변환
@@ -130,6 +131,7 @@ export default function CompetitionView() {
   } else {
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
     const stompClient = Stomp.over(socket);
+    dispatch(setStompClients(stompClient));
     console.log("useEffect stompClient :", stompClient)
 
     stompClient.connect({}, () => {
