@@ -39,9 +39,12 @@ export const authSlice = createSlice({
     setRecord: (state,action) => {
       state.speed = jwtDecode(action.payload).speed
       state.eff = jwtDecode(action.payload).eff
-    }
+    },
+    setUserCoin:  (state,action) => {
+      state.userCoin = action.payload
+    },
   }  
 })
 
-export const { setRefreshToken,logout,setUserNickname,setRecord } = authSlice.actions
+export const { setRefreshToken,logout,setUserNickname,setRecord,setUserCoin } = authSlice.actions
 export default authSlice.reducer

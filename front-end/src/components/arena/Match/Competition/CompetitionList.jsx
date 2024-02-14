@@ -162,7 +162,7 @@ export default function CompetitionList() {
             ) : (
               // 경쟁전 관전 페이지로 입장하기
               <EnterModal competitionId={item.gameId} startTime={item.startTime}
-              problemId={item.problemId}/>
+              problemId={item.problemId} gameMode={item.gameMode}/>
             )}
           </div>
         </div>

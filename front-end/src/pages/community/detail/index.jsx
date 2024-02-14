@@ -152,20 +152,19 @@ export default function CommunityDetail(){
           <input type="text" id="title" className="input input-bordered noc w-10/12" value={board.title} />
           <div className="w-1/12"></div>
         </div>
-        <div className='flex mb-3'>
-          <div className="w-1/12"></div>
-          <div className="flex">
+        <div className='mb-3 grid grid-cols-12'>
+          <div className="flex col-start-2 col-span-10">
             <div className="">
               <label className="me-1" htmlFor="title">문제번호</label>
-              <input type="text" id="title" className="input input-bordered noc" value={board.problemId} />
+              <input type="text" id="title" className="input input-bordered noc w-full" value={board.problemId} />
             </div>
             <div className="ml-6">
               <label className="me-1" htmlFor="rating">언어</label>
-              <input id="rating" className="input input-bordered  noc " type="text" value={board.lang}/>
+              <input id="rating" className="input input-bordered  noc w-full" type="text" value={board.lang}/>
             </div>
             <div className="ml-6">
               <label className="me-1" htmlFor="rating">카테고리</label>
-              <input id="rating" className="input input-bordered noc" type="text" value={cate}/>     
+              <input id="rating" className="input input-bordered noc w-full" type="text" value={cate}/>     
             </div>
           </div>
         </div>

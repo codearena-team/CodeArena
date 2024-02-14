@@ -4,8 +4,9 @@ import DetailWindow from '../../../problem/DetailWindow';
 import { useEffect } from "react";
 import axios from "axios";
 import './../../../css/testcasemodal.css'
+import VS from '../../../../images/arena/HotMatch/VS.png'
 
-export default function TopInfo({ gameExitId, problemId}) {
+export default function CompTopInfo({ gameExitId, problemId, game}) {
   const [panelWidths, setPanelWidths] = useState({
     left: 60,
     right: 40,
@@ -14,18 +15,20 @@ export default function TopInfo({ gameExitId, problemId}) {
   const [problemTitle,setProblemTitle] = useState('')
 
   useEffect(()=> {
-    axios({
-      method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
-    })
-    .then((res)=> {
-      console.log(res);
-      setProblem(res.data.data);
-      setProblemTitle(res.data.data.problemTitle);
-    })
-    .catch((err)=> {
-      console.log(err);
-    })
+    setTimeout(() => {
+      axios({
+        method : 'get',
+        url : `https://i10d211.p.ssafy.io/api/problem/${game.problemId}`,
+      })
+      .then((res)=> {
+        console.log(res);
+        setProblem(res.data.data);
+        setProblemTitle(res.data.data.problemTitle);
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
+    }, 100);
   },[])
 
 
@@ -41,9 +44,34 @@ export default function TopInfo({ gameExitId, problemId}) {
         alignItems: 'center',
         justifyContent: 'flex-start' }}
       >
-        {/* [사진]유저1 vs 유저2 [사진] 필요 */}
-        {/* 사진 및 유저 정보 추가 필요 */}
-        <span style={{ margin: '0 auto' }}>(사진) 유저1 vs 유저2 (사진)</span>
+        <div className="flex justify-center items-center w-full">
+          <div className="flex flex-col mr-20">
+            <div style={{ width: "125px", height: "125px"}} >
+              <img
+                src={game?.userRedSsumnail}
+                alt="플레이어1 이미지"
+                className="rounded-full shadow-lg"
+                style={{width: "100%", height: "100%"}}
+              />
+            </div>
+            <span className="text-center mt-3 text-2xl">{game?.userRedNickname}</span>
+          </div>
+          <img
+            src={VS} alt="vs" 
+            style={{width: "10%", padding: "1%"}}
+          />
+          <div className="flex flex-col ml-20">
+            <div style={{ width: "125px", height: "125px"}} >
+              <img
+                src={game?.userBlueSsumnail}
+                alt="상대 이미지"
+                className="rounded-full shadow-lg"
+                style={{width: "100%", height: "100%"}}
+              />
+            </div>
+            <span className="text-center mt-3 text-2xl">{game?.userBlueNickname}</span>
+          </div>
+        </div>
       </div>
 
       {/* 우측 상단 버튼 영역 */}
