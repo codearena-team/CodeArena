@@ -75,6 +75,7 @@ export default function CommunityCreate() {
     })
     .then((res)=>{
       console.log(res)
+      swal("게시글작성완료","","success")
       navigate('/community')
     })
     .catch((err)=>{
@@ -88,7 +89,7 @@ export default function CommunityCreate() {
       <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
         <div className="flex">
           <div className="w-1/12"></div>
-          <label className="me-1 py-3" htmlFor="title">제목</label>
+          <label className="me-1 py-3 font-bold" htmlFor="title">제목</label>
         </div>
         <div className='flex justify-end'>
           <input type="text" placeholder="제목을 입력하세요" id="title" onChange={(e)=>{setTitle(e.target.value)}} className="input input-bordered w-10/12" />
@@ -96,7 +97,7 @@ export default function CommunityCreate() {
         </div>
         <div className="flex">
           <div className="w-1/12"></div>
-          <label className="me-1 py-3" htmlFor="title">문제번호</label>
+          <label className="me-1 py-3 font-bold" htmlFor="title">문제번호</label>
         </div>
         <div className='flex justify-end mb-4'> 
           <input type="text" placeholder="문제번호를 입력하세요" id="title" onChange={(e)=>{setProblemId(e.target.value)}} className="input input-bordered w-10/12" />
@@ -105,7 +106,7 @@ export default function CommunityCreate() {
         <div className='flex justify-start mb-4'>
           <div className="w-1/12"></div>
           <div className='flex justify-center items-center'>
-          <label className="me-1 py-3" htmlFor="rating">카테고리</label>
+          <label className="me-3 py-3 font-bold" htmlFor="rating">카테고리</label>
             <select value={type} onChange={(e)=>{setType(e.target.value)}} className="select select-sm select-bordered mr-6" >
               <option value={1}>질문</option>
               <option value={2}>시간복잡도</option>
@@ -115,7 +116,7 @@ export default function CommunityCreate() {
             </select>
           </div>
           <div className="flex justify-center items-center">
-          <label className="me-1 py-3" htmlFor="rating">언어</label>
+          <label className="me-3 py-3 font-bold" htmlFor="rating">언어</label>
             <select value={lang} onChange={(e)=>{setLang(e.target.value)}}  className="select select-sm select-bordered mr-6" >
               <option>java</option>
               <option>python</option>
@@ -123,13 +124,13 @@ export default function CommunityCreate() {
             </select>
           </div>
           <div className='flex justify-center items-center'>  
-            <label className="cursor-pointer label me-1">스포방지여부</label>
+            <label className="cursor-pointer label me-1 font-bold">스포방지여부</label>
             <div className='flex items-center'><input type="checkbox" className="checkbox checkbox-warning" style={{borderColor:'black'}} onClick={onClickCheckbox}/></div>
           </div>
         </div>        
         <div className="flex mb-3">
           <div className="w-1/12"></div>
-          <label className="me-1"htmlFor="content">내용</label>
+          <label className="me-1 font-bold" htmlFor="content">내용</label>
         </div>
         <div className='flex justify-end mb-4'>
           <textarea className="textarea textarea-bordered w-10/12 resize-none" onChange={(e)=>{setContent(e.target.value)}} id="content" placeholder="내용을 입력하세요" rows="10"></textarea>
@@ -148,6 +149,7 @@ export default function CommunityCreate() {
             <div className='col-span-10'>
               <Editor onChange={onChangeTestCode} height="400px" id="inputEx" language={lang}
               options={{'scrollBeyondLastLine':false,'minimap':{enabled:false}}}
+              theme="vs-dark"
               />
             </div>
             <div className='col-span-1'></div>

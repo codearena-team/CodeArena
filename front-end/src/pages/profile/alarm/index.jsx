@@ -54,8 +54,8 @@ export default function Alarm() {
       <div className="flex justify-between align-middle mt-5">
         <div className="flex items-end">
           {/* 클릭시에 받은알림 , 보낸알림 목록 axios요청하는 함수 */}
-          <button onClick={(e)=>{setAlarmtype(e.target.value)}} className={alarmtype==='receive' ? 'orderBy' : 'orderBy unchoice'} value='receive'>받은알림</button>  
-          <button onClick={(e)=>{setAlarmtype(e.target.value)}} className={alarmtype==='send' ? 'orderBy' : 'orderBy unchoice'} value='send'>보낸알림</button>
+          <button onClick={(e)=>{setAlarmtype(e.target.value)}} className={alarmtype==='receive' ? 'orderBy font-bold' : 'orderBy unchoice'} value='receive'>받은알림</button>  
+          <button onClick={(e)=>{setAlarmtype(e.target.value)}} className={alarmtype==='send' ? 'orderBy font-bold' : 'orderBy unchoice'} value='send'>보낸알림</button>
         </div>
       </div>
       <div>
@@ -64,12 +64,12 @@ export default function Alarm() {
           <table className="problemTable w-full">
             <thead>
               <tr style={{backgroundColor:'rgb(227, 230, 217)'}}>
-                <th className="p-1.5 font-thin">번호</th>
-                <th className="p-1.5 font-thin">카테고리</th>
-                <th className="p-1.5 font-thin">처리여부</th>
-                <th className="p-1.5 w-1/2 font-thin">내용</th>
-                <th className="p-1.5 font-thin">{(alarmtype==='send') ?'받은사람' : '보낸사람'}</th>
-                <th className="p-1.5 font-thin">날짜</th>
+                <th className="p-1.5 font-bold">번호</th>
+                <th className="p-1.5 font-bold">카테고리</th>
+                <th className="p-1.5 font-bold">처리여부</th>
+                <th className="p-1.5 w-1/2 font-bold">내용</th>
+                <th className="p-1.5 font-bold">{(alarmtype==='send') ?'받은사람' : '보낸사람'}</th>
+                <th className="p-1.5 font-bold">날짜</th>
               </tr>
             </thead>
 
