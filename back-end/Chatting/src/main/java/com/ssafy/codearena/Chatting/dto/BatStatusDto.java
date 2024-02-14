@@ -9,6 +9,10 @@ public class BatStatusDto {
     private String player1Ratio;
     @Schema(description = "플레이어2에 대한 배팅 비율")
     private String player2Ratio;
+    @Schema(description = "플레이어1에 투자한 사람의 총합")
+    private String player1BatPeople;
+    @Schema(description = "플레이어2에 투자한 사람의 총합")
+    private String player2BatPeople;
     @Schema(description = "플레이어1에 대한 배팅 최고 금액")
     private String player1MaxCoin;
     @Schema(description = "플레이어2에 대한 배팅 최고 금액")

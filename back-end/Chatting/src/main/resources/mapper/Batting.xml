@@ -79,4 +79,11 @@
         WHERE game_id = #{gameId} AND bat_player_id = #{playerId}
         ORDER BY bat_date ASC LIMIT 1;
     </select>
+
+    <!-- 특정 게임, 특정 유저에게 배팅을 한 사람의 총합 조회 쿼리 -->
+    <select id="getPlayerSumPeople" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM batting
+        WHERE game_id = #{gameId} AND bat_player_id = #{playerId}
+    </select>
 </mapper>

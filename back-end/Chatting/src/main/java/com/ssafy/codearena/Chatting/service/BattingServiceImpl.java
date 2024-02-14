@@ -96,6 +96,13 @@ public class BattingServiceImpl implements BattingService{
                 batStatusDto.setPlayer2MaxCoin(playerInfo.getUserCoin());
             }
 
+            //각 플레이어에게 건 사람의 총합 조회
+            int player1Cnt = battingMapper.getPlayerSumPeople(map.get("gameId"), map.get("player1Id"));
+            batStatusDto.setPlayer1BatPeople(String.valueOf(player1Cnt));
+
+            int player2Cnt = battingMapper.getPlayerSumPeople(map.get("gameId"), map.get("player2Id"));
+            batStatusDto.setPlayer2BatPeople(String.valueOf(player2Cnt));
+
             resultDto.setData(batStatusDto);
         }
         catch (Exception e) {
