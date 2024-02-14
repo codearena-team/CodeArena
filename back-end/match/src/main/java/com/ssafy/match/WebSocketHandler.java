@@ -270,11 +270,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 Collection<MatchDto> players = (Collection<MatchDto>) matchMap.get(recMatchId).values();
 
                 int noCount = 0;
+                int yesCount = 0;
                 for (MatchDto player : players) {
                     if (player.getIsOk() == null) continue;
                     if (player.getIsOk()) {
                         WebSocketSession okPlayer = CLIENTS.get(userWithSessionId.get(player.getUserId()+" "+player.getUserNickname()));
+                        yesCount++;
                         if(okPlayer!= null && okPlayer.isOpen()){
+
                             String[] frags = player.getQueueKey().split("-");
                             String mode = frags[0];
                             String lang = frags[1];
@@ -291,7 +294,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     }
                 }
 
-                if (noCount > 0) {
+                if (yesCount + noCount == 2) {
                     if(recMatchId !=null && matchMap.containsKey(recMatchId)){
                         matchMap.remove(recMatchId);
                     }
