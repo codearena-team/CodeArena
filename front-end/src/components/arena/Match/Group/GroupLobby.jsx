@@ -25,8 +25,19 @@ export default function GroupLobby() {
       method : 'get'
     })
     .then((res)=>{
-      console.log(res)
+      // console.log(res)
       setFollowingList(res.data.data || [])
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+    axios({
+      url :`https://i10d211.p.ssafy.io/game/chat/enter/room?gameId=${params.id} `, 
+      method : 'get'
+    })
+    .then((res)=>{
+      console.log(res)
     })
     .catch((err)=>{
       console.log(err)

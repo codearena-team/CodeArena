@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Tropy from '../../../../images/arena/Result/tropy.png'
 import Victory from '../../../../images/arena/Result/victory.png'
 import '../../../css/resultpage.css'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 export default function SpeedResult (){
+  const params = useParams();
   const gameId = useSelector(state => state.game.gameId);
 
-  const [userGameData, setUserGameData] = useState('');
+  // const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
   const [winnerRating, setWinnerRating] = useState('');
   const [loserNickname, setLoserNickname] = useState('');
@@ -18,7 +19,7 @@ export default function SpeedResult (){
   const [loserSsumnail, setLoserSsumnail] = useState('');
 
   useEffect(() => {
-    setUserGameData(gameId)
+    // setUserGameData(gameId)
     console.log('넘어와야하는 gameId :', gameId)
     axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${gameId}`)
       .then(res => {

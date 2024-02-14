@@ -265,7 +265,7 @@ export default function TopBanner() {
   };
 
   const startQueryTimer = () => {
-    let seconds = 60;
+    let seconds = 10;
     const timerElements = document.getElementById('matching_timer');
   
     const updateTimer = () => {
