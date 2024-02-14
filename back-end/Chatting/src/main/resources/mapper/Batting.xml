@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.codearena.Chatting.mapper.BattingMapper">
+
+    <resultMap id="batCount" type="batPlayerCountDto">
+        <result column="player1_coin" property="player1Count"/>
+        <result column="player2_coin" property="player2Count"/>
+    </resultMap>
+    <!-- 유저 코인 조회 쿼리 -->
+    <select id="getUserCoin" parameterType="string" resultType="int">
+        SELECT user_coin
+        FROM user
+        WHERE user_id = #{userId};
+    </select>
+
+    <!-- 유저 코인 변동 적용 쿼리 -->
+    <update id="updateUserCoin" parameterType="string">
+        UPDATE user
+        SET user_coin = #{coin}
+        WHERE user_id = #{userId};
+    </update>
+
+    <!-- 배팅 적용 쿼리 -->
+    <insert id="batPlayer" parameterType="map">
+        INSERT INTO bat_record(game_id, bat_user_id, bat_playerId, bat_coin, bat_date)
+        VALUES(#{gameId}, #{userId}, #{playerId}, #{batCoin}, now());
+    </insert>
+
+    <select id="getPlayerCount" parameterType="map" resultType="batCount">
+        SELECT (SELECT COUNT(bat_player_id) FROM battingWHERE game_id = #{gameId} AND bat_playerId = #{player1Id}) as player1_coin
+        , (SELECT COUNT(bat_player_id) FROM batting WHERE game_id = #{gameId} AND bat_playerId = #{player2Id}) as player2_coin;
+    </select>
+
+</mapper>

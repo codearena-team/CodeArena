@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface ChatService {
     public GameResultDto findAllRoom(Map<String, String> map);
-    public GameResultDto findRoomById(String id);
+    public GameResultDto findRoomById(String gameId, String gameMode);
     public GameResultDto createCompetitiveRoom(GameCreateDto gameCreateDto);
     public GameResultDto createPrivateRoom(PrivateGameCreateDto privateGameCreateDto);
     public void plusParticipants(String gameId);

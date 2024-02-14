@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +25,15 @@ import java.util.*;
 public class ChatRoomController {
     private final ChatService chatService;
     //특정 채팅방 반환
+    @Operation(summary = "특정 게임방 상세조회 API")
+    @Parameters(value = {
+            @Parameter(name = "gameId", description = "게임방 ID"),
+            @Parameter(name = "gameMode", description = "해당 게임방 모드", example = "스피드전 : 0, 효율전 : 1")
+    })
     @GetMapping("/room")
-    public ResponseEntity<?> room(@RequestParam String gameId) {
+    public ResponseEntity<?> room(@RequestParam String gameId, String gameMode) {
 //        log.info(gameId);
-        return new ResponseEntity<GameResultDto>(chatService.findRoomById(gameId), HttpStatus.OK);
+        return new ResponseEntity<GameResultDto>(chatService.findRoomById(gameId, gameMode), HttpStatus.OK);
     }
     //모든 채팅방 목록 반환
     @GetMapping("/rooms")
@@ -105,6 +111,5 @@ public class ChatRoomController {
 
         return new ResponseEntity<GameResultDto>(chatService.whoWinner(gameId), HttpStatus.OK);
     }
-
 
 }

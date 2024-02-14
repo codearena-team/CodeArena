@@ -258,7 +258,11 @@ public class RestServiceImpl implements RestService {
         try {
             List<CompetitiveGameSubmitDto> list = mapper.getEffiSubmitList(param);
             int totalSubmitCount = mapper.getTotalSubmitCount(param);
-            int totalPageCount = (totalSubmitCount - 1) / sizePerPage + 1;
+            int totalPageCount = 1;
+
+            if(totalSubmitCount > sizePerPage) {
+                totalPageCount = (totalSubmitCount - 1) / sizePerPage + 1;
+            }
 
             EffiSubmitListDto effiSubmitListDto = new EffiSubmitListDto();
             effiSubmitListDto.setCurrentPage(currentPage);
