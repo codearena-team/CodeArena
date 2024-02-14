@@ -27,7 +27,7 @@
         VALUES(#{gameId}, #{userId}, #{playerId}, #{batCoin}, now());
     </insert>
 
-    <select id="getPlayerCount" parameterType="map" resultType="batCount">
+    <select id="getPlayerCount" parameterType="map" resultMap="batCount">
         SELECT (SELECT COUNT(bat_player_id) FROM battingWHERE game_id = #{gameId} AND bat_playerId = #{player1Id}) as player1_coin
         , (SELECT COUNT(bat_player_id) FROM batting WHERE game_id = #{gameId} AND bat_playerId = #{player2Id}) as player2_coin;
     </select>
