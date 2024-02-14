@@ -13,7 +13,7 @@ import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from 'recharts';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect,useRef} from 'react';
 import axios from 'axios';
 import SolvedItem from '../../components/profile/SolveList';
 import UnsolvedItem from '../../components/profile/UnsolveList';
@@ -25,6 +25,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts'
 // to 프로필주인 , from 로그인한유저 ,
 // isFollow가 0이면 from뒤의 사람이 to뒤의사람을 팔로우안한거, 1이면 팔로우 한거
 export default function MyPage() {
+  const inputRef = useRef(null)
   const params = useParams()
   const profileNickname = params.nickname // 프로필 주인인사람
   const loginNickname = useSelector(state => (state.auth.userNickname)) // 로그인한 유저
@@ -49,6 +50,25 @@ export default function MyPage() {
   const [graphData, setGraphData] = useState([])
   const [selectedFile, setSelectedFile] = useState(null);
   const [money,setMoney] = useState('')
+
+
+  useEffect(() => {
+    // document 클릭 이벤트 리스너 추가
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      // 컴포넌트가 언마운트될 때 클릭 이벤트 리스너 제거
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (inputRef.current && !inputRef.current.contains(event.target)) {
+      // 클릭된 요소가 인풋란 외의 요소인 경우 초기화
+      setWord('');
+      setModalList([]);
+    }
+  };
+
 
 
   // 프로필화면시 그프로필 회원정보요청하는 axios
@@ -232,9 +252,6 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
     })
   }
 
-
-
-
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       searchNickname();
@@ -242,9 +259,12 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
   };
 
   const inputClick = (e)=>{
+    e.stopPropagation()
     const value = e.target.value;
     const newValue = value.replace('팔로우중','').trim();
-    setWord(newValue);
+    const newValue2 = newValue.replace('(','').trim();
+    const newValue3 = newValue2.replace(')','').trim();
+    setWord(newValue3);
     setModalList([]);
   }  
 
@@ -274,7 +294,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
     <div className='container mx-auto'>
       <div className='flex p-40 pt-0 pb-0 justify-end mr-3 mb-5'>
         <div>
-          <input type="text" placeholder="닉네임을 입력하세요" className="input input-bordered w-xl h-8 max-w-xs mb-2" 
+          <input ref={inputRef} type="text" placeholder="닉네임을 입력하세요" className="input input-bordered w-xl h-8 max-w-xs mb-2" 
           style={{outline:'none',borderBottomRightRadius: '0',borderTopRightRadius: '0'}}
           value={word}
           onChange={searchInput}
@@ -286,8 +306,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
             {modalList.map((item, index) => (
               <li key={index}>
                 <input type="text" className="input input-bordered w-xl h-8 max-w-xs" 
-                style={{outline:'none',cursor: 'pointer',color: item.isFollow === '1' ? 'blue' : 'black' }}
-                value={item.userNickname + (item.isFollow === '1' ? '  팔로우중' : '')}
+                style={{outline:'none',cursor: 'pointer'}}
+                value={item.userNickname + (item.isFollow === '1' ? ' (팔로우중)' : '')}
                 onClick={inputClick}
                 />
               </li>
@@ -334,10 +354,10 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
               onClick={getFollowing}
               >팔로잉 {followingList.length}</button>
               <dialog id="my_modal_3" className="modal">
-                <div className="modal-box" style={{ width: '400px' }}> 
+                <div className="modal-box" style={{ width: '200px',backgroundColor: '#F7F6E4'}}> 
                   <form method="dialog">
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                    <h3 className="font-bold text-lg">팔로잉 목록</h3>
+                    <h3 className="font-bold text-lg mb-2">팔로잉 목록</h3>
                   </form>
 
                   { followingList.length === 0  && (
@@ -347,7 +367,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     <ul>
                     {followingList.map((user)=>{
                       return <li key={user.userId}
-                      className="text-md mb-2" 
+                      className="text-md mb-2 " 
                       style={{textDecoration: 'underline',cursor:'pointer'}}
                       onClick={()=>{goFollowingProfile(user.userNickname)}}>
                       {user.userNickname}</li>
@@ -363,10 +383,10 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
               onClick={getFollwer}
               >팔로워 {followerList.length}</button>
               <dialog id="my_modal_4" className="modal">
-                <div className="modal-box" style={{ width: '400px' }}>
+                <div className="modal-box" style={{ width: '200px',backgroundColor: '#F7F6E4' }}>
                   <form method="dialog">
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                    <h3 className="font-bold text-lg">팔로워 목록</h3>
+                    <h3 className="font-bold text-lg mb-2">팔로워 목록</h3>
                   </form>
                   { followerList.length === 0  && (
                     <h1>팔로워목록이 없습니다</h1>
@@ -376,7 +396,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                     {followerList.map((user)=>{
                       return <li key={user.userId}
                       className="text-md mb-2" 
-                      style={{textDecoration: 'underline',cursor:'pointer'}}
+                      style={{textDecoration: 'underline',cursor:'pointer' }}
                       onClick={()=>{goFollowerProfile(user.userNickname)}}>
                       {user.userNickname}</li>
                     })}

@@ -5,6 +5,7 @@ import "../../css/problemdetail.css"
 import Editor from "@monaco-editor/react"
 import { useSelector } from 'react-redux'
 import CommentListItem from '../../../components/community/CommentListItem'
+import swal from "sweetalert"
 
 
 export default function CommunityDetail(){
@@ -76,7 +77,7 @@ export default function CommunityDetail(){
     })
     .then((res)=>{
       console.log(res)
-      alert('게시글이 삭제되었습니다')
+      swal("게시글이 삭제완료","","success")
       navigate('/community')
     })
     .catch((err)=>{
