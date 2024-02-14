@@ -12,8 +12,10 @@
         <result column="player2_nickname" property="userBlueNickname"/>
         <result column="player1_thumbnail" property="userRedSsumnail"/>
         <result column="player2_thumbnail" property="userBlueSsumnail"/>
-        <result column="player1_rating" property="userRedRating"/>
-        <result column="player2_rating" property="userBlueRating"/>
+        <result column="player1_speed_rating" property="userRedSpeedRating"/>
+        <result column="player2_speed_rating" property="userBlueSpeedRating"/>
+        <result column="player1_effi_rating" property="userRedEffiRating"/>
+        <result column="player2_effi_rating" property="userBlueEffiRating"/>
         <result column="problem_id" property="problemId"/>
         <result column="game_mode" property="gameMode"/>
         <result column="start_time" property="startTime"/>
@@ -143,12 +145,7 @@
     </select>
     <!-- 특정 게임방 조회 -->
     <select id="findRoomById" parameterType="string" resultMap="gameDetailInfo">
-        <if test='gameMode == "0"'>
-            SELECT game_id, game_title, player1, player2, (SELECT user_nickname FROM user WHERE user_id = player1) as userRedNickname, (SELECT user_nickname FROM user WHERE user_id = player2) as userBlueNickname, (SELECT user_thumbnail FROM user WHERE user_id = player1) as player1_thumbnail, (SELECT user_thumbnail FROM user WHERE user_id = player2) as player2_thumbnail, (SELECT speed_rating FROM user WHERE user_id = player1) as player1_rating, (SELECT speed_rating FROM user WHERE user_id = player2) as player2_rating, problem_id, start_time, game_mode, game_language
-        </if>
-        <if test='gameMode == "1"'>
-            SELECT game_id, game_title, player1, player2, (SELECT user_nickname FROM user WHERE user_id = player1) as userRedNickname, (SELECT user_nickname FROM user WHERE user_id = player2) as userBlueNickname, (SELECT user_thumbnail FROM user WHERE user_id = player1) as player1_thumbnail, (SELECT user_thumbnail FROM user WHERE user_id = player2) as player2_thumbnail, (SELECT effi_rating FROM user WHERE user_id = player1) as player1_rating, (SELECT effi_rating FROM user WHERE user_id = player2) as player2_rating, problem_id, start_time, game_mode, game_language
-        </if>
+            SELECT game_id, game_title, player1, player2, (SELECT user_nickname FROM user WHERE user_id = player1) as player1_nickname, (SELECT user_nickname FROM user WHERE user_id = player2) as player2_nickname, (SELECT user_thumbnail FROM user WHERE user_id = player1) as player1_thumbnail, (SELECT user_thumbnail FROM user WHERE user_id = player2) as player2_thumbnail, (SELECT speed_rating FROM user WHERE user_id = player1) as player1_speed_rating, (SELECT speed_rating FROM user WHERE user_id = player2) as player2_speed_rating, (SELECT effi_rating FROM user WHERE user_id = player1) as player1_effi_rating, (SELECT effi_rating FROM user WHERE user_id = player2) as player2_effi_rating, problem_id, start_time, game_mode, game_language
         FROM arena_record
         WHERE game_id = #{gameId};
     </select>

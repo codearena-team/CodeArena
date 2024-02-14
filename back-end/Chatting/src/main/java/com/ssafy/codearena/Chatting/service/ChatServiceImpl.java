@@ -97,14 +97,14 @@ public class ChatServiceImpl implements ChatService{
      * 특정 방 찾기
      * */
     @Override
-    public GameResultDto findRoomById(String gameId, String gameMode) {
+    public GameResultDto findRoomById(String gameId) {
         GameResultDto gameResultDto = new GameResultDto();
         gameResultDto.setStatus("200");
         gameResultDto.setMsg("게임방 조회 성공");
         try {
 
 //            log.info(gameId);
-            GameInfoDto gameInfoDto = gameMapper.findRoomById(gameId, gameMode);
+            GameInfoDto gameInfoDto = gameMapper.findRoomById(gameId);
             //참여자 수 조회
             gameInfoDto.setParticipants(gameManage.get(gameInfoDto.getGameId()).getParticipants());
             gameResultDto.setData(gameInfoDto);
@@ -426,8 +426,6 @@ public class ChatServiceImpl implements ChatService{
             double player1_ratio = (double)1 - ((double) batPlayerCountDto.getPlayer2Count()/sum);   //1 -> 0.3 >> 30%
             double player2_ratio = (double)1 - ((double) batPlayerCountDto.getPlayer1Count()/sum);   //1 -> 0.3 >> 30%
 
-            int player1Ratio = (int) Math.round(player1_ratio*100);
-            int player2Ratio = (int) Math.round(player2_ratio*100);
 
             log.info("플레이어 1의 비율 : " + player1_ratio);
             log.info("플레이어 2의 비율 : " + player2_ratio);
@@ -446,7 +444,7 @@ public class ChatServiceImpl implements ChatService{
                 }
 
             }
-            else {
+            else if(winner.equals(player1Nickname) || winner.equals(player2Nickname)){
 
                 //승자가 있을 경우
                 //승자에게 배팅한 유저들 조회
@@ -456,16 +454,18 @@ public class ChatServiceImpl implements ChatService{
                 for(BatUserCoinDto dto : list) {
                     //한명씩 비율과 계산한 후 갱신
                     //이긴 유저 한명 당 기존 coin 조회
-                    int coin = battingMapper.getUserCoin(dto.getUserCoin());
+                    int coin = battingMapper.getUserCoin(dto.getUserId());
 
                     if(player1Nickname.equals(winner)) {
 
-                        int newCoin = coin + coin * (player1Ratio * coinWeight);
+                        log.info("player1이 우승 시 배팅 정산");
+                        int newCoin = (int) (coin + Integer.parseInt(dto.getUserCoin()) * (player1_ratio + 1));
                         battingMapper.updateUserCoin(dto.getUserId(), String.valueOf(newCoin));
                     }
                     else if(player2Nickname.equals(winner)){
 
-                        int newCoin = coin + coin * (player2Ratio * coinWeight);
+                        log.info("player2가 우승 시 배팅 정산");
+                        int newCoin = (int) (coin + Integer.parseInt(dto.getUserCoin()) * (player2_ratio + 1));
                         battingMapper.updateUserCoin(dto.getUserId(), String.valueOf(newCoin));
                     }
                     else {
@@ -475,6 +475,10 @@ public class ChatServiceImpl implements ChatService{
                     }
                 }
 
+            }
+            else {
+
+                log.error("winner 닉네임과 현재 게임방에 속한 플레이어의 닉네임과 일치하지 않습니다.");
             }
 
         }
