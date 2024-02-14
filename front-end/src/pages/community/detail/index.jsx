@@ -205,7 +205,7 @@ export default function CommunityDetail(){
                 <div className='flex justify-end mb-4'>
                   <div className='w-full'>
                     <Editor height="200px" id="inputEx"
-                    onChange={onChangeCode} theme="vs-dark"
+                    onChange={onChangeCode} language=""
                     options={{'scrollBeyondLastLine':false,'minimap':{enabled:false}}}
                     />
                   </div>
