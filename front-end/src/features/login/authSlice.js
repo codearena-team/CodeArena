@@ -29,12 +29,21 @@ export const authSlice = createSlice({
       state.userThumbnail = jwtDecode(action.payload.refreshToken).userThumbnail
       state.userCoin = jwtDecode(action.payload.refreshToken).userCoin
     },
+    setThumbnail : (state,action) =>{
+      state.userThumbnail = action.payload;
+    },
+    
     logout: (state) =>{
       state.refreshToken = null;
       state.isLogin = false;
       state.userId = null;
       state.userEmail = null;
       state.userNickname = null;
+      state.speed = null;
+      state.eff = null;
+      state.userThumbnail = null;
+      state.userCoin = null;
+
     },
     setRecord: (state,action) => {
       state.speed = jwtDecode(action.payload).speed
@@ -43,5 +52,5 @@ export const authSlice = createSlice({
   }  
 })
 
-export const { setRefreshToken,logout,setUserNickname,setRecord } = authSlice.actions
+export const { setRefreshToken,logout,setUserNickname,setRecord,setThumbnail } = authSlice.actions
 export default authSlice.reducer
