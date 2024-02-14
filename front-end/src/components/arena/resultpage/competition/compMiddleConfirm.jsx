@@ -4,6 +4,7 @@ import SubmitListItem from './compSubmitItemList'
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import Reload from '../../../../images/problem/reload.png';
 
 export default function MiddleConfirm(){
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function MiddleConfirm(){
   const [pageCount, setPageCount] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const [submitList, setSubmitList] = useState([]);
+  
 
   const changeParams = (key, value) => {
     searchParams.set(key,value)
@@ -37,6 +39,11 @@ export default function MiddleConfirm(){
 
   }, [])
 
+
+  const onClickReload = () =>{
+    window.location.reload();
+  }
+
   const pageNation = () => {
     const result = [];
     for (let i = 0; i < pageCount; i++) {
@@ -54,7 +61,7 @@ export default function MiddleConfirm(){
 
   return(
     <div>
-      <div className='flex justify-end mr-20'>
+      <div className='flex justify-end mr-20 '>
           <button
             className="btn btn-sm btn-active drop-shadow text-md" 
             style={{backgroundColor:'#E2E2E2'}}
@@ -62,6 +69,9 @@ export default function MiddleConfirm(){
           >
             되돌아가기
           </button>
+      </div>
+      <div className='flex justify-end mr-28 mt-2' onClick={onClickReload}>
+        <img src={Reload} alt="새로고침" style={{width:30,cursor:'pointer'}}/>
       </div>
       <div className="overflow-x-auto p-20 pt-5">
         <table className="problemTable w-full">

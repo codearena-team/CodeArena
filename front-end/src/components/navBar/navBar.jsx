@@ -80,8 +80,9 @@ export default function NavBar() {
                         {item.name}
                       </Link>
                       {/* // 드롭다운 메뉴위치 */}
+                    
                       {item.name === 'Problem' && showDropdown && (
-                        <div className="absolute top-full left-0 rounded-md z-50 mt-0.5" style={{backgroundColor:'#F4F5F1'}}
+                        <div className="absolute top-full left-0 rounded-md z-50" style={{backgroundColor:'#F4F5F1',marginTop: isLogin ? '0.2rem' : '0.4rem'}}
                         onMouseEnter={() => setShowDropdown(true)}
                         onMouseLeave={() => setShowDropdown(false)}
                         >
@@ -91,6 +92,7 @@ export default function NavBar() {
                       )}
                       </div>
                     ))}
+        
                   {/* 벨아이콘 알림함 */}
                     { isLogin && (
                       <button
@@ -106,7 +108,7 @@ export default function NavBar() {
                       <Menu as="div" className="relative ml flex">
                         <div className="my-auto">
                           <Menu.Button className="relative flex rounded-full text-sm focus:outline-none 
-                          focus:ring-black focus:ring-1
+                        
                           hover:scale-110" style={{ transition: 'transform 0.2s' }}>
                           <img
                             className="h-8 w-8 rounded-full"

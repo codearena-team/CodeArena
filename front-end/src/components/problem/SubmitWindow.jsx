@@ -26,7 +26,8 @@ export default function SubmitWindow(props) {
   const [isvisible, setIsvisible] = useState(false)
   const [statistics, setStatistics] = useState([])
   const [graphData, setGraphData] = useState([])
-  
+  const [isAnimetion, setIsAnimetion] = useState(false)
+
   useEffect(()=> {
     const problemId = params.problemId
     const pgno = searchParams.get('pgno') || 1
@@ -110,7 +111,27 @@ export default function SubmitWindow(props) {
     .catch((err)=> {
       console.log(err);
     })
-
+    axios({
+      method : 'get',
+      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/submit/statistics?userId=${userId}`,
+    })
+    .then((res)=> {
+      console.log(res)
+      setIsvisible(true)
+      setStatistics(res.data.data)
+      setGraphData(res.data.data.ratioOfAlgo.map((obj)=> {
+        return {name:obj.tagName,value:parseInt(obj.count)}
+      }))
+    })
+    .catch((err)=> {
+      console.log(err);
+      setIsvisible(false)
+    })
+    
+    setIsAnimetion(true)
+    setTimeout(() => {
+      setIsAnimetion(false)
+    }, 50);
   }
  
 
@@ -136,37 +157,36 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
   
   return(
     <div className="mx-4 flex flex-col">
-      <div className="flex align-middle  justify-between">
         {isvisible && statistics.avgByLang !==null ? (
-        <div className="flex gap-2">
+        <div className="flex align-middle justify-around">
           <div className="flex flex-col justify-center">
             <div className="stats shadow ">
-              <div className="stat p-3">
+              <div className="stat p-2 ps-2">
                 <div className="stat-figure text-secondary ">
-                  <img src={javaImg} alt="java"className="w-12" />
+                  <img src={javaImg} alt="java"className="w-10" />
                 </div>
                 <div className="stat-title  text-sm">java</div>
-                <div className="stat-value text-base mt-1">{statistics.avgByLang.java===0 ? '데이터없음' : statistics.avgByLang.java+'ms'}</div>
+                <div className="stat-value text-sm mt-1">{statistics.avgByLang.java===0 ? '데이터없음' : statistics.avgByLang.java+'ms'}</div>
               </div>
-              <div className="stat p-3">
+              <div className="stat p-2">
                 <div className="stat-figure text-secondary">
-                  <img src={pythonImg} alt="python" className="w-12" />
+                  <img src={pythonImg} alt="python" className="w-10" />
                 </div>
                 <div className="stat-title  text-sm">python</div>
-                <div className="stat-value text-base">{statistics.avgByLang.python===0 ? '데이터없음' : statistics.avgByLang.python+'ms'}</div>
+                <div className="stat-value text-sm">{statistics.avgByLang.python===0 ? '데이터없음' : statistics.avgByLang.python+'ms'}</div>
               </div>
-              <div className="stat p-3">
+              <div className="stat p-2 pe-2">
                 <div className="stat-figure text-secondary">
-                  <img src={cppImg} alt="cpp" className="w-12"/>
+                  <img src={cppImg} alt="cpp" className="w-10"/>
                 </div>
                 <div className="stat-title  text-sm">cpp</div>
-                <div className="stat-value text-base">{statistics.avgByLang.cpp===0 ? '데이터없음' : statistics.avgByLang.cpp+'ms'}</div>
+                <div className="stat-value text-sm">{statistics.avgByLang.cpp===0 ? '데이터없음' : statistics.avgByLang.cpp+'ms'}</div>
               </div>
             </div>
           </div>
           <div className="relative">
             <span className="absolute font-bold left-4">알고리즘 유형 그래프</span>
-            <ResponsiveContainer height={150} width={150} style={{}}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
+            <ResponsiveContainer height={150} width={150} style={{}} className='mt-1'> {/* 차트를 반응형으로 감싸는 컨테이너 */}
               {/* PieChart : 원형 차트 모양으로 변환 */}
               <PieChart className="z-10">
                 {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}
@@ -175,8 +195,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
                 <Pie
                   className="z-10"
                   data={graphData} // 데이터 전달
-                  innerRadius={40} // 내부 반지름
-                  outerRadius={55} // 외부 반지름
+                  innerRadius={35} // 내부 반지름
+                  outerRadius={48} // 외부 반지름
                   paddingAngle={5} // 각 섹션 사이 간격
                   dataKey="value" // 데이터에서 값에 해당하는 키 지정
                 >
@@ -189,19 +209,19 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
             </ResponsiveContainer>
           </div>
         </div>
+
         )
         :
         (<div></div>)
         }
         <div></div>
-      </div>
       
       <div className="flex items-end justify-between ">
         <div className="flex items-end">
           <button onClick={()=>{changeParams('orderBy','submitDate')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='submitDate' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
           <button onClick={()=>{changeParams('orderBy','timeComplexity')}} className={searchParams.get('orderBy')==='timeComplexity' ? 'orderBy' : 'orderBy unchoice'} value='time'>시간복잡도순</button>
           <div className="ms-2 w-8 p-1" onClick={onClickReload}>
-            <img style={{cursor:"pointer"}} src={reload} alt="reload" className="w-full"/>
+            <img style={{cursor:"pointer"}} src={reload} alt="reload" className={`w-full ${isAnimetion ? 'scale-110' : ''}`} />
           </div>
         </div>
         <div className="flex flex-col justify-center">
