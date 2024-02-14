@@ -70,20 +70,20 @@ export default function MiddleConfirm(){
             되돌아가기
           </button>
       </div>
-      <div className='flex justify-end mr-28 mt-2' onClick={onClickReload}>
-        <img src={Reload} alt="새로고침" style={{width:30,cursor:'pointer'}}/>
+      <div className='flex justify-start ml-20 mt-2' onClick={onClickReload}>
+        <img src={Reload} alt="새로고침" style={{width:25,cursor:'pointer'}}/>
       </div>
       <div className="overflow-x-auto p-20 pt-5">
         <table className="problemTable w-full">
           <thead>
-            <tr className="orderBy rounded-tr">
-              <th className="p-1.5 font-light rounded-tl-2xl">제출번호</th>
-              <th className="p-1.5 font-light">제출자</th>
-              <th className="p-1.5 font-light w-3/12">결과</th>
-              <th className="p-1.5 font-light">메모리</th>
-              <th className="p-1.5 font-light">시간</th>
-              <th className="p-1.5 font-light">언어</th>
-              <th className="p-1.5 font-light rounded-tr-2xl">제출날짜</th>
+            <tr className="orderBy rounded-tr ">
+              <th className="p-1.5 font-bold rounded-tl-2xl">제출번호</th>
+              <th className="p-1.5 font-bold">제출자</th>
+              <th className="p-1.5 font-bold w-3/12">결과</th>
+              <th className="p-1.5 font-bold">메모리</th>
+              <th className="p-1.5 font-bold">시간</th>
+              <th className="p-1.5 font-bold">언어</th>
+              <th className="p-1.5 font-bold rounded-tr-2xl">제출날짜</th>
             </tr>
           </thead>
           <tbody className="font-normal">
