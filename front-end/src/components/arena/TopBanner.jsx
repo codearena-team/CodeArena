@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import BannerCreateModal from './modal/Main/BannerCreateModal';
 import MatchingCompleteModal  from './modal/Main/MatchingCompleteModal';
+import { useDispatch } from 'react-redux';
+import { setGameInfo } from '../../features/arena/gameSlice';
 
 import FindMatch from '../../images/arena/TopBanner/FindMatch.gif';
 import FindMatchAsset from '../../images/arena/TopBanner/FindMatch.png';
@@ -16,6 +18,7 @@ import EffiMode from '../../images/arena/TopBanner/EfficiencyMode.gif';
 import EffiModeAsset from '../../images/arena/TopBanner/EfficiencyMode.png';
 
 export default function TopBanner() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [isFindMatchHovered, setIsFindMatchHovered] = useState(false);
@@ -63,6 +66,7 @@ export default function TopBanner() {
   const enemyNickname = useRef('');
   const userImgSrc = useRef('');
   const enemyImgSrc = useRef('');
+  const startTime = useRef(null);
 
   const handleStartMatching = () => {
     socket.current = new WebSocket('wss://i10d211.p.ssafy.io/matching');
@@ -95,27 +99,28 @@ export default function TopBanner() {
         enemyNickname.current = object.enemyNickname;
         userImgSrc.current = object.userImgSrc;
         enemyImgSrc.current = object.enemyImgSrc;
+        startTime.current = object.startTime;
         // console.log("new obj 데이타!! :", new_obj)
         // console.log("현재 타입 :", object.type)
       }
   
       if (object.type && object.type === 'INGAME') {
         // problemId를 props로 내려주기 -> navigate 활용
-        navigate(
-          {pathname: `/game-list/competition/play/${object.gameId}`},
-          {state: {
-            problemId : problemId.current,
-            gameMode : gameMode.current,
-            lang : lang.current,
-            gameId : gameId.current,
-            userId : userId.current,
-            userNickname: userNickname.current,
-            enemyId : enemyId.current,
-            enemyNickname : enemyNickname.current,
-            userImgSrc: userImgSrc.current,
-            enemyImgSrc: enemyImgSrc.current,
-          }},
-        )
+        dispatch(setGameInfo({
+          problemId: problemId.current,
+          gameMode: gameMode.current,
+          lang: lang.current,
+          gameId: gameId.current,
+          userId: userId.current,
+          userNickname: userNickname.current,
+          enemyId: enemyId.current,
+          enemyNickname: enemyNickname.current,
+          userImgSrc: userImgSrc.current,
+          enemyImgSrc: enemyImgSrc.current,
+          startTime: startTime.current,
+        }));
+        console.log("setGameInfo를 찍었습니다 :", setGameInfo)
+        navigate(`/game-list/competition/play/${object.gameId}`)
       }
       
       if (object.type && object.type === 'CONTINUE') {

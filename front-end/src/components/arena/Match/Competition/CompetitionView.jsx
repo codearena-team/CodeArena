@@ -9,32 +9,41 @@ import { useDispatch, useSelector } from "react-redux";
 import Webrtc from "../../../../pages/test/Webrtc";
 import MainVideo from "../../../../pages/test/MainVideo";
 import { setStompClients, clearStompClient } from "../../../../features/arena/stompClientSlice";
-
+import { disconectRtc } from "../../../../features/arena/rtcSlice";
+import axios from "axios";
 
 export default function CompetitionView() {
+  const userId = useSelector(state => state.auth.userId)
   const params = useParams()
   const navigate = useNavigate();
   const location = useLocation();
-  const problemId = location.state?.problemId;
 
+  const [isBetting, setIsBetting] = useState(false)
+  const [bettingCoin1, setBettingCoin1] = useState(0)
+  const [bettingCoin2, setBettingCoin2] = useState(0)
   const dispatch = useDispatch();
   const stompClient = useSelector(state => state.stompClient.stompClient);
 
   const [elapsedTime, setElapsedTime] = useState(0);
-  const startTimeRef = useRef(location.state?.startTime || 0);
+  // const startTimeRef = useRef(startTime || 0);
   const timerRef = useRef(null);
 
   const [chatList, setChatList] = useState([]);
-  const [chatMessage, setChatMessage] =useState('')
+  const [chatMessage, setChatMessage] = useState('')
   const [inputMessage, setInputMessage] = useState('');
   const recentMessage = useRef(null);
+
+  const [startTime, setStartTime] = useState();
+  const [problemId, setProblemId] = useState();
 
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
   useEffect(() => {
+    const { startTime, problemId } = location.state;
+    setStartTime(startTime);
+    setProblemId(problemId);
     console.log(`이거확인이거확인 ${problemId}`)
     // 경기 시작 시간 확인
-    const startTime = location.state?.startTime;
     console.log("경기 시작 시간 확인 :", startTime)
       
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
@@ -68,15 +77,13 @@ export default function CompetitionView() {
           alert("게임이 종료되었습니다.")
           navigate(
             `/game-list/competition/compSpeedResult/${params.id}`,
-            { state: { gameId: params.id }
-          });
+          );
         }
         else if (msg.type && msg.type === "TERMINATED") {
           alert("경기가 종료되었습니다.")
           navigate(
             `/game-list/competition/compSpeedResult/${params.id}`,
-            { state: { gameId: params.id }
-          });
+          );
         }
 
       });
@@ -93,7 +100,7 @@ export default function CompetitionView() {
     // startTime 시간 - 진행된 시간 계산
     const calculateElapsedTime = () => {
       const currentTime = new Date().getTime();
-      const startTimeMillis = new Date(startTimeRef.current).getTime();
+      const startTimeMillis = new Date(startTime).getTime();
       const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
 
       // 초를 시/분/초 형식으로 변환
@@ -129,6 +136,7 @@ export default function CompetitionView() {
   } else {
     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
     const stompClient = Stomp.over(socket);
+    dispatch(setStompClients(stompClient));
     console.log("useEffect stompClient :", stompClient)
 
     stompClient.connect({}, () => {
@@ -203,6 +211,36 @@ export default function CompetitionView() {
     scrollToBottom();
   }, [chatList.length])
 
+
+
+
+  const clickBetting = (e) => {
+    console.log(e.target.value);
+
+
+    // if (mycoin < bettingCoin1) {
+    //   alert()
+    // }
+
+
+    // const data = {
+    //   myId : userId,
+    //   bettingId : 1,
+    //   coin : 100,
+    // }
+    // axios.post('url',data)
+    // .then(res => {
+
+    // })
+    // .catch(err => {
+
+    // })
+
+    setIsBetting(true)
+
+  }
+
+
   return (
     <div>
       <CompTopInfo gameExitId={params.id} problemId={problemId}/>
@@ -225,8 +263,10 @@ export default function CompetitionView() {
                   width={`200px`}
                   height={`100px`}
                 />
-                <div className="flex justify-center items-center mt-5">
+                <div className="">
                   <p className="text-lg font-bold">{`경과 시간: ${elapsedTime}`}</p>
+                  <button  onClick={()=>document.getElementById('bettingModal').showModal()}
+                  className="btn bg-rose-200 w-full text-lg">배팅하기</button>
                 </div>
               </div>
               <div className=" rounded-lg mt-4 w-full" >
@@ -287,6 +327,56 @@ export default function CompetitionView() {
           </div>
         </div>
       </div>
+
+      
+
+
+      <dialog id="bettingModal" className="modal">
+        <div style={{backgroundColor: '#F5EBDB' }} className="modal-box text-black">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 className="font-bold text-lg text-center">배팅</h3>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col items-center">
+              <div className=" bg-black w-36 h-36">
+                {/* 썸네일 */}
+              </div>
+              <p className="text-2xl mb-2"> use1 닉네임</p>
+              <p className="text-xl mb-2"> use1 레이팅</p>
+              {!isBetting ?
+              <div className="flex">
+                <input onClick={e=>setBettingCoin1(e.target.value)} type="number" className="input input-bordered w-24"></input>
+                <button onClick={clickBetting} className="btn" value={1}>배팅</button>
+              </div>
+              :
+              <p>5분전은 비어있고 5분후면 배팅현황</p>
+              }
+            </div>
+            <div className="flex flex-col items-center">
+              <div className=" bg-black w-36 h-36">
+                {/* 썸네일 */}
+              </div>
+              <p className="text-2xl mb-2"> use2 닉네임</p>
+              <p className="text-xl mb-2"> use2 레이팅</p>
+              {!isBetting ?
+              <div className="flex">
+                <input onClick={e=>setBettingCoin2(e.target.value)} type="number" className="input input-bordered w-24"></input>
+                <button onClick={clickBetting} className="btn" value={2}>배팅</button>
+              </div>
+              :
+              <p>5분전은 비어있고 5분후면 배팅현황</p>
+              }
+            </div>
+          </div>
+        </div>
+      </dialog>
+        
+
+
+
+
     </div>
   );
 } 

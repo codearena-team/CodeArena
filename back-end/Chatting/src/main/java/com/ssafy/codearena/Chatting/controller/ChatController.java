@@ -276,7 +276,6 @@ public class ChatController {
 
         //효율전
         else if(message.getMode() == ChatSubmitMessage.MessageType.EFFI){
-
             SubmitResultMessage submitResultDto = new SubmitResultMessage();
             submitResultDto.setType(SubmitResultMessage.resultType.CONTINUE);
             submitResultDto.setGameId(message.getGameId());

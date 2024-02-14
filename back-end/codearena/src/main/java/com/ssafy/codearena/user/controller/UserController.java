@@ -84,7 +84,6 @@ public class UserController {
     public ResponseEntity<UserResultDto> getFollowingList(@PathVariable String userId) {
         return new ResponseEntity<UserResultDto>(userService.getFollowingList(userId), HttpStatus.OK);
     }
-
-
-
+//    @GetMapping("/rating/{userNickname}")
+//    public ResponseEntity<UserResultDto> getUserRatingByNickname(@PathVariable String userNickname)
 }

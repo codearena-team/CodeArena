@@ -1,9 +1,8 @@
 //받은 알림함 리스트
-import "../css/ProblemListItem.css"
 import { useState } from "react"
 import axios from "axios"
 import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 export default function ReceiveListItem(probs) {
   const navigate = useNavigate()
@@ -62,8 +61,16 @@ export default function ReceiveListItem(probs) {
           <option value="거절">거절</option>
         </select>
       </th>
-      <th className="p-1 font-thin" onClick={onClick}>{split}
-        <span style={{color: "blue", textDecoration: "underline" }}>{split2}</span></th>
+      { cate===3 ?
+        <th className="p-1 font-thin" onClick={onClick}>{split}
+          <span style={{color: "blue", textDecoration: "underline" }}>{split2}</span>
+        </th>
+      :
+      <th className="p-1 font-thin"><Link to={``}>{split}</Link>
+      </th>
+    
+      }
+
       <th className="p-1 font-thin">{probs.receiveItem.fromNickname}</th>
       <th className="p-1 font-thin">{probs.receiveItem.alarmDate}</th>
     </tr>

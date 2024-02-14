@@ -1,13 +1,13 @@
 import Tropy from '../../../../images/arena/Result/tropy.png'
-import Victory from '../../../../images/arena/Result/victory.png'
 import '../../../css/resultpage.css'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import SubmitItem from './compSubmitItemList'
 
 export default function EffiResult (){
-  const location = useLocation();
+  const gameId = useSelector(state => state.game.gameId);
 
   const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
@@ -16,12 +16,18 @@ export default function EffiResult (){
   const [loserRating, setLoserRating] = useState('');
   const [winnerSsumnail, setWinnerSsumnail] = useState('');
   const [loserSsumnail, setLoserSsumnail] = useState('');
+  const [pgno, setPgno] = useState();
+  const [pageCount, setPageCount] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [submitList, setSubmitList] = useState([]);
 
-  useEffect(() => {
-    const { gameId } = location.state;
-    setUserGameData(gameId.current)
+  const changeParams = (key, value) => {
+    searchParams.set(key,value)
+    setSearchParams(searchParams)
+  }
 
+  useEffect(() => {
+    setUserGameData(gameId)
     axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${gameId}`)
       .then(res => {
         console.log('여기 json 받았어요', res.data);
@@ -44,6 +50,14 @@ export default function EffiResult (){
         console.log("서브밋 리스트 확인:", newArray)
       })
   }, []);
+
+  const pageNation = () => {
+    const result = [];
+    for (let i = 0; i < pageCount; i++) {
+      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(pgno ==`${i+1}`) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
+    }
+    return result;
+  }
 
   return(
     <div className='flex flex-col mt-10 '>
@@ -112,7 +126,7 @@ export default function EffiResult (){
           <div></div>
           <div className="join">
             <button className="join-item btn btn-sm">{'<<'}</button>
-            {/* {pageNation()} */}
+            {pageNation()}
             <button className="join-item btn btn-sm">{'>>'}</button>
           </div>
           <div></div>

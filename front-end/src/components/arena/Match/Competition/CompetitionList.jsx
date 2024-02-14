@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link,useNavigate,useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import '../../../css/shake.css';
 import EnterModal from '../../modal/Competition/CompEnterModal';
 import axios from 'axios';
+import '../../../../pages/css/problemsolve.css'
 
 export default function CompetitionList() {
-  const navigate = useNavigate();
-  const [searchText, setSearchText] = useState(''); // 검색어 텍스트 입력
+  // const navigate = useNavigate();
+  // const [searchText, setSearchText] = useState(''); // 검색어 텍스트 입력
   const [selectedButton, setSelectedButton] = useState('competition'); // 선택된 버튼 타입-> 첫 렌더링되었을 때 "경쟁전" 화면부터 보이도록
-  const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
+  // const [searchAnimation, setSearchAnimation] = useState(false); // Enter 키 눌러졌을 때 애니메이트
 
   const [pageCount, setPageCount] = useState(1)
   const [searchParams,setSearchParams] = useSearchParams()
@@ -131,9 +132,8 @@ export default function CompetitionList() {
 
       {/* 테이블 헤더 */}
       <div
-        className="grid grid-cols-8 bg-gray-200 text-gray-700 py-2 rounded-md relative z-10"
-        style={{ backgroundColor: '#E3E6D9' }}
-      >
+        className="grid grid-cols-[10%,25%,10%,10%,10%,10%,10%,15%] bg-gray-200 text-gray-700 py-2  rounded-tr-md relative z-10"
+        style={{ backgroundColor: '#E3E6D9' }}>
         <div className="text-center">문제번호</div>
         <div className="text-center">방제목</div>
         <div className="text-center">플레이어1</div>
@@ -146,7 +146,9 @@ export default function CompetitionList() {
 
       {/* 데이터 리스트 */}
       {problemData.map((item, index) => (
-        <div key={index} className="grid w-full grid-cols-8 border-b py-2 items-center rounded-xl shadow-sm hover:bg-gray-300">
+        <div key={index} className="grid w-full grid-cols-[10%,25%,10%,10%,10%,10%,10%,15%] border-b py-2 items-center  shadow-sm 
+        change"
+        >
           <div className="text-center">{item.problemId}</div>
           <div className="text-center">{item.title}</div>
           <div className="text-center">{item.userRed}</div>

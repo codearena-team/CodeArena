@@ -11,5 +11,6 @@ public class UserInfoDto {
     private String speedRating;
     private String effiRating;
     private String userThumbnail;
+    private String userCoin;
     private int isFollow;
 }

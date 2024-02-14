@@ -4,6 +4,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { setStreamManager } from '../../features/arena/rtcSlice';
+import { setMySesssion } from '../../features/arena/rtcSlice';
 import UserVideoComponent from './UserVideoComponent';
 import registerServiceWorker from './../../registerServiceWorker';
 
@@ -38,7 +39,7 @@ class Webrtc extends Component {
         mainStreamManager: stream
       });
     }
-    this.props.action(stream)
+    this.props.setMain(stream)
   }
 
   componentDidMount() {
@@ -53,7 +54,7 @@ class Webrtc extends Component {
 
   onbeforeunload(event) {
     this.leaveSession();
-    this.props.action(undefined)
+    this.props.setMain(undefined)
   }
 
   handleChangeCustomSessionId(e) {
@@ -79,6 +80,24 @@ class Webrtc extends Component {
     }
   }
 
+  leaveSession() {
+    const mySession = this.state.session;
+
+    if (mySession) {
+      mySession.disconnect(() => {
+        // Empty all properties...
+        this.OV = null;
+        this.setState({
+          session: undefined,
+          subscribers: [],
+          customSessionId: 'SessionA',
+          myUserName: 'Participant' + Math.floor(Math.random() * 100),
+          publisher: undefined
+        });
+      });
+    }
+  }
+  
   joinSession() {
     // --- 1) Get an OpenVidu object ---
 
@@ -92,7 +111,6 @@ class Webrtc extends Component {
       },
       () => {
         var mySession = this.state.session;
-
         // --- 3) Specify the actions when events take place in the session ---
 
         // On every new Stream received...
@@ -168,28 +186,10 @@ class Webrtc extends Component {
         });
       },
     );
+    
+    this.props.setSesssion(this.state.session)
   }
 
-  leaveSession() {
-
-    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-
-    const mySession = this.state.session;
-
-    if (mySession) {
-      mySession.disconnect();
-    }
-
-    // Empty all properties...
-    this.OV = null;
-    this.setState({
-      session: undefined,
-      subscribers: [],
-      customSessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
-      publisher: undefined
-    });
-  }
 
   render() {
     const customSessionId = this.state.customSessionId;
@@ -283,7 +283,8 @@ class Webrtc extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    action: (action) => dispatch(setStreamManager(action))
+    setMain: (action) => dispatch(setStreamManager(action)),
+    setSesssion: (action) => dispatch(setMySesssion(action))
   }
 }
 

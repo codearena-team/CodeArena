@@ -7,7 +7,7 @@ export default function GroupLobbyModal({ groupId }) {
 
   return (
     <div>
-      <button className="btn" onClick={() => document.getElementById(`groupLobbyModal_${groupId}`).showModal()}>참여하기</button>
+      <button className="btn btn-sm" onClick={() => document.getElementById(`groupLobbyModal_${groupId}`).showModal()}>참여하기</button>
       <dialog id={`groupLobbyModal_${groupId}`} className="modal">
         <div className="modal-box">
           {groupLobbyPath} {/* 경로 확인용 */}

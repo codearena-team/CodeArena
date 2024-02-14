@@ -3,8 +3,9 @@ import C_ExitModal from "../../modal/Competition/C_ExitModal";
 import DetailWindow from '../../../problem/DetailWindow';
 import { useEffect } from "react";
 import axios from "axios";
+import './../../../css/testcasemodal.css'
 
-export default function TopInfo({ gameExitId,problemId}) {
+export default function TopInfo({ gameExitId, problemId}) {
   const [panelWidths, setPanelWidths] = useState({
     left: 60,
     right: 40,
@@ -60,14 +61,14 @@ export default function TopInfo({ gameExitId,problemId}) {
         </button>
         {/* 문제모달창 */}
         <dialog id="openProblem" className="modal">
-          <div className="modal-box w-11/12 max-w-5xl">
-            <div className="rounded-lg p-5 mb-5" style={{backgroundColor: '#F4ECE4'}}>
+          <div style={{backgroundColor: '#F5EBDB'}} className="modal-box w-11/12 max-w-5xl scrollBar" >
+            <div className="rounded-lg p-5 mb-3" style={{backgroundColor: '#F4ECE4'}}>
               <div className="flex items-center">
                 <p className="mr-2">#{problemId}</p>
                 <h3 className="font-bold text-2xl">{problemTitle}</h3>
               </div>
             </div>
-            <div className="rounded-lg p-5 " style={{backgroundColor: '#F4ECE4'}}>
+            <div className="rounded-lg p-4 " style={{backgroundColor: '#F4ECE4'}}>
               <DetailWindow problem={problem}/>
             </div>
             <div className="modal-action">

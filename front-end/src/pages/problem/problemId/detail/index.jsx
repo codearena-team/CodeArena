@@ -91,8 +91,8 @@ export default function ProblemDetail() {
     }
   }
   return(
-    <div className="grid grid-cols-2 p-8 h-full pt-0">
-      <div>
+    <div className="grid grid-cols-1 p-8 h-full pt-0 lg:grid-cols-2">
+      <div className="ms-4 lg:ms-0">
         <div className="leftUp drop-shadow p-5">
           <div className="flex">
             <h1 className="text-3xl mb-2 "><span className="text-lg">#{problem.problemId}  </span>{problem.problemTitle}</h1>

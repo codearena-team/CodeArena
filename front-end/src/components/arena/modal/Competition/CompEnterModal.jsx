@@ -10,18 +10,15 @@ export default function EnterModal({ competitionId, startTime, problemId }) {
 
   const handlerYes = (() => {
     navigate(
-      {pathname: `/game-list/competition/view/${competitionId}`},
-      {state: {
-        startTime: startTime,
-        problemId
-      }},
-    )
-  })
+      `/game-list/competition/view/${competitionId}`,
+      { state : { startTime: startTime, problemId: problemId}}
+    );
+  });
 
   dispatch(setGameId(competitionId))
   return (
     <div>
-      <button className="btn" onClick={() => document.getElementById(competitionId).showModal()}>관전하기</button>
+      <button className="btn btn-sm" onClick={() => document.getElementById(competitionId).showModal()}>관전하기</button>
       <dialog id={competitionId} className="modal">
         <div className="modal-box">
             <h3 className="font-bold text-lg mb-4 text-center">경쟁전을 관전하시겠습니까?</h3>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../../../css/resultpage.css'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import SubmitItem from './compSubmitItemList'
 
 export default function EffiDraw (){
-  const location = useLocation();
+  const gameId = useSelector(state => state.game.gameId);
 
   const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
@@ -13,10 +15,18 @@ export default function EffiDraw (){
   const [loserRating, setLoserRating] = useState('');
   const [winnerSsumnail, setWinnerSsumnail] = useState('');
   const [loserSsumnail, setLoserSsumnail] = useState('');
+  const [pgno, setPgno] = useState();
+  const [pageCount, setPageCount] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [submitList, setSubmitList] = useState([]);
+
+  const changeParams = (key, value) => {
+    searchParams.set(key,value)
+    setSearchParams(searchParams)
+  }
 
   useEffect(() => {
-    const { gameId } = location.state;
-    setUserGameData(gameId.current)
+    setUserGameData(gameId)
     console.log('넘어와야하는 gameId :', gameId)
     axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${gameId}`)
       .then(res => {
@@ -32,7 +42,22 @@ export default function EffiDraw (){
         console.error('에러 발생:', error);
       });
 
+    axios.get('https://i10d211.p.ssafy.io/game/rest/effi/list?gameId='+`${gameId}`)
+    .then(res => {
+      console.log('여기 제출 리스트 받았어요', res.data)
+      const newArray = [...res.data.data.list]
+      setSubmitList(newArray)
+      console.log("서브밋 리스트 확인:", newArray)
+    }) 
   }, []);
+
+  const pageNation = () => {
+    const result = [];
+    for (let i = 0; i < pageCount; i++) {
+      result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(pgno ==`${i+1}`) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
+    }
+    return result;
+  }
 
   return(
     <div className='flex flex-col mt-20'>
@@ -56,7 +81,7 @@ export default function EffiDraw (){
               </div>
               <h1 className='text-3xl font-bold mb-5 mt-5'>{winnerNickname}</h1>
               <h1 className="text-2xl mb-5" style={{color:"skyblue"}}>{winnerRating}</h1>
-              <h1>아쉽게도 비기고 말았어요 !</h1>
+              <h1>아무도 문제를 풀지 못해 비겼어요 !</h1>
             </div>
           </div>
         </div>
@@ -80,7 +105,7 @@ export default function EffiDraw (){
               </div>
               <h1 className='text-3xl font-bold mb-5 mt-5'>{loserNickname}</h1>
               <h1 className="text-2xl mb-5" style={{color:"skyblue"}}>{loserRating}</h1>
-              <h1>아쉽게도 비기고 말았어요 !</h1>
+              <h1>아무도 문제를 풀지 못해 비겼어요 !</h1>
             </div>
           </div>
         </div>
@@ -112,14 +137,15 @@ export default function EffiDraw (){
               </tr>
             </thead>
             <tbody className="font-normal">
-             {/* {submitList.map((submit,index)=>{
-              return(
-             <SubmitItem 
-              key={submit.submitNo}
-              submitItem={submit}
-              index={index}
-             />
-             )})} */}
+              {submitList.map((submit, index)=>{
+                console.log(submit)
+                return (
+              <SubmitItem
+                  key={index}
+                  submitItem={submit}
+                  index={index}
+              />
+              )})}
             </tbody>
           </table>
         </div>
@@ -128,7 +154,7 @@ export default function EffiDraw (){
           <div></div>
           <div className="join">
             <button className="join-item btn btn-sm">{'<<'}</button>
-            {/* {pageNation()} */}
+            {pageNation()}
             <button className="join-item btn btn-sm">{'>>'}</button>
           </div>
           <div></div>

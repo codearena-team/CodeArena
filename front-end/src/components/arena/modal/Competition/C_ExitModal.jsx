@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { clearStompClient } from "../../../../features/arena/stompClientSlice";
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ export default function CompetitionExitModal({ gameExitId }) {
     }
     dispatch(clearStompClient());
     navigate('/arena')
+    // window.location.href = '/arena';
 
     axios.get('https://i10d211.p.ssafy.io/game/chat/exit?gameId=' + `${gameId}`)
       .then((res)=> {
@@ -26,6 +27,7 @@ export default function CompetitionExitModal({ gameExitId }) {
       .catch((err) => {
         console.log(err)
       })
+    window.location.reload();
   }
 
   return (

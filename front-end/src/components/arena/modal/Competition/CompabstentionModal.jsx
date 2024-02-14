@@ -1,50 +1,31 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setStompClients, clearStompClient } from "../../../../features/arena/stompClientSlice";
 
 export default function AbstentionModal() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const sender = useRef(useSelector(state => state.auth.userNickname));
-  const Location = useLocation();
-  const [stompClient, setStompClient] = useState(null);
-  const [problem, setProblem] = useState({})
-  const [gameMode, setGameMode] = useState("");
-  const [problemId, setProblemId] = useState(""); 
-  const [userId, setUserId] = useState("");
-  const [gameId, setGameId] = useState(""); 
+  const {
+    problemId,
+    gameMode,
+    userId,
+    gameId
+  } = useSelector(state => state.game);
+  const stompClient = useSelector(state => state.stompClient.stompClient);
+
   useEffect(()=> {
-    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
-    const stompClient = Stomp.over(socket);
+
     console.log("useEffect stompClient :", stompClient)
     
-    const { problemId, gameMode, lang, userId, gameId } = Location.state;
-    console.log("여기서 진짜 넘어와야함 :", problemId)
-    // setGameMode
-    setGameMode(gameMode);
-    setProblemId(problemId);
-    setUserId(userId);
-    setGameId(gameId);
-    stompClient.connect({}, () => {
-      // 연결
-      console.log('채팅과 연결이 되었어요 !')
-      stompClient.subscribe('/sub/chat/room/'+`${gameId.current}`, (message) => {
-        // 받은 메시지에 대한 처리
-        const data = JSON.parse(message.body);
-        console.log(data);
-        
-      });
-      }, error => {
-      // 에러
+    console.log("넘어온 problemId 번호 확인 :", problemId)
+    
+  },[gameId])
 
-      console.error("채팅 연결 에러났음", error)
-      alert("연결에 문제가 있습니다. 다시 시도해주세요.")
-      // 필요한 경우 여기에서 재연결 로직을 구현
-    });
-    setStompClient(stompClient);
-  },[])
+  // 기권할래요 동작 함수
   const clickHandler = () => {
     console.log('기권했어요', stompClient.send)
     stompClient.send(`/pub/chat/leave`, {}, JSON.stringify({
@@ -54,8 +35,15 @@ export default function AbstentionModal() {
       mode : gameMode === 'speed' ? 0 : 1,
       type: 'PLAYER_EXIT',
     }))
+    
+    stompClient.unsubscribe('/sub/chat/room/'+`${gameId}`);
+    stompClient.unsubscribe('/pub/chat/leave');
+    stompClient.disconnect();
+    dispatch(clearStompClient());
     navigate('/arena')
+    window.location.reload()
   }
+
   return (
     <div>
       <dialog id="comp_abstention" className="modal">

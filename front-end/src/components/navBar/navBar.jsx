@@ -1,5 +1,5 @@
-import { useState, Fragment } from 'react'
-import { Link,useNavigate } from 'react-router-dom'
+import { useState, Fragment, useEffect } from 'react'
+import { Link,useNavigate, useLocation } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/24/outline'
 import Logo from '../../images/common/logo.png'
@@ -27,11 +27,17 @@ function classNames(...classes) {
 }
 
 export default function NavBar() {
+  const location = useLocation()
   const isLogin = useSelector(state => state.auth.isLogin);
-  const nickName = useSelector(state => state.auth.userNickname)
+  const nickName = useSelector(state => state.auth.userNickname);
+  const profileImg = useSelector(state => state.auth.userThumbnail)
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  
+
+    
+  useEffect(()=> {
+    console.log(location);
+  },[location])
   const filterNav = isLogin ? navigation.filter(item => item.name != 'Login') : navigation;
 
   const handleLogout = ()=>{
@@ -99,10 +105,11 @@ export default function NavBar() {
                     {isLogin && (
                       <Menu as="div" className="relative ml flex">
                         <div className="my-auto">
-                          <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2">
+                          <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2
+                          hover:scale-110" style={{ transition: 'transform 0.2s' }}>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src={Profile}
+                            src={profileImg}
                             alt=""
                           />
                           </Menu.Button>

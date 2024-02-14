@@ -94,28 +94,28 @@ export default function CommunityEdit(){
   return(
     <div className="ml-64 mr-64 mt-10">
       <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
-        <div className='flex justify-end mb-4'>
-          <label className="me-1 py-3" htmlFor="title">제목</label>
+        <div className='flex'>
+          <div className='w-1/12'></div>
+          <label className="me-1 py-2" htmlFor="title">제목</label>
+        </div>
+        <div className='flex justify-end mb-4'>         
           <input type="text" id="title" className="input input-bordered w-10/12" value={title} 
           onChange={(e)=>{setTitle(e.target.value)}} />
           <div className='w-1/12'></div>
         </div>
-        <div className='flex justify-end mb-4'>
-          <label className="me-1 py-3" htmlFor="title">문제번호</label>
-          <input type="text" id="title" className="input input-bordered w-10/12" value={problemId}/>
-          <div className='w-1/12'></div>  
+        <div className='flex items-center mb-4'>
+          <div className='w-1/12'></div>
+          <label className="me-1 py-2" htmlFor="title">문제번호</label>
+          <input type="text" id="title" className="input input-bordered mr-7" value={problemId}
+          style={{outline:'none'}} readOnly/>
+          <label className="me-1 py-2" htmlFor="rating">카테고리</label>
+          <input id="rating" value={cate} className="input input-bordered" type="text" 
+          style={{outline:'none'}} readOnly/>       
         </div>
-
-        <div className='flex justify-start mb-4'>
-          <div className='ml-6'>
-            <label className="me-1 py-3" htmlFor="rating">카테고리</label>
-            <input id="rating" value={cate} className="input input-bordered w-6/12" type="text" />     
-          </div>
-        </div>
-
-        <div className='flex justify-start mb-4'>
-          <div className='flex justify-center items-center ml-3'>
-            <label className="me-1 py-3 ml-10" htmlFor="rating">언어</label>
+        <div className='flex justify-start mb-2'>
+          <div className='w-1/12'></div>
+          <div className='flex justify-center items-center '>
+            <label className="me-2 py-3" htmlFor="rating">언어</label>
               <select value={lang} onChange={(e)=>{setLang(e.target.value)}} className="select select-sm select-bordered mr-6" >
                 <option>java</option>
                 <option>python</option>
@@ -129,16 +129,20 @@ export default function CommunityEdit(){
               checked={spoiler === 1} onClick={onClickCheckbox}/></div>
           </div>
         </div>
- 
+        <div className='flex'>
+          <div className='w-1/12'></div>
+          <label className=" me-1 py-2"htmlFor="content">내용</label>
+        </div>
         <div className='flex justify-end mb-4'>
-          <label className=" me-1"htmlFor="content">내용</label>
           <textarea className="textarea textarea-bordered w-10/12 resize-none" 
           id="content" rows="10" value={content} 
           onChange={(e)=>{setContent(e.target.value)}}></textarea>
           <div className='w-1/12'></div>
-        </div>    
+        </div>
+
+
         <div className='grid grid-cols-12 mb-4'>
-          <label className="me-1 col-span-1 text-end"htmlFor="inputEx">코드</label>
+          <label className="me-1 col-span-1 text-end"htmlFor="inputEx"></label>
           <div className=' col-span-10'>
             <Editor height="400px" id="inputEx" language={lang}
             value={code} onChange={onChangeTestCode}

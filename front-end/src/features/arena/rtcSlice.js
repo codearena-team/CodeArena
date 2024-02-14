@@ -14,6 +14,8 @@ export const rtcSlice = createSlice({
       state.mySession = action.payload
     },
     disconectRtc : (state,action) =>{
+      state.mySession.close()
+      state.streamManager = null
     }
   }
 })

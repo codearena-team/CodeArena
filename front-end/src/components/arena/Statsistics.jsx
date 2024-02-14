@@ -61,7 +61,7 @@ export default function StatsisticsPage() {
     }
     axios.get('https://i10d211.p.ssafy.io/game/rest/user/record', {headers})
     .then((res)=> {
-      setRecord(res)
+      setRecord(res.data.data.record)
       setData(Object.entries(res.data.data.record).map(([key,value])=>{
         return {name:key.split('Count'), value:value}
       }))
@@ -112,13 +112,13 @@ export default function StatsisticsPage() {
             YOUR <span style={powerStyle}>ARENA</span> GRAPH {/* 차트 제목 */}
           </h1>
           <div className="ml-5 text-center" style={subTitleStyle}>
-          {record.winCount + record.drawCount + record.defeatCount}전 {record.winCount}승 {record.drawCount}무 {record.defeatCount}패 {/* 소제목 */}
+          {record.winCount}승 {record.drawCount}무 {record.defeatCount}패 {/* 소제목 */}
           </div>
           <ResponsiveContainer width="100%" height={350}> {/* 차트를 반응형으로 감싸는 컨테이너 */}
             {/* PieChart : 원형 차트 모양으로 변환 */}
             <PieChart>
               {/* Tooltip : 마우스를 데이터 포인트 위로 올리면 정보 보여주기 */}
-              <Tooltip />
+              <Tooltip formatter={(value, name) => [`${value}`, `${name}`]} />
               {/* Pie : 실제 원형 차트 데이터 삽입 */}
               <Pie
                 data={data} // 데이터 전달
@@ -129,7 +129,6 @@ export default function StatsisticsPage() {
                 fill="#8884d8" // 차트 색상
                 paddingAngle={5} // 각 섹션 사이 간격
                 dataKey="value" // 데이터에서 값에 해당하는 키 지정
-                label={({ name, percent }) => `${name} ${formatPercent(percent)}`} // 데이터에서의 이름과 퍼센트
               >
                 {data.map((entry, index) => (
                   // Cell : 각 섹션의 스타일을 설정하기 위함 -> key는 index값, fill은 컬러 채우기

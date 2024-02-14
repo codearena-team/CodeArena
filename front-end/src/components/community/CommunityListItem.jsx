@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import "../css/ProblemListItem.css";
 
 
 
@@ -9,7 +8,6 @@ export default function CommunityListItem(probs) {
     navigate((`/community/${probs.communityItem.articleNo}/detail`))
   }
   return(
-
     <tr onClick={onClick} className="cell-height2 border-b-2 border-gray"
     style={{cursor:"pointer"}}>
       <th className="p-1 font-thin" >{probs.communityItem.articleNo}</th>
@@ -23,6 +21,5 @@ export default function CommunityListItem(probs) {
       <th className="p-1 font-thin">{probs.communityItem.date.split(' ')[0]}</th> 
       <hr  />
     </tr>
-
   )
 }
