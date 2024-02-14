@@ -444,7 +444,7 @@ public class ChatServiceImpl implements ChatService{
                 for(BatUserCoinDto dto : list) {
 
                     //한명씩 비율과 계산한 후 갱신
-                    battingMapper.updateUserPlusCoin(dto.getUserId(), String.valueOf(dto.getUserCoin()));
+                    battingMapper.updateUserCoin(dto.getUserId(), String.valueOf(dto.getUserCoin()));
                 }
 
             }
