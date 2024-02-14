@@ -273,14 +273,25 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 for (MatchDto player : players) {
                     if (player.getIsOk() == null) continue;
                     if (player.getIsOk()) {
-                        redisTemplate.opsForZSet().add(player.getQueueKey(), player.getUserId() + " " + player.getUserNickname(), player.getEnqueueTime());
+                        WebSocketSession okPlayer = CLIENTS.get(userWithSessionId.get(player.getUserId()+" "+player.getUserNickname()));
+                        if(okPlayer!= null && okPlayer.isOpen()){
+                            String[] frags = player.getQueueKey().split("-");
+                            String mode = frags[0];
+                            String lang = frags[1];
+                            MessageDto send = makeMessage(MessageDto.MessageType.CONTINUE, mode, null, player.getUserId(), lang, null, player.getUserNickname() + "은 매칭큐에 지속됩니다.", player.getQueueKey(), player.getUserNickname(), null, null, null);
+                            log.debug("[CONTINUE] server send to player message : {}", send);
+                            okPlayer.sendMessage(new TextMessage(objectMapper.writeValueAsString(send)));
+                            redisTemplate.opsForZSet().add(player.getQueueKey(), player.getUserId() + " " + player.getUserNickname(), player.getEnqueueTime());
+                        }
+                        
+
                     } else {
                         noCount++;
                         session.close();
                     }
                 }
 
-                if (noCount == 2) {
+                if (noCount > 0) {
                     if(recMatchId !=null && matchMap.containsKey(recMatchId)){
                         matchMap.remove(recMatchId);
                     }
