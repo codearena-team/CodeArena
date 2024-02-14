@@ -55,7 +55,8 @@
     <select id="getPlayerCount" parameterType="map" resultMap="batCount">
         SELECT (SELECT COUNT(bat_player_id) FROM battingWHERE game_id = #{gameId} AND bat_playerId = #{player1Id}) as player1_coin
         , (SELECT COUNT(bat_player_id) FROM batting WHERE game_id = #{gameId} AND bat_playerId = #{player2Id}) as player2_coin;
-
+    </select>
+    
     <!-- 특정 승자에 대해 배팅한 유저들의 ID, Coin 조회 쿼리 -->
     <select id="getUserBatCoin" parameterType="string" resultMap="userCoins">
         SELECT bat_user_id, bat_coin
