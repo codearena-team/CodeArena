@@ -49,4 +49,5 @@ public class BattingController {
         return new ResponseEntity<>(battingService.getBatStatus(map), HttpStatus.OK);
     }
 
+
 }
