@@ -95,16 +95,41 @@ export default function CompetitionView() {
           alert(msg.result)
         }
         else if (msg.type && msg.type === "END") {
+          console.log(msg);
           alert("게임이 종료되었습니다.")
-          navigate(
-            `/game-list/competition/compSpeedResult/${params.id}`,
-          );
+          if (!msg.winner) {
+            if (game?.gameMode === '1') {
+              navigate(
+                `/game-list/competition/compEffiDraw/${params.id}`,
+              );
+            } else {
+              navigate(
+                `/game-list/competition/compSpeedDraw/${params.id}`,
+              );
+            }
+          } else {
+            if (game?.gameMode === '1') {
+              navigate(
+                `/game-list/competition/compEffiResult/${params.id}`,
+              );
+            } else {
+              navigate(
+                `/game-list/competition/compSpeedResult/${params.id}`,
+              );
+            }
+          }
         }
         else if (msg.type && msg.type === "TERMINATED") {
           alert("경기가 종료되었습니다.")
-          navigate(
-            `/game-list/competition/compSpeedResult/${params.id}`,
-          );
+          if (game?.gameMode === '1') {
+            navigate(
+              `/game-list/competition/compEffiDrow/${params.id}`,
+            );
+          } else {
+            navigate(
+              `/game-list/competition/compSpeedDrow/${params.id}`,
+            );
+          }
         }
       });
     }, error => {
@@ -406,7 +431,9 @@ export default function CompetitionView() {
             </div>
           </div>
         </div>
-      </div>
+      
+      
+      
       
       <dialog id="bettingModal" className="modal">
         <div style={{backgroundColor: '#F5EBDB'}} className="modal-box text-black p-10 w-8/12 max-w-3xl ">
@@ -433,9 +460,9 @@ export default function CompetitionView() {
             </div>
           </div>
           <div className="grid grid-cols-2">
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center border-r border-gray-400">
              
-              <div className="grid grid-cols-2 border-r border-gray-400">
+              <div className="grid grid-cols-2">
                 <div>
                   <div className="flex items-center mb-2 tooltip" data-tip="레이팅">
                     <img src={score} alt="people" className="h-6"/>
@@ -518,6 +545,9 @@ export default function CompetitionView() {
           </div>
         </div>
       </dialog>
+      
+      </div>
+      
         
     </div>
   );

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../../../css/resultpage.css'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import SubmitItem from './compSubmitItemList'
 
 export default function EffiDraw (){
   const gameId = useSelector(state => state.game.gameId);
-
+  const navigate = useNavigate()
   const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
   const [winnerRating, setWinnerRating] = useState('');
@@ -57,6 +57,11 @@ export default function EffiDraw (){
       result.push(<button onClick={()=>changeParams('pgno',i+1)} key={i} className={(pgno ==`${i+1}`) ? "btn-active join-item btn btn-sm" : "join-item btn btn-sm"}>{i+1}</button>);
     }
     return result;
+  }
+
+  const onClickexit = () => {
+    navigate('/arena')
+    window.location.reload()
   }
 
   return(
@@ -112,14 +117,13 @@ export default function EffiDraw (){
       </div>
 
       <div className='flex justify-center '>
-        <Link to='/arena'>
           <button
             className="btn btn-sm btn-active drop-shadow text-md" 
             style={{backgroundColor:'#E2E2E2'}}
+            onClick={onClickexit}
           >
             아레나로 돌아가기
           </button>
-        </Link>
       </div>
       
       {/* 문제제출정보테이블 */}

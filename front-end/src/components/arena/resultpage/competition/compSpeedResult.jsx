@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Tropy from '../../../../images/arena/Result/tropy.png'
 import Victory from '../../../../images/arena/Result/victory.png'
 import '../../../css/resultpage.css'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 export default function SpeedResult (){
   const params = useParams();
   const gameId = useSelector(state => state.game.gameId);
-
+  const navigate = useNavigate()
   // const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
   const [winnerRating, setWinnerRating] = useState('');
@@ -18,10 +18,16 @@ export default function SpeedResult (){
   const [winnerSsumnail, setWinnerSsumnail] = useState('');
   const [loserSsumnail, setLoserSsumnail] = useState('');
 
+  
+  const onClickexit = () => {
+    navigate('/arena')
+    window.location.reload()
+  }
+
   useEffect(() => {
     // setUserGameData(gameId)
     console.log('넘어와야하는 gameId :', gameId)
-    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${gameId}`)
+    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${params.id}`)
       .then(res => {
         console.log('여기 json 받았어요', res.data);
         setWinnerNickname(res.data.data.winnerId);
@@ -94,14 +100,12 @@ export default function SpeedResult (){
 
       {/* 아레나 돌아가기 */}
       <div className='mt-32 flex justify-center'>
-        <Link to='/arena'>
-          <button
+          <button onClick={onClickexit}
             className="btn btn-md btn-active drop-shadow text-md" 
             style={{backgroundColor:'#E2E2E2'}}
           >
             아레나로 돌아가기
           </button>
-        </Link>
       </div>
     </div>
   )
