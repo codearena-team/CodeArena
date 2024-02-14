@@ -32,8 +32,6 @@ export function useAuthCheck() {
           await checkAccess()
           return true
         }
-        dispatch(logout())
-        navigate('/login', { replace: true })
         return false
       }
       return true

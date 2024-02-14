@@ -355,41 +355,41 @@ input.txt                                       output.txt
             <button className='btn btn-sm btn-neutral ms-4' onClick={onClickComfile}>컴파일</button>
             <button className="btn btn-sm btn-neutral ms-4" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
             <dialog id="TagModal" className="modal">
-                <div className="modal-box" style={{backgroundColor:'rgb(245, 245, 236)'}}>
-                  <div className="modal-action flex justify-between mb-4 mt-0">
-                    <div className="w-12"></div>
-                    <h3 className="font-bold text-lg text-center ms-">문제의 알고리즘 유형을 선택하세요</h3>
-                    <form method="dialog">
-                      <button className="btn-sm btn rounded-full">X</button>
-                    </form>
-                  </div>
-                  <div className="text-center">
-                    <div>
-                      <p className="font-bold ms-4 mt-1 me-2">알고리즘</p>
-                      <select value={'선택'} onChange={onClickCate} className="select select-sm select-bordered w-20" >
-                        <option disabled='true'>선택</option>
-                        {cateList.map((cate)=>{
-                          return(
-                            <option key={cate} onClick={onClickCate}>{cate}</option>
-                          )
-                        })}
-                      </select>
-                    </div>
-                    <div className="px-4 mt-4 grid grid-cols-3 gap-4" >
-                      {selectedList.map((selected)=>{
+              <div className="modal-box" style={{backgroundColor:'rgb(245, 245, 236)'}}>
+                <div className="modal-action flex justify-between mb-4 mt-0">
+                  <div className="w-12"></div>
+                  <h3 className="font-bold text-lg text-center ms-">문제의 알고리즘 유형을 선택하세요</h3>
+                  <form method="dialog">
+                    <button className="btn-sm btn rounded-full">X</button>
+                  </form>
+                </div>
+                <div className="text-center">
+                  <div>
+                    <p className="font-bold ms-4 mt-1 me-2">알고리즘</p>
+                    <select value={'선택'} onChange={onClickCate} className="select select-sm select-bordered w-20" >
+                      <option disabled='true'>선택</option>
+                      {cateList.map((cate)=>{
                         return(
-                          <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
+                          <option key={cate} onClick={onClickCate}>{cate}</option>
                         )
                       })}
-                    </div>
-                    <div className="flex justify-end px-4">
-                      <form method="dialog">
-                        <button className="btn-sm btn rounded-lg mt-5">확인</button>
-                      </form>
-                    </div>
+                    </select>
+                  </div>
+                  <div className="px-4 mt-4 grid grid-cols-3 gap-4" >
+                    {selectedList.map((selected)=>{
+                      return(
+                        <div className='m-2 bg-gray-300 p-2 rounded-lg w-full' onClick={onClickSelected}>{selected} X</div>
+                      )
+                    })}
+                  </div>
+                  <div className="flex justify-end px-4">
+                    <form method="dialog">
+                      <button className="btn-sm btn rounded-lg mt-5">확인</button>
+                    </form>
                   </div>
                 </div>
-              </dialog>
+              </div>
+            </dialog>
 
 
             <div className='w-full mt-2'>

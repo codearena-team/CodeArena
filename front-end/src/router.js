@@ -1,5 +1,7 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useTransition, useLayoutEffect } from "react";
+import { logout } from "./features/login/authSlice";
+import { useDispatch } from "react-redux";
 import Login from './pages/login/index';
 import Community from './pages/community/index';
 import CommunityCreate from './pages/community/create/index';
@@ -44,6 +46,7 @@ import GroupEffiDraw from './components/arena/resultpage/group/groupEffiDraw';
 import GroupMiddleConfirm from './components/arena/resultpage/group/groupMiddleConfirm';
 
 const ProtectedRoute = ({ user, children }) => {
+  const dispatch = useDispatch()
   const [authCheck] = useAuthCheck()
   const [component, setComponent] = useState(<div></div>);
   const navigate = useNavigate()
@@ -53,11 +56,12 @@ const ProtectedRoute = ({ user, children }) => {
       if(res) {
         setComponent(children)
       } else {
-        navigate('/login')
+        dispatch(logout())
+        navigate('/login', { replace: true })
       }
     })
   },[children])
-
+  
   return (
     <div>
       {component}
