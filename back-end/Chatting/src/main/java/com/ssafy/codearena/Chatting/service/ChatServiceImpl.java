@@ -436,6 +436,7 @@ public class ChatServiceImpl implements ChatService{
 
             if(winner.isEmpty()) {
 
+                log.info("무승부입니다.");
                 //승자가 없을 경우
                 //배팅 금액만큼 다 돌려줘야됨.
                 List<BatUserCoinDto> list = battingMapper.getUserBatCoin(gameId, winner);
