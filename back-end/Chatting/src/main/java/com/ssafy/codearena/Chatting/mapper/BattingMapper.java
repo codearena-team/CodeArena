@@ -2,7 +2,9 @@ package com.ssafy.codearena.Chatting.mapper;
 
 import com.ssafy.codearena.Chatting.dto.BatPlayerCountDto;
 import com.ssafy.codearena.Chatting.dto.BatUserCoinDto;
+import com.ssafy.codearena.Chatting.dto.MaxBatUserInfoDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.jdbc.SQL;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,5 +18,6 @@ public interface BattingMapper {
     public void batPlayer(Map<String, String> map) throws Exception;
     public BatPlayerCountDto getPlayerCount(Map<String, String> map) throws Exception;
     public List<BatUserCoinDto> getUserBatCoin(String gameId, String winner) throws SQLException;
+    public MaxBatUserInfoDto getMaxBatUser(String gameId, String playerId) throws SQLException;
 
 }

@@ -1,15 +1,16 @@
 package com.ssafy.codearena.Chatting.service;
 
-import com.ssafy.codearena.Chatting.dto.BatPlayerCountDto;
-import com.ssafy.codearena.Chatting.dto.BatStatusDto;
-import com.ssafy.codearena.Chatting.dto.RestResultDto;
+import com.ssafy.codearena.Chatting.dto.*;
 import com.ssafy.codearena.Chatting.mapper.BattingMapper;
+import com.ssafy.codearena.Chatting.mapper.GameMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -77,6 +78,15 @@ public class BattingServiceImpl implements BattingService{
             log.info("플레이어 2의 비율 : " + player2_ratio);
             batStatusDto.setPlayer1Ratio(String.valueOf(player1Ratio));
             batStatusDto.setPlayer2Ratio(String.valueOf(player2Ratio));
+
+            //최고 금액 투자한 유저 조회
+            MaxBatUserInfoDto playerInfo = battingMapper.getMaxBatUser(map.get("gameId"), map.get("player1Id"));
+            batStatusDto.setPlayer1MaxUserNickname(playerInfo.getUserNickname());
+            batStatusDto.setPlayer1MaxCoin(playerInfo.getUserCoin());
+
+            playerInfo = battingMapper.getMaxBatUser(map.get("gameId"), map.get("player2Id"));
+            batStatusDto.setPlayer2MaxUserNickname(playerInfo.getUserNickname());
+            batStatusDto.setPlayer2MaxCoin(playerInfo.getUserCoin());
 
             resultDto.setData(batStatusDto);
         }

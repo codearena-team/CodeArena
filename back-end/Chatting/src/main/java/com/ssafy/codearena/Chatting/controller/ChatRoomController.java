@@ -28,12 +28,11 @@ public class ChatRoomController {
     @Operation(summary = "특정 게임방 상세조회 API")
     @Parameters(value = {
             @Parameter(name = "gameId", description = "게임방 ID"),
-            @Parameter(name = "gameMode", description = "해당 게임방 모드", example = "스피드전 : 0, 효율전 : 1")
     })
     @GetMapping("/room")
-    public ResponseEntity<?> room(@RequestParam String gameId, String gameMode) {
+    public ResponseEntity<?> room(@RequestParam String gameId) {
 //        log.info(gameId);
-        return new ResponseEntity<GameResultDto>(chatService.findRoomById(gameId, gameMode), HttpStatus.OK);
+        return new ResponseEntity<GameResultDto>(chatService.findRoomById(gameId), HttpStatus.OK);
     }
     //모든 채팅방 목록 반환
     @GetMapping("/rooms")
