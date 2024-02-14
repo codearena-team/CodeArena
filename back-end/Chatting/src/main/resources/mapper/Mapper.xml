@@ -80,9 +80,6 @@
         <if test='gameMode != null and gameMode != ""'>
             AND game_mode = #{gameMode}
         </if>
-        <if test='gameMode == null or gameMode == ""'>
-            AND game_mode = 1
-        </if>
     </sql>
     <!-- 정렬조건 동적쿼리 -->
     <sql id="sort">
