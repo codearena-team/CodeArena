@@ -25,6 +25,8 @@ export default function UserInfo() {
     startTime,
   } = useSelector(state => state.game);
   const stompClient = useSelector(state => state.stompClient.stompClient);
+  
+  // console.log("현재 선택된 게임 모드 확인 :", gameMode)
 
   const [panelWidths, setPanelWidths] = useState({
     left: 50,
@@ -37,13 +39,13 @@ export default function UserInfo() {
     const startTimeMillis = new Date(startTime).getTime()
     const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
     console.log("남은시간 확인 :", 3600 - elapsed)
-
-    const initialTimer = 3600 - elapsed;
-    setTimer(initialTimer >= 0 ? initialTimer : 0);
-  }, [startTime])
+    setTimer(3600 - elapsed)
+  }, [])
 
   // 제한시간 1시간 타이머 useEffect
   useEffect(() => {
+    console.log("startTime 확인:", startTime)
+
     const intervalId = setInterval(() => {
       // 매 초마다 타이머 업데이트
       setTimer((prevTimer) => {
@@ -68,7 +70,7 @@ export default function UserInfo() {
 
     // 컴포넌트가 언마운트되면 간격 정리
     return () => clearInterval(intervalId);
-  }, [stompClient, gameMode, timer]);
+  }, [stompClient, gameMode]);
 
   useEffect(() => {
     // 타이머 값을 HH:MM:SS 형식으로 포맷
@@ -103,14 +105,14 @@ export default function UserInfo() {
       >
         {/* [사진]유저1 vs 유저2 [사진] 필요 */}
         {/* 사진 및 유저 정보 추가 필요 */}
-        <div className="flex justify-evenly items-center w-full">
-          <div className="flex flex-col">
+        <div className="flex justify-center items-center w-full">
+          <div className="flex flex-col mr-20">
             <div style={{ width: "125px", height: "125px"}} >
               <img
                 src={userImgSrc}
                 alt="본인 이미지"
                 className="rounded-full shadow-lg"
-                style={{ width:"100%", height: "100%"}}
+                style={{width: "100%", height: "100%"}}
               />
             </div>
             <span className="text-center mt-3 text-2xl">{userNickname}</span>
@@ -119,7 +121,7 @@ export default function UserInfo() {
             src={VS} alt="vs" 
             style={{width: "10%", padding: "1%"}}
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col ml-20">
             <div style={{ width: "125px", height: "125px"}} >
               <img
                 src={enemyImgSrc}
@@ -146,7 +148,7 @@ export default function UserInfo() {
           userNickname={userNickname}
           customSessionId={params.id}
           height= '30vh'
-          width={`${panelWidths.middle * 3}%`}
+          width='100%'
           isPlayer={true}
         />
       </div>
@@ -168,13 +170,15 @@ export default function UserInfo() {
         {<CompAbstentionModal />}
 
         {/* 중간채점 페이지 이동 */}
-        <button
-          className="rounded-lg mt-3 shadow-lg px-4 focus:outline-none text-2xl font-bold hover:scale-105"
-          style={{ width: '100%', height:'30%', backgroundColor: '#F5EBDB' }}
-          onClick={checkSubmithandler}
-        >
-          채점 현황
-        </button>
+        {gameMode !== 'speed' && (
+          <button
+            className="rounded-lg mt-3 shadow-lg px-4 focus:outline-none text-2xl font-bold hover:scale-105"
+            style={{ width: '100%', height:'30%', backgroundColor: '#F5EBDB' }}
+            onClick={checkSubmithandler}
+          >
+            채점 현황
+          </button>
+        )}
 
         {/* 남은 시간 보여주는 div */}
         <div
