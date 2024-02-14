@@ -83,6 +83,8 @@ public class ChatServiceImpl implements ChatService{
         }
         catch (Exception e) {
 
+            e.printStackTrace();
+            log.error("Exception Msg", e);
             gameResultDto.setStatus("500");
             gameResultDto.setMsg("Server Internal Error");
             gameResultDto.setData(null);
@@ -93,18 +95,21 @@ public class ChatServiceImpl implements ChatService{
      * 특정 방 찾기
      * */
     @Override
-    public GameResultDto findRoomById(String gameId) {
+    public GameResultDto findRoomById(String gameId, String gameMode) {
         GameResultDto gameResultDto = new GameResultDto();
         gameResultDto.setStatus("200");
         gameResultDto.setMsg("게임방 조회 성공");
         try {
+
 //            log.info(gameId);
-            GameInfoDto gameInfoDto = gameMapper.findRoomById(gameId);
+            GameInfoDto gameInfoDto = gameMapper.findRoomById(gameId, gameMode);
             //참여자 수 조회
             gameInfoDto.setParticipants(gameManage.get(gameInfoDto.getGameId()).getParticipants());
             gameResultDto.setData(gameInfoDto);
         }
         catch (Exception e) {
+
+            log.error("Exception Msg", e);
             gameResultDto.setStatus("500");
             gameResultDto.setMsg("Server Internal Error");
             gameResultDto.setData(null);

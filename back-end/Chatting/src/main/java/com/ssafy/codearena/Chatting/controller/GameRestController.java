@@ -63,4 +63,5 @@ public class GameRestController {
 
         return new ResponseEntity<GameResultDto>(service.getEffiSubmitList(map), HttpStatus.OK);
     }
+
 }

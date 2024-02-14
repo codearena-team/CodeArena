@@ -9,7 +9,7 @@ import java.util.Map;
 @Mapper
 public interface GameMapper {
     public int findProblemById() throws Exception;
-    public GameInfoDto findRoomById(String gameId) throws Exception;
+    public GameInfoDto findRoomById(String gameId, String gameMode) throws Exception;
     public List<GameInfoDto> findAllRoom(Map<String, Object> map) throws Exception;
     public int getTotalGameCount(Map<String, Object> map) throws Exception;
     public void createCompetitiveRoom(GameCreateDto gameCreateDto) throws Exception;

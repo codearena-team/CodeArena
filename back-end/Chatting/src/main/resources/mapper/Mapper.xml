@@ -2,6 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.codearena.Chatting.mapper.GameMapper">
+
+    <resultMap id="gameDetailInfo" type="GameInfoDto">
+        <result column="game_id" property="gameId"/>
+        <result column="game_title" property="title"/>
+        <result column="player1" property="userRed"/>
+        <result column="player2" property="userBlue"/>
+        <result column="player1_nickname" property="userRedNickname"/>
+        <result column="player2_nickname" property="userBlueNickname"/>
+        <result column="player1_thumbnail" property="userRedSsumnail"/>
+        <result column="player2_thumbnail" property="userBlueSsumnail"/>
+        <result column="player1_rating" property="userRedRating"/>
+        <result column="player2_rating" property="userBlueRating"/>
+        <result column="problem_id" property="problemId"/>
+        <result column="game_mode" property="gameMode"/>
+        <result column="start_time" property="startTime"/>
+        <result column="game_language" property="language"/>
+        <result column="room_type" property="roomType"/>
+    </resultMap>
+
     <resultMap id="gameInfo" type="GameInfoDto">
         <result column="game_id" property="gameId"/>
         <result column="game_title" property="title"/>
@@ -123,8 +142,13 @@
         ORDER BY RAND() LIMIT 1;
     </select>
     <!-- 특정 게임방 조회 -->
-    <select id="findRoomById" parameterType="string" resultMap="gameInfo">
-        SELECT game_id, game_title, player1, player2, problem_id, start_time, game_mode, game_language
+    <select id="findRoomById" parameterType="string" resultMap="gameDetailInfo">
+        <if test='gameMode == "0"'>
+            SELECT game_id, game_title, player1, player2, (SELECT user_nickname FROM user WHERE user_id = player1) as userRedNickname, (SELECT user_nickname FROM user WHERE user_id = player2) as userBlueNickname, (SELECT user_thumbnail FROM user WHERE user_id = player1) as player1_thumbnail, (SELECT user_thumbnail FROM user WHERE user_id = player2) as player2_thumbnail, (SELECT speed_rating FROM user WHERE user_id = player1) as player1_rating, (SELECT speed_rating FROM user WHERE user_id = player2) as player2_rating, problem_id, start_time, game_mode, game_language
+        </if>
+        <if test='gameMode == "1"'>
+            SELECT game_id, game_title, player1, player2, (SELECT user_nickname FROM user WHERE user_id = player1) as userRedNickname, (SELECT user_nickname FROM user WHERE user_id = player2) as userBlueNickname, (SELECT user_thumbnail FROM user WHERE user_id = player1) as player1_thumbnail, (SELECT user_thumbnail FROM user WHERE user_id = player2) as player2_thumbnail, (SELECT effi_rating FROM user WHERE user_id = player1) as player1_rating, (SELECT effi_rating FROM user WHERE user_id = player2) as player2_rating, problem_id, start_time, game_mode, game_language
+        </if>
         FROM arena_record
         WHERE game_id = #{gameId};
     </select>
