@@ -105,7 +105,8 @@ export default function NavBar() {
                     {isLogin && (
                       <Menu as="div" className="relative ml flex">
                         <div className="my-auto">
-                          <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2
+                          <Menu.Button className="relative flex rounded-full text-sm focus:outline-none 
+                          focus:ring-black focus:ring-1
                           hover:scale-110" style={{ transition: 'transform 0.2s' }}>
                           <img
                             className="h-8 w-8 rounded-full"

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState,useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { setUserNickname } from '../../../features/login/authSlice';
+import { setThumbnail, setUserNickname } from '../../../features/login/authSlice';
 import axios from 'axios';
 import { useEffect } from 'react';
 import swal from 'sweetalert';
@@ -17,9 +17,28 @@ export default function Edit(){
   const navigate = useNavigate()
   const [nickname, setNickname] = useState(useSelector(state => state.auth.userNickname))
   const [email, setEmail] = useState(useSelector(state => state.auth.userEmail))
-  const [intro, setIntro] = useState()
+  const [intro, setIntro] = useState('')
   const [nicknamemessage, setNicknamemessage] = useState()
   const userId = useSelector(state => state.auth.userId)
+
+
+
+  // 프로필화면시 그프로필 회원정보요청하는 
+  useEffect(()=>{
+    axios({
+      url : `https://i10d211.p.ssafy.io/api/user?to=${nickname}&from=${nickname}`,
+      method : 'get'
+    })
+    .then((res)=>{
+      console.log(res.data.data)
+      setIntro(res.data.data.userInfoDto.userIntro)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })  
+  },[])
+
+
 
 
   const onNicknameChange = (e) =>{
@@ -41,6 +60,7 @@ export default function Edit(){
       console.log(err)
     })
   }
+
 
   // 저장버튼 클릭시
   const onSumit = ()=> {
@@ -71,6 +91,7 @@ export default function Edit(){
     })
     .then((res)=>{
       console.log(res)
+      console.log('여기확이이이이인')
       setSelectedFile(res.data.data.profileUrl)
     })
     .catch((err)=>{
@@ -103,6 +124,7 @@ export default function Edit(){
       .then((res)=>{
         console.log(res)
         setSelectedFile(imageUrl)
+        dispatch(setThumbnail(imageUrl))
         swal("프로필사진 변경완료","","success")
       })
       .catch((err)=>{
@@ -125,6 +147,7 @@ export default function Edit(){
     .then((res)=>{
       console.log(res)
       setSelectedFile(Profile)
+      dispatch(setThumbnail(Profile))
       swal("기본이미지로 변경완료","","success")
     })
     .catch((err)=>{
@@ -170,7 +193,7 @@ export default function Edit(){
             <div className="label">
               <span className="label-text text-md font-bold">소개글</span>
             </div>
-            <textarea onChange={(e)=>{setIntro(e.target.value)}} className="textarea textarea-bordered h-24 drop-shadow" placeholder=""></textarea>
+            <textarea onChange={(e)=>{setIntro(e.target.value)}} className="textarea textarea-bordered h-24 drop-shadow" value={intro}></textarea>
           </label>
           <div className='flex justify-end'>
           <button className="btn btn-sm btn-active drop-shadow text-md mr-2" 
