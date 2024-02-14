@@ -7,12 +7,36 @@
         <result column="player1_coin" property="player1Count"/>
         <result column="player2_coin" property="player2Count"/>
     </resultMap>
+
+    <resultMap id="userCoins" type="batUserCoinDto">
+        <result column="bat_user_id" property="userId"/>
+        <result column="bat_coin" property="userCoin"/>
+    </resultMap>
+
+    <sql id="isWin">
+        <if test='playerId != null and playerId != ""'>
+            AND bat_player_id = (SELECT user_id FROM user WHERE user_nickname = '관리자')
+        </if>
+    </sql>
+
     <!-- 유저 코인 조회 쿼리 -->
     <select id="getUserCoin" parameterType="string" resultType="int">
         SELECT user_coin
         FROM user
         WHERE user_id = #{userId};
     </select>
+
+    <!-- 유저 코인 변동 + 적용 쿼리 -->
+    <update id="updateUserPlusCoin" parameterType="string">
+        <selectKey order="BEFORE" keyColumn="user_coin" resultType="int" keyProperty="userCoin">
+            SELECT user_coin
+            FROM user
+            WHERE user_id = #{userId}
+        </selectKey>
+        UPDATE user
+        SET user_coin = userCoin + #{coin}
+        WHERE user_id = #{userId};
+    </update>
 
     <!-- 유저 코인 변동 적용 쿼리 -->
     <update id="updateUserCoin" parameterType="string">
@@ -23,13 +47,23 @@
 
     <!-- 배팅 적용 쿼리 -->
     <insert id="batPlayer" parameterType="map">
-        INSERT INTO bat_record(game_id, bat_user_id, bat_playerId, bat_coin, bat_date)
+        INSERT INTO bat_record(game_id, bat_user_id, bat_player_id, bat_coin, bat_date)
         VALUES(#{gameId}, #{userId}, #{playerId}, #{batCoin}, now());
     </insert>
 
+    <!-- 각 플레이어에게 투자한 사람의 인원 조회 쿼리 -->
     <select id="getPlayerCount" parameterType="map" resultMap="batCount">
         SELECT (SELECT COUNT(bat_player_id) FROM battingWHERE game_id = #{gameId} AND bat_playerId = #{player1Id}) as player1_coin
         , (SELECT COUNT(bat_player_id) FROM batting WHERE game_id = #{gameId} AND bat_playerId = #{player2Id}) as player2_coin;
+
+    <!-- 특정 승자에 대해 배팅한 유저들의 ID, Coin 조회 쿼리 -->
+    <select id="getUserBatCoin" parameterType="string" resultMap="userCoins">
+        SELECT bat_user_id, bat_coin
+        FROM batting
+        <where>
+            WHERE game_id = #{gameId}
+            <include refid="isWin"></include>
+        </where>
     </select>
 
 </mapper>

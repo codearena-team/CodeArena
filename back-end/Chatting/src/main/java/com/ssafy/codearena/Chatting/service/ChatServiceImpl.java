@@ -1,6 +1,7 @@
 package com.ssafy.codearena.Chatting.service;
 import com.ssafy.codearena.Chatting.controller.OpenviduController;
 import com.ssafy.codearena.Chatting.dto.*;
+import com.ssafy.codearena.Chatting.mapper.BattingMapper;
 import com.ssafy.codearena.Chatting.mapper.GameMapper;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.Session;
@@ -16,11 +17,13 @@ import java.util.*;
 @Slf4j
 @Service
 public class ChatServiceImpl implements ChatService{
+    private final int coinWeight = 1;
     private Map<String, CompetitiveManageDto> gameManage;  //경쟁방 (Redis로 관리)
     private Map<String, PrivateManageDto> privateGameManage;    //사설방
     private Map<String, Integer> privateGameParticipaints;  //사설방 참여자 수 관리 리소스
 
     private final GameMapper gameMapper;
+    private final BattingMapper battingMapper;
     private final OpenviduController openviduController;
     private final int weight = 30;
 
@@ -83,7 +86,6 @@ public class ChatServiceImpl implements ChatService{
         }
         catch (Exception e) {
 
-            e.printStackTrace();
             log.error("Exception Msg", e);
             gameResultDto.setStatus("500");
             gameResultDto.setMsg("Server Internal Error");
@@ -405,6 +407,79 @@ public class ChatServiceImpl implements ChatService{
             gameMapper.refreshRating(player2, Integer.toString(player2_result), competitiveManageDto.getGamemode());
         }
         catch (Exception e) {
+            log.error("Exception Msg", e);
+        }
+
+
+        //배팅 결과 적용
+        try {
+            //두 플레이어 아이디 탈취
+            Map<String, String> params = new HashMap<>();
+            params.put("gameId", gameId);
+            params.put("player1Id", player1);
+            params.put("player2Id", player2);
+            BatPlayerCountDto batPlayerCountDto = battingMapper.getPlayerCount(params);
+
+            //총 투자 인원
+            double sum = batPlayerCountDto.getPlayer1Count() + batPlayerCountDto.getPlayer2Count(); //115명
+
+            double player1_ratio = (double)1 - ((double) batPlayerCountDto.getPlayer2Count()/sum);   //1 -> 0.3 >> 30%
+            double player2_ratio = (double)1 - ((double) batPlayerCountDto.getPlayer1Count()/sum);   //1 -> 0.3 >> 30%
+
+            int player1Ratio = (int) Math.round(player1_ratio*100);
+            int player2Ratio = (int) Math.round(player2_ratio*100);
+
+            log.info("플레이어 1의 비율 : " + player1_ratio);
+            log.info("플레이어 2의 비율 : " + player2_ratio);
+
+
+            if(winner.isEmpty()) {
+
+                //승자가 없을 경우
+                //배팅 금액만큼 다 돌려줘야됨.
+                List<BatUserCoinDto> list = battingMapper.getUserBatCoin(gameId, winner);
+
+                for(BatUserCoinDto dto : list) {
+
+                    //한명씩 비율과 계산한 후 갱신
+                    battingMapper.updateUserPlusCoin(dto.getUserId(), String.valueOf(dto.getUserCoin()));
+                }
+
+            }
+            else {
+
+                //승자가 있을 경우
+                //승자에게 배팅한 유저들 조회
+                //for문 돌면서 한 유저당 기존 코인 꺼내오고 비율 * 배팅금액 한거 더해서 추가
+                List<BatUserCoinDto> list = battingMapper.getUserBatCoin(gameId, winner);
+
+                for(BatUserCoinDto dto : list) {
+                    //한명씩 비율과 계산한 후 갱신
+                    //이긴 유저 한명 당 기존 coin 조회
+                    int coin = battingMapper.getUserCoin(dto.getUserCoin());
+
+                    if(player1Nickname.equals(winner)) {
+
+                        int newCoin = coin + coin * (player1Ratio * coinWeight);
+                        battingMapper.updateUserCoin(dto.getUserId(), String.valueOf(newCoin));
+                    }
+                    else if(player2Nickname.equals(winner)){
+
+                        int newCoin = coin + coin * (player2Ratio * coinWeight);
+                        battingMapper.updateUserCoin(dto.getUserId(), String.valueOf(newCoin));
+                    }
+                    else {
+
+                        log.info("ChatServiceImpl.terminateGame : winner값에 이상한 값이 들어왔습니다.");
+                        break;
+                    }
+                }
+
+            }
+
+        }
+        catch (Exception e) {
+
             log.error("Exception Msg", e);
         }
 
