@@ -25,7 +25,6 @@ export default function ProblemDetail() {
   const [window, setWindow] = useState(true)
   
   useEffect(()=> {
-    authCheck()
     axios({
       method : 'get',
       url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
