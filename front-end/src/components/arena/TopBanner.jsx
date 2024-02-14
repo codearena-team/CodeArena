@@ -29,10 +29,8 @@ export default function TopBanner() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMatchingComplete, setIsMatchingComplete] = useState(false);
   
-  // 수락 대기할 때 문구 띄울 state
-  const [waitingText, setWaitingText] = useState("");
-  const [rejectingText, setRejectingText] = useState(""); // 추가: 거절 후 매칭 재시도 문구
-
+  const [propsLanguageModal, setLanguageModal] = useState(null);
+  const [propsMatchingModal, setMatchingModal] = useState(null);
 
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -209,7 +207,8 @@ export default function TopBanner() {
 
     // 매칭 모달이 닫힐 때 타이머 중지
     matchingModal.addEventListener('close', () => {
-      closeMatchingModalHandler(); // 타이머 중지
+      console.log("너가 아니길 빈다.... 머리아프다")
+      clearInterval(timerInterval.current); // 타이머 중지
       // languageModal.close();
     });
   };
@@ -218,10 +217,25 @@ export default function TopBanner() {
   // let timerInterval///
   const closeMatchingModalHandler = () => {
     console.log('타이머 중지!!');
-
+    type.current = null;
+    console.log('진짜 마지막 타입 확인 :', type.current)
     // 선택된 언어 초기화
     setSelectedLanguage(null);
+    const matchingCompleteModal = document.getElementById('matching_complete_modal');
+    const languageModal = document.getElementById('language_modal');
+    const matchingModal = document.getElementById('matching_modal');
+    
+    if (matchingCompleteModal && matchingCompleteModal.open) {
+      matchingCompleteModal.close();
+    }
 
+    if (languageModal && languageModal.open) {
+      languageModal.close();
+    }
+  
+    if (matchingModal && matchingModal.open) {
+      matchingModal.close();
+    }
     // 이전에 실행 중인 타이머가 있으면 중지하고 초기화
     if (timerInterval.current) {
       clearInterval(timerInterval.current);
@@ -229,10 +243,6 @@ export default function TopBanner() {
     }
 
     // 언어 선택 모달 중복호출이 안되도록
-    const languageModal = document.getElementById('language_modal');
-    if (languageModal && languageModal.open) {
-      languageModal.close();
-    }
   };
 
   // 4. 매칭이 돌아가면 타이머 소환
@@ -265,12 +275,12 @@ export default function TopBanner() {
     if (type.current && type.current === "QUERY") {
       clearInterval(interval);
       timerInterval.current = interval;
-      handleMatchingComplete(); // 수락&취소 모달 함수 호출
+      handleMatchingComplete(); // 수락&거절 모달 함수 호출
     }
   };
 
   const startQueryTimer = () => {
-    let seconds = 15;
+    let seconds = 10;
     const timerElements = document.getElementById('matching_timer');
   
     const updateTimer = () => {
@@ -285,7 +295,7 @@ export default function TopBanner() {
       }
 
       if (seconds === 0) {
-        // console.log("startQueryTimer의 matchData: ", )
+        console.log("startQueryTimer의 타이머 확인@@")
         socket.current.send(
           JSON.stringify({
             matchId: matchId.current,
@@ -332,11 +342,12 @@ export default function TopBanner() {
   // 5-1. 매칭 완료 후 띄워질 "수락", "취소" 마지막 모달
   const openMatchingCompleteModal = () => {
     // MatchingCompleteModal 열기
+    console.log("마지막 수락 거절 모달 호출되니?")
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     matchingCompleteModal.style.left = '50%';
     matchingCompleteModal.style.top = '50%';
     matchingCompleteModal.style.transform = 'translate(-50%, -50%)';
-    matchingCompleteModal.style.zIndex = '3'; // 더 높은 z-index로 설정
+    matchingCompleteModal.style.zIndex = '100'; // 더 높은 z-index로 설정
     matchingCompleteModal.showModal();
 
     startQueryTimer();
@@ -347,6 +358,12 @@ export default function TopBanner() {
       if (languageModal && languageModal.open) {
         languageModal.close();
       }
+      
+      // 닫힐 때만 MatchingCompleteModal 닫도록 수정
+      setIsMatchingComplete(false);
+      // MatchingCompleteModal이 닫힐 때 다른 모달 플래그를 초기화
+      setLanguageModal(null);
+      setMatchingModal(null);
     });
   };
 
@@ -416,25 +433,27 @@ export default function TopBanner() {
       JSON.stringify (send_obj)
     );
     
-
     // clearInterval(timerInterval.current);
-
+    
     // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
-    const matchingCompleteModal = document.getElementById('matching_complete_modal');
+    // const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
     
-    if (matchingCompleteModal && matchingCompleteModal.open) {
-      matchingCompleteModal.close();
-    }
-
+    // if (matchingCompleteModal && matchingCompleteModal.open) {
+    //   matchingCompleteModal.close();
+    // }
+    
     if (languageModal && languageModal.open) {
       languageModal.close();
     }
-  
+    
     if (matchingModal && matchingModal.open) {
       matchingModal.close();
     }
+
+    setLanguageModal(languageModal);
+    setMatchingModal(matchingModal);
   };
 
   // 게임 생성 모달 닫기
@@ -452,7 +471,6 @@ export default function TopBanner() {
       <div
        className="mt-3 flex justify-center shadow-lg rounded-xl z-10"
        style={{ backgroundColor: '#E3E6D9', width:'70%', height: 'auto' }}
-       
       >
         {/* 경쟁 매칭 버튼*/}
         <button
@@ -472,7 +490,7 @@ export default function TopBanner() {
           />
 
           {/* 언어 선택 모달 */}
-          <dialog id="language_modal" className="modal">
+          <dialog id="language_modal" className="modal" onClick={e=>e.stopPropagation()}>
             <div className="modal-box flex-row justify-center">
               <form method="dialog">
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -587,7 +605,7 @@ export default function TopBanner() {
           </dialog>
 
           {/* 매칭 완료 모달 후 "수락", "거절" 모달 소환 */}
-          <dialog id="matching_complete_modal" className="modal">
+          <dialog id="matching_complete_modal" className="modal" onClick={e=>e.stopPropagation()}>
             <div className="modal-box flex-row justify-center">
               <MatchingCompleteModal
                 matchingState={matchingState}
@@ -595,6 +613,10 @@ export default function TopBanner() {
                 onAccept={handleAccept}
                 // 거절
                 onCancel={handleCancel}
+                languageModal={propsLanguageModal}
+                matchingModal={propsMatchingModal}
+                type={type}
+                openMatchingCompleteModal={openMatchingCompleteModal}
               />
             </div>
           </dialog>
