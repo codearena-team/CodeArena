@@ -8,5 +8,4 @@ import java.util.Map;
 public interface BattingService {
     public RestResultDto batPlayer(Map<String, String> map);
     public RestResultDto getBatStatus(Map<String, String> map);
-    public RestResultDto commitBatResult(String gameId, String winner);
 }

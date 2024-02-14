@@ -92,8 +92,4 @@ public class BattingServiceImpl implements BattingService{
         return resultDto;
     }
 
-    @Override
-    public RestResultDto commitBatResult(String gameId, String winner) {
-        return null;
-    }
 }

@@ -49,15 +49,4 @@ public class BattingController {
         return new ResponseEntity<>(battingService.getBatStatus(map), HttpStatus.OK);
     }
 
-    @Operation(summary = "배팅 결과 적용 API", description = "경쟁 종료 시 배팅 유저들에 대한 정산 로직")
-    @Parameters(value = {
-            @Parameter(name = "gameId", description = "게임방 ID"),
-            @Parameter(name = "winner", description = "우승한 사람의 닉네임", example = "무승부 시 : '' 빈값으로")
-    })
-    @ApiResponse(description = "HttpStatusCode")
-    @PostMapping("/result/apply")
-    public ResponseEntity<?> commitBatResult(@RequestParam String gameId, String winner) {
-
-        return new ResponseEntity<>(battingService.commitBatResult(gameId, winner), HttpStatus.OK);
-    }
 }
