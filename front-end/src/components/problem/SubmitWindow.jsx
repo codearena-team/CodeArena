@@ -5,6 +5,7 @@ import WindowSubmitItem from "./WindowSubmitItem";
 import javaImg from "../../images/problem/java.png"
 import pythonImg from "../../images/problem/python.png"
 import cppImg from "../../images/problem/cpp.png"
+import reload from "../../images/problem/reload.png"
 import { useSelector } from "react-redux";
 import axios from "axios"
 
@@ -88,6 +89,31 @@ export default function SubmitWindow(props) {
     }
   }
   
+  const onClickReload = () => {
+    const problemId = params.problemId
+    const pgno = searchParams.get('pgno') || 1
+    const orderBy = searchParams.get('orderBy') || 'submitDate'
+    const lang = searchParams.get('lang') || ''
+    const nickname = searchParams.get('nickname') || ''
+    axios({
+      method : 'get',
+      url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=10&pgno=${pgno}&orderBy=${orderBy}`,
+      headers : {
+        Authorization : accessToken
+      }
+    })
+    .then((res)=> {
+      console.log(res);
+      setSubmitList(res.data.data.submitList)
+      setPageCount(res.data.data.pageCount)
+    })
+    .catch((err)=> {
+      console.log(err);
+    })
+
+  }
+ 
+
   const changeParams = (key, value) => {
     searchParams.set(key,value)
     setSearchParams(searchParams)
@@ -174,6 +200,9 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
         <div className="flex items-end">
           <button onClick={()=>{changeParams('orderBy','submitDate')}} className={searchParams.get('orderBy')===null||searchParams.get('orderBy')==='submitDate' ? 'orderBy' : 'orderBy unchoice'} value='date'>최신순</button>
           <button onClick={()=>{changeParams('orderBy','timeComplexity')}} className={searchParams.get('orderBy')==='timeComplexity' ? 'orderBy' : 'orderBy unchoice'} value='time'>시간복잡도순</button>
+          <div className="ms-2 w-8 p-1" onClick={onClickReload}>
+            <img style={{cursor:"pointer"}} src={reload} alt="reload" className="w-full"/>
+          </div>
         </div>
         <div className="flex flex-col justify-center">
         <div className="z-50">

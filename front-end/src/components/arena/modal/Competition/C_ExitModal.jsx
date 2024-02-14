@@ -18,6 +18,7 @@ export default function CompetitionExitModal({ gameExitId }) {
     }
     dispatch(clearStompClient());
     navigate('/arena')
+    window.location.reload()
     // window.location.href = '/arena';
 
     axios.get('https://i10d211.p.ssafy.io/game/chat/exit?gameId=' + `${gameId}`)

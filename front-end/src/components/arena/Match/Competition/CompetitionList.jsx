@@ -87,7 +87,7 @@ export default function CompetitionList() {
   }, [searchParams]);
 
   return (
-    <div className="mt-5 mx-20">
+    <div className="pt-5 mx-20">
       {/* 상단 버튼, 검색바, 버튼 영역 */}
       <div className="flex justify-between items-center">
         <div className="flex relative z-0">

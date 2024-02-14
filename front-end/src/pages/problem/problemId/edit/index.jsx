@@ -22,7 +22,7 @@ export default function ProblemEdit() {
   const [time, setTime] = useState("");
   const [mem, setMem] = useState("");
   const [rating, setRating] = useState(1)
-  const [cateList, setCateList] = useState(["PD","구현","그리디","매개변수 탐색","문자열","수학","시뮬레이션","완전탐색","이분탐색","자료구조"])
+  const [cateList, setCateList] = useState([])
   const [selectedList, setSelectedList] = useState([])
   const [testcase, setTestcase] = useState([])
   const problemId = params.problemId

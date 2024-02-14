@@ -10,7 +10,7 @@ export function useAuthCheck() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const checkAccess = async function () {
+  const checkAccess = async function (accessToken) {
     const headers = {Authorization : accessToken}
     return (axios.get('https://i10d211.p.ssafy.io/api/auth', {headers}))
   }
@@ -22,14 +22,14 @@ export function useAuthCheck() {
 
   const authCheck = async () => {
     try{
-      let value = await checkAccess()
+      let value = await checkAccess(accessToken)
       console.log(value);
       if (value.data.status === '302') {
         let value2 = await auseRefresh()
         console.log(value2);
         if (value2.data.status === '200') {
           dispatch(setAccessToken(value2.headers.authorization))
-          await checkAccess()
+          await checkAccess(value2.headers.authorization)
           return true
         }
         return false
