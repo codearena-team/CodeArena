@@ -9,6 +9,7 @@
         <result property="userNickname" column="user_nickname"/>
         <result property="effRating" column="effi_rating"/>
         <result property="speedRating" column="speed_rating"/>
+        <result property="point" column="user_coin"/>
     </resultMap>
 
     <resultMap id="playerAllData" type="gamePlayerDto">
@@ -105,6 +106,11 @@
 
     <select id="getSpeedRankingByRating" resultMap="playerData">
         select user_id, user_nickname, speed_rating from user where user_id != 1 order by speed_rating desc, user_id asc limit 0, 5;
+    </select>
+
+    <select id="getPointRankingByPoint" resultMap="playerData">
+        select user_id, user_nickname, user_coin from user where user_id !=1 order by user_coin desc, user_id asc limit 0, 5;
+
     </select>
 
     <select id="getUserRecordByUserId" resultMap="playerAllData" parameterType="String">

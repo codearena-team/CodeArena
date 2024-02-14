@@ -14,6 +14,8 @@ public interface RestMapper {
     List<GamePlayerDto> getEffRankingbyRating() throws SQLException;
     List<GamePlayerDto> getSpeedRankingByRating() throws SQLException;
 
+    List<GamePlayerDto> getPointRankingByPoint() throws SQLException;
+
     GamePlayerDto getUserRecordByUserId(String userId) throws SQLException;
 
     CompetitiveResultDto getGameInfo(String gameId) throws Exception;
