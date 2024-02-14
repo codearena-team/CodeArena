@@ -85,12 +85,16 @@ public class BattingServiceImpl implements BattingService{
             //최고 금액 투자한 유저 조회
             MaxBatUserInfoDto playerInfo = battingMapper.getMaxBatUser(map.get("gameId"), map.get("player1Id"));
 
-            batStatusDto.setPlayer1MaxUserNickname(playerInfo.getUserNickname());
-            batStatusDto.setPlayer1MaxCoin(playerInfo.getUserCoin());
+            if(playerInfo != null) {
+                batStatusDto.setPlayer1MaxUserNickname(playerInfo.getUserNickname());
+                batStatusDto.setPlayer1MaxCoin(playerInfo.getUserCoin());
+            }
 
             playerInfo = battingMapper.getMaxBatUser(map.get("gameId"), map.get("player2Id"));
-            batStatusDto.setPlayer2MaxUserNickname(playerInfo.getUserNickname());
-            batStatusDto.setPlayer2MaxCoin(playerInfo.getUserCoin());
+            if(playerInfo != null) {
+                batStatusDto.setPlayer2MaxUserNickname(playerInfo.getUserNickname());
+                batStatusDto.setPlayer2MaxCoin(playerInfo.getUserCoin());
+            }
 
             resultDto.setData(batStatusDto);
         }
