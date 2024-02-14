@@ -29,6 +29,11 @@ export default function TopBanner() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMatchingComplete, setIsMatchingComplete] = useState(false);
   
+  // 수락 대기할 때 문구 띄울 state
+  const [waitingText, setWaitingText] = useState("");
+  const [rejectingText, setRejectingText] = useState(""); // 추가: 거절 후 매칭 재시도 문구
+
+
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const languageButtons = [
@@ -265,7 +270,7 @@ export default function TopBanner() {
   };
 
   const startQueryTimer = () => {
-    let seconds = 10;
+    let seconds = 15;
     const timerElements = document.getElementById('matching_timer');
   
     const updateTimer = () => {
@@ -410,6 +415,7 @@ export default function TopBanner() {
     socket.current.send (
       JSON.stringify (send_obj)
     );
+    
 
     // clearInterval(timerInterval.current);
 
@@ -444,14 +450,14 @@ export default function TopBanner() {
       </div>  
       {/* 상단 배너 */}
       <div
-       className="mt-3 flex justify-center w-3/4 shadow-lg rounded-xl z-10"
-       style={{ backgroundColor: '#E3E6D9', height: 'auto' }}
+       className="mt-3 flex justify-center shadow-lg rounded-xl z-10"
+       style={{ backgroundColor: '#E3E6D9', width:'70%', height: 'auto' }}
        
       >
         {/* 경쟁 매칭 버튼*/}
         <button
           className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
-          style={{ width: '80%', height: 'auto' }}
+          style={{ width: '50%', height: 'auto' }}
           onClick={openLanguageModal} // 클릭하면 모달 띄우기
           onMouseEnter={() => setIsFindMatchHovered(true)} // 마우스 호버 In
           onMouseLeave={() => setIsFindMatchHovered(false)} // 마우스 호버 Out
@@ -594,8 +600,8 @@ export default function TopBanner() {
           </dialog>
         </button>
 
-        {/* 게임 생성 */}
-        <button
+        {/* 게임 생성.. 자릅니다... */}
+        {/* <button
             className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
             style={{ width: '80%', height: 'auto' }}
             onClick={() => document.getElementById('my_modal_1').showModal()}
@@ -609,12 +615,12 @@ export default function TopBanner() {
             style={{ width: '100%', height: 'auto' }}
             />
         </button>
-        {<BannerCreateModal closeModal={closeModal} />}
+        {<BannerCreateModal closeModal={closeModal} />} */}
 
         {/* 게임 찾기 */}
         <button
           className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
-          style={{ width: '80%', height: 'auto' }}
+          style={{ width: '50%', height: 'auto' }}
           onMouseEnter={() => setIsGameSearchHovered(true)} // 마우스 호버 In
           onMouseLeave={() => setIsGameSearchHovered(false)} // 마우스 호버 Out
         >
