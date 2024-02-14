@@ -31,7 +31,7 @@ public class BattingController {
             @Parameter(name = "batCoin", description = "배팅하려는 금액")
     })
     @PostMapping("/player")
-    public ResponseEntity<?> batPlayer(@RequestParam Map<String, String> map) {
+    public ResponseEntity<?> batPlayer(@RequestBody Map<String, String> map) {
 
         return new ResponseEntity<>(battingService.batPlayer(map), HttpStatus.OK);
     }
