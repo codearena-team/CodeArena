@@ -30,6 +30,9 @@ public class BattingServiceImpl implements BattingService{
 
         try {
 
+            log.info("유저가 배팅 시도를 했습니다!");
+            log.info(map.get("userId"));
+            log.info(map.get("gameId"));
             int userCoin = battingMapper.getUserCoin(map.get("userId"));   //해당 유저의 현재 코인 조회
 
             // 차감된 유저 코인 금액 적용
@@ -81,6 +84,7 @@ public class BattingServiceImpl implements BattingService{
 
             //최고 금액 투자한 유저 조회
             MaxBatUserInfoDto playerInfo = battingMapper.getMaxBatUser(map.get("gameId"), map.get("player1Id"));
+
             batStatusDto.setPlayer1MaxUserNickname(playerInfo.getUserNickname());
             batStatusDto.setPlayer1MaxCoin(playerInfo.getUserCoin());
 
