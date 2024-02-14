@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // npm install styled-components 애니메이트 기능 구현 설치 라이브러리
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import axios from 'axios';
 import View from '../../images/arena/HotMatch/View.png'
 import VS from '../../images/arena/HotMatch/VS.png'
 import Fighting from '../../images/arena/HotMatch/Fighting.gif'
+
 
 export default function HotMatch() {
   // Hot Match 애니메이트
@@ -21,7 +22,7 @@ export default function HotMatch() {
     axios.get('https://i10d211.p.ssafy.io/game/chat/hotmatch')
     .then((res)=> {
       setHotMatchs(res.data)
-      console.log(res.data);
+      console.log("Hot Match 확인 :", res.data);
     })
   },[])
 
@@ -34,14 +35,16 @@ export default function HotMatch() {
       <div className="mt-5 shadow-xl mb-5" style={{ backgroundColor: '#E3E6D9', height: '100%' }}>
         {/* 캐러셀 */}
         <div className='flex justify-center mt-2'>
-          <div className="carousel w-full p-4 space-x-0 rounded-box">
+          <div className="carousel w-full p-1 rounded-box"> 
             {/* 아이템 요소 */}
-            {hotMatchs.map((match) => (
+            {hotMatchs.map((match, index) => (
               <div
                 key={match.gameId}
+                id={`slide${index+1}`}
                 className="carousel-item flex items-center justify-center"
                 style={{ width:'100%'}}
               >
+                <a href="#slide5" className="btn btn-circle">❮</a> 
                 <div className="rounded-xl ml-2 w-1/3 shadow-xl p-5 mb-2" style={{ backgroundColor: '#F4F5F1' }}>
                   {/* 지금 경쟁 중! + 시청자 수 */}
                   <div className="flex items-center justify-end">
@@ -72,6 +75,7 @@ export default function HotMatch() {
                     </div>
                   </div>
                 </div>
+                <a href="#slide2" className="btn btn-circle">❯</a>
               </div>
             ))}
           </div>

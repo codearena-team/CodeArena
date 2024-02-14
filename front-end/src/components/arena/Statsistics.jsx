@@ -35,26 +35,6 @@ export default function StatsisticsPage() {
   // 차트에 보이는 퍼센트 값을 직접 계산하여 표시하는 함수
   const formatPercent = (value) => `${(value * 100).toFixed(0)}%`;
 
-  // 최근 겨루었던 문제 데이터 (가상)
-  const recentlyData = [
-    { id: 1000, name: '두 정수 더하기' },
-    { id: 1020, name: '디지털 카운터' },
-    { id: 22278, name: '두 최단경로' },
-    { id: 30303, name: '알고리즘 문제' },
-    { id: 40506, name: '그래프 이론' },
-    { id: 55678, name: '동적 프로그래밍' },
-  ];
-
-  // 최근 겨루었던 상대 데이터 (가상)
-  const recentlyOpponent = [
-    { id: 1, name: 'Beemo99' },
-    { id: 2, name: '회창일타강사' },
-    { id: 3, name: '고양이가 눌렀어요' },
-    { id: 4, name: '탑갱안가요' },
-    { id: 5, name: '자면서해도이김' },
-    { id: 6, name: '세정1234' },
-  ]
-
   useEffect(()=> {
     const headers = {
       Authorization : access
@@ -66,6 +46,7 @@ export default function StatsisticsPage() {
         return {name:key.split('Count'), value:value}
       }))
       setMatchs(res.data.data.recentMatches)
+      console.log("record 확인 :", res.data.data.recentMatches)
     })
     .catch((err) => {
       console.log("에러!!! :", err)
@@ -84,7 +65,7 @@ export default function StatsisticsPage() {
     return (
       <div className='h-full' onClick={onClickMatch}>
         <div>
-          <p>{match.roomType ? '사설' : '경쟁'} - {match.gameMode ? '효율전' : '스피드전'}</p>
+          <p>경쟁 - {match.gameMode==='1' ? '효율전' : '스피드전'}</p>
           {
             isPlayerVisible ?
             <Link className='text-blue-600' to={`/problem/${match.problemId}/detail`}>{`#${match.problemId} ${match.problemTitle}`}</Link>
@@ -93,8 +74,12 @@ export default function StatsisticsPage() {
           }
         </div>
         <div className={isPlayerVisible ? '' : 'hidden'}>
-          <p>플레이어1 : {match.player1}</p>
-          <p>플레이어2 : {match.player2}</p>
+          <div>
+            <Link to={`/profile/${match.player1}`}>플레이어1 : <span className="underline">{match.player1}</span></Link>
+          </div>
+          <div>
+            <Link to={`/profile/${match.player2}`}>플레이어2 : <span className="underline">{match.player2}</span></Link>
+          </div>
           {match.player3 && <p>플레이어3 : {match.player3}</p>}
           {match.player4 && <p>플레이어4 : {match.player4}</p>}
         </div>
@@ -125,7 +110,7 @@ export default function StatsisticsPage() {
                 cx="50%" // 가로 중앙
                 cy="50%" // 세로 중앙
                 innerRadius={60} // 내부 반지름
-                outerRadius={80} // 외부 반지름ㅁ
+                outerRadius={80} // 외부 반지름
                 fill="#8884d8" // 차트 색상
                 paddingAngle={5} // 각 섹션 사이 간격
                 dataKey="value" // 데이터에서 값에 해당하는 키 지정
@@ -141,7 +126,7 @@ export default function StatsisticsPage() {
 
         {/* 우측 */}
         <div className="flex-1 mr-5 w-2/3 max-h-full overflow-y-auto">
-          <div className="mb-5 text-2xl font-bold">최근 겨루었던 문제</div>
+          <div className="mb-5 text-2xl font-bold">최근 다섯 매치</div>
           <div className="flex flex-wrap items-start">
             {matchs.map((match)=> {
               return(
@@ -154,34 +139,6 @@ export default function StatsisticsPage() {
               )}
             )}
           </div>
-
-
-          
-          
-          {/* <div className="mb-5 text-2xl font-bold">최근 겨루었던 문제</div>
-          <div className="flex flex-wrap space-x-2">
-            {recentlyData.map((problem) => (
-              <div
-                key={problem.id}
-                className="bg-gray-200 p-2 m-3 rounded-xl cursor-pointer hover:scale-110"
-                onClick={() => handleProblemClick(problem.id)}
-              >
-            ))}
-          </div>
-
-          
-          <div className="mt-5 mb-5 text-2xl font-bold">최근 겨루었던 상대</div>
-          <div className="flex flex-wrap space-x-2">
-            {recentlyOpponent.map((opponent) => (
-              <div
-                key={opponent.id}
-                className="bg-gray-200 p-2 m-1 rounded-xl cursor-pointer hover:scale-110"
-                onClick={() => handleOpponentClick(opponent.id)}
-              >
-                {`${opponent.name}`}
-              </div>
-            ))}
-          </div> */}
         </div>
       </div>
     </div>

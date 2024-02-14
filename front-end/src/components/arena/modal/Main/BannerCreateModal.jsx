@@ -40,6 +40,8 @@ export default function CreateModal({ closeModal, onRoomCreated }) {
           console.error('채팅방 생성 중 오류 발생:', error);
         });
     }
+
+    
   };
 
   return (

@@ -16,8 +16,5 @@ export default function SubmitListItem (probs){
     <th className="p-1 font-thin">{probs.submit.submitDate.split(' ')[0]}</th> 
     <hr  />
   </tr>
-
-
-
   )
 }
