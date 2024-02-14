@@ -80,13 +80,13 @@
         <if test='gameMode != null and gameMode != ""'>
             AND game_mode = #{gameMode}
         </if>
-        <if test='gameMode == null and gameMode == ""'>
+        <if test='gameMode == null or gameMode == ""'>
             AND game_mode = 1;
         </if>
     </sql>
     <!-- 정렬조건 동적쿼리 -->
     <sql id="sort">
-        <if test='sortType == null and sortType == ""'>
+        <if test='sortType == null or sortType == ""'>
             ORDER BY start_time DESC
         </if>
         <if test="sortType == 'old'">

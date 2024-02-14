@@ -33,6 +33,15 @@ public class BattingServiceImpl implements BattingService{
             log.info("유저가 배팅 시도를 했습니다!");
             log.info(map.get("userId"));
             log.info(map.get("gameId"));
+
+            //유저가 배팅한 기록이 있는지 조회
+            int cnt = battingMapper.getUserBatStatus(map.get("gameId"), map.get("userId"));
+
+            if(cnt > 0) {
+
+                throw new Error("배팅을 1회이상 시도하였습니다.");
+            }
+
             int userCoin = battingMapper.getUserCoin(map.get("userId"));   //해당 유저의 현재 코인 조회
 
             // 차감된 유저 코인 금액 적용
@@ -42,6 +51,13 @@ public class BattingServiceImpl implements BattingService{
 
             // 배팅 기록
             battingMapper.batPlayer(map);
+        }
+        catch (Error e) {
+
+            log.info("배팅을 1회이상 시도한 유저입니다.");
+            resultDto.setStatus("500");
+            resultDto.setMsg("배팅을 1회이상 시도한 유저입니다.");
+            resultDto.setData(null);
         }
         catch (Exception e) {
 

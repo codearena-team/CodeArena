@@ -62,6 +62,9 @@ public class ChatServiceImpl implements ChatService{
         String key = map.get("key");    //검색조건 : 문제번호 or 유저 닉네임
         param.put("key", key == null ? "" : key);
         param.put("sortType", map.get("sortType") == null ? "" : map.get("sortType"));  //정렬 조건
+        log.info(map.get("sortType"));
+        log.info((String) param.get("sortType"));
+
         try {
             List<GameInfoDto> list = gameMapper.findAllRoom(param);
             int totalGameCount = gameMapper.getTotalGameCount(param);

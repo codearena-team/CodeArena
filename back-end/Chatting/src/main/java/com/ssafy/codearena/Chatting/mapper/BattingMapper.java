@@ -20,5 +20,6 @@ public interface BattingMapper {
     public List<BatUserCoinDto> getUserBatCoin(String gameId, String winner) throws SQLException;
     public MaxBatUserInfoDto getMaxBatUser(String gameId, String playerId) throws SQLException;
     public int getPlayerSumPeople(String gameId, String playerId) throws SQLException;
+    public int getUserBatStatus(String gameId, String userId) throws SQLException;
 
 }
