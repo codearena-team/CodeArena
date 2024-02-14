@@ -223,7 +223,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
         <div></div>
         <div className="join">
           <button onClick={()=>{changeParams('pgno','1')}} className="join-item btn btn-sm">{'<<'}</button>
-          28
+          {pageNation()}
           <button onClick={()=>{changeParams('pgno', pageCount)}} className="join-item btn btn-sm">{'>>'}</button>
         </div>
         <div></div>

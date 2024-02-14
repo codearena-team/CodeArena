@@ -9,7 +9,7 @@ export default function SolveList(props) {
   }
 
   return(
-    <button className="btn mr-2 drop-shadow"
-    onClick={goProblem}>#{problemId}<span className="text-lg">{problemTitle}</span></button>
+    <button className="btn mr-2 drop-shadow text-xs"
+    onClick={goProblem}>#{problemId}<span className="text-sm">{problemTitle}</span></button>
   )
 }

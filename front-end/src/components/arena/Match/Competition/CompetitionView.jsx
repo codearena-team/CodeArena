@@ -10,12 +10,17 @@ import Webrtc from "../../../../pages/test/Webrtc";
 import MainVideo from "../../../../pages/test/MainVideo";
 import { setStompClients, clearStompClient } from "../../../../features/arena/stompClientSlice";
 import { disconectRtc } from "../../../../features/arena/rtcSlice";
+import axios from "axios";
 
 export default function CompetitionView() {
+  const userId = useSelector(state => state.auth.userId)
   const params = useParams()
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isBetting, setIsBetting] = useState(false)
+  const [bettingCoin1, setBettingCoin1] = useState(0)
+  const [bettingCoin2, setBettingCoin2] = useState(0)
   const dispatch = useDispatch();
   const stompClient = useSelector(state => state.stompClient.stompClient);
 
@@ -206,9 +211,36 @@ export default function CompetitionView() {
     scrollToBottom();
   }, [chatList.length])
 
-  const test = () => {
-    dispatch(disconectRtc())
+
+
+
+  const clickBetting = (e) => {
+    console.log(e.target.value);
+
+
+    // if (mycoin < bettingCoin1) {
+    //   alert()
+    // }
+
+
+    // const data = {
+    //   myId : userId,
+    //   bettingId : 1,
+    //   coin : 100,
+    // }
+    // axios.post('url',data)
+    // .then(res => {
+
+    // })
+    // .catch(err => {
+
+    // })
+
+    setIsBetting(true)
+
   }
+
+
   return (
     <div>
       <CompTopInfo gameExitId={params.id} problemId={problemId}/>
@@ -224,7 +256,6 @@ export default function CompetitionView() {
             {/* 각 유저의 화면 구성 (추가적인 스타일 및 컨텐츠 추가 필요) */}
             <div>
               <div className=" rounded-lg flex justify-between items-end">
-                <button onClick={test}>버튼버튼버튼버튼버튼버튼버튼</button>
                 <Webrtc 
                   userNickname={sender.current}
                   customSessionId={params.id}
@@ -232,8 +263,10 @@ export default function CompetitionView() {
                   width={`200px`}
                   height={`100px`}
                 />
-                <div className="flex justify-center items-center mt-5">
+                <div className="">
                   <p className="text-lg font-bold">{`경과 시간: ${elapsedTime}`}</p>
+                  <button  onClick={()=>document.getElementById('bettingModal').showModal()}
+                  className="btn bg-rose-200 w-full text-lg">배팅하기</button>
                 </div>
               </div>
               <div className=" rounded-lg mt-4 w-full" >
@@ -294,6 +327,56 @@ export default function CompetitionView() {
           </div>
         </div>
       </div>
+
+      
+
+
+      <dialog id="bettingModal" className="modal">
+        <div style={{backgroundColor: '#F5EBDB' }} className="modal-box text-black">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 className="font-bold text-lg text-center">배팅</h3>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col items-center">
+              <div className=" bg-black w-36 h-36">
+                {/* 썸네일 */}
+              </div>
+              <p className="text-2xl mb-2"> use1 닉네임</p>
+              <p className="text-xl mb-2"> use1 레이팅</p>
+              {!isBetting ?
+              <div className="flex">
+                <input onClick={e=>setBettingCoin1(e.target.value)} type="number" className="input input-bordered w-24"></input>
+                <button onClick={clickBetting} className="btn" value={1}>배팅</button>
+              </div>
+              :
+              <p>5분전은 비어있고 5분후면 배팅현황</p>
+              }
+            </div>
+            <div className="flex flex-col items-center">
+              <div className=" bg-black w-36 h-36">
+                {/* 썸네일 */}
+              </div>
+              <p className="text-2xl mb-2"> use2 닉네임</p>
+              <p className="text-xl mb-2"> use2 레이팅</p>
+              {!isBetting ?
+              <div className="flex">
+                <input onClick={e=>setBettingCoin2(e.target.value)} type="number" className="input input-bordered w-24"></input>
+                <button onClick={clickBetting} className="btn" value={2}>배팅</button>
+              </div>
+              :
+              <p>5분전은 비어있고 5분후면 배팅현황</p>
+              }
+            </div>
+          </div>
+        </div>
+      </dialog>
+        
+
+
+
+
     </div>
   );
 } 
