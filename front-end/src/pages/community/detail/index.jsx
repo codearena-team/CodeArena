@@ -1,14 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useState,useEffect,useCallback } from "react"
+import { useState,useEffect,useCallback,useRef} from "react"
 import axios from "axios"
 import "../../css/problemdetail.css"
 import Editor from "@monaco-editor/react"
+import { useMonaco } from "@monaco-editor/react"
 import { useSelector } from 'react-redux'
 import CommentListItem from '../../../components/community/CommentListItem'
 import swal from "sweetalert"
+import Pencil from '../../../images/common/pencil.png'
+
 
 
 export default function CommunityDetail(){
+  const monaco = useMonaco()
   const accessToken = useSelector(state => state.access.accessToken)
   const [bgcolor,setBgcolor] = useState('#F4F2CA');
   const [showCodeMirror, setShowCodeMirror] = useState(true)
@@ -67,6 +71,7 @@ export default function CommunityDetail(){
     .catch((err)=>{
       console.log(err)
     })
+   
   },[])
 
   // 게시글삭제
@@ -128,51 +133,68 @@ export default function CommunityDetail(){
   }
 
   const goEdit = () =>{
-    navigate((`/community/${boardId}/edit`))
+    navigate((`/community/${boardId}/edit`));
+    window.scrollTo(0, 0);
   }
 
   const onChangeCode = useCallback((code, viewUpdate) => {
     setCommentCode(code);
   }, []);
   
+  const goUp = () =>{
+    window.scrollTo({
+      top : 0,
+      behavior : "smooth"
+    })
+  }
   return (
-    <div className="ml-64 mr-64 mt-10"> 
+    <div className="ml-64 mr-64 mt-10 relative">
+      <button style={{ position: 'fixed', right: '100px', bottom: '150px',border:'1px solid black'}} 
+       onClick={()=>document.getElementById('modal').showModal()} className="btn btn-md">
+         <img src={Pencil} style={{width:20}} alt="" />
+         댓글쓰기</button>
+      <p style={{ position: 'fixed', right: '120px', bottom: '110px',border:'1px solid black'}}
+      className="btn btn-sm"
+      onClick={goUp}>맨위로</p>
       <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
         <div className='flex justify-end mb-3'>
-          <h1 className="mr-3">조회수 : {board.hit}</h1>
+          <h1 className="mr-3 font-bold">조회수 : {board.hit}</h1>
           <h1 onClick={()=>{navigate(`/profile/${articleNickname}`)}} 
-          style={{ textDecoration: 'underline'}}>작성자 : {articleNickname}
-          </h1>
+          style={{cursor:'pointer'}}
+          className="font-bold">작성자  :</h1><p style={{textDecoration:'underline',cursor:'pointer'}} className="font-bold"> {articleNickname}</p>
+          
           <div className="w-1/12"></div>
         </div>
         <div className="flex">
           <div className="w-1/12"></div>
-          <label className="py-1" htmlFor="title">제목</label>
+          <label className="py-1 font-bold" htmlFor="title">제목</label>
         </div>
         <div className='flex justify-end mb-4'>
           <input type="text" id="title" className="input input-bordered noc w-10/12" value={board.title} />
           <div className="w-1/12"></div>
         </div>
-        <div className='flex mb-3'>
-          <div className="w-1/12"></div>
-          <div className="flex">
+        <div className='mb-3 grid grid-cols-12'>
+          <div className="flex col-start-2 col-span-10">
             <div className="">
-              <label className="me-1" htmlFor="title">문제번호</label>
-              <input type="text" id="title" className="input input-bordered noc" value={board.problemId} />
+              <label className="me-1 font-bold" htmlFor="title">문제번호</label>
+              <input type="text" id="title" className="input input-bordered noc" 
+               style={{ width: '100px', height: '28px' }} value={board.problemId} />
             </div>
             <div className="ml-6">
-              <label className="me-1" htmlFor="rating">언어</label>
-              <input id="rating" className="input input-bordered  noc " type="text" value={board.lang}/>
+              <label className="me-1 font-bold" htmlFor="rating">언어</label>
+              <input id="rating" className="input input-bordered  noc" 
+              style={{ width: '100px', height: '30px' }} type="text" value={board.lang}/>
             </div>
             <div className="ml-6">
-              <label className="me-1" htmlFor="rating">카테고리</label>
-              <input id="rating" className="input input-bordered noc" type="text" value={cate}/>     
+              <label className="me-1 font-bold" htmlFor="rating">카테고리</label>
+              <input id="rating" className="input input-bordered noc" 
+              style={{ width: '100px', height: '30px'}}type="text" value={cate}/>     
             </div>
           </div>
         </div>
         <div className="flex">
           <div className="w-1/12"></div>
-          <label className="me-1 py-1" htmlFor="content">내용</label>
+          <label className="me-1 py-1 font-bold" htmlFor="content">내용</label>
         </div>
 
           <div className='flex justify-end'>
@@ -184,16 +206,12 @@ export default function CommunityDetail(){
         </div>
         <div className='flex justify-between mb-4 mt-3'>
           <div className="w-1/12"></div>
-          <div className="w-10/12 flex justify-between">
+          <div className="w-10/12 flex justify-end">
             <button className="btn btn-sm btn-active drop-shadow text-md" 
             style={{backgroundColor:bgcolor}}
             onClick={colorChange}>코드보기
             </button>
-            <button className="btn btn-sm btn-active drop-shadow text-md" 
-            style={{backgroundColor:'#F4F2CA'}}
-            onClick={()=>document.getElementById('modal').showModal()}
-            >댓글쓰기
-            </button>
+           
             
             {/* 댓글 모달창 */}
             <dialog id="modal" className="modal">
@@ -211,7 +229,7 @@ export default function CommunityDetail(){
                     />
                   </div>
                 </div>
-                <div className="flex justify-between">   
+                <div className="flex justify-end">   
                   <div className="modal-action ">
                     <form method="dialog" className="mt-0">
                       <div className=""><button className="btn btn-sm btn-active drop-shadow text-md" 
@@ -235,6 +253,7 @@ export default function CommunityDetail(){
             <div className="col-span-1"></div>
             <div className='col-span-10 '>
               <Editor height="400px" id="inputEx" value={board.code}
+              theme="vs-dark"
               options={{'scrollBeyondLastLine':false, 'readOnly': true,'minimap':{enabled:false}}}
               />
             </div>
@@ -267,9 +286,13 @@ export default function CommunityDetail(){
       {commentlist.length === 0 && (
         <div className="flex p-10 rounded-3xl drop-shadow-2xl" style={{backgroundColor: "#F5F5EC"}}>
           <div className="w-1/12"></div>
-          <h1>댓글이 없습니다</h1>
+          <h1 className="font-bold">댓글이 없습니다</h1>
         </div>
       )}
     </div>
   )
+
+  
+
 }
+

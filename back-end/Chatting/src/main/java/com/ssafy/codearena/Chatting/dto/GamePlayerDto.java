@@ -11,6 +11,7 @@ public class GamePlayerDto {
     String userNickname;
     String effRating;
     String speedRating;
+    String point;
     UserRecordDto record;
     List<GameRecordDto> recentMatches;
 }

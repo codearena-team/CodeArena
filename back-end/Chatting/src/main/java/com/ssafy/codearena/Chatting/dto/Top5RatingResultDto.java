@@ -9,4 +9,5 @@ import java.util.List;
 public class Top5RatingResultDto {
     List<GamePlayerDto> effRank;
     List<GamePlayerDto> speedRank;
+    List<GamePlayerDto> pointRank;
 }

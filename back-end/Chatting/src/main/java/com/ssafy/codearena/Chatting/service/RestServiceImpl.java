@@ -101,14 +101,17 @@ public class RestServiceImpl implements RestService {
         Top5RatingResultDto rank = new Top5RatingResultDto();
         List<GamePlayerDto> effRanking = Collections.EMPTY_LIST;
         List<GamePlayerDto> speedRanking = Collections.EMPTY_LIST;
+        List<GamePlayerDto> pointRanking = Collections.EMPTY_LIST;
         resultDto.setStatus("200");
         resultDto.setMsg("순위조회에 성공했습니다.");
         try{
             effRanking = mapper.getEffRankingbyRating();
             speedRanking = mapper.getSpeedRankingByRating();
-            if(effRanking == null && speedRanking == null) throw new Exception("랭크 조회 에러");
+            pointRanking = mapper.getPointRankingByPoint();
+            if(effRanking == null && speedRanking == null && pointRanking == null) throw new Exception("랭크 조회 에러");
             if(effRanking == null) effRanking = Collections.EMPTY_LIST;
             if(speedRanking == null) speedRanking = Collections.EMPTY_LIST;
+            if(pointRanking == null) pointRanking = Collections.EMPTY_LIST;
         }catch(Exception e){
             log.debug("exception : {}", e);
             resultDto.setStatus("500");
@@ -116,6 +119,7 @@ public class RestServiceImpl implements RestService {
         }finally{
             rank.setSpeedRank(speedRanking);
             rank.setEffRank(effRanking);
+            rank.setPointRank(pointRanking);
             resultDto.setData(rank);
             return resultDto;
         }

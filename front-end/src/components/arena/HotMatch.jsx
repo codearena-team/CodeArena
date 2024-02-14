@@ -26,6 +26,14 @@ export default function HotMatch() {
     })
   },[])
 
+
+
+
+
+
+
+
+
   return (
     <div className='flex flex-col mt-5 relative'>
       <br />
@@ -40,11 +48,12 @@ export default function HotMatch() {
             {hotMatchs.map((match, index) => (
               <div
                 key={match.gameId}
-                id={`slide${index+1}`}
-                className="carousel-item flex items-center justify-center"
+                id={`slide${index + 1}`}
+                className="carousel-item  w-full flex items-center justify-center"
                 style={{ width:'100%'}}
               >
-                <a href="#slide5" className="btn btn-circle">❮</a> 
+                <a  href={`#slide${index === 0 ? hotMatchs.length : index}`} 
+                className="btn btn-circle mr-3">❮</a> 
                 <div className="rounded-xl ml-2 w-1/3 shadow-xl p-5 mb-2" style={{ backgroundColor: '#F4F5F1' }}>
                   {/* 지금 경쟁 중! + 시청자 수 */}
                   <div className="flex items-center justify-end">
@@ -75,7 +84,7 @@ export default function HotMatch() {
                     </div>
                   </div>
                 </div>
-                <a href="#slide2" className="btn btn-circle">❯</a>
+                <a href={`#slide${index === hotMatchs.length - 1 ? 1 : index + 2}`} className="btn btn-circle ml-5">❯</a>
               </div>
             ))}
           </div>
