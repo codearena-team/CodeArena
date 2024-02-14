@@ -44,6 +44,11 @@ public class BattingServiceImpl implements BattingService{
 
             int userCoin = battingMapper.getUserCoin(map.get("userId"));   //해당 유저의 현재 코인 조회
 
+            //가지고 있는 금액보다 높게 배팅할 시
+            if(Integer.parseInt(map.get("batCoin")) > userCoin) {
+
+                throw new Error("Error : 현재 보유중인 코인보다 높은 배팅");
+            }
             // 차감된 유저 코인 금액 적용
             String batCoin = map.get("batCoin");
             String changeCoin = Integer.toString(userCoin - Integer.parseInt(batCoin));
@@ -54,11 +59,12 @@ public class BattingServiceImpl implements BattingService{
         }
         catch (Error e) {
 
-            log.info("배팅을 1회이상 시도한 유저입니다.");
+            log.error("Exception Msg", e);
             resultDto.setStatus("500");
-            resultDto.setMsg("배팅을 1회이상 시도한 유저입니다.");
+            resultDto.setMsg(String.valueOf(e));
             resultDto.setData(null);
         }
+
         catch (Exception e) {
 
             resultDto.setStatus("500");
