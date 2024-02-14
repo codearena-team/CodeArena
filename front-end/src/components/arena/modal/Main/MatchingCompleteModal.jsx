@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import VS from '../../../../images/arena/HotMatch/VS.png'
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
-export default function MatchingCompleteModal({ matchingState, onAccept, onCancel, type, openMatchingCompleteModal}) {
+export default function MatchingCompleteModal({ matchingState, onAccept, onCancel, type, socket}) {
+
   const [userImgSrcs, setUserImgSrcs] = useState('');
   const [enemyImgSrcs, setEnemyImgSrcs] = useState('');
   const [userNicknames, setUserNicknames] = useState('');
@@ -10,46 +12,82 @@ export default function MatchingCompleteModal({ matchingState, onAccept, onCance
   const [buttonsVisible, setButtonsVisible] = useState(true);
   // const [propsType, setPropsType] = useState(type);
 
+  const queueKey = useSelector(state => state.game.queueKey);
+  const userId = useSelector(state => state.game.userId);
+  const userNickname = useSelector(state => state.game.userNickname);
+  const rating = useSelector(state => state.game.rating);
+
   // const propsType = type; // props 받은 타입 선언
-  console.log("props받은 타입 확인000 :", type.current)
 
   // 수락했을 때 작동할 함수
   
-  const checkPropsType = (msgType) => {
-    // 거절당하고 다시 우선순위 큐에 들어감
-    if (msgType == 'CONTINUE') {
-      console.log("msgType 확인 :", msgType)
-      changeText("상대가 매칭을 거절하여 새로운 매칭을 시도하겠습니다...");
-      setButtonsVisible(false);
-    }
-    // 상대방과 매칭 잡혔을 때 : QUERY
-    else if (msgType == 'QUERY') {
-      console.log("좀 떠라")
-      changeText('');
-      setButtonsVisible(true);
-      // changeText("새 매칭을 잡았어요!");
-    } 
-  }
+  // const checkPropsType = (msgType) => {
+  //   // 거절당하고 다시 우선순위 큐에 들어감
+  //   if (msgType == 'CONTINUE') {
+  //     // console.log("msgType 확인 :", msgType)
+  //     changeText("상대가 매칭을 거절하여 새로운 매칭을 시도하겠습니다...");
+  //     setButtonsVisible(false);
+  //   }
+  //   // 상대방과 매칭 잡혔을 때 : QUERY
+  //   else if (msgType == 'QUERY') {
+  //     // console.log("좀 떠라")
+  //     changeText('');
+  //     setButtonsVisible(true);
+  //     // changeText("새 매칭을 잡았어요!");
+  //   } 
+  // }
 
   const handleAccept = () => {
     onAccept();
-    console.log("props받은 타입 확인111 :", type.current)
-    checkPropsType();
+    // console.log("props받은 타입 확인111 :", type.current)
     changeText("상대방의 수락을 기다리고 있어요!");
     setButtonsVisible(false);
   };
 
   useEffect(()=>{
-    console.log("useEffect !!!!")
-    checkPropsType(type.current);
-  }, [type.current])
+    console.log("props받은 type 확인000 :", type)
+
+    // console.log("useEffect !!!!")
+    // 거절당하고 다시 우선순위 큐에 들어감
+    if (type == 'CONTINUE') {
+      // console.log("msgType 확인 :", msgType)
+      changeText("상대가 매칭을 거절하여 새로운 매칭을 시도하겠습니다...");
+      setButtonsVisible(false);
+    }
+    // 상대방과 매칭 잡혔을 때 : QUERY
+    else if (type == 'QUERY') {
+      // console.log("좀 떠라")
+      changeText('');
+      setButtonsVisible(true);
+      // changeText("새 매칭을 잡았어요!");
+    } 
+  }, [type])
 
   // 텍스트 문구 동적으로 변환
   const changeText = (text) => {
     setWaitingText(text);
   }
 
+  const onHandleCancle = () => {
+    // console.log("queuekey 확인입니다!!!!!!!!!!!!!!!!!!! :", queueKey)
+    // console.log("userId 확인입니다!!!!!!!!!!!!!!!!!!! :", userId)
+    // console.log("rating 확인입니다!!!!!!!!!!!!!!!!!!! :", rating)
+    // console.log("userNickname 확인입니다!!!!!!!!!!!!!!!!!!! :", userNickname)
+    socket.send(
+      JSON.stringify ({
+        type : "POP",
+        queueKey: queueKey,
+        userId : userId,
+        rating : rating,
+        gameMode : "speed",
+        lang: "cpp",
+        userNickname: userNickname,
+      })
+    );
+    socket.close();
+    socket = null;
 
+  }
 
   // 거절했을 때 작동할 함수
   // const handleReject = () => {
@@ -60,7 +98,7 @@ export default function MatchingCompleteModal({ matchingState, onAccept, onCance
   // };
 
   useEffect(() => {
-    console.log('내려받은 유저 닉네임, 이미지 확인 :', matchingState);
+    // console.log('내려받은 유저 닉네임, 이미지 확인 :', matchingState);
     setUserImgSrcs(matchingState.userImgSrc);
     setEnemyImgSrcs(matchingState.enemyImgSrc);
     setUserNicknames(matchingState.userNickname);
@@ -118,6 +156,7 @@ export default function MatchingCompleteModal({ matchingState, onAccept, onCance
             <button
               className="btn btn-sm btn-circle btn-ghost mt-2"
               style={{ width: '10%' }}
+              onClick={onHandleCancle}
             > 취 소
             </button>
           </form>
