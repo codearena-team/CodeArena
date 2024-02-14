@@ -60,7 +60,7 @@ export default function NavBar() {
                   <img
                     className="h-full w-auto mt-3"
                     src={Logo}
-                    alt="Your Company"
+                    alt="CodaArena"
                   />
                 </Link>
                 </div>

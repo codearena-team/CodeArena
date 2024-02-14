@@ -38,7 +38,7 @@ export default function TagList() {
       {/* 데이터 리스트 */}
       {tagList.map((item, index) => (
         <div key={index} className="w-full border-b items-center rounded-xl shadow-sm hover:bg-gray-300">
-          <div style={{cursor:"pointer"}} className="py-4" onClick={()=>navigate(`/problem?orderBy=percent&tag=${item.tagName}`)}>
+          <div style={{cursor:"pointer"}} className="py-4" onClick={()=>navigate(`/problem?orderBy=percent&tag=${item.tagName}`, { replace: true })}>
             <div className="text-center w-full">{item.tagName}</div>
           </div>
         </div>
