@@ -64,7 +64,7 @@ export default function UserInfo({problemId}) {
     console.log(`여기여기여기여기여기 ${problemId}`)
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      url : `https://codearena.shop/api/problem/${problemId}`,
     })
     .then((res)=> {
       console.log(res);

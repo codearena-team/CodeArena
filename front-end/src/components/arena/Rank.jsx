@@ -12,7 +12,7 @@ export default function RankPage() {
   const [effRanks, setEffRanks] = useState([])
 
   useEffect(()=> {
-    axios.get('https://i10d211.p.ssafy.io/game/rest/rank')
+    axios.get('https://codearena.shop/game/rest/rank')
     .then((res)=> {
       console.log(res);
       setSpeedRanks(res.data.data.speedRank)

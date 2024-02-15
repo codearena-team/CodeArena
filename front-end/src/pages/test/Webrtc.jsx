@@ -9,7 +9,7 @@ import UserVideoComponent from './UserVideoComponent';
 import registerServiceWorker from './../../registerServiceWorker';
 
 // const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
-const APPLICATION_SERVER_URL = 'https://i10d211.p.ssafy.io/';
+const APPLICATION_SERVER_URL = 'https://codearena.shop/';
 
 class Webrtc extends Component {
   constructor(props) {

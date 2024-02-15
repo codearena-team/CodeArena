@@ -30,7 +30,7 @@ export default function Ps() {
     }
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/category`,
+      url : `https://codearena.shop/api/problem/category`,
     })
     .then((res)=> {
       const tmp = res.data.data
@@ -42,7 +42,7 @@ export default function Ps() {
     })
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem?orderBy=${orderBy}&cate=${cate}&word=${word}&pgno=${pgno}&spp=15&tag=${tag}`,
+      url : `https://codearena.shop/api/problem?orderBy=${orderBy}&cate=${cate}&word=${word}&pgno=${pgno}&spp=15&tag=${tag}`,
     })
     .then((res)=> {
       console.log(res);

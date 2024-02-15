@@ -42,7 +42,7 @@ export default function Login() {
     }
     if (checkEmail() && checkPassword()) {
       axios({
-        url: 'https://i10d211.p.ssafy.io/api/user/login',
+        url: 'https://codearena.shop/api/user/login',
         method:'post',
         data: {
           userEmail : email, 

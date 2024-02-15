@@ -39,7 +39,7 @@ export default function StatsisticsPage() {
     const headers = {
       Authorization : access
     }
-    axios.get('https://i10d211.p.ssafy.io/game/rest/user/record', {headers})
+    axios.get('https://codearena.shop/game/rest/user/record', {headers})
     .then((res)=> {
       setRecord(res.data.data.record)
       setData(Object.entries(res.data.data.record).map(([key,value])=>{

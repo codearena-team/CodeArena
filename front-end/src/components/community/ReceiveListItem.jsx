@@ -26,7 +26,7 @@ export default function ReceiveListItem(probs) {
      setAlarmStatus(e.target.value)
 
     axios({
-      url : `https://i10d211.p.ssafy.io/api/alarm/statusChange?alarmId=${alarmId}&alarmStatus=${e.target.value}`,
+      url : `https://codearena.shop/api/alarm/statusChange?alarmId=${alarmId}&alarmStatus=${e.target.value}`,
       method : 'put',
     })
     .then((res)=>{

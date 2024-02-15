@@ -14,7 +14,7 @@ export default function AlarmModal({alarmId}) {
 
   useEffect(()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      url : `https://codearena.shop/api/problem/${problemId}`,
       method : 'get',
     })
     .then((res)=>{
@@ -29,7 +29,7 @@ export default function AlarmModal({alarmId}) {
   // 문제수정요청보내기
   const sendProblemEdit = ()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/alarm/send`,
+      url : `https://codearena.shop/api/alarm/send`,
       method : 'post',
       data :{
         alarmType : '2',

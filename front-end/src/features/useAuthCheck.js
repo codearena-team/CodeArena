@@ -12,12 +12,12 @@ export function useAuthCheck() {
 
   const checkAccess = async function (accessToken) {
     const headers = {Authorization : accessToken}
-    return (axios.get('https://i10d211.p.ssafy.io/api/auth', {headers}))
+    return (axios.get('https://codearena.shop/api/auth', {headers}))
   }
 
   const auseRefresh = async function () {
     const data = {refreshToken : refreshToken}
-    return axios.post('https://i10d211.p.ssafy.io/api/auth/renew',data)
+    return axios.post('https://codearena.shop/api/auth/renew',data)
   }
 
   const authCheck = async () => {
@@ -42,7 +42,7 @@ export function useAuthCheck() {
   }
 
   //   axios({
-  //     url : 'http://i10d211.p.ssafy.io:8081/api/auth',  // access 토큰검사axios
+  //     url : 'http://codearena.shop:8081/api/auth',  // access 토큰검사axios
   //     method : 'get',
   //     headers : {
   //       Authorization : accessToken
@@ -52,7 +52,7 @@ export function useAuthCheck() {
   //     console.log(1, res)
   //     if (res.data.status === '302'){
   //       axios({
-  //         url : 'http://i10d211.p.ssafy.io:8081/api/auth/renew', // refresh로 재발급받는 axios
+  //         url : 'http://codearena.shop:8081/api/auth/renew', // refresh로 재발급받는 axios
   //         method : 'post',
   //         data : {
   //           refreshToken : refreshToken
@@ -65,7 +65,7 @@ export function useAuthCheck() {
   //         console.log(2, res)
   //         dispatch(setAccessToken(res.headers.authorization))
   //         axios({
-  //           url : 'http://i10d211.p.ssafy.io:8081/api/auth',
+  //           url : 'http://codearena.shop:8081/api/auth',
   //           method : 'get',
   //           headers : {
   //             Authorization : res.headers.authorization

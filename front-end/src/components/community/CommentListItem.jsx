@@ -18,7 +18,7 @@ export default function CommentListItem(props) {
 
   const commentDelete = () =>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/comment/delete?commentId=${commentNo}`,
+      url : `https://codearena.shop/api/comment/delete?commentId=${commentNo}`,
       method : 'delete'
     })
     .then((res)=>{
@@ -37,7 +37,7 @@ export default function CommentListItem(props) {
   
   const updateComment = () =>{
     axios({
-      url : 'https://i10d211.p.ssafy.io/api/comment/update',
+      url : 'https://codearena.shop/api/comment/update',
       method : 'put',
       data : {
         commentId : commentNo,

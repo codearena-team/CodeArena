@@ -18,7 +18,7 @@ export default function Test () {
   }
   const create = ()=> {
     axios({
-      url : 'https://i10d211.p.ssafy.io/game/vidu/sessions',
+      url : 'https://codearena.shop/game/vidu/sessions',
       data : {customSessionId:sessionId},
       method : 'post',
       headers: {'Content-Type': 'application/json'},
@@ -34,7 +34,7 @@ export default function Test () {
 
   const join = ()=> {
     axios({
-      url : `https://i10d211.p.ssafy.io/game/vidu/sessions/${sessionId}/connections`,
+      url : `https://codearena.shop/game/vidu/sessions/${sessionId}/connections`,
       data : {},
       method : 'post',
       headers: {'Content-Type': 'application/json'},
@@ -50,7 +50,7 @@ export default function Test () {
 
   const test2 = () => {
     axios({
-      url : `https://i10d211.p.ssafy.io/api/auth/renew`,
+      url : `https://codearena.shop/api/auth/renew`,
       data : {refreshToken:"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZWZyZXNoLXRva2VuIiwiaWF0IjoxNzA3ODM1NzAyLCJleHAiOjE3MDg2OTk3MDIsInVzZXJFbWFpbCI6Im15d2VAZ21haWwuY29tIiwidXNlcklkIjoiNDUiLCJ1c2VyTmlja25hbWUiOiLslpHqsbTsmrAiLCJzcGVlZCI6Ijk4NSIsImVmZiI6IjEwMDAifQ.2eKS5VbjwXbpkjXU0la7boaHECz292vvSrY6MG4dN6I"},
       method : 'post',
       headers: {'Content-Type': 'application/json'},

@@ -15,7 +15,7 @@ export default function Arena() {
   const userNickname = useSelector(state => state.auth.userNickname)
   useEffect(() => {
     window.scrollTo(0, 0);
-    axios.get(`https://i10d211.p.ssafy.io/api/user?to=${userNickname}&from=${userNickname}`)
+    axios.get(`https://codearena.shop/api/user?to=${userNickname}&from=${userNickname}`)
     .then(res => dispatch(updateArenadata(res.data.data)))
     .catch(err => console.log(err))
   }, []);

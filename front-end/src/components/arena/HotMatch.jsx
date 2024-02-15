@@ -20,7 +20,7 @@ export default function HotMatch() {
   const [hotMatchs, setHotMatchs] = useState([])
 
   useEffect(()=> {
-    axios.get('https://i10d211.p.ssafy.io/game/chat/hotmatch')
+    axios.get('https://codearena.shop/game/chat/hotmatch')
     .then((res)=> {
       setHotMatchs(res.data)
       console.log("Hot Match 확인 :", res.data);

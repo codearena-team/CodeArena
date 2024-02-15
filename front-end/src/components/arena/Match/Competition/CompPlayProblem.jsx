@@ -54,7 +54,7 @@ export default function CompPlayProblem({  }) {
     }
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      url : `https://codearena.shop/api/problem/${problemId}`,
     })
     .then((res)=> {
       console.log(res);
@@ -65,7 +65,7 @@ export default function CompPlayProblem({  }) {
     })
 
     if (stompClient == null) {
-      const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+      const socket = new SockJS('https://codearena.shop/game/ws-stomp');
       const stompClient = Stomp.over(socket);
       dispatch(setStompClients(stompClient));
       console.log("useEffect stompClient :", stompClient)
@@ -145,7 +145,7 @@ export default function CompPlayProblem({  }) {
 
     if(gameMode === 'speed'){
       console.log("제출해버렷!")
-      url = `https://i10d211.p.ssafy.io/${lang}/judge/arena`
+      url = `https://codearena.shop/${lang}/judge/arena`
       fetch(url, {
         method : "POST",
         headers : {
@@ -175,7 +175,7 @@ export default function CompPlayProblem({  }) {
         }))        
       })
     }else{
-      url = `https://i10d211.p.ssafy.io/game/rest/submit`
+      url = `https://codearena.shop/game/rest/submit`
       console.log("여긴 효율전 전용이얌")
       fetch(url, {
         method : "POST",

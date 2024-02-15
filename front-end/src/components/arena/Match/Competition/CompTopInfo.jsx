@@ -17,7 +17,7 @@ export default function CompTopInfo({ gameExitId, problemId, game}) {
   const onClick = ()=> {
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${game.problemId}`,
+      url : `https://codearena.shop/api/problem/${game.problemId}`,
     })
     .then((res)=> {
       console.log(res);

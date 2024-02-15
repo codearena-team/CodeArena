@@ -60,7 +60,7 @@ export default function CommunityCreate() {
       return;
     }
     axios({
-      url : 'https://i10d211.p.ssafy.io/api/board/write',
+      url : 'https://codearena.shop/api/board/write',
       method : 'post',
       data : {
         userId : userId,

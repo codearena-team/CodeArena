@@ -32,7 +32,7 @@ export default function FindPassword(){
       return
     }
     axios({
-      url : 'https://i10d211.p.ssafy.io/api/user/password/reissue',
+      url : 'https://codearena.shop/api/user/password/reissue',
       method : 'post',
       data : {
         userEmail : email
@@ -54,7 +54,7 @@ export default function FindPassword(){
       return
     }
     axios({
-      url : 'https://i10d211.p.ssafy.io/api/user/password/verification',
+      url : 'https://codearena.shop/api/user/password/verification',
       method : 'post',
       data : {
         userEmail : email,
@@ -88,7 +88,7 @@ export default function FindPassword(){
     }
     if (checkPassword() && password === passwordconfirm) {
       axios({
-        url : 'https://i10d211.p.ssafy.io/api/user/password',
+        url : 'https://codearena.shop/api/user/password',
         method : 'put',
         data : {
           userEmail : email,

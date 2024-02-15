@@ -74,7 +74,7 @@ export default function MyPage() {
   // 프로필화면시 그프로필 회원정보요청하는 axios
   useEffect(()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/user?to=${profileNickname}&from=${loginNickname}`,
+      url : `https://codearena.shop/api/user?to=${profileNickname}&from=${loginNickname}`,
       method : 'get'
     })
     .then((res)=>{
@@ -105,7 +105,7 @@ export default function MyPage() {
     }
      //자기가 팔로우하는사람 = 팔로잉조회
     axios({
-      url: `https://i10d211.p.ssafy.io/api/user/follow/${profileId} `,
+      url: `https://codearena.shop/api/user/follow/${profileId} `,
       method : 'get'
     })
     .then((res)=>{
@@ -116,7 +116,7 @@ export default function MyPage() {
       console.log(err)
     })
     axios({
-      url: `https://i10d211.p.ssafy.io/api/user/follow/${loginId} `,
+      url: `https://codearena.shop/api/user/follow/${loginId} `,
       method : 'get'
     })
     .then((res)=>{
@@ -130,7 +130,7 @@ export default function MyPage() {
 
     // 자기를 팔로우하는사람 = 팔로워 조회
     axios({
-      url :`https://i10d211.p.ssafy.io/api/user/following/${profileId} `, 
+      url :`https://codearena.shop/api/user/following/${profileId} `, 
       method : 'get'
     })
     .then((res)=>{
@@ -141,7 +141,7 @@ export default function MyPage() {
       console.log(err)
     })
     axios({
-      url :`https://i10d211.p.ssafy.io/api/user/following/${loginId} `, 
+      url :`https://codearena.shop/api/user/following/${loginId} `, 
       method : 'get'
     })
     .then((res)=>{
@@ -160,7 +160,7 @@ const goEdit = () =>{
 
 const goFollow = () =>{
   axios({
-    url : 'https://i10d211.p.ssafy.io/api/user/follow',
+    url : 'https://codearena.shop/api/user/follow',
     method : 'post',
     data : {
       fromId : loginId,
@@ -187,7 +187,7 @@ const goFollow = () =>{
 
 const goUnfollow = () =>{
   axios({
-    url : 'https://i10d211.p.ssafy.io/api/user/follow',
+    url : 'https://codearena.shop/api/user/follow',
     method : 'delete',
     data : {
       fromId : loginId,
@@ -239,7 +239,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
       return
     }
     axios({
-      url :`https://i10d211.p.ssafy.io/api/user/list?fromId=${loginId}&toNickname=${e.target.value}`,
+      url :`https://codearena.shop/api/user/list?fromId=${loginId}&toNickname=${e.target.value}`,
       method : 'get'
     })
     .then((res)=>{
