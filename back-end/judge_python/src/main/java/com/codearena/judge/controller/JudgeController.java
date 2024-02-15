@@ -1,9 +1,6 @@
 package com.codearena.judge.controller;
 
-import com.codearena.judge.dto.JudgeArenaDto;
-import com.codearena.judge.dto.JudgeNormalDto;
-import com.codearena.judge.dto.JudgeResultDto;
-import com.codearena.judge.dto.JudgeValidationCheckDto;
+import com.codearena.judge.dto.*;
 import com.codearena.judge.service.JudgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +29,10 @@ public class JudgeController {
     @PostMapping("/normal")
     public ResponseEntity<JudgeResultDto>  judgeNormal(@RequestBody JudgeNormalDto judgeNormalDto) {
         return new ResponseEntity<JudgeResultDto>(judgeService.judgeNormal(judgeNormalDto), HttpStatus.OK);
+    }
+    @PostMapping("/example")
+    public ResponseEntity<JudgeResultDto>  judgeExample(@RequestBody JudgeExampleDto judgeExampleDto) {
+        return new ResponseEntity<JudgeResultDto>(judgeService.judgeExample(judgeExampleDto), HttpStatus.OK);
     }
 
 }
