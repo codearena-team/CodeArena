@@ -136,6 +136,10 @@ export default function CompPlayProblem({  }) {
     // dispatch(setStompClients(stompClient));
   }, []);
 
+  useEffect(()=>{
+
+  },[])
+
   const onClickHandler = (e) => {
     let url =  '';
 

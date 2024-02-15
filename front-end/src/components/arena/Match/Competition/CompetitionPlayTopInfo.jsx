@@ -13,7 +13,7 @@ export default function UserInfo() {
   const [timer, setTimer] = useState(3600);
   const [timerDisplay, setTimerDisplay] = useState("1:00:00");
   const [timerExpired, setTimerExpired] = useState(false);
-  
+  const [num, setNum] = useState(0)
   const {
     gameId,
     gameMode,
@@ -40,7 +40,7 @@ export default function UserInfo() {
     const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
     console.log("남은시간 확인 :", 3600 - elapsed)
     setTimer(3600 - elapsed)
-  }, [])
+  }, [num])
 
   // 제한시간 1시간 타이머 useEffect
   useEffect(() => {
@@ -48,7 +48,12 @@ export default function UserInfo() {
 
     const intervalId = setInterval(() => {
       // 매 초마다 타이머 업데이트
+      
       setTimer((prevTimer) => {
+        if (prevTimer % 60 === 0 ) {
+          setNum(num+1)
+        }
+
         if (prevTimer === 0) {
           clearInterval(intervalId); // 0초가 되면 타이머 중지
           // 타이머 만료 시 처리하는 useState

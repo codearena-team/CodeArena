@@ -15,6 +15,7 @@ export const gameSlice = createSlice({
     enemyImgSrc: null,
     startTime: null,
     queueKey: null,
+    isTimeUp: true
   },
   reducers : {
     // set 할 때 쓰기 위함
@@ -62,8 +63,13 @@ export const gameSlice = createSlice({
       state.startTime = null;
       state.queueKey = null;
     },
+    
+    setIsTimeUp : (state,action) => {
+      state.isTimeUp = action.payload;
+    },
+
   }  
 })
 
-export const { setGameInfo, resetGameInfo } = gameSlice.actions
+export const { setGameInfo, resetGameInfo,setIsTimeUp } = gameSlice.actions
 export default gameSlice.reducer
