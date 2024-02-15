@@ -39,7 +39,7 @@
             WHERE user_id = #{userId}
         </selectKey>
         UPDATE user
-        SET user_coin = #{userCoin} + #{coin}
+        SET user_coin = #{userCoin} + ${coin}
         WHERE user_id = #{userId};
     </update>
 

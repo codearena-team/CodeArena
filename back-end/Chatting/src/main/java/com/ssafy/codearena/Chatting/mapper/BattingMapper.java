@@ -14,7 +14,7 @@ import java.util.Map;
 public interface BattingMapper {
     public int getUserCoin(String userId) throws Exception;
     public void updateUserCoin(String userId, String coin) throws Exception;
-    public void updateUserPlusCoin(String userId, String coin) throws Exception;
+    public void updateUserPlusCoin(String userId, int coin) throws Exception;
     public void batPlayer(Map<String, String> map) throws Exception;
     public BatPlayerCountDto getPlayerCount(Map<String, String> map) throws Exception;
     public List<BatUserCoinDto> getUserBatCoin(String gameId, String winner) throws SQLException;

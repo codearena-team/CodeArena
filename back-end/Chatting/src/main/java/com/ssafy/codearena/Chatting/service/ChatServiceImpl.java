@@ -443,7 +443,7 @@ public class ChatServiceImpl implements ChatService{
 
                 for(BatUserCoinDto dto : list) {
 
-                    battingMapper.updateUserPlusCoin(dto.getUserId(), String.valueOf(dto.getUserCoin()));
+                    battingMapper.updateUserPlusCoin(dto.getUserId(), Integer.parseInt(dto.getUserCoin()));
                 }
 
             }
