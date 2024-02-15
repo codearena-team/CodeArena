@@ -14,22 +14,21 @@ export default function CompTopInfo({ gameExitId, problemId, game}) {
   const [problem,setProblem] = useState([])
   const [problemTitle,setProblemTitle] = useState('')
 
-  useEffect(()=> {
-    setTimeout(() => {
-      axios({
-        method : 'get',
-        url : `https://i10d211.p.ssafy.io/api/problem/${game.problemId}`,
-      })
-      .then((res)=> {
-        console.log(res);
-        setProblem(res.data.data);
-        setProblemTitle(res.data.data.problemTitle);
-      })
-      .catch((err)=> {
-        console.log(err);
-      })
-    }, 100);
-  },[])
+  const onClick = ()=> {
+    axios({
+      method : 'get',
+      url : `https://i10d211.p.ssafy.io/api/problem/${game.problemId}`,
+    })
+    .then((res)=> {
+      console.log(res);
+      setProblem(res.data.data);
+      setProblemTitle(res.data.data.problemTitle);
+    })
+    .catch((err)=> {
+      console.log(err);
+    })
+    document.getElementById('openProblem').showModal()
+  }
 
 
   return (
@@ -83,13 +82,13 @@ export default function CompTopInfo({ gameExitId, problemId, game}) {
         <button
           className="rounded-lg shadow-lg px-4 py-2 focus:outline-none text-2xl font-bold hover:scale-105"
           style={{ width: '100%', height: '100%', backgroundColor: '#F5EBDB' }}
-          onClick={()=>document.getElementById('openProblem').showModal()}
+          onClick={onClick}
         >
           문제보기
         </button>
         {/* 문제모달창 */}
         <dialog id="openProblem" className="modal">
-          <div style={{backgroundColor: '#F5EBDB'}} className="modal-box w-11/12 max-w-5xl scrollBar" >
+          <div style={{backgroundColor: '#F7F6E4'}} className="modal-box w-11/12 max-w-5xl scrollBar" >
             <div className="rounded-lg p-5 mb-3" style={{backgroundColor: '#F4ECE4'}}>
               <div className="flex items-center">
                 <p className="mr-2">#{problemId}</p>

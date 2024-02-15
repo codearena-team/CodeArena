@@ -348,12 +348,12 @@ input.txt                                       output.txt
         </div>
         
         <div className='grid grid-cols-12 mb-4'>
-          <div className="col-start-2 col-span-10">
+          <div className="col-start-2 col-span-10 z-50">
             <span className="font-bold mb-2 col-span-1"htmlFor="inputEx">
               검증용 코드
             </span>
-            <button className='btn btn-sm btn-neutral ms-4' onClick={onClickComfile}>컴파일</button>
-            <button className="btn btn-sm btn-neutral ms-4" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</button>
+            <div className='btn btn-sm btn-neutral ms-4 z-50' onClick={onClickComfile}>컴파일</div>
+            <div className="btn btn-sm btn-neutral ms-4 z-50" onClick={()=>document.getElementById('TagModal').showModal()}>알고리즘 선택</div>
             <dialog id="TagModal" className="modal">
               <div className="modal-box" style={{backgroundColor:'rgb(245, 245, 236)'}}>
                 <div className="modal-action flex justify-between mb-4 mt-0">
@@ -390,17 +390,14 @@ input.txt                                       output.txt
                 </div>
               </div>
             </dialog>
-
-
-            <div className='w-full mt-2'>
-              <Editor language={lang} height="400px"
-              onChange={onChangeTestCode} 
-              options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}/>
-            </div>
           </div>
-
-
-
+        </div>
+        <div className='grid grid-cols-12 mt-2'>
+          <div className=" col-span-10 col-start-2">
+            <Editor language={lang} height="400px"
+            onChange={onChangeTestCode}
+            options={{'scrollBeyondLastLine':false, 'minimap':{enabled:false}}}/>
+          </div>
         </div>
         <div className='flex justify-center z-10'>
           <div className={isValidCode? 'z-10 btn btn-neutral w-60 text-2xl text-center rounded-full' : 'z-10 btn w-60 text-2xl text-center rounded-full btn-disabled' } onClick={onClick}>{isValidCode? '제 출' : '컴파일 후 제출가능' }</div>

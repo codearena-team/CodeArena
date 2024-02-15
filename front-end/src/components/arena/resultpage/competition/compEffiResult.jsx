@@ -1,6 +1,6 @@
 import Tropy from '../../../../images/arena/Result/tropy.png'
 import '../../../css/resultpage.css'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import SubmitItem from './compSubmitItemList'
 
 export default function EffiResult (){
   const gameId = useSelector(state => state.game.gameId);
-
+  const navigate = useNavigate()
   const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
   const [winnerRating, setWinnerRating] = useState('');
@@ -42,6 +42,8 @@ export default function EffiResult (){
         console.error('에러 발생:', error);
       });
 
+  
+    
     axios.get('https://i10d211.p.ssafy.io/game/rest/effi/list?gameId='+`${gameId}`)
       .then(res => {
         console.log('여기 제출 리스트 받았어요', res.data)
@@ -50,6 +52,11 @@ export default function EffiResult (){
         console.log("서브밋 리스트 확인:", newArray)
       })
   }, []);
+  
+  const onClickexit = () => {
+    navigate('/arena')
+    window.location.reload()
+  }
 
   const pageNation = () => {
     const result = [];
@@ -62,11 +69,9 @@ export default function EffiResult (){
   return(
     <div className='flex flex-col mt-10 '>
       <div className='flex justify-end mr-20'>
-        <Link to='/arena'>
           <button className="btn btn-sm btn-active drop-shadow text-md" 
-          style={{backgroundColor:'#E2E2E2'}}
+          style={{backgroundColor:'#E2E2E2'}} onClick={onClickexit}
           >아레나로 돌아가기</button>
-        </Link>
       </div>
       <div className="mt-5 shadow-xl mb-5 relative" style={{ backgroundColor: '#E3E6D9', height:180 }}>
         <div className="rounded-xl drop-shadow p-5 mb-2  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" 
