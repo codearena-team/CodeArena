@@ -291,8 +291,8 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
 
 
   return (
-    <div className='container mx-auto'>
-      <div className='flex p-40 pt-0 pb-0 justify-end mr-3 mb-5'>
+    <div className=''>
+      <div className='flex p-36 pt-0 pb-0 justify-end  mb-5 ml-10'>
         <div>
           <input ref={inputRef} type="text" placeholder="닉네임을 입력하세요" className="input input-bordered w-xl h-8 max-w-xs mb-2" 
           style={{outline:'none',borderBottomRightRadius: '0',borderTopRightRadius: '0'}}
@@ -320,7 +320,7 @@ const colors = ['#778899', '#DB7093', '#87CEFA','#DEB887','#FF7F50',
         onClick={searchNickname}>검색</button>  
       </div>
     
-      <div className="grid grid-cols-12 p-20 pb-0 pt-0">
+      <div className="grid grid-cols-12 pl-24 pb-0 pt-0">
         <div className="col-span-2 gap-4 ">
           <div className='grid grid-cols-1 gap-4'>
             <div className='flex justify-center mt-5'><img style={{width:130}} src={selectedFile} alt="" /></div>
