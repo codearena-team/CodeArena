@@ -36,7 +36,7 @@ export default function GroupPlay() {
   useEffect(()=> {
     axios({
       method : 'get',
-      url : `http://i10d211.p.ssafy.io:8081/api/problem/29`,
+      url : `http://codearena.shop:8081/api/problem/29`,
     })
     .then((res)=> {
       console.log(res);

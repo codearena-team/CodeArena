@@ -9,7 +9,7 @@ export default function TagList() {
   useEffect(()=> {
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/category`,
+      url : `https://codearena.shop/api/problem/category`,
     })
     .then((res)=> {
       console.log(res);

@@ -27,7 +27,7 @@ export default function ProblemDetail() {
   useEffect(()=> {
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      url : `https://codearena.shop/api/problem/${problemId}`,
       headers : {
         Authorization : accessToken 
       }
@@ -71,7 +71,7 @@ export default function ProblemDetail() {
       const headers = {
         Authorization : accessToken 
       }
-      axios.put(`https://i10d211.p.ssafy.io/api/problem/${problemId}/status`,{change:1},{headers})
+      axios.put(`https://codearena.shop/api/problem/${problemId}/status`,{change:1},{headers})
       .then(setTimeout((res) => {
         console.log(res)
         navigate(-1);

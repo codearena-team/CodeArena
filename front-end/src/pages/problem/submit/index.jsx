@@ -33,7 +33,7 @@ export default function Submit() {
     if (problemId) {
       axios({
         method : 'get',
-        url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/submit/statistics?userId=6`,
+        url : `https://codearena.shop/api/problem/${problemId}/submit/statistics?userId=6`,
       })
       .then((res)=> {
         console.log(res)
@@ -50,7 +50,7 @@ export default function Submit() {
     }
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=15&pgno=${pgno}&orderBy=${orderBy}`,
+      url : `https://codearena.shop/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=15&pgno=${pgno}&orderBy=${orderBy}`,
       headers : {
         Authorization : accessToken
       }

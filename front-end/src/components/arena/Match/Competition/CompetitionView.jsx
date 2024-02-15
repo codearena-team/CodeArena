@@ -50,7 +50,7 @@ export default function CompetitionView() {
   }, []);
 
   useEffect(()=> {
-    axios.get(`https://i10d211.p.ssafy.io/game/chat/room?gameId=${params.id}`)
+    axios.get(`https://codearena.shop/game/chat/room?gameId=${params.id}`)
     .then(res => {
       console.log(res)
       setGame(res.data.data)
@@ -92,7 +92,7 @@ export default function CompetitionView() {
     // 경기 시작 시간 확인
     console.log("경기 시작 시간 확인 :", startTime)
       
-    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+    const socket = new SockJS('https://codearena.shop/game/ws-stomp');
     const stompClient = Stomp.over(socket)
     dispatch(setStompClients(stompClient));
     console.log("경쟁전 useEffect stompClient :", stompClient)
@@ -194,7 +194,7 @@ export default function CompetitionView() {
 //         type: 'ENTER',
 //     }))
 //   } else {
-//     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+//     const socket = new SockJS('https://codearena.shop/game/ws-stomp');
 //     const stompClient = Stomp.over(socket);
 //     dispatch(setStompClients(stompClient));
 //     console.log("useEffect stompClient :", stompClient)
@@ -298,7 +298,7 @@ export default function CompetitionView() {
       playerId : game.userRed,
       batCoin : bettingCoin1,
     }
-    axios.post('https://i10d211.p.ssafy.io/game/batting/player',data)
+    axios.post('https://codearena.shop/game/batting/player',data)
     .then(res => {
       console.log(res)
       dispatch(setUserCoin(mycoin-bettingCoin1))
@@ -307,7 +307,7 @@ export default function CompetitionView() {
       console.log(err);
     })
     
-    axios.get(`https://i10d211.p.ssafy.io/game/batting/status?gameId=${params.id}&player1Id=${game.userRed}&player2Id=${game.userBlue}`)
+    axios.get(`https://codearena.shop/game/batting/status?gameId=${params.id}&player1Id=${game.userRed}&player2Id=${game.userBlue}`)
     .then(res => {
       console.log(res)
       setBetting(res.data.data)
@@ -328,7 +328,7 @@ export default function CompetitionView() {
       playerId : game.userBlue,
       batCoin : bettingCoin2,
     }
-    axios.post('https://i10d211.p.ssafy.io/game/batting/player',data)
+    axios.post('https://codearena.shop/game/batting/player',data)
     .then(res => {
       console.log(res)
       dispatch(setUserCoin(mycoin-bettingCoin2))
@@ -337,7 +337,7 @@ export default function CompetitionView() {
       console.log(err);
     })
     
-    axios.get(`https://i10d211.p.ssafy.io/game/batting/status?gameId=${params.id}&player1Id=${game.userRed}&player2Id=${game.userBlue}`)
+    axios.get(`https://codearena.shop/game/batting/status?gameId=${params.id}&player1Id=${game.userRed}&player2Id=${game.userBlue}`)
     .then(res => {
       console.log(res)
       setBetting(res.data.data)
@@ -353,7 +353,7 @@ export default function CompetitionView() {
 
   const onClickBettingStatus = () => {
     
-    axios.get(`https://i10d211.p.ssafy.io/game/batting/status?gameId=${params.id}&player1Id=${game.userRed}&player2Id=${game.userBlue}`)
+    axios.get(`https://codearena.shop/game/batting/status?gameId=${params.id}&player1Id=${game.userRed}&player2Id=${game.userBlue}`)
     .then(res => {
       console.log(res)
       setBetting(res.data.data)

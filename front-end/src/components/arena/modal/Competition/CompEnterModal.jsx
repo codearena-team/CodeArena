@@ -8,7 +8,7 @@ export default function EnterModal({ competitionId, startTime, problemId, gameMo
   // const competitionPath = `/game-list/competition/view/${competitionId}`;
   const navigate = useNavigate();
   const handlerYes = (() => {
-    axios.get(`https://i10d211.p.ssafy.io/game/chat/enter?gameId=${competitionId}`)
+    axios.get(`https://codearena.shop/game/chat/enter?gameId=${competitionId}`)
     .then(res=>console.log(res))
     .catch(err=>console.log(err))
 

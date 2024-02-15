@@ -18,7 +18,7 @@ export default function Alarm() {
   // 알림 목록 요청보내기 렌더링 될때는 기본이 받는알림함보기
   useEffect(()=> {
     axios({
-      url : `https://i10d211.p.ssafy.io/api/alarm/receive?userId=${userId}`,
+      url : `https://codearena.shop/api/alarm/receive?userId=${userId}`,
       method : 'get',
     })
     .then((res)=>{
@@ -36,7 +36,7 @@ export default function Alarm() {
 
   useEffect(()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/alarm/send/list?userId=${userId}`,
+      url : `https://codearena.shop/api/alarm/send/list?userId=${userId}`,
       method : 'get',
     })
     .then((res)=>{

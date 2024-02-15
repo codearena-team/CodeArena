@@ -28,7 +28,7 @@ export default function ProblemEdit() {
   const problemId = params.problemId
   useEffect(() => {
     axios({
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/modify`,
+      url : `https://codearena.shop/api/problem/${problemId}/modify`,
       method : "get",
     })
     .then((res) => {
@@ -104,7 +104,7 @@ export default function ProblemEdit() {
       return {tagName : selected}
     })
     axios({
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      url : `https://codearena.shop/api/problem/${problemId}`,
       method : "put",
       data : {
         userId:userId,
@@ -140,7 +140,7 @@ export default function ProblemEdit() {
         problemTime : time,
         testCase : testcase
     }
-    axios.post(`https://i10d211.p.ssafy.io/${lang}/judge/validation`,data)
+    axios.post(`https://codearena.shop/${lang}/judge/validation`,data)
     .then(res=> {
       if (res.data.data.solve) {
         alert('코드 검증 성공하였습니다.')
@@ -155,7 +155,7 @@ export default function ProblemEdit() {
 
   const onDelete = () => {
     axios({
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}`,
+      url : `https://codearena.shop/api/problem/${problemId}`,
       method : "delete",
       headers : {
         Authorization : accessToken 

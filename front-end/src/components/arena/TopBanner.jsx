@@ -70,7 +70,7 @@ export default function TopBanner() {
   const startTime = useRef(null);
 
   const handleStartMatching = () => {
-    socket.current = new WebSocket('wss://i10d211.p.ssafy.io/matching');
+    socket.current = new WebSocket('wss://codearena.shop/matching');
 
     socket.current.addEventListener("open", function (event) {
       console.log(event)

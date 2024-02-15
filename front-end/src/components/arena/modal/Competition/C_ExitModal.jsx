@@ -21,7 +21,7 @@ export default function CompetitionExitModal({ gameExitId }) {
     window.location.reload()
     // window.location.href = '/arena';
 
-    axios.get('https://i10d211.p.ssafy.io/game/chat/exit?gameId=' + `${gameId}`)
+    axios.get('https://codearena.shop/game/chat/exit?gameId=' + `${gameId}`)
       .then((res)=> {
         console.log(res.data);
       })

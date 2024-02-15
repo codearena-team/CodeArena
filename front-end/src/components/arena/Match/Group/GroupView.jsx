@@ -21,7 +21,7 @@ export default function GroupView() {
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
   useEffect(() => {
-    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+    const socket = new SockJS('https://codearena.shop/game/ws-stomp');
     const stompClient = Stomp.over(socket);
     console.log("단체전 useEffect stompClient :", stompClient)
 
@@ -68,7 +68,7 @@ export default function GroupView() {
         type: 'ENTER',
     }))
   } else {
-    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+    const socket = new SockJS('https://codearena.shop/game/ws-stomp');
     const stompClient = Stomp.over(socket);
     console.log("useEffect stompClient :", stompClient)
 

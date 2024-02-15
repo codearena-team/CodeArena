@@ -28,7 +28,7 @@ export default function MiddleConfirm(){
     console.log("gameId 확인 :", gameId)
     console.log("problemId 확인 :", problemId)
     console.log("startTime 확인 :", startTime)
-    axios.get('https://i10d211.p.ssafy.io/game/rest/effi/list?gameId='+`${gameId}&pgno=${pgno}&spp=${spp}`)
+    axios.get('https://codearena.shop/game/rest/effi/list?gameId='+`${gameId}&pgno=${pgno}&spp=${spp}`)
       .then(res => {
         console.log(res.data)
         const { currentPage, list, totalPageCount } = res.data.data

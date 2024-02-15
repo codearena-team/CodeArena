@@ -60,7 +60,7 @@ export default function Signup(){
     }
     if(checkEmail() && checkPassword() && checkNickname() && checkIntroduce() && password === passwordconfirm) {
       axios({
-        url:'https://i10d211.p.ssafy.io/api/user/join',
+        url:'https://codearena.shop/api/user/join',
         method:'post',
         data:{
           userEmail : email,
@@ -88,7 +88,7 @@ export default function Signup(){
     // 이메일 중복 검사 요청보내기
     setTimeout(() => {
       axios({
-        url:`https://i10d211.p.ssafy.io/api/user/email/duplicate?userEmail=${e.target.value}`,
+        url:`https://codearena.shop/api/user/email/duplicate?userEmail=${e.target.value}`,
         method:'get',
       })
       .then((res)=>{
@@ -112,7 +112,7 @@ export default function Signup(){
     // 닉네임 중복 검사 요청보내기
     setTimeout(() => {
       axios({
-        url:`https://i10d211.p.ssafy.io/api/user/nick/duplicate?userNickname=${e.target.value}`,
+        url:`https://codearena.shop/api/user/nick/duplicate?userNickname=${e.target.value}`,
         method:'get',
       })
       .then((res)=>{

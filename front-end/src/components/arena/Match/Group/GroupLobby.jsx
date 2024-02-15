@@ -21,7 +21,7 @@ export default function GroupLobby() {
   const userNickname = useSelector(state=>state.auth.userNickname)
   useEffect(()=> {
     axios({
-      url :`https://i10d211.p.ssafy.io/api/user/follow/${userId} `, 
+      url :`https://codearena.shop/api/user/follow/${userId} `, 
       method : 'get'
     })
     .then((res)=>{
@@ -33,7 +33,7 @@ export default function GroupLobby() {
     })
 
     axios({
-      url :`https://i10d211.p.ssafy.io/game/chat/enter/room?gameId=${params.id} `, 
+      url :`https://codearena.shop/game/chat/enter/room?gameId=${params.id} `, 
       method : 'get'
     })
     .then((res)=>{
@@ -46,7 +46,7 @@ export default function GroupLobby() {
 
   const onClickInvite = (e) => {
     axios({
-      url : `https://i10d211.p.ssafy.io/api/alarm/send`,
+      url : `https://codearena.shop/api/alarm/send`,
       method : 'post',
       data :{
         alarmType : '3',

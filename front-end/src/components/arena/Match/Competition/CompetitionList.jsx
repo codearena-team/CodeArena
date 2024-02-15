@@ -74,7 +74,7 @@ export default function CompetitionList() {
     const langType = searchParams.get('langType') || ''
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/game/chat/rooms?roomType=0&key=${key}&word=${word}&gameMode=${gameMode}&langType=${langType}&pgno=${pgno}&spp=15`,
+      url : `https://codearena.shop/game/chat/rooms?roomType=0&key=${key}&word=${word}&gameMode=${gameMode}&langType=${langType}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       console.log(res);

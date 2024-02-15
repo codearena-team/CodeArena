@@ -37,7 +37,7 @@ export default function SubmitWindow(props) {
     if (problemId) {
       axios({
         method : 'get',
-        url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/submit/statistics?userId=${userId}`,
+        url : `https://codearena.shop/api/problem/${problemId}/submit/statistics?userId=${userId}`,
       })
       .then((res)=> {
         console.log(res)
@@ -54,7 +54,7 @@ export default function SubmitWindow(props) {
     }
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=10&pgno=${pgno}&orderBy=${orderBy}`,
+      url : `https://codearena.shop/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=10&pgno=${pgno}&orderBy=${orderBy}`,
       headers : {
         Authorization : accessToken
       }
@@ -98,7 +98,7 @@ export default function SubmitWindow(props) {
     const nickname = searchParams.get('nickname') || ''
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=10&pgno=${pgno}&orderBy=${orderBy}`,
+      url : `https://codearena.shop/api/problem/submit?problemId=${problemId}&userNickname=${nickname}&lang=${lang}&spp=10&pgno=${pgno}&orderBy=${orderBy}`,
       headers : {
         Authorization : accessToken
       }
@@ -113,7 +113,7 @@ export default function SubmitWindow(props) {
     })
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/${problemId}/submit/statistics?userId=${userId}`,
+      url : `https://codearena.shop/api/problem/${problemId}/submit/statistics?userId=${userId}`,
     })
     .then((res)=> {
       console.log(res)

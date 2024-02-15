@@ -60,7 +60,7 @@ export default function Summary() {
   const [problemNum,setProblemNum] = useState('')
 
   useEffect(() => {
-    axios.get('https://i10d211.p.ssafy.io/api/problem?orderBy=date&cate=&word=&pgno=1&spp=6&tag=')
+    axios.get('https://codearena.shop/api/problem?orderBy=date&cate=&word=&pgno=1&spp=6&tag=')
     .then((res)=> {
       console.log(res);
       console.log(res.data.data.problemWithSearch)
@@ -69,7 +69,7 @@ export default function Summary() {
     }).catch((err)=> {
       console.log(err);
     })
-    axios.get("https://i10d211.p.ssafy.io/api/board/list?sortType=hit&key=&word=&langType=&pgno=1&spp=5")
+    axios.get("https://codearena.shop/api/board/list?sortType=hit&key=&word=&langType=&pgno=1&spp=5")
     .then((res)=> {
       console.log(res);
       setPopularQuestions(res.data.data.articles)

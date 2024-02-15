@@ -32,7 +32,7 @@ export default function ChangePassword(){
 
     if (checkPassword() && password === passwordconfirm) {
       axios({
-        url : 'https://i10d211.p.ssafy.io/api/user/password',
+        url : 'https://codearena.shop/api/user/password',
         method : 'put',
         data : {
           userEmail : email,

@@ -29,7 +29,7 @@ export default function ProblemCreate() {
   
 useEffect(()=>{ axios({
   method : 'get',
-  url : `https://i10d211.p.ssafy.io/api/problem/category`,
+  url : `https://codearena.shop/api/problem/category`,
 })
 .then((res)=> {
   console.log(res);
@@ -123,7 +123,7 @@ useEffect(()=>{ axios({
           return {input : el, output: outputFileData[index]}
         })
     }
-    axios.post(`https://i10d211.p.ssafy.io/${lang}/judge/validation`,data)
+    axios.post(`https://codearena.shop/${lang}/judge/validation`,data)
     .then(res=> {
       console.log(res);
       if (res.data.data.solve) {
@@ -191,7 +191,7 @@ useEffect(()=>{ axios({
     })
     
     axios({
-      url : `https://i10d211.p.ssafy.io/api/problem`,
+      url : `https://codearena.shop/api/problem`,
       method : "post",
       data : {
         userId:userId,

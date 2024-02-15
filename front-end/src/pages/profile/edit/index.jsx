@@ -26,7 +26,7 @@ export default function Edit(){
   // 프로필화면시 그프로필 회원정보요청하는 
   useEffect(()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/user?to=${nickname}&from=${nickname}`,
+      url : `https://codearena.shop/api/user?to=${nickname}&from=${nickname}`,
       method : 'get'
     })
     .then((res)=>{
@@ -45,7 +45,7 @@ export default function Edit(){
     setNickname(e.target.value)
     // 닉네임 중복 검사 요청보내기
     axios({
-      url:`https://i10d211.p.ssafy.io/api/user/nick/duplicate?userNickname=${e.target.value}`,
+      url:`https://codearena.shop/api/user/nick/duplicate?userNickname=${e.target.value}`,
       method:'get',
     })
     .then((res)=>{
@@ -65,7 +65,7 @@ export default function Edit(){
   // 저장버튼 클릭시
   const onSumit = ()=> {
     axios({
-      url:`https://i10d211.p.ssafy.io/api/user`,
+      url:`https://codearena.shop/api/user`,
       method:'put',
       data: {
         "userId": userId,
@@ -86,7 +86,7 @@ export default function Edit(){
   // 유저의 프로필사진 불러오기
   useEffect(()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/profile/${userId}`,
+      url : `https://codearena.shop/api/profile/${userId}`,
       method :'get'
     })
     .then((res)=>{
@@ -114,7 +114,7 @@ export default function Edit(){
       const formData = new FormData();
       formData.append("file", file);
       axios({
-        url : `https://i10d211.p.ssafy.io/api/profile/upload/${userId}`,
+        url : `https://codearena.shop/api/profile/upload/${userId}`,
         data : formData,
         method : 'put',
         headers : {
@@ -141,7 +141,7 @@ export default function Edit(){
   // 기본이미지로 변경하기로직
   const goBasicProfile =  ()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/profile/upload/${userId}/default`,
+      url : `https://codearena.shop/api/profile/upload/${userId}/default`,
       method : 'put'
     })
     .then((res)=>{

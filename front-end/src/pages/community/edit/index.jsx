@@ -35,7 +35,7 @@ export default function CommunityEdit(){
 
   useEffect(()=>{
     axios({
-      url : `https://i10d211.p.ssafy.io/api/board/detail/${boardId}`,
+      url : `https://codearena.shop/api/board/detail/${boardId}`,
       method : 'get',
       headers : {
         Authorization : accessToken 
@@ -68,7 +68,7 @@ export default function CommunityEdit(){
   //게시글 수정
   const updateArticle = ()=>{
     axios({
-      url : 'https://i10d211.p.ssafy.io/api/board/update',
+      url : 'https://codearena.shop/api/board/update',
       method : 'patch',
       data : {
         articleNo : boardId,

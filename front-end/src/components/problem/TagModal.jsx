@@ -12,7 +12,7 @@ export default function TagModal (props) {
   useEffect(()=> {
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/problem/category`,
+      url : `https://codearena.shop/api/problem/category`,
     })
     .then((res)=> {
       console.log(res);
@@ -45,7 +45,7 @@ export default function TagModal (props) {
   
   const onClickHandler = (e) => {
     const taglist = selectedList.map((el)=> {return {'tagName' : el}})
-    axios.post(`https://i10d211.p.ssafy.io/api/problem/${problemId}/submit`,{code:code, tagList:taglist, userId:userId, submitLang:lang})
+    axios.post(`https://codearena.shop/api/problem/${problemId}/submit`,{code:code, tagList:taglist, userId:userId, submitLang:lang})
     .then((res)=>{
       console.log(res)
       window.location.reload()

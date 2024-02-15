@@ -24,7 +24,7 @@ export default function Community() {
    
     axios({
       method : 'get',
-      url : `https://i10d211.p.ssafy.io/api/board/list?sortType=${sortType}&key=${key}&word=${word}&langType=${langType}&pgno=${pgno}&spp=15`,
+      url : `https://codearena.shop/api/board/list?sortType=${sortType}&key=${key}&word=${word}&langType=${langType}&pgno=${pgno}&spp=15`,
     })
     .then((res)=> {
       console.log(res);
