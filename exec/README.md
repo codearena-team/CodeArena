@@ -65,6 +65,10 @@ sudo ufw allow <PORT번호>
 ```
 sudo yum install docker -y
 ```
+yum이 없다고 하면 아래의 링크를 참조하여 설치 할 것
+```
+https://linux.how2shout.com/how-to-install-docker-on-aws-ec2-ubuntu-22-04-or-20-04-linux/#2_Update_Ubuntu_Package_List
+```
 docker login 하기 (docker hub계정으로다가)
 ```
 docker login
@@ -84,7 +88,7 @@ sudo usermod -aG docker $USER
 sudo chmod 666 /var/run/docker.sock
 ```
 
-```Docker-componse``` 설치
+```Docker-componse``` 설치 (docker 설치할 때, yum없어서 링크 타신분은 안하셔도 됩니다.)
 ```
 sudo yum install docker-compose-plugin
 ```
@@ -92,14 +96,14 @@ Docker-compose 설치확인
 ```
 docker compose version
 ```
-#### SSL을 위한 ```letencrypt``` 설정
+#### SSL을 위한 ```letsencrypt``` 설정
 
 ```sh
-sudo apt-get install letencrypt
+sudo apt-get install letsencrypt
 ```
 
 ```sh
-sudo letencrypt certonly --standalone -d <도메인>
+sudo letㄴencrypt certonly --standalone -d <도메인>
 ```
 
 #### ```OpenVidu``` 설치
@@ -116,7 +120,7 @@ cd opt
 
 ```OpenVidu``` 설치
 ```
-curl <https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_2.25.0.sh> | bash
+curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_2.25.0.sh | bash
 ```
 
 환경설정 열기 (익숙한 편집기로 / 안보이시면 ```OpenVidu``` 폴더로 이동 후)
@@ -138,7 +142,7 @@ LETSENCRYPT_EMAIL=이메일을 입력해주세요
 ```
 ./openvidu start
 ```
-```OpenVidu``` 종료
+정상 실행된다면 ```Ctrl+C```누른 후 ```OpenVidu``` 종료
 ```
 ./openvidu stop
 ```
@@ -152,16 +156,20 @@ vim .env
 
 ```
 HTTP_PORT=8084
-HTTP_PORT=8443
+HTTPS_PORT=8443
 ```
 ```OpenVidu``` 다시 실행
 ```
 ./openvidu start
 ```
+```OpenVidu```가 8443, 8084 포트 먹고 있는지 검사
+```
+sudo netstat -lntp
+```
 
 #### ```NGINX``` 설치
 
-아마존 EC2 설치
+```NGINX``` 설치
 ```
 sudo apt-get install nginx
 ```
@@ -234,7 +242,7 @@ server {
 
 ```sites-enabled```로 방금 작성한 파일 복사
 
-복사하기전 꼭 ```sites-enabled```에 ```deploy-test.conf```가 없는 상태여야 합니다.
+복사하기전 꼭 **```sites-enabled```에 ```deploy-test.conf```가 없는 상태**여야 합니다.
 
 ```
 cp /etc/sites-available/deploy-test.conf /etc/sites-enabled/deploy-test.conf
@@ -245,6 +253,30 @@ cp /etc/sites-available/deploy-test.conf /etc/sites-enabled/deploy-test.conf
 sudo systemctl restart nginx
 ```
 
+```NGINX```가 정상적으로 실행되었는지 확인
+```
+sudo nginx -t
+```
+80, 443 포트 먹었는지 확인
+```
+netstat -lntp
+```
+에러가 난다면 보통은 conf 파일 잘못 작성했을 가능성이 크거나
+
+이미 몇몇 포트를 먹혀있는 상태일 가능성이 큽니다. (특히나 ```OpenVidu```와 충돌날 가능성이 큼!!!)
+
+따라서 **80, 443 포트를 먹고있는 모든 프로세스**를 죽이고 ```NGINX```를 다시 실행합니다.
+
+80, 443을 사용하는 모든 프로세스 죽이기
+```
+fuser -k 443/tcp
+fuser -k 80/tcp
+```
+
+```NGINX``` 서비스 다시 시작하기
+```
+sudo service nginx start
+```
 #### 클론받기
 
 아래의 링크를 ```git clone``` 명령어를 통해 아마존 EC2에서 클론받아야 합니다.
@@ -276,6 +308,22 @@ mysql -u root -p
 정상적으로 접속되었다면 EC2가 아닌 MySQL이 설치된 환경에서 ```WorkBench```를 통해 접속합니다.
 
 접속에 성공하였다면 ```S10P12D211/back-end/exec``` 폴더 속 ```sql```파일을 Data Import 기능을 통해 실행합니다.
+
+**기본적인 max_connection 개수로는 저희 서버가 많기 때문**에 
+
+늘리지 않는다면 서버 실행이 안됩니다.
+
+따라서 아래의 명령어 수행을 통해 max_connection 값을 늘립니다.
+
+max_connection 값 조회
+```
+show variables like '%max_connection%';
+```
+max_connection 늘리기
+```
+set global max_connections=500;
+```
+max_connection 값 잘 늘어났는지 재조회 하고 끝냅니다.
 
 #### ```Redis``` 설치하기
 
@@ -309,7 +357,7 @@ Jasypt 복호화 사이트
 https://www.devglan.com/online-tools/jasypt-online-encryption-decryption
 ```
 
-기입하는 방법
+```application.properties```에 기입하는 방법
 ```
 key=ENC(<암호화된 값>)
 ```
