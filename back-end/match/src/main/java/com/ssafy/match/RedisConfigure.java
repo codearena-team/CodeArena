@@ -16,7 +16,7 @@ public class RedisConfigure {
     private String host;
    @Value("${redis.port}")
     private int port;
-   @Value("123456")
+   @Value("${redis.password}")
    private String password;
 
    @Bean
