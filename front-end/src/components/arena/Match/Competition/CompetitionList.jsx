@@ -91,21 +91,21 @@ export default function CompetitionList() {
       {/* 상단 버튼, 검색바, 버튼 영역 */}
       <div className="flex justify-between items-center">
         <div className="flex relative z-0">
-          <button
+          {/* <button
             className="btn btn-competition relative top-2"
             style={{ backgroundColor: selectedButton === 'competition' ? '#E3E6D9' : '' }}
             onClick={() => handleButtonClick('competition')}
           >
             경쟁전
-          </button>
-          <Link
+          </button> */}
+          {/* <Link
             to="/game-list/group"
             className="btn btn-group relative top-2"
             style={{ backgroundColor: selectedButton === 'group' ? '#E3E6D9' : '' }}
             onClick={() => handleButtonClick('group')}
           >
-            단체전 {/* 단체전 방 리스트로 변경 */}
-          </Link>
+            단체전 
+          </Link> */}
         </div>
         <div className="flex space-x-3 items-center">
           <select value={searchParams.get('gameMode') || ''} onChange={(e)=>{changeParams('gameMode',e.target.value)}} className="select select-sm select-bordered join-item" >
@@ -132,16 +132,16 @@ export default function CompetitionList() {
 
       {/* 테이블 헤더 */}
       <div
-        className="grid grid-cols-[10%,25%,10%,10%,10%,10%,10%,15%] bg-gray-200 text-gray-700 py-2  rounded-tr-md relative z-10"
+        className="mt-5 grid grid-cols-[10%,25%,10%,10%,10%,10%,10%,15%] bg-gray-200 text-gray-700 py-2  rounded-tr-md  rounded-tl-md relative z-10"
         style={{ backgroundColor: '#E3E6D9' }}>
-        <div className="text-center">문제번호</div>
-        <div className="text-center">방제목</div>
-        <div className="text-center">플레이어1</div>
-        <div className="text-center">플레이어2</div>
-        <div className="text-center">모드</div>
-        <div className="text-center">언어</div>
-        <div className="text-center">관전자</div>
-        <div className="text-center">입장 여부</div>
+        <div className="text-center font-bold">문제번호</div>
+        <div className="text-center font-bold">방제목</div>
+        <div className="text-center font-bold">플레이어1</div>
+        <div className="text-center font-bold">플레이어2</div>
+        <div className="text-center font-bold">모드</div>
+        <div className="text-center font-bold">언어</div>
+        <div className="text-center font-bold">관전자</div>
+        <div className="text-center font-bold">입장 여부</div>
       </div>
 
       {/* 데이터 리스트 */}

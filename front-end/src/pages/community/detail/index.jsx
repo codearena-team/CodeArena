@@ -147,6 +147,20 @@ export default function CommunityDetail(){
       behavior : "smooth"
     })
   }
+
+  useEffect(() => {
+    // Monaco Editor의 테마를 설정합니다.
+    if (monaco) {
+      monaco.editor.defineTheme('myCustomTheme', {
+        base: 'vs-dark', // 원하는 테마로 설정합니다. 예시로 'vs-dark'를 사용했습니다.
+        inherit: true,
+        rules: [{ background: bgcolor }],
+      });
+    }
+  }, [monaco, bgcolor]); // monaco와 bgcolor가 변경될 때마다 테마를 다시 설정합니다.
+  
+
+
   return (
     <div className="ml-64 mr-64 mt-10 relative">
       <button style={{ position: 'fixed', right: '100px', bottom: '150px',border:'1px solid black'}} 
@@ -158,13 +172,13 @@ export default function CommunityDetail(){
       onClick={goUp}>맨위로</p>
       <div className="p-4 rounded-3xl drop-shadow mb-7" style={{backgroundColor: "#F5F5EC"}}>
         <div className='flex justify-end mb-3'>
-          <h1 className="mr-3 font-bold">조회수 : {board.hit}</h1>
-          <h1 onClick={()=>{navigate(`/profile/${articleNickname}`)}} 
-          style={{cursor:'pointer'}}
-          className="font-bold">작성자  :</h1><p style={{textDecoration:'underline',cursor:'pointer'}} className="font-bold"> {articleNickname}</p>
-          
+          <h1 className="mr-3 font-bold">조회수 : {board.hit}</h1>     
+          <h1 style={{cursor:'pointer'}} className="font-bold">작성자  :</h1>
+          <a style={{textDecoration:'underline',cursor:'pointer'}} 
+          onClick={()=>{navigate(`/profile/${articleNickname}`)}}
+          className="font-bold"> {articleNickname}</a> 
           <div className="w-1/12"></div>
-        </div>
+          </div>
         <div className="flex">
           <div className="w-1/12"></div>
           <label className="py-1 font-bold" htmlFor="title">제목</label>
@@ -253,7 +267,7 @@ export default function CommunityDetail(){
             <div className="col-span-1"></div>
             <div className='col-span-10 '>
               <Editor height="400px" id="inputEx" value={board.code}
-              theme="vs-dark"
+          
               options={{'scrollBeyondLastLine':false, 'readOnly': true,'minimap':{enabled:false}}}
               />
             </div>
@@ -271,8 +285,9 @@ export default function CommunityDetail(){
           <div className="w-1/12"></div>
         </div>
         )}
-      </div>
-      {/* 댓글공간 */}
+    </div> 
+    {/* 댓글 */}
+  
       {commentlist.length > 0 && (
         commentlist.map((comment,index)=>{
           return( 
