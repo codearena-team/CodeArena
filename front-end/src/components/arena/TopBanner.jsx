@@ -20,7 +20,8 @@ import EffiModeAsset from '../../images/arena/TopBanner/EfficiencyMode.png';
 export default function TopBanner() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  
+  const [type2,setType2] = useState()
   const [isFindMatchHovered, setIsFindMatchHovered] = useState(false);
   const [isGameCreateHovered, setIsGameCreateHovered] = useState(false);
   const [isGameSearchHovered, setIsGameSearchHovered] = useState(false);
@@ -80,10 +81,10 @@ export default function TopBanner() {
   
       const object = JSON.parse(event.data)
       console.log("recive data :", object)
-    
-      type.current = object.type;
+      
       
       if (object.type) {
+        setType2(object.type)
         matchId.current = object.matchId;
         userId.current = object.userId;
         rating.current = object.rating;
@@ -141,7 +142,7 @@ export default function TopBanner() {
         }));
       }
   
-      if (socket.current.readyState === WebSocket.OPEN && type.current) {
+      if (socket.current.readyState === WebSocket.OPEN && type2) {
         startMatchingTimer();
       }
   
@@ -228,8 +229,8 @@ export default function TopBanner() {
   // let timerInterval///
   const closeMatchingModalHandler = () => {
     console.log('타이머 중지!!');
-    type.current = null;
-    console.log('진짜 마지막 타입 확인 :', type.current)
+    setType2(null)
+    console.log('진짜 마지막 타입 확인 :', type2)
     // 선택된 언어 초기화
     setSelectedLanguage(null);
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
@@ -282,13 +283,24 @@ export default function TopBanner() {
     // 원하는 시간까지 진행 후 타이머 중지
     // const desiredTimeInSeconds = 10;
     
-    console.log('Start Matching Timer type : ', type.current)
-    if (type.current && type.current === "QUERY") {
+    console.log('Start Matching Timer type : ', type2)
+    
+  };
+
+  useEffect(()=> {
+    console.log('!!!!!!!!!!!!!!!타입2',type2);
+    if (type2 && type2 === "QUERY") {
+      const interval = timerInterval.current
       clearInterval(interval);
       timerInterval.current = interval;
       handleMatchingComplete(); // 수락&거절 모달 함수 호출
+    } else if (type2 && type2 === 'RESPONSE') {
+
     }
-  };
+    // if (socket.current.readyState === WebSocket.OPEN && type2) {
+    //   startMatchingTimer();
+    // }
+  },[type2])
 
   const startQueryTimer = () => {
     let seconds = 10;
@@ -301,9 +313,9 @@ export default function TopBanner() {
       // 타이머 초마다 상승하고 문자열로 표기
       timerElements.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
       
-      if (type && type === 'CONTINUE') {
-        clearInterval(timerInterval.current); // 초기화
-      }
+      // if (type2 && type2 === 'CONTINUE') {
+      //   clearInterval(timerInterval.current); // 초기화
+      // }
 
       if (seconds === 0) {
         console.log("startQueryTimer의 타이머 확인@@")
@@ -618,7 +630,7 @@ export default function TopBanner() {
                 onAccept={handleAccept}
                 // 거절
                 onCancel={handleCancel}
-                type={type.current}
+                type={type2}
                 socket={socket.current}
               />
             </div>
