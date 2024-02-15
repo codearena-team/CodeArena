@@ -65,6 +65,7 @@ export default function CompetitionView() {
 
   const calculateElapsedTime = () => {
     console.log(startTime);
+    console.log(new Date().getTime())
     const currentTime = new Date().getTime();
     const startTimeMillis = new Date(startTime).getTime();
     const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
@@ -76,6 +77,10 @@ export default function CompetitionView() {
     
     if (elapsed > 300) {
       setIsBetting(true)
+    }
+
+    if (elapsed % 60 === 0) {
+
     }
 
     setElapsedTime(formattedTime);
@@ -175,7 +180,7 @@ export default function CompetitionView() {
   useEffect(()=> {
     setTimeout(() => {
       setChatList([])
-    }, 100);
+    }, 200);
   },[])
 
 
