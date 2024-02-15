@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 
 export default function SpeedResult (){
   const params = useParams()
+  const userId = useSelector(state => state.auth.userId);
   const gameId = useSelector(state => state.game.gameId);
   const navigate = useNavigate()
   const [userGameData, setUserGameData] = useState('');
@@ -19,7 +20,7 @@ export default function SpeedResult (){
   useEffect(() => {
     setUserGameData(gameId)
     console.log('넘어와야하는 gameId :', gameId)
-    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${params.id}}`)
+    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${params.id}`)
       .then(res => {
         console.log('여기 json 받았어요', res.data);
         setWinnerNickname(res.data.data.winnerId);

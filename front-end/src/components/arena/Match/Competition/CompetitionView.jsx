@@ -44,28 +44,46 @@ export default function CompetitionView() {
   const [problemId, setProblemId] = useState();
   const sender = useRef(useSelector(state => state.auth.userNickname));
 
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(()=> {
     axios.get(`https://i10d211.p.ssafy.io/game/chat/room?gameId=${params.id}`)
     .then(res => {
       console.log(res)
       setGame(res.data.data)
+      setStartTime(res.data.data.startTime)
+      setProblemId(res.data.data.problemId)
     })
     .catch(err => {
       console.log(err);
     })
     
-    setTimeout(() => {
-      
-    }, 500);
   },[])
 
+  const calculateElapsedTime = () => {
+    console.log(startTime);
+    const currentTime = new Date().getTime();
+    const startTimeMillis = new Date(startTime).getTime();
+    const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
+    // 초를 시/분/초 형식으로 변환
+    // const hours = Math.floor(elapsed / 3600);
+    const minutes = Math.floor((elapsed % 3600) / 60);
+    const seconds = elapsed % 60;
+    const formattedTime = `${minutes}분 ${seconds}초`;
+    
+    if (elapsed > 300) {
+      setIsBetting(true)
+    }
 
+    setElapsedTime(formattedTime);
+  };
 
   useEffect(() => {
-    const { startTime, problemId } = location.state;
-    setStartTime(startTime);
-    setProblemId(problemId);
-    console.log(`이거확인이거확인 ${problemId}`)
+    // const { startTime, problemId, gameMode } = location.state;
+    // setStartTime(startTime);
     // 경기 시작 시간 확인
     console.log("경기 시작 시간 확인 :", startTime)
       
@@ -97,8 +115,10 @@ export default function CompetitionView() {
         else if (msg.type && msg.type === "END") {
           console.log(msg);
           alert("게임이 종료되었습니다.")
+          console.log('game', game.gameMode);
+          console.log('game.gameMode', game.gameMode);
           if (!msg.winner) {
-            if (game?.gameMode === '1') {
+            if (game.gameMode === '1') {
               navigate(
                 `/game-list/competition/compEffiDraw/${params.id}`,
               );
@@ -108,7 +128,7 @@ export default function CompetitionView() {
               );
             }
           } else {
-            if (game?.gameMode === '1') {
+            if (game.gameMode === '1') {
               navigate(
                 `/game-list/competition/compEffiResult/${params.id}`,
               );
@@ -121,7 +141,7 @@ export default function CompetitionView() {
         }
         else if (msg.type && msg.type === "TERMINATED") {
           alert("경기가 종료되었습니다.")
-          if (game?.gameMode === '1') {
+          if (game.gameMode === '1') {
             navigate(
               `/game-list/competition/compEffiDrow/${params.id}`,
             );
@@ -140,26 +160,10 @@ export default function CompetitionView() {
     });
     dispatch(setStompClients(stompClient));
     // startTime 시간 - 진행된 시간 계산
-    const calculateElapsedTime = () => {
-      const currentTime = new Date().getTime();
-      const startTimeMillis = new Date(startTime).getTime();
-      const elapsed = Math.floor((currentTime - startTimeMillis) / 1000);
-      // 초를 시/분/초 형식으로 변환
-      // const hours = Math.floor(elapsed / 3600);
-      const minutes = Math.floor((elapsed % 3600) / 60);
-      const seconds = elapsed % 60;
-      const formattedTime = `${minutes}분 ${seconds}초`;
-      
 
-
-      if (elapsed > 300) {
-        setIsBetting(true)
-      }
-
-      setElapsedTime(formattedTime);
-    };
     timerRef.current = setInterval(calculateElapsedTime, 1000);
     return () => {
+
       clearInterval(timerRef.current)
       console.log("채팅 연결을 종료합니다.")
       stompClient.disconnect();
@@ -167,6 +171,14 @@ export default function CompetitionView() {
     }
   }, [chatList, params.id]);
   // 입장했을 때 1번만 알림 보내기
+
+  useEffect(()=> {
+    setTimeout(() => {
+      setChatList([])
+    }, 100);
+  },[])
+
+
   const handleEnterMessage = () => {
     console.log("입장 메세지를 전달합니다.")
     if (stompClient && stompClient.connected ) {
@@ -386,7 +398,7 @@ export default function CompetitionView() {
         {/* handleDividerMove를 통해 왼쪽 오른쪽 화면 비율 조정 */}
         <C_DividingLine onDividerMove={handleDividerMove} />
         {/* 오른쪽(4)에 해당하는 부분 */}
-        <div className="right-panel mr-3 mt-10 relative" style={{ width: `${panelWidths.right}%`, display: 'flex', flexDirection: 'column' }}>
+        <div className="right-panel mr-3 relative" style={{ width: `${panelWidths.right}%`, display: 'flex', flexDirection: 'column' }}>
           {/* 채팅 div */}
           <div className="ml-5 flex-grow" style={{ maxHeight: "80%", overflowY: "auto" }}>
             {/* 채팅창 */}
@@ -408,28 +420,22 @@ export default function CompetitionView() {
             </div>
           </div>
           {/* 입력 폼 */}
-          <div className="flex justify-center items-center mt-5">
-            <div className="w-full">
-              <div className="flex justify-center items-center">
-                <form onSubmit={handleSendMessage} className="flex">
-                  <input
-                    type="text"
-                    className="rounded-full border-2 border-gray-300 px-4 py-2 flex-grow focus:outline-none focus:border-blue-400"
-                    placeholder=" 메시지를 입력하세요...!"
-                    value={inputMessage}
-                    onChange={handleInputChange}
-                    style={{ width: '400px' }}
-                  />
-                  <button
-                    type="submit"
-                    className="bg-blue-300 text-white rounded-full px-4 py-2 ml-2 focus:outline-none"
-                  >
-                    입력
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
+          <form onSubmit={handleSendMessage} className="grid grid-cols-12">
+            <input
+              type="text"
+              className="rounded-full border-2 border-gray-300 px-4 py-2 flex-grow focus:outline-none focus:border-blue-400 col-span-9" 
+              placeholder=" 메시지를 입력하세요...!"
+              value={inputMessage}
+              onChange={handleInputChange}
+              style={{ width: '100%' }}
+            />
+            <button
+              type="submit"
+              className="bg-blue-300 text-white rounded-full px-4 py-2 ml-2 focus:outline-none col-span-3"
+            >
+              입력
+            </button>
+          </form>
         </div>
       
       

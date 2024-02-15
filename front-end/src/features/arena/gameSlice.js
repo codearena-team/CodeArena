@@ -14,6 +14,7 @@ export const gameSlice = createSlice({
     enemyNickname: null,
     enemyImgSrc: null,
     startTime: null,
+    queueKey: null,
   },
   reducers : {
     // set 할 때 쓰기 위함
@@ -30,6 +31,7 @@ export const gameSlice = createSlice({
         userImgSrc,
         enemyImgSrc,
         startTime,
+        queueKey,
       } = action.payload;
 
       state.problemId = problemId;
@@ -43,6 +45,7 @@ export const gameSlice = createSlice({
       state.userImgSrc = userImgSrc;
       state.enemyImgSrc = enemyImgSrc;
       state.startTime = startTime;
+      state.queueKey = queueKey;
     },
     resetGameInfo: (state) => {
       // 비워야 할 때를 쓰기 위함 -> 쓰지않을 수도 있지만 미리 만들어둠
@@ -57,6 +60,7 @@ export const gameSlice = createSlice({
       state.userImgSrc = null;
       state.enemyImgSrc = null;
       state.startTime = null;
+      state.queueKey = null;
     },
   }  
 })

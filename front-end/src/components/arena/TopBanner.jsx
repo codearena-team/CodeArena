@@ -28,9 +28,6 @@ export default function TopBanner() {
   const [isEffiModeHovered, setIsEffiModeHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMatchingComplete, setIsMatchingComplete] = useState(false);
-  
-  const [propsLanguageModal, setLanguageModal] = useState(null);
-  const [propsMatchingModal, setMatchingModal] = useState(null);
 
   // 언어 선택 useState
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -121,13 +118,27 @@ export default function TopBanner() {
           userImgSrc: userImgSrc.current,
           enemyImgSrc: enemyImgSrc.current,
           startTime: startTime.current,
+          queueKey: queueKey.current,
         }));
         console.log("setGameInfo를 찍었습니다 :", setGameInfo)
         navigate(`/game-list/competition/play/${object.gameId}`)
       }
       
       if (object.type && object.type === 'CONTINUE') {
-        console.log('')
+        dispatch(setGameInfo({
+          problemId: problemId.current,
+          gameMode: gameMode.current,
+          lang: lang.current,
+          gameId: gameId.current,
+          userId: userId.current,
+          userNickname: userNickname.current,
+          enemyId: enemyId.current,
+          enemyNickname: enemyNickname.current,
+          userImgSrc: userImgSrc.current,
+          enemyImgSrc: enemyImgSrc.current,
+          startTime: startTime.current,
+          queueKey: queueKey.current,
+        }));
       }
   
       if (socket.current.readyState === WebSocket.OPEN && type.current) {
@@ -209,7 +220,7 @@ export default function TopBanner() {
     matchingModal.addEventListener('close', () => {
       console.log("너가 아니길 빈다.... 머리아프다")
       clearInterval(timerInterval.current); // 타이머 중지
-      // languageModal.close();
+      languageModal.close();
     });
   };
 
@@ -361,9 +372,6 @@ export default function TopBanner() {
       
       // 닫힐 때만 MatchingCompleteModal 닫도록 수정
       setIsMatchingComplete(false);
-      // MatchingCompleteModal이 닫힐 때 다른 모달 플래그를 초기화
-      setLanguageModal(null);
-      setMatchingModal(null);
     });
   };
 
@@ -388,7 +396,7 @@ export default function TopBanner() {
     socket.current.send (
       JSON.stringify (send_obj)
     );
-    
+    setSelectedLanguage(null);
     clearInterval(timerInterval.current);
 
     // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
@@ -451,9 +459,6 @@ export default function TopBanner() {
     if (matchingModal && matchingModal.open) {
       matchingModal.close();
     }
-
-    setLanguageModal(languageModal);
-    setMatchingModal(matchingModal);
   };
 
   // 게임 생성 모달 닫기
@@ -590,7 +595,7 @@ export default function TopBanner() {
                       })
                     );
                     // document.getElementById('language_modal').close(); // 언어&모드 선택 모달 닫기
-                    // setSelectedLanguage(null); // 닫을 때 선택된 언어 초기화
+                    setSelectedLanguage(null); // 닫을 때 선택된 언어 초기화
                     closeMatchingModalHandler();
                   }}
                 >
@@ -613,10 +618,8 @@ export default function TopBanner() {
                 onAccept={handleAccept}
                 // 거절
                 onCancel={handleCancel}
-                languageModal={propsLanguageModal}
-                matchingModal={propsMatchingModal}
-                type={type}
-                openMatchingCompleteModal={openMatchingCompleteModal}
+                type={type.current}
+                socket={socket.current}
               />
             </div>
           </dialog>
