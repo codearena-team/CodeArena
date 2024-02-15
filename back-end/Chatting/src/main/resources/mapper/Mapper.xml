@@ -196,7 +196,7 @@
     </update>
 
     <select id="passProblem" parameterType="string" resultType="int">
-        SELECT DISTINCT(user_id)
+        SELECT COUNT(DISTINCT(user_id))
         FROM arena_submit_status
         WHERE game_id = #{gameId} AND (user_id = #{player1} OR user_id = #{player2}) AND submit_status = '맞았습니다.';
     </select>
