@@ -46,7 +46,7 @@ export default function EffiResult (){
 
   
     
-    axios.get('https://i10d211.p.ssafy.io/game/rest/effi/list?gameId='+`${gameId}`)
+    axios.get('https://i10d211.p.ssafy.io/game/rest/effi/list?gameId='+`${params.id}`)
       .then(res => {
         console.log('여기 제출 리스트 받았어요', res.data)
         const newArray = [...res.data.data.list]

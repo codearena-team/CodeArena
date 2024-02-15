@@ -179,38 +179,38 @@ export default function CompetitionView() {
   },[])
 
 
-  const handleEnterMessage = () => {
-    console.log("입장 메세지를 전달합니다.")
-    if (stompClient && stompClient.connected ) {
-      stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
-        gameId: params.id,
-        sender: sender.current,
-        message: '경쟁전에 누군가 입장했어요!',
-        type: 'ENTER',
-    }))
-  } else {
-    const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
-    const stompClient = Stomp.over(socket);
-    dispatch(setStompClients(stompClient));
-    console.log("useEffect stompClient :", stompClient)
-    stompClient.connect({}, () => {
-      // 연결
-      console.log("손님이 입장하여 stompClient 연결이 시도되었습니다.")
-      stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
-        gameId: params.id,
-        sender: sender.current,
-        message: '경쟁전에 누군가 입장했어요!',
-        type: 'ENTER',
-    }))
-    }, error => {
-      console.error("경쟁전 입장 연결 에러가 발생했어요.", error)
-      alert("입장에 문제가 있습니다. 다시 시도해주세요.")
-    });
-  }
-}
-  useEffect(() => {
-    handleEnterMessage();
-  }, [])
+//   const handleEnterMessage = () => {
+//     console.log("입장 메세지를 전달합니다.")
+//     if (stompClient && stompClient.connected ) {
+//       stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
+//         gameId: params.id,
+//         sender: sender.current,
+//         message: '경쟁전에 누군가 입장했어요!',
+//         type: 'ENTER',
+//     }))
+//   } else {
+//     const socket = new SockJS('https://i10d211.p.ssafy.io/game/ws-stomp');
+//     const stompClient = Stomp.over(socket);
+//     dispatch(setStompClients(stompClient));
+//     console.log("useEffect stompClient :", stompClient)
+//     stompClient.connect({}, () => {
+//       // 연결
+//       console.log("손님이 입장하여 stompClient 연결이 시도되었습니다.")
+//       stompClient.send(`/pub/chat/message`, {}, JSON.stringify({
+//         gameId: params.id,
+//         sender: sender.current,
+//         message: '경쟁전에 누군가 입장했어요!',
+//         type: 'ENTER',
+//     }))
+//     }, error => {
+//       console.error("경쟁전 입장 연결 에러가 발생했어요.", error)
+//       alert("입장에 문제가 있습니다. 다시 시도해주세요.")
+//     });
+//   }
+// }
+//   useEffect(() => {
+//     handleEnterMessage();
+//   }, [])
   // 메세지 보내기 조작할 함수
   const handleSendMessage = (event) => {
     if (event) {
