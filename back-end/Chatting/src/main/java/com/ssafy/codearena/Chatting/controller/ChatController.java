@@ -43,16 +43,16 @@ public class ChatController {
     public void privateMessage(ChatMessage message) {
         String gameId = message.getGameId();
         log.info("메시지 수신");
-        //관전 채팅방 참여
-        if(message.getType() == ChatMessage.MessageType.ENTER) {
-            log.info(message.getSender() + "님이 " + message.getGameId() + "방에 참여했습니다.");
-            message.setMessage(message.getSender() + "님이 " + message.getGameId() + "방에 참여했습니다.");
-            chatService.plusCandidates(gameId, message.getSender());
-
-            messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
-        }
+        //관전 채팅방 참여 REST API로 대체
+//        if(message.getType() == ChatMessage.MessageType.ENTER) {
+//            log.info(message.getSender() + "님이 " + message.getGameId() + "방에 참여했습니다.");
+//            message.setMessage(message.getSender() + "님이 " + message.getGameId() + "방에 참여했습니다.");
+//            chatService.plusCandidates(gameId, message.getSender());
+//
+//            messagingTemplate.convertAndSend("/sub/chat/room/" + message.getGameId(), message);
+//        }
         //관전 채팅방 대화 Publishing
-        else if (message.getType() == ChatMessage.MessageType.TALK) {
+        if (message.getType() == ChatMessage.MessageType.TALK) {
             log.info("-----------TALK 타입으로 메시지 수신---------");
             log.info(message.getGameId());
             log.info(String.valueOf(message));

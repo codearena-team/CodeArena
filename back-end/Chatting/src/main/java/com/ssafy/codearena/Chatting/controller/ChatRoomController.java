@@ -47,6 +47,13 @@ public class ChatRoomController {
         chatService.minusParticipants(gameId);
         return new ResponseEntity<String>("퇴장", HttpStatus.OK);
     }
+
+    @GetMapping("/enter")
+    public ResponseEntity<?> enter(@RequestParam String gameId) {
+
+        chatService.plusParticipants(gameId);
+        return new ResponseEntity<>("입장", HttpStatus.OK);
+    }
     @GetMapping("/exit/private")
     public ResponseEntity<?> exitPrivate(@RequestParam String gameId, String userId) {
 
