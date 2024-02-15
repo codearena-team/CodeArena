@@ -171,6 +171,10 @@ public class JudgeUtil {
 
             String tcTrim = testCase.get(tc).getOutput();
             String sbTrim = sb.toString().trim();
+
+            tcTrim = tcTrim.replaceAll("\r", "");
+            sbTrim = sbTrim.replaceAll("\r", "");
+
             log.info("tcTrim : {} ", tcTrim);
             log.info("sbTrim : {} ", sbTrim);
 

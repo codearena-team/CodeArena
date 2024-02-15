@@ -45,7 +45,12 @@ public class JudgeServiceImpl implements JudgeService{
         try {
             // problemExInput, Output 를 테스트케이스에 포함시킴
             List<TestCaseDto> testCase = userInput.getTestCase();
-            testCase.add(new TestCaseDto(userInput.getProblemExInput().replaceAll("\r", ""), userInput.getProblemExOutput().replaceAll("\r", ""), null));
+
+            TestCaseDto exTestCase = new TestCaseDto();
+            exTestCase.setInput(userInput.getProblemExInput().replaceAll("\r", ""));
+            exTestCase.setInput(userInput.getProblemExOutput().replaceAll("\r", ""));
+
+            testCase.add(exTestCase);
 
             for (int i = 0 ; i < testCase.size() ; i ++) {
                 String str = testCase.get(i).getOutput().trim();
@@ -189,6 +194,54 @@ public class JudgeServiceImpl implements JudgeService{
         }
 
         judgeResultDto.setData(result);
+
+        return judgeResultDto;
+    }
+
+    @Override
+    public JudgeResultDto judgeExample(JudgeExampleDto userInput) {
+        JudgeResultDto judgeResultDto = new JudgeResultDto();
+        judgeResultDto.setStatus("200");
+        judgeResultDto.setMsg("예제 채점 성공");
+        judgeResultDto.setData(null);
+
+        try {
+            TestCaseDto exTestCase = mapper.getExTestCase(userInput.getProblemId());
+
+            log.info("[testcaseDto] , {} ", exTestCase);
+
+            exTestCase.setInput(exTestCase.getInput().replaceAll("\r", ""));
+            exTestCase.setOutput(exTestCase.getInput().replaceAll("\r", ""));
+
+            String ExInputStr = exTestCase.getInput().trim();
+            exTestCase.setInput(ExInputStr);
+
+            String ExOutputStr = exTestCase.getOutput().trim();
+            exTestCase.setOutput(ExOutputStr);
+
+            long timeLimit = Long.parseLong(exTestCase.getProblemTime());
+
+            String path = UUID.randomUUID().toString();
+
+            String cmd = "java " + path + "/Solution.java";
+            log.info("CMD : {}", cmd);
+
+            List<TestCaseDto> exTestCaseList = new ArrayList<>();
+            exTestCaseList.add(exTestCase);
+
+            // 폴더 생성하기
+            judgeUtil.createFolder(path);
+            // 코드 파일 생성하기 (solution.java)
+            judgeUtil.createCodeFile(userInput.getCode(), path);
+            // 코드 검증하기
+            JudgeValidateResultDto result = judgeUtil.validate(cmd, exTestCaseList, timeLimit, path);
+            log.info("[validationCheck] judgeValidationResult : {}" , result);
+
+        } catch (Exception e) {
+            judgeResultDto.setStatus("500");
+            judgeResultDto.setMsg("서버 내부 에러");
+            log.debug("[JudgeExample] : {} ", e);
+        }
 
         return judgeResultDto;
     }

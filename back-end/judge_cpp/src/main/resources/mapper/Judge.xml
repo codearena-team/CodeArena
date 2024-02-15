@@ -9,6 +9,12 @@
         <result column="problem_mem" property="problemMem"/>
     </resultMap>
 
+    <resultMap id="testCaseDtoMap" type="testCaseDto">
+        <result column="problem_ex_input" property="input"/>
+        <result column="problem_ex_output" property="output"/>
+        <result column="problem_time" property="problemTime"/>
+    </resultMap>
+
     <select id="getTestCase" parameterType="string" resultType="testCaseDto">
         select input, output, tid
         from ps_testcase
@@ -32,5 +38,11 @@
         set submit_status=#{msg}, time_complexity=#{time}
         where submit_no=#{submitNo};
     </update>
+
+    <select id="getExTestCase" parameterType="string" resultMap="testCaseDtoMap">
+        select problem_ex_input, problem_ex_output, problem_time
+        from ps_list
+        where problem_id=#{problemId};
+    </select>
 
 </mapper>

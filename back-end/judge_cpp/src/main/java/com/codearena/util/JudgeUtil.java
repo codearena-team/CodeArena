@@ -177,6 +177,9 @@ public class JudgeUtil {
             String tcTrim = testCase.get(tc).getOutput();
             String sbTrim = sb.toString().trim();
 
+            tcTrim = tcTrim.replaceAll("\r", "");
+            sbTrim = sbTrim.replaceAll("\r", "");
+
             log.info("비교 결과 : {}" , tcTrim.equals(sbTrim));
 
             if (!tcTrim.equals(sbTrim)) {
