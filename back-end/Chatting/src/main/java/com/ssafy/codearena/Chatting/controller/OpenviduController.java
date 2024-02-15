@@ -74,6 +74,7 @@ public class OpenviduController {
         }
         catch (Exception e) {
 
+            log.info("세션을 가져오는 과정에서 문제가 발생했습니다.");
             log.error("Exception Msg", e);
             return new ResponseEntity<>("입장코드를 통해 세션을 불러오는 과정에서 예기치 못한 오류가 발생했습니다.", HttpStatus.OK);
         }
@@ -91,6 +92,7 @@ public class OpenviduController {
         }
         catch (Exception e) {
 
+            log.info("스트리밍 세션에 접속하는 과정에서 예기치 못한 오류가 발생했습니다.");
             log.error("Exception Msg", e);
             return new ResponseEntity<>("스트리밍 세션에 접속하는 과정에서 예기치 못한 오류가 발생했습니다.", HttpStatus.OK);
         }

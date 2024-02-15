@@ -148,8 +148,8 @@
     </select>
     <!-- 경쟁 게임방 생성 -->
     <insert id="createCompetitiveRoom" parameterType="gameCreateDto">
-        INSERT INTO arena_record(game_id, game_title, player1, player2, problem_id, start_time, game_mode, game_language, room_type)
-        VALUES(#{gameId}, #{title}, #{userRed}, #{userBlue}, #{problemId}, now(), #{gameMode}, #{language}, #{roomType});
+        INSERT INTO arena_record(game_id, game_title, player1, player2, problem_id, game_mode, game_language, room_type)
+        VALUES(#{gameId}, #{title}, #{userRed}, #{userBlue}, #{problemId}, #{gameMode}, #{language}, #{roomType});
     </insert>
 
     <!-- 사설 게임방 생성 -->
