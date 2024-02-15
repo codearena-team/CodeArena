@@ -2,11 +2,16 @@ import React from "react";
 import { Link, useNavigate, } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setGameId } from "../../../../features/arena/arenaSlice";
+import axios from "axios";
 export default function EnterModal({ competitionId, startTime, problemId, gameMode }) {
   const dispatch = useDispatch()
   // const competitionPath = `/game-list/competition/view/${competitionId}`;
   const navigate = useNavigate();
   const handlerYes = (() => {
+    axios.get(`https://i10d211.p.ssafy.io/game/chat/enter?gameId=${competitionId}`)
+    .then(res=>console.log(res))
+    .catch(err=>console.log(err))
+
     navigate(
       `/game-list/competition/view/${competitionId}`,
       { state : { startTime: startTime, problemId: problemId, gameMode:gameMode}}
