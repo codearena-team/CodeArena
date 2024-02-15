@@ -2,7 +2,7 @@
 
 ## 🎥 시연영상
 
-### >> https://i10d211.p.ssafy.io/ <<
+### >> https://codearena.shop/ <<
 
 ## 🪪 개요
 
