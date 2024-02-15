@@ -153,7 +153,7 @@
 
     <select id="getEffiSubmitList" parameterType="map" resultMap="submit">
         SELECT submit_no, user_id as users, (SELECT user_nickname FROM user WHERE user_id = users) as user_nickname, problem_id, game_type, submit_lang, submit_status, time_complexity, memory, submit_date
-        FROM code_arena.arena_submit_status
+        FROM codearena.arena_submit_status
         <where>
             game_id = #{gameId}
             <include refid="search"></include>
@@ -164,7 +164,7 @@
 
     <select id="getTotalSubmitCount" parameterType="map" resultType="int">
         SELECT COUNT(submit_no)
-        FROM code_arena.arena_submit_status
+        FROM codearena.arena_submit_status
         <where>
             <include refid="search"></include>
         </where>

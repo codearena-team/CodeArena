@@ -136,7 +136,7 @@
     <!-- 랜덤 문제번호 조회 -->
     <select id="findProblemById" resultType="int">
         SELECT problem_id
-        FROM code_arena.ps_list
+        FROM codearena.ps_list
         WHERE problem_visibility = 1
         ORDER BY RAND() LIMIT 1;
     </select>
@@ -245,7 +245,7 @@
 
     <select id="getSubmitList" parameterType="string" resultMap="submit">
         SELECT submit_no, user_id as users, (SELECT user_nickname FROM user WHERE user_id = users) as user_nickname, problem_id, game_type, submit_lang, submit_status, time_complexity, memory, submit_date
-        FROM code_arena.arena_submit_status
+        FROM codearena.arena_submit_status
         WHERE game_id = #{gameId};
     </select>
 
