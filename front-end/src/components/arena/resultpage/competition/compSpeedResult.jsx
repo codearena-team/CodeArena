@@ -4,10 +4,13 @@ import Victory from '../../../../images/arena/Result/victory.png'
 import '../../../css/resultpage.css'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { updateArenadata } from '../../../../features/login/authSlice';
 
 export default function SpeedResult (){
   const params = useParams();
+  const userNickname = useSelector(state => state.auth.userNickname);
+  const speed = useSelector(state => state.auth.speed);
   const gameId = useSelector(state => state.game.gameId);
   const navigate = useNavigate()
   // const [userGameData, setUserGameData] = useState('');
@@ -17,8 +20,8 @@ export default function SpeedResult (){
   const [loserRating, setLoserRating] = useState('');
   const [winnerSsumnail, setWinnerSsumnail] = useState('');
   const [loserSsumnail, setLoserSsumnail] = useState('');
+  const dispatch = useDispatch()
 
-  
   const onClickexit = () => {
     navigate('/arena')
     window.location.reload()
@@ -67,7 +70,21 @@ export default function SpeedResult (){
                 />
               </div>
               <h1 className='text-3xl font-bold mb-5 mt-5'>{winnerNickname}</h1>
-              <h1 className="text-2xl mb-5" style={{color:"skyblue"}}>{winnerRating}</h1>
+              <div className="text-2xl mb-5 font-bold flex">
+                <h1 className='me-2'>{winnerRating}</h1>
+                {winnerNickname === userNickname ?
+                  
+                  winnerRating === speed ?
+                    <span>( - )</span>
+                  :
+                    winnerRating > speed ?
+                      <span className='text-blue-500'>(+{winnerRating - speed})</span>
+                    :
+                      <span className='text-red-500'>({winnerRating - speed})</span>
+                :
+                  null
+                }
+              </div>
               <h1>축하합니다 ! 먼저 문제를 풀어내셨어요 !</h1>
             </div>
           </div>
@@ -91,7 +108,24 @@ export default function SpeedResult (){
                 />
               </div>
               <h1 className='text-3xl font-bold mb-5 mt-5'>{loserNickname}</h1>
-              <h1 className="text-2xl mb-5" style={{color:"skyblue"}}>{loserRating}</h1>
+
+              <div className="text-2xl mb-5 font-bold flex">
+                <h1 className='me-2'>{loserRating}</h1>
+                {loserNickname === userNickname ?
+                  
+                  loserRating === speed ?
+                    <span>( - )</span>
+                  :
+                  loserRating > speed ?
+                      <span className='text-blue-500'>(+{loserRating - speed})</span>
+                    :
+                      <span className='text-red-500'>({loserRating - speed})</span>
+                :
+                  null
+                }
+              </div>
+
+
               <h1>아쉽네요 ! 상대보다 조금 늦었어요 !</h1>
             </div>
           </div>

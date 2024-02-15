@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../css/resultpage.css'
-import { Link, useSearchParams, useNavigate } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import SubmitItem from './compSubmitItemList'
@@ -8,6 +8,7 @@ import SubmitItem from './compSubmitItemList'
 export default function EffiDraw (){
   const gameId = useSelector(state => state.game.gameId);
   const navigate = useNavigate()
+  const params = useParams()
   const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
   const [winnerRating, setWinnerRating] = useState('');
@@ -28,7 +29,7 @@ export default function EffiDraw (){
   useEffect(() => {
     setUserGameData(gameId)
     console.log('넘어와야하는 gameId :', gameId)
-    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${gameId}`)
+    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${params.id}`)
       .then(res => {
         console.log('여기 json 받았어요', res.data);
         setWinnerNickname(res.data.data.winnerId);

@@ -1,6 +1,6 @@
 import Tropy from '../../../../images/arena/Result/tropy.png'
 import '../../../css/resultpage.css'
-import { Link, useSearchParams, useNavigate } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate, useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -8,7 +8,9 @@ import SubmitItem from './compSubmitItemList'
 
 export default function EffiResult (){
   const gameId = useSelector(state => state.game.gameId);
+  const userNickname = useSelector(state => state.auth.userNickname);
   const navigate = useNavigate()
+  const params = useParams()
   const [userGameData, setUserGameData] = useState('');
   const [winnerNickname, setWinnerNickname] = useState('');
   const [winnerRating, setWinnerRating] = useState('');
@@ -28,7 +30,7 @@ export default function EffiResult (){
 
   useEffect(() => {
     setUserGameData(gameId)
-    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${gameId}`)
+    axios.get('https://i10d211.p.ssafy.io/game/chat/result?gameId='+`${params.id}`)
       .then(res => {
         console.log('여기 json 받았어요', res.data);
         setWinnerNickname(res.data.data.winnerId);

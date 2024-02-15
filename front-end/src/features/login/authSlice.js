@@ -41,8 +41,8 @@ export const authSlice = createSlice({
       state.userNickname = null;
       state.speed = null;
       state.eff = null;
-      state.userThumbnail = null;
       state.userCoin = null;
+      state.userThumbnail = null;
 
     },
     setRecord: (state,action) => {
@@ -52,8 +52,13 @@ export const authSlice = createSlice({
     setUserCoin:  (state,action) => {
       state.userCoin = action.payload
     },
+    updateArenadata : (state,action) =>{
+      state.speed = action.payload.userInfoDto.speedRating
+      state.eff = action.payload.userInfoDto.effiRating
+      state.userCoin = action.payload.userInfoDto.userCoin
+    },
   }  
 })
 
-export const { setRefreshToken,logout,setUserNickname,setRecord,setUserCoin,setThumbnail } = authSlice.actions
+export const { setRefreshToken, logout, setUserNickname, setRecord, setUserCoin, setThumbnail, updateArenadata } = authSlice.actions
 export default authSlice.reducer

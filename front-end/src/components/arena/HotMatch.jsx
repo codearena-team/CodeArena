@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 // npm install styled-components 애니메이트 기능 구현 설치 라이브러리
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
@@ -78,6 +79,7 @@ export default function HotMatch() {
                       <div>{match.player1Nickname}</div>
                       <div>{match.player1Rating}</div>
                     </div>
+                    <Link to={`/game-list/competition/view/${match.gameId}`} className='btn bg-red-300 text-base'>관전하기</Link>
                     <div className='text-center'>
                       <div>{match.player2Nickname}</div>
                       <div>{match.player2Rating}</div>
