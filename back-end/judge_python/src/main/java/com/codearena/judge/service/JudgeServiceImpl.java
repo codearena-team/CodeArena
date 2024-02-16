@@ -47,7 +47,7 @@ public class JudgeServiceImpl implements JudgeService{
             List<TestCaseDto> testCase = userInput.getTestCase();
             TestCaseDto exTestCase = new TestCaseDto();
             exTestCase.setInput(userInput.getProblemExInput().replaceAll("\r", ""));
-            exTestCase.setInput(userInput.getProblemExOutput().replaceAll("\r", ""));
+            exTestCase.setOutput(userInput.getProblemExOutput().replaceAll("\r", ""));
 
             testCase.add(exTestCase);
 

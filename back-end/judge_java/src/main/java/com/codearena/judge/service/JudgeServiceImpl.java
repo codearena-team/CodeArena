@@ -48,7 +48,7 @@ public class JudgeServiceImpl implements JudgeService{
 
             TestCaseDto exTestCase = new TestCaseDto();
             exTestCase.setInput(userInput.getProblemExInput().replaceAll("\r", ""));
-            exTestCase.setInput(userInput.getProblemExOutput().replaceAll("\r", ""));
+            exTestCase.setOutput(userInput.getProblemExOutput().replaceAll("\r", ""));
 
             testCase.add(exTestCase);
 
@@ -203,8 +203,8 @@ public class JudgeServiceImpl implements JudgeService{
 
             log.info("[testcaseDto] , {} ", exTestCase);
 
-//            exTestCase.setInput(exTestCase.getInput().replaceAll("\r", ""));
-//            exTestCase.setOutput(exTestCase.getInput().replaceAll("\r", ""));
+            exTestCase.setInput(exTestCase.getInput().replaceAll("\r", ""));
+            exTestCase.setOutput(exTestCase.getInput().replaceAll("\r", ""));
 
             long timeLimit = Long.parseLong(exTestCase.getProblemTime());
 
