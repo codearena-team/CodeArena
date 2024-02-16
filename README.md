@@ -199,16 +199,59 @@ https://www.erdcloud.com/d/nrfqSDdChRWJpanzz
 
 <br>
 <br>
+<br>
+<br>
+
+### MyPage
+
+![Main](/asset/img/figma-profile.png)
+
+<br>
+<br>
+<br>
+<br>
+
+### Matching
+
+![Main](/asset/img/figma-matching.png)
+
+<br>
+<br>
+<br>
+<br>
+
+### INGAME
+
+![Main](/asset/img/figma-arena-ingame-1.png)
+
+<br>
+<br>
+<br>
+<br>
+
+### SPECTATORS
+
+![Main](/asset/img/figma-arena-spec.png)
+
+<br>
+<br>
+<br>
+<br>
+
+### RESULT
+
+![Main](/asset/img/figma-game-result.png)
+
+<br>
+<br>
+<br>
+<br>
 
 ## 주요 기능
 
 ### 메인 화면
 
 ![Main](/asset/gif/Main.gif)
-
-### 로그인
-
-![Main](/asset/gif/Login.gif)
 
 ### 문제 풀이
 
@@ -217,3 +260,17 @@ https://www.erdcloud.com/d/nrfqSDdChRWJpanzz
 ### 마이 페이지
 
 ![Main](/asset/gif/Mypage.gif)
+
+### 아레나 통계
+
+![Main](/asset/gif/arena_main.gif)    
+
+### 매칭 진행
+
+
+
+### 스피드전 진행, 화면공유 그리고 결과
+
+### 효율전 진행, 중간 채점현황
+
+### 관전자 배팅 및 채팅
