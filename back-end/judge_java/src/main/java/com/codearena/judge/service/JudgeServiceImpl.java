@@ -203,8 +203,8 @@ public class JudgeServiceImpl implements JudgeService{
 
             log.info("[testcaseDto] , {} ", exTestCase);
 
-//            exTestCase.setInput(exTestCase.getInput().replaceAll("\r", ""));
-//            exTestCase.setOutput(exTestCase.getInput().replaceAll("\r", ""));
+            exTestCase.setInput(exTestCase.getInput().replaceAll("\r", ""));
+            exTestCase.setOutput(exTestCase.getInput().replaceAll("\r", ""));
 
             long timeLimit = Long.parseLong(exTestCase.getProblemTime());
 
