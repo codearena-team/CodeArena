@@ -58,3 +58,7 @@ services:
             - ENV_KEY=beemo
         networks:
             - canetwork
+
+networks:
+    canetwork:
+        external: true
