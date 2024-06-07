@@ -32,7 +32,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/conf.d
 
 # 컨테이너의 80번 포트를 열어준다.
-EXPOSE 80
+EXPOSE 3000
 
 ENV TZ=Asia/Seoul
 RUN apk add --no-cache tzdata && \
