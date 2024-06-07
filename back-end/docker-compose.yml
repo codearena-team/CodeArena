@@ -1,6 +1,6 @@
 services:
     codearenabackend:
-        container_name: codearena-backend
+        container_name: rest
         build:
             context: ./codearena
             dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
             - canetwork
 
     chatting:
-        container_name: chatting
+        container_name: chat
         build:
             context: ./Chatting
             dockerfile: Dockerfile
@@ -24,7 +24,7 @@ services:
             - canetwork
 
     match:
-        container_name: match
+        container_name: matching
         build:
             context: ./match
             dockerfile: Dockerfile
@@ -36,7 +36,7 @@ services:
             - canetwork
 
     judgejava:
-        container_name: judgejava
+        container_name: java
         build:
             context: ./judge_java
             dockerfile: Dockerfile
@@ -48,7 +48,7 @@ services:
             - canetwork
 
     judgecpp:
-        container_name: judgecpp
+        container_name: cpp
         build:
             context: ./judge_cpp
             dockerfile: Dockerfile
@@ -60,7 +60,7 @@ services:
             - canetwork
 
     judgepython:
-        container_name: judgepython
+        container_name: python
         build:
             context: ./judge_python
             dockerfile: Dockerfile
