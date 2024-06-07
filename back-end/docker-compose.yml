@@ -1,0 +1,76 @@
+services:
+    codeArenabackend:
+        container_name: codearena-backend
+        build:
+            context: ./codearena
+            dockerfile: Dockerfile
+        ports:
+            - '8081:8080'
+        environment:
+            - ENV_KEY: beemo
+        networks:
+            - canetwork
+
+    chatting:
+        container_name: chatting
+        build:
+            context: ./Chatting
+            dockerfile: Dockerfile
+        ports:
+            - '8082:8080'
+        environment:
+            - ENV_KEY: beemo
+        networks:
+            - canetwork
+
+    match:
+        container_name: match
+        build:
+            context: ./match
+            dockerfile: Dockerfile
+        ports:
+            - '8083:8080'
+        environment:
+            - ENV_KEY: beemo
+        networks:
+            - canetwork
+
+    judgejava:
+        container_name: judgejava
+        build:
+            context: ./judge_java
+            dockerfile: Dockerfile
+        ports:
+            - '8085:8080'
+        environment:
+            - ENV_KEY: beemo
+        networks:
+            - canetwork
+
+    judgecpp:
+        container_name: judgecpp
+        build:
+            context: ./judge_cpp
+            dockerfile: Dockerfile
+        ports:
+            - '8086:8080'
+        environment:
+            - ENV_KEY: beemo
+        networks:
+            - canetwork
+
+    judgepython:
+        container_name: judgepython
+        build:
+            context: ./judge_python
+            dockerfile: Dockerfile
+        ports:
+            - '8087:8080'
+        environment:
+            - ENV_KEY: beemo
+        networks:
+            - canetwork
+
+networks:
+    canetwork:
+        driver: bridge
