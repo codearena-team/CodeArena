@@ -1,5 +1,5 @@
 services:
-    codeArenabackend:
+    codearenabackend:
         container_name: codearena-backend
         build:
             context: ./codearena
