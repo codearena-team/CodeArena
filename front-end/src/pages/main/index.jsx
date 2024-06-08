@@ -6,7 +6,6 @@ import Summary from '../../components/main/Summary';
 import AboutUs from '../../components/main/AboutUs';
 import Policy from '../../components/main/Policy';
 
-
 export default function Main() {
   const fromRefLogoHome = useRef(null);
   const fromRefFourElement = useRef(null);
