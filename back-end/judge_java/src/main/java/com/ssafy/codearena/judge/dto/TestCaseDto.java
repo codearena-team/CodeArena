@@ -1,4 +1,4 @@
-package com.codearena.judge.dto;
+package com.ssafy.codearena.judge.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
