@@ -61,4 +61,4 @@ services:
 
 networks:
     canetwork:
-        driver: bridge
+        external: true
