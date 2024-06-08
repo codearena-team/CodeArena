@@ -1,4 +1,4 @@
-package com.codearena.config;
+package com.ssafy.codearena.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

@@ -1,11 +1,13 @@
-package com.codearena.judge.mapper;
+package com.ssafy.codearena.judge.mapper;
 
 import com.codearena.judge.dto.*;
+import com.ssafy.codearena.judge.dto.JudgeProblemInfoDto;
+import com.ssafy.codearena.judge.dto.JudgeValidateResultDto;
+import com.ssafy.codearena.judge.dto.JudgeValidationCheckDto;
+import com.ssafy.codearena.judge.dto.TestCaseDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Mapper
