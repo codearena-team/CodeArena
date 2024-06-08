@@ -1,20 +1,15 @@
-package com.codearena.judge.service;
+package com.ssafy.codearena.judge.service;
 
-import com.codearena.judge.dto.*;
-import com.codearena.judge.mapper.JudgeMapper;
-import com.codearena.util.JudgeUtil;
+import com.ssafy.codearena.judge.dto.*;
+import com.ssafy.codearena.judge.mapper.JudgeMapper;
+import com.ssafy.codearena.util.JudgeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @Slf4j

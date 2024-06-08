@@ -1,9 +1,9 @@
-package com.codearena.util;
+package com.ssafy.codearena.util;
 
-import com.codearena.judge.dto.JudgeProblemInfoDto;
-import com.codearena.judge.dto.JudgeValidateResultDto;
-import com.codearena.judge.dto.TestCaseDto;
-import com.codearena.judge.mapper.JudgeMapper;
+import com.ssafy.codearena.judge.dto.JudgeProblemInfoDto;
+import com.ssafy.codearena.judge.dto.JudgeValidateResultDto;
+import com.ssafy.codearena.judge.dto.TestCaseDto;
+import com.ssafy.codearena.judge.mapper.JudgeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
