@@ -1,6 +1,5 @@
 package com.ssafy.codearena.judge.mapper;
 
-import com.codearena.judge.dto.*;
 import com.ssafy.codearena.judge.dto.JudgeProblemInfoDto;
 import com.ssafy.codearena.judge.dto.JudgeValidateResultDto;
 import com.ssafy.codearena.judge.dto.JudgeValidationCheckDto;

@@ -1,9 +1,8 @@
 package com.ssafy.codearena.judge.service;
 
-import com.codearena.judge.dto.*;
+import com.ssafy.codearena.util.JudgeUtil;
 import com.ssafy.codearena.judge.dto.*;
 import com.ssafy.codearena.judge.mapper.JudgeMapper;
-import com.ssafy.codearena.util.JudgeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

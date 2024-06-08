@@ -1,6 +1,5 @@
 package com.ssafy.codearena.judge.controller;
 
-import com.codearena.judge.dto.*;
 import com.ssafy.codearena.judge.dto.*;
 import com.ssafy.codearena.judge.service.JudgeService;
 import lombok.RequiredArgsConstructor;

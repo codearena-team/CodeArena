@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
-@MapperScan(basePackages = {"com.codearena.*.mapper"})
+@MapperScan(basePackages = {"com.ssafy.codearena.*.mapper"})
 public class DataBaseConfiguration{
 
     final ApplicationContext applicationContext;
@@ -51,7 +51,7 @@ public class DataBaseConfiguration{
         SqlSessionFactoryBean session = new SqlSessionFactoryBean();
         session.setDataSource(dataSource);
         session.setMapperLocations(applicationContext.getResources("classpath:mapper/**/*.xml"));
-        session.setTypeAliasesPackage("com.codearena.*.dto");
+        session.setTypeAliasesPackage("com.ssafy.codearena.*.dto");
         return session.getObject();
     }
 
