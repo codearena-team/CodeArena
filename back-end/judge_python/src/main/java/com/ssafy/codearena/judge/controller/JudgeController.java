@@ -1,7 +1,7 @@
-package com.codearena.judge.controller;
+package com.ssafy.codearena.judge.controller;
 
-import com.codearena.judge.dto.*;
-import com.codearena.judge.service.JudgeService;
+import com.ssafy.codearena.judge.dto.*;
+import com.ssafy.codearena.judge.service.JudgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
