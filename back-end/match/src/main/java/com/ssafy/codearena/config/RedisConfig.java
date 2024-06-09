@@ -1,4 +1,4 @@
-package com.ssafy.match;
+package com.ssafy.codearena.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisConfigure {
+public class RedisConfig {
    @Value("${redis.host}")
     private String host;
    @Value("${redis.port}")

@@ -1,4 +1,4 @@
-package com.ssafy.match;
+package com.ssafy.codearena.dto;
 
 
 import lombok.Getter;
