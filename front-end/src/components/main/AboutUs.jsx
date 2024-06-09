@@ -4,47 +4,48 @@ import 'tailwindcss/tailwind.css';
 import Introduce from '../../images/main/AboutUs/Introduce.gif';
 import We from '../../images/main/AboutUs/We.gif';
 
+const frameInAnimation_gif = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100%{
+    opacity: 1;
+    transform: translateX(0%);
+  }
+`;
+
+const AnimateContainer_gif = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &.frame-in {
+    animation: ${frameInAnimation_gif} 1s forwards;
+  }
+`;
+
+const frameInAnimation_font = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100%{
+    opacity: 1;
+    transform: translateX(0%);
+  }
+`;
+
+const AnimateContainer_font = styled.div`
+  display: flex;
+  &.frame-in {
+    animation: ${frameInAnimation_font} 1s forwards;
+  }
+`;
+
 export default function AboutUs({ fromRefFourElement }) {
   const [animate, setAnimate] = useState(false); // 애니메이트 상태 관리
 
-  const frameInAnimation_gif = keyframes`
-    0% {
-      opacity: 0;
-      transform: translateX(-100%);
-    }
-    100%{
-      opacity: 1;
-      transform: translateX(0%);
-    }
-  `;
-
-  const AnimateContainer_gif = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    &.frame-in {
-      animation: ${frameInAnimation_gif} 1s forwards;
-    }
-  `;
-
-  const frameInAnimation_font = keyframes`
-    0% {
-      opacity: 0;
-      transform: translateX(100%);
-    }
-    100%{
-      opacity: 1;
-      transform: translateX(0%);
-    }
-  `;
-
-  const AnimateContainer_font = styled.div`
-    display: flex;
-    &.frame-in {
-      animation: ${frameInAnimation_font} 1s forwards;
-    }
-  `;
 
   useEffect(() => {
     const handleScroll = () => {

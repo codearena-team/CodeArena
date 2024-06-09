@@ -10,7 +10,7 @@ function App() {
 
   useEffect(()=> {
     const path = location.pathname
-    console.log(path);
+    // console.log(path);
     if (path.includes('game-list') && !(path === '/game-list/competition' || path === '/game-list/group')  ) {
       setIsArena(true)
     } else {

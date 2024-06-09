@@ -73,16 +73,15 @@ export default function TopBanner() {
     socket.current = new WebSocket('wss://codearena.shop/matching');
 
     socket.current.addEventListener("open", function (event) {
-      console.log(event)
+      console.log("웹소켓 연결 확인", event)
     })
 
     socket.current.addEventListener("message", function (event) {
-      console.log("Message from server ", event.data);
-  
+      // console.log("Message from server ", event.data);
+      
       const object = JSON.parse(event.data)
-      console.log("recive data :", object)
-      
-      
+      // console.log("recive data :", object)
+
       if (object.type) {
         setType2(object.type)
         matchId.current = object.matchId;
@@ -121,7 +120,7 @@ export default function TopBanner() {
           startTime: startTime.current,
           queueKey: queueKey.current,
         }));
-        console.log("setGameInfo를 찍었습니다 :", setGameInfo)
+        // console.log("setGameInfo 확인 :", setGameInfo)
         navigate(`/game-list/competition/play/${object.gameId}`)
       }
       
@@ -145,7 +144,6 @@ export default function TopBanner() {
       if (socket.current.readyState === WebSocket.OPEN && type2) {
         startMatchingTimer();
       }
-  
     });
 
     socket.current.addEventListener("error", function (event) {
@@ -158,19 +156,16 @@ export default function TopBanner() {
       }
     };
   };
-  
-  ////////////////// 위에서 websocket 통신 연결 //////////////////////////
 
   // 1. 언어 3가지 중 하나 선택하기
   const handleLanguageSelection = (lang) => {
     setSelectedLanguage(lang);
-    console.log("lang :", lang)
+    // console.log("lang :", lang)
   };
-
 
   // 2. 언어 선택 모달 활성화
   const openLanguageModal = () => {
-    console.log('언어 선택 모달 호출함!!');
+    // console.log('언어 선택 모달 호출함!!');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
 
@@ -191,7 +186,7 @@ export default function TopBanner() {
 
   // 3. 매칭 진행 모달
   const openMatchingModal = () => {
-    console.log('매칭 진행 모달 호출함!!');
+    // console.log('매칭 진행 모달 호출함!!');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
 
@@ -219,18 +214,16 @@ export default function TopBanner() {
 
     // 매칭 모달이 닫힐 때 타이머 중지
     matchingModal.addEventListener('close', () => {
-      console.log("너가 아니길 빈다.... 머리아프다")
       clearInterval(timerInterval.current); // 타이머 중지
       languageModal.close();
     });
   };
 
   // 타이머 중지
-  // let timerInterval///
   const closeMatchingModalHandler = () => {
-    console.log('타이머 중지!!');
+    // console.log('타이머 중지!!');
     setType2(null)
-    console.log('진짜 마지막 타입 확인 :', type2)
+    // console.log('진짜 마지막 타입 확인 :', type2)
     // 선택된 언어 초기화
     setSelectedLanguage(null);
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
@@ -253,8 +246,6 @@ export default function TopBanner() {
       clearInterval(timerInterval.current);
       timerInterval.current = null;
     }
-
-    // 언어 선택 모달 중복호출이 안되도록
   };
 
   // 4. 매칭이 돌아가면 타이머 소환
@@ -283,23 +274,16 @@ export default function TopBanner() {
     // 원하는 시간까지 진행 후 타이머 중지
     // const desiredTimeInSeconds = 10;
     
-    console.log('Start Matching Timer type : ', type2)
-    
+    // console.log('Start Matching Timer type : ', type2)
   };
 
   useEffect(()=> {
-    console.log('!!!!!!!!!!!!!!!타입2',type2);
     if (type2 && type2 === "QUERY") {
       const interval = timerInterval.current
       clearInterval(interval);
       timerInterval.current = interval;
       handleMatchingComplete(); // 수락&거절 모달 함수 호출
-    } else if (type2 && type2 === 'RESPONSE') {
-
-    }
-    // if (socket.current.readyState === WebSocket.OPEN && type2) {
-    //   startMatchingTimer();
-    // }
+    } 
   },[type2])
 
   const startQueryTimer = () => {
@@ -313,12 +297,8 @@ export default function TopBanner() {
       // 타이머 초마다 상승하고 문자열로 표기
       timerElements.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
       
-      // if (type2 && type2 === 'CONTINUE') {
-      //   clearInterval(timerInterval.current); // 초기화
-      // }
-
       if (seconds === 0) {
-        console.log("startQueryTimer의 타이머 확인@@")
+        // console.log("startQueryTimer의 타이머 확인@@")
         socket.current.send(
           JSON.stringify({
             matchId: matchId.current,
@@ -345,7 +325,7 @@ export default function TopBanner() {
     timerInterval.current = setInterval(updateTimer, 1000);
   }
 
-  // 5. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
+  // 5-1. "매칭 완료!" 문구와 동시에 "수락", "취소" 모달 띄우기
   const handleMatchingComplete = () => {
     setMatchingState({
       userImgSrc: userImgSrc.current,
@@ -362,10 +342,10 @@ export default function TopBanner() {
     }, 1500);
   };
 
-  // 5-1. 매칭 완료 후 띄워질 "수락", "취소" 마지막 모달
+  // 5-2. 매칭 완료 후 띄워질 "수락", "취소" 마지막 모달
   const openMatchingCompleteModal = () => {
     // MatchingCompleteModal 열기
-    console.log("마지막 수락 거절 모달 호출되니?")
+    // console.log("마지막 수락 거절 모달 호출되니?")
     const matchingCompleteModal = document.getElementById('matching_complete_modal');
     matchingCompleteModal.style.left = '50%';
     matchingCompleteModal.style.top = '50%';
@@ -387,9 +367,9 @@ export default function TopBanner() {
     });
   };
 
-  // 마지막 모달에서 "거절" 모든 모달 닫기 (중복 호출 방지)
+  // 마지막 모달에서 "거절" 누를 시 모든 모달 닫기 (중복 호출 방지)
   const handleCancel = () => {
-    console.log("매칭을 거절했어요 !")
+    // console.log("매칭을 거절했어요 !")
     const send_obj = {
       matchId: matchId.current,
       userId: userId.current,
@@ -429,9 +409,9 @@ export default function TopBanner() {
     }
   };
 
-  // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수..
+  // 마지막 "수락" 버튼을 눌렀을 때 호출될 함수
   const handleAccept = () => {
-    console.log("매칭을 수락했어요 !")
+    // console.log("매칭을 수락했어요 !")
     const send_obj = {
       matchId: matchId.current,
       userId: userId.current,
@@ -447,22 +427,13 @@ export default function TopBanner() {
       type: 'YES',
     };
 
-    console.log("수락 :", send_obj)
-
     socket.current.send (
       JSON.stringify (send_obj)
     );
     
-    // clearInterval(timerInterval.current);
-    
     // 중복 호출 방지를 위한 선언 및 모든 모달 닫기
-    // const matchingCompleteModal = document.getElementById('matching_complete_modal');
     const languageModal = document.getElementById('language_modal');
     const matchingModal = document.getElementById('matching_modal');
-    
-    // if (matchingCompleteModal && matchingCompleteModal.open) {
-    //   matchingCompleteModal.close();
-    // }
     
     if (languageModal && languageModal.open) {
       languageModal.close();
@@ -473,11 +444,6 @@ export default function TopBanner() {
     }
   };
 
-  // 게임 생성 모달 닫기
-  const closeModal = () => {
-      setIsModalOpen(false);
-  };
-
   return (
     <div className='flex flex-col items-center justify-center relative'>
       <div
@@ -486,12 +452,12 @@ export default function TopBanner() {
       </div>  
       {/* 상단 배너 */}
       <div
-       className="mt-3 flex justify-center shadow-lg rounded-xl z-10"
-       style={{ backgroundColor: '#E3E6D9', width:'70%', height: 'auto' }}
+       className="w-[70%] h-auto mt-3 flex justify-center shadow-lg rounded-xl z-10"
+       style={{ backgroundColor: '#E3E6D9' }}
       >
         {/* 경쟁 매칭 버튼*/}
-        <button
-          className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
+        <div
+          className="px-4 py-2 mx-2 rounded-xl cursor-pointer"
           style={{ width: '50%', height: 'auto' }}
           onClick={openLanguageModal} // 클릭하면 모달 띄우기
           onMouseEnter={() => setIsFindMatchHovered(true)} // 마우스 호버 In
@@ -510,19 +476,23 @@ export default function TopBanner() {
           <dialog id="language_modal" className="modal" onClick={e=>e.stopPropagation()}>
             <div className="modal-box flex-row justify-center">
               <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 outline-none">
+                  ✕
+                </button>
                 <button
-                  className="btn btn-sm btn-circle btn-ghost absolute bottom-0"
+                  className="btn btn-sm btn-circle btn-ghost absolute bottom-0 outline-none my-1"
                   style={{ width: '10%', left: '50%', transform: 'translateX(-50%)' }}
-                >취 소</button>
+                >
+                  취 소
+                </button>
               </form>
-              <h3 className="font-bold text-2xl mb-5">언어를 선택하세요 !</h3>
+              <h3 className="flex justify-center font-bold text-2xl pb-5">언어를 선택하세요 !</h3>
               {/* 언어 선택 옵션 3가지 -> 수정 */}
-              <div>
+              <div className='flex justify-center items-center'>
                 {languageButtons.map(({ lang, label }) => (
                   <button
                     key={lang}
-                    className={`btn mr-5 mb-5 ${selectedLanguage === lang ? 'btn-selected' : ''}`}
+                    className={`btn mb-4 mr-5 outline-none ${selectedLanguage === lang ? 'btn-selected' : ''}`}
                     style={{ backgroundColor: selectedLanguage === lang ? '#F9C7C6' : '#E3E6D9' }}
                     onClick={() => handleLanguageSelection(lang)} // 선택한 언어 set
                   >
@@ -534,12 +504,12 @@ export default function TopBanner() {
               {/* 언어 선택 후 모드 선택 */}
               {selectedLanguage && (
                 <div>
-                  <h3 className="font-bold text-2xl mb-5">모드를 선택하세요 !</h3>
+                  <h3 className="flex justify-center font-bold text-2xl pb-5">모드를 선택하세요 !</h3>
                   {/* 스피드모드 */}                  
                   <img
                     src={isSpeedModeHovered ? SpeedMode : SpeedModeAsset}
                     alt="스피드전"
-                    className="float-left rounded-2xl"
+                    className="float-left rounded-2xl mb-5"
                     style={{ width: '49%', height: 'auto' }}
                     onMouseEnter={() => setIsSpeedModeHovered(true)}
                     onMouseLeave={() => setIsSpeedModeHovered(false)}
@@ -556,9 +526,9 @@ export default function TopBanner() {
                       );
                       // document.getElementById('language_modal').close(); // 클릭 시 언어 선택 모달 닫고,
                       openMatchingModal(); // 매칭 진행 모달 열기
-
                     }}
                   />
+
                   {/* 효율전모드 */}
                   <img
                     src={isEffiModeHovered ? EffiMode : EffiModeAsset}
@@ -592,7 +562,7 @@ export default function TopBanner() {
             <div className="modal-box flex-row justify-center">
               <form method="dialog">
                 <button
-                  className="btn btn-sm btn-circle btn-ghost absolute bottom-0"
+                  className="btn btn-sm btn-circle btn-ghost absolute bottom-0 my-1"
                   style={{ width: '10%', left: '50%', transform: 'translateX(-50%)' }}
                   onClick={() => {
                     socket.current.send(
@@ -606,7 +576,6 @@ export default function TopBanner() {
                         userNickname: userNickname.current,
                       })
                     );
-                    // document.getElementById('language_modal').close(); // 언어&모드 선택 모달 닫기
                     setSelectedLanguage(null); // 닫을 때 선택된 언어 초기화
                     closeMatchingModalHandler();
                   }}
@@ -614,10 +583,11 @@ export default function TopBanner() {
                   취 소
                 </button>
               </form>
-              <h3 className="font-bold text-2xl mb-5">매칭 중입니다...</h3>
-              <h3 className="font-bold text-lg mb-5">잠시만 기다려주세요</h3>
+              <h3 className="flex justify-center items-center font-bold text-2xl mb-5">매칭 중입니다...</h3>
+              <h3 className="flex justify-center items-center font-bold text-lg mb-5">잠시만 기다려주세요</h3>
               {/* 타이머 00:00부터 1초씩 상승하기 */}
-              <div id="matching_timer" className="font-bold text-lg mb-5"></div>
+              
+              <div id="matching_timer" className="flex justify-center items-center font-bold text-lg mb-6" />
             </div>
           </dialog>
 
@@ -626,37 +596,18 @@ export default function TopBanner() {
             <div className="modal-box flex-row justify-center">
               <MatchingCompleteModal
                 matchingState={matchingState}
-                // 수락
-                onAccept={handleAccept}
-                // 거절
-                onCancel={handleCancel}
+                onAccept={handleAccept} // 수락
+                onCancel={handleCancel} // 거절
                 type={type2}
                 socket={socket.current}
               />
             </div>
           </dialog>
-        </button>
-
-        {/* 게임 생성.. 자릅니다... */}
-        {/* <button
-            className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
-            style={{ width: '80%', height: 'auto' }}
-            onClick={() => document.getElementById('my_modal_1').showModal()}
-            onMouseEnter={() => setIsGameCreateHovered(true)} // 마우스 호버 In
-            onMouseLeave={() => setIsGameCreateHovered(false)} // 마우스 호버 Out
-        >
-            <img
-            src={isGameCreateHovered ? GameCreate : GameCreateAsset} // 게임 생성 Hover
-            alt="게임생성 이미지"
-            className="mr-2 rounded-xl"
-            style={{ width: '100%', height: 'auto' }}
-            />
-        </button>
-        {<BannerCreateModal closeModal={closeModal} />} */}
+        </div>
 
         {/* 게임 찾기 */}
-        <button
-          className="px-4 py-2 mx-2 rounded-xl hover:scale-110"
+        <div
+          className="px-4 py-2 mx-2 rounded-xl cursor-pointer"
           style={{ width: '50%', height: 'auto' }}
           onMouseEnter={() => setIsGameSearchHovered(true)} // 마우스 호버 In
           onMouseLeave={() => setIsGameSearchHovered(false)} // 마우스 호버 Out
@@ -669,7 +620,7 @@ export default function TopBanner() {
               style={{ width: '100%', height: 'auto' }}
             />
           </Link>
-        </button>
+        </div>
       </div>
       {/* 상단 배너 선 */}
       <div

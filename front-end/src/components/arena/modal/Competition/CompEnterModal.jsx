@@ -1,16 +1,15 @@
 import React from "react";
-import { Link, useNavigate, } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setGameId } from "../../../../features/arena/arenaSlice";
 import axios from "axios";
 export default function EnterModal({ competitionId, startTime, problemId, gameMode }) {
   const dispatch = useDispatch()
-  // const competitionPath = `/game-list/competition/view/${competitionId}`;
   const navigate = useNavigate();
   const handlerYes = (() => {
     axios.get(`https://codearena.shop/game/chat/enter?gameId=${competitionId}`)
-    .then(res=>console.log(res))
-    .catch(err=>console.log(err))
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
 
     navigate(
       `/game-list/competition/view/${competitionId}`,

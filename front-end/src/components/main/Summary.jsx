@@ -6,6 +6,41 @@ import Plus from '../../images/main/Summary/Plus.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// 스크롤 애니메이트 이벤트 - 텍스트
+const frameInAnimation_text = keyframes`
+  0% {opacity: 0; transform: translateY(100%);}
+  100%{opacity: 1; transform: translateY(0%);}
+`;
+
+const AnimateContainer_text = styled.div`
+  &.ease-out {
+    animation: ${frameInAnimation_text} 1s forwards;
+  }
+`;
+
+// 스크롤 애니메이트 이벤트 - 인기 질문
+const frameInAnimation_que = keyframes`
+  0% {opacity: 0; transform: translateY(50%);}
+  100%{opacity: 1; transform: translateY(0%);}
+`;
+const AnimateContainer_que = styled.div`
+  &.ease-out {
+    animation: ${frameInAnimation_que} 1.2s forwards;
+  }
+`;
+
+// 스크롤 애니메이트 이벤트 - 최근 추가된 문제
+const frameInAnimation_add = keyframes`
+  0% {opacity: 0; transform: translateY(50%);}
+  100% {opacity: 1; transform: translateY(0%);}
+`;
+
+const AnimateContainer_add = styled.div`
+  &.ease-out {
+    animation: ${frameInAnimation_add} 1.2s forwards;
+  }
+`;
+
 export default function Summary() {
   const navigate = useNavigate()
   const [animate_text, setAnimate_text] = useState(false); // 텍스트 애니메이트 상태 관리
@@ -14,43 +49,26 @@ export default function Summary() {
   const [popularQuestions, setPopularQuestions] = useState([]); // 질문 카드 상태 관리
   const [addProblemSolve, setaddProblemSolve] = useState([]) // 최근 추가된 문제 상태 관리
 
-  // 스크롤 애니메이트 이벤트 - 텍스트
-  const frameInAnimation_text = keyframes`
-  0% {opacity: 0; transform: translateY(100%);}
-  100%{opacity: 1; transform: translateY(0%);}
-  `;
-  const AnimateContainer_text = styled.div`
-  &.ease-out {
-    animation: ${frameInAnimation_text} 1s forwards;
-  }
-  `;
 
-  // 스크롤 애니메이트 이벤트 - 인기 질문
-  const frameInAnimation_que = keyframes`
-  0% {opacity: 0; transform: translateY(50%);}
-  100%{opacity: 1; transform: translateY(0%);}
-  `;
-  const AnimateContainer_que = styled.div`
-  &.ease-out {
-    animation: ${frameInAnimation_que} 1.2s forwards;
-  }
-  `;
-
-  // 스크롤 애니메이트 이벤트 - 최근 추가된 문제
-  const frameInAnimation_add = keyframes`
-  0% {opacity: 0; transform: translateY(50%);}
-  100%{opacity: 1; transform: translateY(0%);}
-  `;
-  const AnimateContainer_add = styled.div`
-  &.ease-out {
-    animation: ${frameInAnimation_add} 1.2s forwards;
-  }
-  `;
+  // 이미지 + 제목
+  const ImageAndText = ({ image, title, children }) => (
+    <AnimateContainer_text
+      className={`w-full text-start mb-2 flex items-center
+        ${animate_text ? 'ease-out' : ''
+      }`}
+    >
+      <img src={image} alt={title} className="w-10 h-10 object-cover ml-5 mr-3" />
+      <div>
+        <h1 className="text-3xl font-bold">{title}</h1>
+      </div>
+      <div className="flex mt-3">{children}</div>
+    </AnimateContainer_text>
+  );
 
   // 인기 질문 카드
   const QuestionCard = ({ question }) => (
     <AnimateContainer_que
-      className={`bg-gray-100 p-4 mb-4 rounded-md shadow-lg mr-5 w-64 cursor-pointer
+      className={`bg-gray-100 p-4 rounded-md shadow-lg mr-5 w-64 cursor-pointer
         ${animate_que ? 'ease-out' : ''
       }`}
       onClick={() => {
@@ -63,10 +81,10 @@ export default function Summary() {
     </AnimateContainer_que>
   );
 
-  // 추가된 문제 카드
+  // 최근 추가된 문제 카드
   const ProblemCard = ({ problem }) => (
     <AnimateContainer_add
-      className={`bg-gray-100 p-4 mb-4 rounded-md shadow-lg mr-5 w-52 cursor-pointer
+      className={`bg-gray-100 p-4 rounded-md shadow-lg mr-5 w-52 max-w-[1200px] cursor-pointer
         ${animate_add ? 'ease-out' : ''
       }`}
       onClick={()=>{
@@ -76,21 +94,6 @@ export default function Summary() {
       <p className="text-lg font-semibold mb-2">#{problem.problemId}</p>
       <p className="text-gray-500">{problem.problemTitle}</p>
     </AnimateContainer_add>
-  );
-
-  // 이미지 + 제목
-  const ImageAndText = ({ image, title, children }) => (
-    <AnimateContainer_text
-      className={`w-full text-start mb-6 flex items-center
-        ${animate_text ? 'ease-out' : ''
-      }`}
-    >
-      <img src={image} alt={title} className="w-10 h-10 object-cover ml-5 mr-3" />
-      <div>
-        <h1 className="text-3xl font-bold">{title}</h1>
-      </div>
-      <div className="flex mt-3">{children}</div>
-    </AnimateContainer_text>
   );
 
   useEffect(() => {
@@ -130,21 +133,21 @@ export default function Summary() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       {/* 인기 질문 */}
-      <ImageAndText image={Hand} title="인기 질문"></ImageAndText>
-      <div className="flex mt-3">
+      <ImageAndText image={Hand} title="인기 질문" className='flex items-center'></ImageAndText>
+      <div className="flex mt-1">
         {popularQuestions.map((question, index) => (
           <QuestionCard key={index} question={question} />
         ))}
       </div>
 
       {/* 구분선 */}
-      <div className='w-full mt-3'>
-        <div className="mx-5 border-t-2 border-gray-300 my-2"></div>
+      <div className='w-full mt-1'>
+        <div className="mx-5 border-t-2 border-gray-200 my-8"></div>
       </div>
 
       {/* 최근 추가된 문제 */}
       <ImageAndText image={Plus} title="최근 추가된 문제"></ImageAndText>
-      <div className="flex mt-3">
+      <div className="flex mt-1">
         {addProblemSolve.map((problem, index) => (
         <ProblemCard key={index} problem={problem} />
         ))}
