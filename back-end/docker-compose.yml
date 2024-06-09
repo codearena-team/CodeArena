@@ -1,0 +1,64 @@
+services:
+    codearenabackend:
+        container_name: rest
+        build:
+            context: ./codearena
+            dockerfile: Dockerfile
+        environment:
+            - ENV_KEY=beemo
+        networks:
+            - canetwork
+
+    chatting:
+        container_name: chat
+        build:
+            context: ./Chatting
+            dockerfile: Dockerfile
+        environment:
+            - ENV_KEY=beemo
+        networks:
+            - canetwork
+
+    match:
+        container_name: matching
+        build:
+            context: ./match
+            dockerfile: Dockerfile
+        environment:
+            - ENV_KEY=beemo
+        networks:
+            - canetwork
+
+    judgejava:
+        container_name: java
+        build:
+            context: ./judge_java
+            dockerfile: Dockerfile
+        environment:
+            - ENV_KEY=beemo
+        networks:
+            - canetwork
+
+    judgecpp:
+        container_name: cpp
+        build:
+            context: ./judge_cpp
+            dockerfile: Dockerfile
+        environment:
+            - ENV_KEY=beemo
+        networks:
+            - canetwork
+
+    judgepython:
+        container_name: python
+        build:
+            context: ./judge_python
+            dockerfile: Dockerfile
+        environment:
+            - ENV_KEY=beemo
+        networks:
+            - canetwork
+
+networks:
+    canetwork:
+        external: true

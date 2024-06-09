@@ -3,21 +3,16 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-// import ChatRoom from '../match/ChatRoom';
-
 export default function CreateModal({ closeModal, onRoomCreated }) {
   const navigate = useNavigate()
   const userId = useSelector(state => state.auth.userId)
   const [roomName, setRoomName] = useState('');
-  const [mode, setMode] = useState(0)
-  const [chatrooms, setChatrooms] = useState([]);
-  const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [gameMode, setGameMode] = useState(0)
   const [language, setLanguage] = useState('java')
 
   const createRoom = () => {
     if (roomName === '') {
-      alert('방 제목을 입력해 주십시요.');
+      alert('방 제목을 입력해 주세요.');
       return;
     } else {
       const data = {
@@ -29,19 +24,15 @@ export default function CreateModal({ closeModal, onRoomCreated }) {
       axios.post('https://codearena.shop/game/chat/gameroom/private', data)
         .then(response => {
           if (response.data.status === '200'){
-            alert(`${response.data.name} 방 개설에 성공하였습니다.`);
-            // onRoomCreated(response.data)
-            // closeModal(); // 모달 닫기
+            // alert(`${response.data.name} 방 개설에 성공하였습니다.`);
             navigate(`/game-list/group/lobby/${response.data.data}`)
           }
         })
         .catch(error => {
-          alert('채팅방 개설에 실패하였습니다.');
-          console.error('채팅방 생성 중 오류 발생:', error);
+          // alert('채팅방 개설에 실패하였습니다.');
+          console.error('방 생성 중 오류 발생:', error);
         });
     }
-
-    
   };
 
   return (

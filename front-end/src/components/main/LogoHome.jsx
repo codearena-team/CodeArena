@@ -35,7 +35,8 @@ const AnimateContainer = styled.div`
 `;
 
 export default function LogoHome({ scrollToFourElement }) {
-  const [animate, setAnimate] = useState(false);
+  const [animate, setAnimate] = useState(false); // 스크롤 애니메이트 상태 관리
+
 
   const handleLogoClick = () => {
     if (scrollToFourElement) {
@@ -45,23 +46,19 @@ export default function LogoHome({ scrollToFourElement }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log('Scroll event 발생');
-      // 특정 조건을 확인하여 animate 상태 토글
       const shouldAnimate = window.scrollY < 700;
       setAnimate(shouldAnimate);
     };
 
-    // 스크롤 이벤트 리스너 등록
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll); // 스크롤 이벤트 리스너 등록
 
-    // 클린업 함수에서 이벤트 리스너 제거
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll); // 클린업 함수에서 이벤트 리스너 제거
     };
   }, []);
 
+  // 최초 렌더링 시 initial fade-in 애니메이션 적용
   useEffect(() => {
-    // 최초 렌더링 시 initial fade-in 애니메이션 적용
     setAnimate(true);
   }, []);
 
@@ -79,7 +76,7 @@ export default function LogoHome({ scrollToFourElement }) {
       />
       <br />
       <br />
-      <h1 className="text-2xl font-bold text-gray-400 mb-40">지금 배틀에 참여하세요!</h1>
+      <h1 className="text-xl font-bold text-gray-400 pb-40">지금 배틀에 참여하세요!</h1>
     </AnimateContainer>
   );
 }

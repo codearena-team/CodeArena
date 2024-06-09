@@ -1,39 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-// npm install styled-components 애니메이트 기능 구현 설치 라이브러리
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
-// import Oh from '../../images/arena/HotMatch/oh.png'
-// import Gwi from '../../images/arena/HotMatch/gwi.png'
-// import Hae from '../../images/arena/HotMatch/hae.png'
-// import Kim from '../../images/arena/HotMatch/kim.png'
 import View from '../../images/arena/HotMatch/View.png'
 import VS from '../../images/arena/HotMatch/VS.png'
 import Fighting from '../../images/arena/HotMatch/Fighting.gif'
 
+const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
+const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
 
 export default function HotMatch() {
-  // Hot Match 애니메이트
-  const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
-  const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
-
   const [hotMatchs, setHotMatchs] = useState([])
 
   useEffect(()=> {
     axios.get('https://codearena.shop/game/chat/hotmatch')
     .then((res)=> {
       setHotMatchs(res.data)
-      console.log("Hot Match 확인 :", res.data);
+      // console.log("Hot Match 확인 :", res.data);
     })
   },[])
-
-
-
-
-
-
-
-
 
   return (
     <div className='flex flex-col mt-5 relative'>

@@ -57,6 +57,7 @@ const AnimateContainer_AU = styled.div`
 
 
 export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
+  const navigate = useNavigate();
   const [isProblemSolveHovered, setIsProblemSolveHovered] = useState(false);
   const [isCodeArenaHovered, setIsCodeArenaHovered] = useState(false);
   const [isCommunityHovered, setIsCommunityHovered] = useState(false);
@@ -72,23 +73,18 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
     }
   };
 
-  const navigate = useNavigate();
-
   const handleCodeArenaClick = () => {
     navigate('/arena');
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log('스크롤 애니메이트 이벤트 발생 확인');
-      // 특정 조건을 확인하여 animate 상태 토글
       const shouldAnimate = window.scrollY < 1550 && window.scrollY > 450;
       setAnimate_PS(shouldAnimate);
       setAnimate_CA(shouldAnimate);
     };
-    // 스크롤 이벤트 리스너 등록
+
     window.addEventListener('scroll', handleScroll);
-    // 클린업 함수에서 이벤트 리스너 제거
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -96,15 +92,12 @@ export default function FourElement({ fromRefLogoHome, scrollToAboutUs }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log('스크롤 애니메이트 이벤트 발생 확인22');
-      // 특정 조건을 확인하여 animate 상태 토글
       const shouldAnimate = window.scrollY < 1550 && window.scrollY > 450;
       setAnimate_CM(shouldAnimate);
       setAnimate_AU(shouldAnimate);
     };
-    // 스크롤 이벤트 리스너 등록
+
     window.addEventListener('scroll', handleScroll);
-    // 클린업 함수에서 이벤트 리스너 제거
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };

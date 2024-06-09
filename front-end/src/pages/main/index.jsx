@@ -6,7 +6,6 @@ import Summary from '../../components/main/Summary';
 import AboutUs from '../../components/main/AboutUs';
 import Policy from '../../components/main/Policy';
 
-
 export default function Main() {
   const fromRefLogoHome = useRef(null);
   const fromRefFourElement = useRef(null);
@@ -26,7 +25,7 @@ export default function Main() {
   };
 
   return (
-    <div>
+    <div className='w-auto max-w-[1490px]'>
       <LogoHome scrollToFourElement={scrollToFourElement} />
       <FourElement fromRefLogoHome={fromRefLogoHome} scrollToAboutUs={scrollToAboutUs} />
       <Summary />
