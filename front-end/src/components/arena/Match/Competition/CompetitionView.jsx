@@ -337,7 +337,7 @@ export default function CompetitionView() {
                   isPlayer={false}
                   className='w-[200px] h-[100px]'
                 />
-                <div className="">
+                <div>
                   <p className="text-lg font-bold">{`경과 시간: ${elapsedTime}`}</p>
                   <button  onClick={onClickBettingStatus}
                   className="btn bg-rose-200 w-full text-lg">배팅현황</button>
