@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.codearena.problem.mapper.ProblemMapper">
+    <resultMap id="problemWithSearchDto" type="problemWithSearchDto">
+        <result property="problemId" column="problem_id"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="problemTitle" column="problem_title"/>
+        <result property="problemRating" column="problem_rating"/>
+        <result property="submitCount" column="submit_count"/>
+        <result property="acceptCount" column="accept_count"/>
+        <result property="percentage" column="percentage"/>
+    </resultMap>
+
+    <resultMap id="problemForInsertDto" type="problemForInsertDto">
+        <result property="userId" column="user_id"/>
+        <result property="problemId" column="problem_id"/>
+        <result property="problemTitle" column="problem_title"/>
+        <result property="problemContent" column="problem_content"/>
+        <result property="problemInputDesc" column="problem_input_desc"/>
+        <result property="problemOutputDesc" column="problem_output_desc"/>
+        <result property="problemValidationCode" column="problem_validation_code"/>
+        <result property="problemValidationLang" column="problem_validation_lang"/>
+        <result property="problemExInput" column="problem_ex_input"/>
+        <result property="problemExOutput" column="problem_ex_output"/>
+        <result property="problemTime" column="problem_time"/>
+        <result property="problemMem" column="problem_mem"/>
+        <result property="problemRating" column="problem_rating"/>
+        <collection property="testCase" column="problemId=problem_id" ofType="TestCaseDto" select="selectTCByProblemId"/>
+        <collection property="tagList" column="problemId=problem_id" ofType="TagDto" select="getTagListByProblemId"/>
+    </resultMap>
+
+    <resultMap id="getProblemIdAndProblemTitle" type="problemForInsertDto">
+        <result property="problemId" column="problem_id"/>
+        <result property="problemTitle" column="problem_title"/>
+    </resultMap>
+    
+    <resultMap id="problemDetail" type="problemDetailDto">
+        <result property="problemId" column="problem_id"/>
+        <result property="problemTitle" column="problem_title"/>
+        <result property="problemContent" column="problem_content"/>
+        <result property="submitCount" column="submit_count"/>
+        <result property="acceptCount" column="accept_count"/>
+        <result property="percentage" column="percentage"/>
+        <result property="userId" column="user_id"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="problemInputDesc" column="problem_input_desc"/>
+        <result property="problemOutputDesc" column="problem_output_desc"/>
+        <result property="problemTime" column="problem_time"/>
+        <result property="problemMem" column="problem_mem"/>
+        <result property="problemExInput" column="problem_ex_input"/>
+        <result property="problemExOutput" column="problem_ex_output"/>
+        <result property="problemVisibility" column="problem_visibility"/>
+        <collection column="problemId=problem_id" property="tagList" javaType="List" ofType="TagDto" select="getTagListByProblemId"/>
+    </resultMap>
+
+    <resultMap id="TCListDto" type="tCListDto">
+        <result property="problemId" column="problem_id"/>
+        <collection column="problemId=problem_id" property="testCase" ofType="TestCaseDto" select="selectTestCase"/>
+    </resultMap>
+
+    <resultMap id="testcase" type="testCaseDto">
+        <result property="input" column="input"/>
+        <result property="output" column="output"/>
+        <result property="tid" column="tid"/>
+    </resultMap>
+
+    <select id="selectTCByProblemId" resultMap="testcase">
+        select tid, input, output from ps_testcase where problem_id=${problemId}
+    </select>
+
+    <resultMap id="tagName" type="tagDto">
+        <result property="tagId" column="tag_id"/>
+        <result property="tagName" column="tag_name"/>
+    </resultMap>
+
+    <resultMap id="submitDto" type="submitDto">
+        <result property="submitNo" column="submit_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="tid" column="tid"/>
+        <result property="problemId" column="problem_id"/>
+        <result property="submitLang" column="submit_lang"/>
+        <result property="code" column="code"/>
+        <result property="submitStatus" column="submit_status"/>
+        <result property="timeComplexity" column="time_complexity"/>
+        <result property="memory" column="memory"/>
+        <result property="submitDate" column="submit_date"/>
+        <association property="testCase" column="tid=tid" select="getTestCaseByTid" javaType="testCaseDto"/>
+        <collection property="tagList" column="submitNo=submit_no" select="getSubmitTagsBySubmitNo" ofType="SubmitTagDto"/>
+    </resultMap>
+
+    <resultMap id="userProblemCate" type="com.ssafy.codearena.user.dto.UserProblemCateDto">
+        <result property="problemCate" column="problem_cate"/>
+        <result property="problemCateCnt" column="problem_cate_cnt"/>
+    </resultMap>
+
+    <resultMap id="submitTag" type="submitTagDto">
+        <result property="submitNo" column="submit_no"/>
+        <result property="tagName" column="tag_name"/>
+    </resultMap>
+
+    <resultMap id="RatioOfAlgoDto" type="ratioOfAlgoDto">
+        <result property="tagName" column="tag_name"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <select id="getTestCaseByTid" resultMap="testcase">
+        <include refid="tidCheck"/>
+    </select>
+    <sql id="tidCheck">
+        <if test="tid!=null">
+            select tid, input, output from ps_testcase where tid=${tid}
+        </if>
+    </sql>
+
+    <select id="getSubmitTagsBySubmitNo" resultMap="submitTag">
+        select submit_no, tag_name from ps_submit_tag where submit_no=${submitNo}
+    </select>
+
+    <select id="getTagListByProblemId" resultMap="tagName">
+        select tag_id, tag_name from ps_problem_tag where problem_id=${problemId}
+    </select>
+
+    <select id="getProblemDetailByProblemId" resultMap="problemDetail" parameterType="String">
+        select
+            p.problem_id, p.problem_title, ifnull(inline.submit_count, 0) as submit_count, ifnull(inline2.accept_count, 0) as accept_count,u.user_id, u.user_nickname,
+            ifnull(round((inline2.accept_count/inline.submit_count * 100),2), 0) AS percentage,
+            problem_content, problem_input_desc, problem_output_desc, problem_time, problem_mem, problem_ex_input, problem_ex_output, problem_visibility
+        from ps_list as p
+                 left join (select problem_id, count(distinct user_id) as submit_count from ps_submit group by problem_id) as inline
+                           on p.problem_id = inline.problem_id
+                 left join (select problem_id, count(distinct user_id) as accept_count from ps_submit where submit_status like '%맞았습니다.%' group by problem_id) as inline2
+                           on p.problem_id = inline2.problem_id
+                 left join `user` as u
+                           on p.user_id = u.user_id
+        where p.problem_id = ${problemId}
+    </select>
+
+    <sql id='cate'>
+        <choose>
+            <when test=' word!=null and !"".equals(word)'>
+                <choose>
+                    <when test=' cate.equals("problem_id") '>
+                        and p.problem_id = ${word}
+                    </when>
+                    <otherwise>
+                        and ${cate} like concat('%','${word}','%')
+                    </otherwise>
+                </choose>
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="whereTag">
+        <choose>
+            <when test=' tag!=null and !"".equals(tag)'>
+                and tag_name = '${tag}'
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="joinTag">
+        <choose>
+            <when test=' tag!=null and !"".equals(tag)'>
+                left join ps_problem_tag as t
+                on p.problem_id = t.problem_id
+            </when>
+        </choose>
+    </sql>
+
+
+    <select id="selectTestCase">
+        select tid, input, output from ps_testcase where problem_id = ${problemId}
+    </select>
+
+    <select id="problemCount" parameterType="hashmap" resultType="int">
+        select count(p.problem_id) from ps_list as p
+        <include refid="joinTag"></include>
+        where 1=1 and p.problem_visibility = 1
+        <include refid="whereTag"></include>
+        <include refid="cate"></include>
+    </select>
+
+
+    <sql id="orderby">
+        <if test='orderBy!=null and !"".equals(orderBy)'>
+            order by ${orderBy} desc
+        </if>
+    </sql>
+    <select id="selectProblemList" parameterType="hashmap" resultMap="problemWithSearchDto">
+        select
+            p.problem_id, p.problem_title, p.problem_rating, ifnull(inline.submit_count, 0) as submit_count, ifnull(inline2.accept_count, 0) as accept_count, u.user_nickname,
+            ifnull(round((inline2.accept_count/inline.submit_count * 100),2), 0) AS percentage
+        from ps_list as p
+                 left join (select problem_id, count(distinct user_id) as submit_count from ps_submit group by problem_id) as inline
+                           on p.problem_id = inline.problem_id
+                 left join (select problem_id, count(distinct user_id) as accept_count from ps_submit where submit_status like '%맞았습니다.%' group by problem_id) as inline2
+                           on p.problem_id = inline2.problem_id
+                 left join `user` as u
+                           on p.user_id = u.user_id
+                 <include refid="joinTag"/>
+        where 1=1 and p.problem_visibility = 1
+        <include refid="whereTag"></include>
+        <include refid="cate"></include>
+        <include refid="orderby"></include>
+        limit ${start}, ${offset}
+    </select>
+
+    <insert id="insertProblem" parameterType="problemForInsertDto">
+        insert into ps_list ( user_id, problem_title, problem_content, problem_time, problem_mem, problem_ex_input, problem_ex_output, problem_input_desc, problem_output_desc, problem_validation_code, problem_validation_lang )
+        values (${userId}, #{problemTitle}, #{problemContent}, '${problemTime}', '${problemMem}',#{problemExInput}, #{problemExOutput}, #{problemInputDesc}, #{problemOutputDesc}, #{problemValidationCode}, '${problemValidationLang}')
+            <selectKey order="AFTER" keyProperty="problemId" resultType="java.lang.Integer">
+            select last_insert_id();
+        </selectKey>
+    </insert>
+    
+    <insert id="insertTestCase" parameterType="tCListDto">
+        insert into ps_testcase (problem_id, input, output)
+        values
+        <foreach collection="testCase" item="item" separator=",">
+            ('${problemId}' ,'${item.input}', '${item.output}' )
+        </foreach>
+    </insert>
+
+    <insert id="insertProblemTagList" parameterType="tagListDto">
+        insert into ps_problem_tag (problem_id, tag_name) values
+        <foreach collection="tagList" item="item" separator=",">
+            ('${problemId}', '${item.tagName}')
+        </foreach>
+    </insert>
+
+    <delete id="deleteProblem" parameterType="String">
+        delete from ps_list where problem_id=${problemId}
+    </delete>
+
+    <select id="getAllTagNames" resultMap="tagName">
+        select tag_name from ps_tag_cate
+    </select>
+
+    <select id="getTestCasesByProblemId" resultMap="testcase" parameterType="String">
+        select tid, input, output from ps_testcase where problem_id=${problemId}
+    </select>
+    <insert id="insertSubmit" parameterType="submitDto">
+        insert into ps_submit
+        (problem_id, user_id, submit_lang, code, submit_status)
+        values
+            (${problemId}, '${userId}', '${submitLang}', #{code}, '${submitStatus}')
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="submitNo">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <insert id="insertSubmitTags" parameterType="submitTagListDto">
+        insert into ps_submit_tag
+        (submit_no, tag_name)
+        values
+            <foreach collection="tagList" item="item" separator=",">
+                ( ${submitNo}, '${item.tagName}' )
+            </foreach>
+    </insert>
+
+    <sql id="nickname">
+        <if test='userNickname!=null and !"".equals(userNickname)'>
+            and u.user_nickname like concat('%','${userNickname}','%')
+        </if>
+    </sql>
+    <sql id="problemId">
+        <if test='problemId!=null and !"".equals(problemId)'>
+            and problem_id=${problemId}
+        </if>
+    </sql>
+    <sql id="lang">
+        <if test='lang!=null and !"".equals(lang)'>
+            and submit_lang like concat('%', '${lang}', '%')
+        </if>
+    </sql>
+    <sql id="orderBy">
+        <if test='orderBy!=null and !"".equals(orderBy)'>
+            <if test='"submit_date".equals(orderBy)'>
+                order by ${orderBy} desc
+            </if>
+            <if test='"time_complexity".equals(orderBy)'>
+                order by ${orderBy} asc
+            </if>
+        </if>
+    </sql>
+    <sql id="onlySolve">
+        <if test='onlySolve!=null and !"".equals(onlySolve)'>
+            and submit_status like concat('%','맞았습니다.','%')
+        </if>
+    </sql>
+    <select id="getSubmitCount" resultType="int" parameterType="hashmap">
+        select count(submit_no)
+        from ps_submit as s
+        left join user as u
+        on s.user_id=u.user_id
+        where 1=1
+        <include refid="onlySolve"></include>
+        <include refid="nickname"></include>
+        <include refid="problemId"></include>
+        <include refid="lang"></include>
+    </select>
+    <select id="getSubmitList" resultMap="submitDto" parameterType="hashmap">
+        select submit_no, tid, u.user_nickname, problem_id, submit_lang, code, submit_status, time_complexity, memory, submit_date
+        from ps_submit as s
+        left join user as u
+        on s.user_id=u.user_id
+        where 1=1
+        <include refid="onlySolve"></include>
+        <include refid="nickname"></include>
+        <include refid="problemId"></include>
+        <include refid="lang"></include>
+        <include refid="orderBy"></include>
+        limit ${start}, ${offset}
+    </select>
+
+    <select id="isAccept" parameterType="hashmap" resultType="int">
+        select count(user_id) from ps_submit where submit_status like concat('%','맞았습니다.','%') and problem_id=${problemId} and user_id=${userId};
+    </select>
+
+    <select id="getRatioOfAlgo" resultMap="RatioOfAlgoDto" parameterType="String">
+        select t.tag_name, count(s.submit_no) as count from ps_submit s
+        inner join ps_submit_tag t
+        on s.submit_no = t.submit_no
+        where problem_id = ${problemId} and s.submit_status like '%맞았습니다.%'
+        group by t.tag_name
+    </select>
+
+    <select id="getAvgByLang" parameterType="String">
+            select s.problem_id, cpp, java, python from ps_list as s
+                left join
+            (select problem_id, round(avg(time_complexity)) as cpp
+             from
+                 (select problem_id, submit_lang, time_complexity from ps_submit where submit_status like '%맞았습니다.%' and problem_id=${problemId} and submit_lang like '%cpp%') inline
+             group by submit_lang) cpp
+            on s.problem_id = cpp.problem_id
+                left join
+            (select problem_id, round(avg(time_complexity)) as java
+             from
+                 (select problem_id, submit_lang, time_complexity from ps_submit where submit_status like '%맞았습니다.%' and problem_id=${problemId} and submit_lang like '%java%') inline
+             group by submit_lang) java
+            on s.problem_id = java.problem_id
+                left join
+            (select problem_id, round(avg(time_complexity)) as python
+             from
+                 (select problem_id, submit_lang, time_complexity from ps_submit where submit_status like '%맞았습니다.%' and problem_id=${problemId} and submit_lang like '%python%') inline
+             group by submit_lang) python
+            on s.problem_id = python.problem_id
+             where s.problem_id = ${problemId};
+    </select>
+
+    <select id="getProblemDetailForUpdateByProblemId" resultMap="problemForInsertDto">
+        select
+            problem_id,
+            problem_title,
+            problem_content,
+            problem_time,
+            problem_mem,
+            problem_ex_input,
+            problem_ex_output,
+            problem_input_desc,
+            problem_output_desc,
+            problem_validation_code,
+            problem_validation_lang,
+            problem_visibility
+        from
+            ps_list
+        where problem_id=${problemId}
+    </select>
+
+    <delete id="deleteProblemTagsByProblemId" parameterType="int">
+        delete from ps_problem_tag where problem_id=${problemId}
+    </delete>
+
+    <update id="updateProblemByProblemId" parameterType="problemDetailDto">
+        update
+        ps_list
+        set problem_title=#{problemTitle}, problem_content=#{problemContent},
+            problem_input_desc=#{problemInputDesc}, problem_output_desc=#{problemOutputDesc},
+            problem_validation_code=#{problemValidationCode}, problem_validation_lang='${problemValidationLang}',
+            problem_ex_input=#{problemExInput}, problem_ex_output=#{problemExOutput},
+            problem_time='${problemTime}', problem_mem='${problemMem}'
+        where
+            problem_id=${problemId}
+    </update>
+
+    <update id="updateProblemStatusByProblemId" parameterType="hashmap">
+        update
+        ps_list
+        set problem_visibility='${change}'
+        where
+            problem_id=${problemId}
+    </update>
+
+    <select id="getSolveListByUserNickname" parameterType="String" resultMap="getProblemIdAndProblemTitle">
+        select s.problem_id, l.problem_title from ps_submit s
+        inner join ps_list l
+            on s.problem_id = l.problem_id
+        inner join user u
+            on s.user_id = u.user_id
+        where submit_status = '맞았습니다.' and u.user_nickname = '${nickName}' group by s.problem_id;
+</select>
+
+    <select id="getUnsolveListByUserNickname" parameterType="String" resultMap="getProblemIdAndProblemTitle">
+        select ps_submit.problem_id, problem_title from ps_submit
+            inner join ps_list on ps_submit.problem_id = ps_list.problem_id
+            inner join user on ps_submit.user_id = user.user_id where user_nickname = '${userNickname}' and submit_status!='채점중'
+        and ps_submit.problem_id not in ( select ps_submit.problem_id from ps_submit inner join user on ps_submit.user_id = user.user_id where submit_status like '%맞았습%' and user_nickname = '${userNickname}' group by ps_submit.problem_id ) group by problem_id;
+    </select>
+
+    <select id="getProblemCateByNickname" parameterType="String" resultMap="userProblemCate">
+        select tag_name as problem_cate, count(tag_name) as problem_cate_cnt from ps_submit s
+          inner join ps_problem_tag pt
+                     on s.problem_id = pt.problem_id
+          inner join user u
+                     on s.user_id = u.user_id
+        where u.user_nickname = '${nickName}' and s.submit_status='맞았습니다.'
+        group by tag_name
+    </select>
+
+</mapper>

@@ -1,0 +1,15 @@
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.blinking-element {
+  animation: blink 1.5s infinite; /* 1.5s 간격으로 무한 반복 */
+}

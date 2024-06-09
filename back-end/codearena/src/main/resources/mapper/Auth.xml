@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.codearena.auth.mapper.AuthMapper">
+
+    <resultMap id="AccessTokenMap" type="TokenDataDto">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_nickname" property="userNickname"/>
+    </resultMap>
+
+    <select id="checkRefreshToken" parameterType="string" resultMap="AccessTokenMap">
+        select user_id, user_email, user_nickname
+        from user
+        where refresh_token=#{refreshToken};
+    </select>
+    
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.codearena.user.mapper.UserMapper">
+
+    <resultMap id="userInfoDto" type="UserInfoDto">
+        <result column="user_id" property="userId"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_intro" property="userIntro"/>
+        <result column="speed_rating" property="speedRating"/>
+        <result column="effi_rating" property="effiRating"/>
+        <result column="user_thumbnail" property="userThumbnail"/>
+        <result column="user_coin" property="userCoin"/>
+    </resultMap>
+
+    <resultMap id="tokenDataDto" type="TokenDataDto">
+        <result column="user_id" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="speed_rating" property="speedRating"/>
+        <result column="effi_rating" property="effiRating"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_thumbnail" property="userThumbnail"/>
+        <result column="user_coin" property="userCoin"/>
+    </resultMap>
+
+    <resultMap id="userFollowInfoDto" type="UserFollowInfoDto">
+        <result column="to_id" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_email" property="userEmail"/>
+    </resultMap>
+
+    <resultMap id="userFollowingInfoDto" type="userFollowingInfoDto">
+        <result column="from_id" property="userId"/>
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_email" property="userEmail"/>
+    </resultMap>
+
+    <resultMap id="userSearchResultListDto" type="UserSearchResultListDto">
+        <result column="is_follow" property="isFollow"/>
+        <result column="target_nickname" property="userNickname"/>
+    </resultMap>
+
+    <insert id="join" parameterType="userJoinDto">
+        insert into user(user_email, user_password, user_nickname, user_intro, user_thumbnail) values("${userEmail}" ,"${userPassword}" , "${userNickname}", "${userIntro}", "${userThumbnail}");
+    </insert>
+    
+    <select id="checkNickname" parameterType="string" resultType="int">
+        select count(*) from user where user_nickname="${nickname}";
+    </select>
+
+    <select id="checkEmail" parameterType="string" resultType="int">
+        select count(*) from user where user_email="${email}";
+    </select>
+
+    <select id="login" parameterType="userLoginDto" resultMap="tokenDataDto">
+        select user_id, user_nickname, user_email, speed_rating, effi_rating, user_password, user_thumbnail, user_coin
+        from user
+        where user_email=#{userEmail};
+    </select>
+
+    <update id="logout" parameterType="string">
+        update user
+        set refresh_token=NULL
+        where user_email=#{userEmail};
+    </update>
+
+    <update id="issueVerificationCode" parameterType="userReissueDto">
+        update user set verification_code="${tempCode}" where user_email="${userEmail}";
+    </update>
+
+    <select id="checkVerificationCode" parameterType="userReissueDto" resultType="int">
+        select count(*)
+        from user
+        where user_email="${userEmail}" and verification_code="${tempCode}"
+    </select>
+
+    <select id="searchUser" parameterType="string" resultMap="userInfoDto">
+        select user_id, user_email, user_nickname, user_intro, speed_rating, effi_rating, user_thumbnail, user_coin
+        from user
+        where user_nickname=#{userNickname};
+    </select>
+
+    <update id="saveRefreshToken" parameterType="map">
+        update user
+        set refresh_token=#{refreshToken}
+        where user_email=#{userEmail};
+    </update>
+
+    <update id="changePassword" parameterType="userChangePasswordDto">
+        update user
+        set user_password=#{userPassword}
+        where user_email=#{userEmail};
+    </update>
+
+    <update id="changeUserInfo" parameterType="userChangeInfoDto">
+        update user
+        set user_nickname=#{userNickname}, user_intro=#{userIntro}
+        where user_id=#{userId};
+    </update>
+    
+    <insert id="follow" parameterType="userFollowDto">
+        insert into follow
+        values (#{fromId}, #{toId});
+    </insert>
+
+    <delete id="unfollow" parameterType="userFollowDto">
+        delete from follow
+        where from_id=#{fromId} and to_id=#{toId};
+    </delete>
+
+    <select id="getFollowList" parameterType="string" resultMap="userFollowInfoDto">
+        select to_id, b.user_nickname, b.user_email
+        from follow as a join user b on (b.user_id=a.to_id)
+        where from_id="${userId}";
+    </select>
+
+    <select id="getFollowingList" parameterType="string" resultMap="userFollowingInfoDto">
+        select from_id, b.user_nickname, b.user_email
+        from follow as a join user b on (b.user_id=a.from_id)
+        where to_id="${userId}";
+    </select>
+
+    <select id="isFollow" parameterType="userIsFollowDto" resultType="int">
+        select count(*)
+        from follow
+        where from_id=#{fromId} and to_id=#{toId};
+    </select>
+
+    <select id="searchUserList" parameterType="userSearchListDto" resultMap="userSearchResultListDto">
+        select
+            case
+                when isnull(to_id) then 0
+                else 1
+                end as is_follow,
+            target_nickname
+        from follow as a right outer join (
+            select user_id as target_id, user_nickname as target_nickname
+            from user
+            where user_nickname like CONCAT("${toNickname}",'%')) as b on ((a.from_id="${fromId}") and (a.to_id = b.target_id));
+    </select>
+    
+</mapper>

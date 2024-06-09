@@ -1,0 +1,46 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.ssafy.codearena'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '3.0.3'
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.33'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'	//jasypt
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'	//Swagger
+	//Openvidu
+	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.29.0'
+	implementation 'com.google.code.gson:gson:2.10.1'	//gson
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.2.2'// webflux
+
+	// jaxb 는 jwt를 사용하기 위한 의존성
+	// com.sun.xml.bind
+	implementation 'com.sun.xml.bind:jaxb-impl:4.0.1'
+	implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
+	// javax.xml.bind
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

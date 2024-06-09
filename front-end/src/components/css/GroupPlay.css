@@ -1,0 +1,24 @@
+.leftUp {
+  background-color: #F4ECE4;
+  border-radius: 30px;
+  margin-bottom: 3%;
+}
+
+.leftDown {
+  background-color: #F4ECE4;
+  border-radius: 30px;
+  margin-bottom: 35px;
+  min-height: 80%;
+}
+
+.right {
+  background-color: #F7F6E4;
+  border-radius: 30px;
+  max-height: 95vh;
+  margin-left: 2%;
+}
+
+.con {
+  min-height: 670px;
+  padding: 35px;
+}
