@@ -1,6 +1,12 @@
-package com.ssafy.match;
+package com.ssafy.codearena;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.codearena.dto.MatchDto;
+import com.ssafy.codearena.dto.MessageDto;
+import com.ssafy.codearena.dto.UserDto;
+import com.ssafy.codearena.exception.ExpressionException;
+import com.ssafy.codearena.exception.MatchNotFoundException;
+import com.ssafy.codearena.exception.MatchPlayerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -299,7 +305,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
     private void sendException(WebSocketSession session, Exception exception){
         try{
-            if(exception instanceof  MatchNotFoundException){
+            if(exception instanceof MatchNotFoundException){
                 session.sendMessage(((MatchNotFoundException) exception).getTextMessage());
             }else if(exception instanceof MatchPlayerNotFoundException){
                 session.sendMessage(((MatchPlayerNotFoundException) exception).getTextMessage());
