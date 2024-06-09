@@ -25,7 +25,7 @@ export default function Main() {
   };
 
   return (
-    <div>
+    <div className='w-auto max-w-[1490px]'>
       <LogoHome scrollToFourElement={scrollToFourElement} />
       <FourElement fromRefLogoHome={fromRefLogoHome} scrollToAboutUs={scrollToAboutUs} />
       <Summary />

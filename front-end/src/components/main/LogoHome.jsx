@@ -4,38 +4,39 @@ import 'tailwindcss/tailwind.css';
 import Logo from '../../images/main/LogoHome/Logo.png';
 import '../css/BlinkingElement.css';
 
+// 최초 렌더링 시에 대표 로고 나타나는 애니메이트
+const initialFadeInAnimation = keyframes`
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+`;
+
+// 로고 스크롤 애니메이트 이벤트
+const frameInAnimation = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(1%);
+  }
+
+  100%{
+    opacity: 1;
+    transform: translateY(0%);
+  }
+`;
+
+const AnimateContainer = styled.div`
+  &.frame-in {
+    animation: ${frameInAnimation} 1.3s forwards;
+  }
+`;
+
 export default function LogoHome({ scrollToFourElement }) {
   const [animate, setAnimate] = useState(false); // 스크롤 애니메이트 상태 관리
 
-  // 최초 렌더링 시에 대표 로고 나타나는 애니메이트
-  const initialFadeInAnimation = keyframes`
-    0% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 1;
-    }
-  `;
-
-  // 로고 스크롤 애니메이트 이벤트
-  const frameInAnimation = keyframes`
-    0% {
-      opacity: 0;
-      transform: translateY(1%);
-    }
-
-    100%{
-      opacity: 1;
-      transform: translateY(0%);
-    }
-  `;
-
-  const AnimateContainer = styled.div`
-    &.frame-in {
-      animation: ${frameInAnimation} 1.3s forwards;
-    }
-  `;
 
   const handleLogoClick = () => {
     if (scrollToFourElement) {

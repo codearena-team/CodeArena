@@ -1,5 +1,5 @@
-import { useState, Fragment, useEffect } from 'react'
-import { Link,useNavigate, useLocation } from 'react-router-dom'
+import { useState, Fragment } from 'react'
+import { Link, useNavigate} from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/24/outline'
 import Logo from '../../images/common/logo.png'
@@ -21,7 +21,7 @@ function classNames(...classes) {
 }
 
 export default function NavBar() {
-  const location = useLocation()
+  // const location = useLocation()
   const isLogin = useSelector(state => state.auth.isLogin);
   const nickName = useSelector(state => state.auth.userNickname);
   const profileImg = useSelector(state => state.auth.userThumbnail)
@@ -39,9 +39,9 @@ export default function NavBar() {
   
   const [showDropdown,setShowDropdown ] = useState(false)
   
-  useEffect(()=> {
-    console.log(location);
-  }, [location])
+  // useEffect(()=> {
+  //   console.log(location);
+  // }, [location])
 
   return (
     <Disclosure as="nav">

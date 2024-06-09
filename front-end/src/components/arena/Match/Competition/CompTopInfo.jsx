@@ -34,22 +34,23 @@ export default function CompTopInfo({ gameExitId, problemId, game}) {
   return (
     <div className="flex">
       {/* 왼쪽 상단 (유저 정보) */}
-      <div className="match-header rounded-xl shadow-lg ml-2 mt-2 mr-5"
-      style={{
-        width: `${panelWidths.left}%`,
-        height: 'auto',
-        backgroundColor: '#F5EBDB',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start' }}
-      >
-        <div className="flex justify-center items-center w-full">
+      <div
+        className="match-header rounded-xl shadow-lg ml-2 my-2 mr-5 p-1"
+        style={{
+          width: `${panelWidths.left}%`,
+          height: 'auto',
+          backgroundColor: '#F5EBDB',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-start' }}
+        >
+        <div className="flex justify-center items-center w-full p-1">
           <div className="flex flex-col mr-20">
             <div style={{ width: "125px", height: "125px"}} >
               <img
                 src={game?.userRedSsumnail}
                 alt="플레이어1 이미지"
-                className="rounded-full shadow-lg"
+                className="rounded-full shadow-lg object-cover object-center"
                 style={{width: "100%", height: "100%"}}
               />
             </div>
@@ -106,7 +107,6 @@ export default function CompTopInfo({ gameExitId, problemId, game}) {
             </div>
           </div>
         </dialog>
-
 
         {/* 나가기 버튼 */}
         <button

@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 
+const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
+const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
+
 export default function RankPage() {
-  const fadeIn = keyframes`from {opacity: 0; transform: translateX(-50px);} to {opacity: 1;}`;
-  const AnimatedHeader = styled.h1`animation: ${fadeIn} 0.5s ease-in-out forwards;`;
 
   const [CoinRanks, setCoinRanks] = useState([])
   const [speedRanks, setSpeedRanks] = useState([])
@@ -14,16 +15,15 @@ export default function RankPage() {
   useEffect(()=> {
     axios.get('https://codearena.shop/game/rest/rank')
     .then((res)=> {
-      console.log(res);
+      // console.log(res);
       setSpeedRanks(res.data.data.speedRank)
       setEffRanks(res.data.data.effRank)
       setCoinRanks(res.data.data.pointRank)
     })
   },[])
 
-
   // 각 모드별 전체 랭킹 리스트
-  const renderRankingList = (mode, rankingList) => (
+  const renderRankingList = ( mode, rankingList ) => (
     <div
       className="flex flex-col w-1/4 mr-6 ml-6 mt-3 mb-3 items-center rounded-xl"
       style={{backgroundColor:'#FBF9F1'}}
@@ -46,9 +46,9 @@ export default function RankPage() {
       </div>
       <div style={{ width: '80%' }}>
         { mode === 'Speed' ?
-        rankingList.map((user, index) => renderRankingItem(user, index))
-        :
-        rankingList.map((user, index) => renderRankingItem2(user, index))
+          rankingList.map((user, index) => renderRankingItem(user, index))
+          :
+          rankingList.map((user, index) => renderRankingItem2(user, index))
         }
       </div>
     </div>
@@ -56,10 +56,9 @@ export default function RankPage() {
 
   // 각 모드별 랭킹 리스트 아이템
   const renderRankingItem = (user, index) => (
-    <div>
+    <div key={index}>
       <Link
         to={`/profile/${user.userNickname}`}
-        key={index}
         className="flex justify-between hover:scale-125 items-center h-16 mb-5 rounded-lg shadow-lg bg-yellow-100"
         style={{ backgroundColor: '#F8E6D0' }}
       >
@@ -71,10 +70,9 @@ export default function RankPage() {
   );
 
   const renderRankingItem2 = (user, index) => (
-    <div>
+    <div key={index}>
       <Link
         to={`/profile/${user.userNickname}`}
-        key={index}
         className="flex justify-between hover:scale-125 items-center h-16 mb-5 rounded-lg shadow-lg bg-yellow-100"
         style={{ backgroundColor: '#F8E6D0' }}
       >
@@ -84,8 +82,6 @@ export default function RankPage() {
       </Link>
     </div>
   );
-
-
 
   const BattingKingList = (mode, rankingList) => (
     <div
@@ -114,10 +110,9 @@ export default function RankPage() {
   );
 
   const BattingKingItem = (user, index) => (
-    <div>
+    <div key={index}>
       <Link
         to={`/profile/${user.userNickname}`}
-        key={index}
         className="flex justify-between hover:scale-125 items-center h-16 mb-5 rounded-lg shadow-lg bg-yellow-100"
         style={{ backgroundColor: '#F8E6D0' }}
       >
@@ -127,9 +122,6 @@ export default function RankPage() {
       </Link>
     </div>
   );
-
-
-
   
   return (
     <div className="flex flex-col mt-5">
@@ -141,9 +133,6 @@ export default function RankPage() {
         {renderRankingList('Efficiency', effRanks)}
         <div className="w-10"></div> {/* 사이에 여백 */}
         {BattingKingList('Rich', CoinRanks)}
-
-
-
       </div>
     </div>
   );

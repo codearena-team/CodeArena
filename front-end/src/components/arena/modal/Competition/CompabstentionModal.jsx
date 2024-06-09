@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom"
-import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
 import { useDispatch, useSelector } from "react-redux";
-import { setStompClients, clearStompClient } from "../../../../features/arena/stompClientSlice";
+import { clearStompClient } from "../../../../features/arena/stompClientSlice";
 
 export default function AbstentionModal() {
   const navigate = useNavigate();
@@ -16,18 +14,9 @@ export default function AbstentionModal() {
     gameId
   } = useSelector(state => state.game);
   const stompClient = useSelector(state => state.stompClient.stompClient);
-
-  useEffect(()=> {
-
-    console.log("useEffect stompClient :", stompClient)
-    
-    console.log("넘어온 problemId 번호 확인 :", problemId)
-    
-  },[gameId])
-
   // 기권할래요 동작 함수
   const clickHandler = () => {
-    console.log('기권했어요', stompClient.send)
+    // console.log('기권했어요', stompClient.send)
     stompClient.send(`/pub/chat/leave`, {}, JSON.stringify({
       gameId: gameId,
       userId: userId,
@@ -35,7 +24,6 @@ export default function AbstentionModal() {
       mode : gameMode === 'speed' ? 0 : 1,
       type: 'PLAYER_EXIT',
     }))
-    
     stompClient.unsubscribe('/sub/chat/room/'+`${gameId}`);
     stompClient.unsubscribe('/pub/chat/leave');
     stompClient.disconnect();
@@ -43,6 +31,11 @@ export default function AbstentionModal() {
     navigate('/arena')
     window.location.reload()
   }
+
+  // useEffect(()=> {
+  //   console.log("useEffect stompClient :", stompClient)
+  //   console.log("넘어온 problemId 번호 확인 :", problemId)
+  // },[gameId])
 
   return (
     <div>

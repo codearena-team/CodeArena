@@ -32,8 +32,8 @@ export default function StatsisticsPage() {
     fontSize: '16px',
   };
 
-  // 차트에 보이는 퍼센트 값을 직접 계산하여 표시하는 함수
-  const formatPercent = (value) => `${(value * 100).toFixed(0)}%`;
+  // 차트에 보이는 퍼센트 값을 계산하여 표시하는 함수
+  // const formatPercent = (value) => `${(value * 100).toFixed(0)}%`;
 
   useEffect(()=> {
     const headers = {
@@ -46,7 +46,7 @@ export default function StatsisticsPage() {
         return {name:key.split('Count'), value:value}
       }))
       setMatchs(res.data.data.recentMatches)
-      console.log("record 확인 :", res.data.data.recentMatches)
+      // console.log("record 확인 :", res.data.data.recentMatches)
     })
     .catch((err) => {
       console.log("에러!!! :", err)
