@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.codearena.Chatting.mapper.RestMapper">
+<mapper namespace="com.ssafy.codearena.chatting.mapper.RestMapper">
 
     <resultMap id="playerData" type="gamePlayerDto">
         <result property="userId" column="user_id"/>
